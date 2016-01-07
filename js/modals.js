@@ -1,55 +1,8 @@
-/*var getHarvestModal = function (found) {
-
-    var harvestModal = '<div class="modal" id="facetview_harvestmodal" style="max-width:800px;width:650px;"> \
-                <div class="modal-header"> \
-                <a class="facetview_removeharvest close">×</a> \
-                <h3>Harvest the result records</h3> \
-                </div> \
-                <div class="modal-body"> \
-				<form class="well">';
-
-    harvestModal += '<div class="control-group"> \
-				<label class="control-label" for="input"><b>CouchDB instance</b></label> \
-		 		<div class="controls"> \
-				<input type="text" class="input-xxlarge" id="input_couchdb" value="localhost:5984"/> \
-				</div></div>';
-
-    harvestModal += '<div class="control-group"> \
-				<label class="control-label" for="input"><b>Database name</b></label> \
-		 		<div class="controls"> \
-				<input type="text" class="input-xxlarge" id="input_dbname" value="query' + Math.floor((Math.random() * 100000) + 1) + '"/> \
-				</div></div>';
-
-    harvestModal += '<div class="control-group"> \
-				<label class="control-label" for="input"><b>nb results</b></label> \
-		 		<div class="controls"> \
-				from <input type="text" class="input-small" id="input_from" value="0"/> to \
-				<input type="text" class="input-small" id="input_to" value="' + found + '"/> \
-				with window size <input type="text" class="input-small" id="step_size" value="' + 50 + '"/> \
-				</div></div>';
-
-    harvestModal += '<div class="control-group"> \
-				<label class="control-label" for="input"><b>Interval time</b></label> \
-		 		<div class="controls"> \
-				<input type="text" class="input-small" id="input_interval" value="3000"/> ms \
-				</div></div>';
-
-    harvestModal += '</form> \
-				      <div class="progress progress-striped progress-danger"> \
-				          <div class="bar" id="harvest_progress" style="width:0%;"></div> \
-                      </div> \
-					  <div id="info_progress" /> \
-			    </div> \
-                <div class="modal-footer"> \
-                <a id="facetview_doharvest" href="#" class="btn btn-danger" rel="">Launch</a> \
-                <a class="facetview_removeharvest btn close">Close</a> \
-                </div>';
-
-    return harvestModal;
-}*/
-
 var getEditFilterModal = function (which) {
-    var editFilterModal = '<div class="modal" id="facetview_editmodal" style="max-width:800px;width:650px;"> \
+    var editFilterModal = 
+            '<div id="facetview_editmodal" class="modal">\
+        <div class="modal-dialog">\
+            <div class="modal-content">\
                 <div class="modal-header"> \
                 <a class="facetview_removeedit close">×</a> \
                 <h3>Edit the facet parameters</h3> \
@@ -137,6 +90,8 @@ var getEditFilterModal = function (which) {
                 <a id="facetview_dofacetedit" href="#" class="btn btn-primary" rel="' + which + '">Apply</a> \
                 <a class="facetview_removeedit btn close">Cancel</a> \
                 </div> \
+                </div> \
+</div> \
                 </div>';
 
     return editFilterModal;
@@ -144,20 +99,24 @@ var getEditFilterModal = function (which) {
 
 };
 
-var facetrangeModal = '<div class="modal" id="facetview_rangemodal"> \
-                <div class="modal-header"> \
-                <a class="facetview_removerange close">×</a> \
-                <h3>Set a filter range</h3> \
-                </div> \
-                <div class="modal-body"> \
-                <div style=" margin:20px;" id="facetview_slider"></div> \
-                <h3 id="facetview_rangechoices" style="text-align:center; margin:10px;"> \
-                <span class="facetview_lowrangeval">...</span> \
-                <small>to</small> \
-                <span class="facetview_highrangeval">...</span></h3> \
-                </div> \
-                <div class="modal-footer"> \
-                <a id="facetview_dofacetrange" href="#" class="btn btn-primary">Apply</a> \
-                <a class="facetview_removerange btn close">Cancel</a> \
-                </div> \
+var facetrangeModal = '<div id="facetview_rangemodal" class="modal">\
+        <div class="modal-dialog">\
+            <div class="modal-content">\
+                            <div class="modal-header"> \
+                                <a class="facetview_removerange close">×</a> \
+                                <h3>Set a filter range</h3> \
+                            </div> \
+                            <div class="modal-body"> \
+                                <div style=" margin:20px;" id="facetview_slider"></div> \
+                                <h3 id="facetview_rangechoices" style="text-align:center; margin:10px;"> \
+                                <span class="facetview_lowrangeval">...</span> \
+                                <small>to</small> \
+                                <span class="facetview_highrangeval">...</span></h3> \
+                            </div> \
+                            <div class="modal-footer"> \
+                                <a id="facetview_dofacetrange" href="#" class="btn btn-primary">Apply</a> \
+                                <a class="facetview_removerange btn close">Cancel</a> \
+                            </div> \
+                            </div> \
+                            </div> \
                 </div>';

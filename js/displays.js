@@ -107,11 +107,11 @@ var displayAnnotations = function (data, index, id, origin) {
     for (var m in entities) {
         // set the info box
         if (origin == "abstract")
-            $('#annot-abs-' + index + '-' + m).bind('hover', viewEntity);
+            $('#annot-abs-' + index + '-' + m).hover(viewEntity);
         else if (origin == "keyword")
-            $('#annot-key-' + index + '-' + m + '-' + id).bind('hover', viewEntity);
+            $('#annot-key-' + index + '-' + m + '-' + id).hover(viewEntity);
         else
-            $('#annot-' + index + '-' + m).bind('hover', viewEntity);
+            $('#annot-' + index + '-' + m).hover(viewEntity);
     }
 }
 
@@ -135,7 +135,7 @@ var displayAbstract = function (data, index) {
 
         //piece += '<div class="row-fluid">';
 
-        piece += '<div class="span2" style="width:13%;">';
+        piece += '<div class="col-md-2">';
         if (options.subcollection == "hal") {
             piece += '<p><strong> <a href="https://hal.archives-ouvertes.fr/'
                     + docid + '" target="_blank" style="text-decoration:underline;">'
@@ -164,7 +164,7 @@ var displayAbstract = function (data, index) {
 
         piece += '</div>';
 
-        piece += '<div class="span6" style="margin-left:10px;">';
+        piece += '<div class="col-md-6">';
         // abstract, if any
         var abstract = null;
 
@@ -246,7 +246,7 @@ var displayAbstract = function (data, index) {
         if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
             piece += '<p id="abstractNaked" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';
         }
-
+        
         // keywords
         var keyword = null;
         var keywordIDs =
@@ -282,13 +282,13 @@ var displayAbstract = function (data, index) {
         piece += '</div>';
 
         // info box for the entities
-        piece += '<div class="span4" style="margin-left:10px; width:35%;">';
+        piece += '<div class="col-md-4">';
         piece += '<span id="detailed_annot-' + index + '" />';
         piece += "</div>";
 
         piece += "</div>";
 
-        $('#innen_abstract[rel="' + docid + '"]').append(piece);
+        $('.innen_abstract[rel="' + docid + '"]').append(piece);
 
         $('#abstractNaked[rel="' + abstractID + '"]', obj).each(function () {
             // annotations for the abstract
@@ -520,7 +520,6 @@ function viewEntity(event) {
         }
 
         string += "</div></div>";
-
         $('#detailed_annot-' + resultIndex).html(string);
         $('#detailed_annot-' + resultIndex).show();
     }

@@ -10,14 +10,14 @@ var buildrecord = function (index, node) {
     result += '<tr style="border-collapse:collapse;"><td>';
 
 
-    result += '<div class="row-fluid">';
+    result += '<div class="row">';
 
     var type = null;
     var id = options.data['ids'][index];
 
     var family = id;
     
-        result += '<div class="span10" class="height:100%;" id="myCollapsible_' + index + '" data-toggle="collapse" data-target="#abstract_' + index + '" style="white-space:normal;">';
+        result += '<div class="col-md-10" class="height:100%;" id="myCollapsible_' + index + '" style="white-space:normal;">';
     
 
     // date
@@ -37,9 +37,9 @@ var buildrecord = function (index, node) {
     var titleIDs = null;
     var titleAnnotated = null;
 
-        // NPL
-        titles = jsonObject['$teiCorpus.$teiHeader.$titleStmt.$title.$title-first'];
-        titleIDs = jsonObject['$teiCorpus.$teiHeader.$titleStmt.xml:id'];
+    // NPL
+    titles = jsonObject['$teiCorpus.$teiHeader.$titleStmt.$title.$title-first'];
+    titleIDs = jsonObject['$teiCorpus.$teiHeader.$titleStmt.xml:id'];
     
     if (typeof titles == 'string') {
         title = titles;
@@ -124,7 +124,7 @@ var buildrecord = function (index, node) {
             result += '<span style="color:grey">' + docid
                     + ' - </span> <strong><span '
             if (titleID) {
-                result += ' id="titleNaked" pos="' + index + '" rel="' + titleID + '" ';
+                result += ' class="titleNaked" pos="' + index + '" rel="' + titleID + '" ';
             }
             result += ' style="font-size:13px; color:black; white-space:normal;">' + title + '<span></strong>';
         }
@@ -135,7 +135,6 @@ var buildrecord = function (index, node) {
 
     result += '<br />';
 
-    if (options['collection'] != 'patent') {
         var authorsLast = null;
         var authorsFirst = null;
 
@@ -169,14 +168,12 @@ var buildrecord = function (index, node) {
             }
             result += authorsLast[0] + ' et al.';
         }
-    }
 
     // book, proceedings or journal title
-    if (options['collection'] == 'npl') {
         var titleBook = null;
         var titlesBook = null;
         //if (options['collection'] == 'npl') {
-        titlesBook = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title'];
+        titlesBook = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$lang_en'];
         var titleBookTmp = null;
         if (typeof titlesBook == 'string') {
             titleBook = titlesBook;
@@ -205,9 +202,7 @@ var buildrecord = function (index, node) {
         if (titleBook && (titleBook.length > 1)) {
             result += ' - <em>' + titleBook + '</em>';
         }
-    }
 
-    if (options['collection'] != 'patent') {
         var rawDate = JSON.stringify(dates);
         if (rawDate != null) {
             var ind1 = rawDate.indexOf('"');
@@ -237,7 +232,6 @@ var buildrecord = function (index, node) {
                     result += year + '</em>' + '<br />';
             }
         }
-    }
 
     // snippets 
     // Dominique Andlauer's strategy (sort of Google's one), at least one snippet per matched term, then 
@@ -420,7 +414,7 @@ var buildrecord = function (index, node) {
             }
         }
     }
-
+result+='<a role="button" data-toggle="collapse" href="#abstract_' + index + '">Abstract</a>'
     result += '</div>';
 
     // add image where available
@@ -429,37 +423,35 @@ var buildrecord = function (index, node) {
             var ind = family.indexOf("-");
             if ((ind != -1) && (family.length > ind)) {
                 var pubNum = family.substring(ind + 1, family.length);
-                result += '<div class="span2"><a href="https://hal.archives-ouvertes.fr/' + family +
-                        '/document" target="_blank"><img class="thumbnail" style="float:right; " src="' +
+                result += '<div class="col-md-2"><a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + family +
+                        '/document" target="_blank"><img class="img-thumbnail" style="float:right; " src="' +
                         'https://hal.archives-ouvertes.fr/' + family + '/thumb' + '" /></a></div>';
             }
             else {
-                result += '<div class="span2" />';
+                result += '<div class="col-md-2" />';
             }
-        
     }
 
     //result += '</tr></table>';
     result += '</div>';
 
-    result += '<div class="row-fluid"><div id="abstract_' + index +
+    result += '<div class="row"><div id="abstract_' + index +
             '" class="collapse">';  //#f8f8f8
     if (index % 2) {
-        result += '<div class="mini-layout fluid" style="background-color:#f8f8f8; padding-right:0px;">';
+        result += '<div class="well" style="background-color:#f8f8f8; padding-right:0px;">';
     }
     else {
-        result += '<div class="mini-layout fluid" style="background-color:#ffffff;">';
+        result += '<div class="well" style="background-color:#ffffff;">';
     }
     //result += '<div class="class="container-fluid" style="border: 1px solid #DDD;">';
-    result += '<div class="row-fluid">';
+    
 
     {
         // we need to retrieve the extra biblio and abstract for this biblo item
         result +=
-                '<div class="row-fluid" id="innen_abstract" pos="' + index + '" rel="' + family + '">';
+                '<div class="row innen_abstract"  pos="' + index + '" rel="' + family + '">';
         //'"><div style="background:url(data/images/bar-loader.gif) '+
         //'no-repeat center center; height:13px; "/></div>';
-        result += '</div>';
         result += '</div>';
     }
 

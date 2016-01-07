@@ -27,13 +27,14 @@
         // show the filter values
         var showfiltervals = function (event) {
             event.preventDefault();
+            console.log('showfiltervals');
             if ($(this).hasClass('facetview_open')) {
-                $(this).children('i').replaceWith('<i class="icon-plus"></i>');
+                $(this).children('i').replaceWith('<i class="pull-right glyphicon glyphicon-plus"></i>');
                 $(this).removeClass('facetview_open');
                 $('#facetview_' + $(this).attr('rel')).children('li').hide();
             }
             else {
-                $(this).children('i').replaceWith('<i class="icon-minus"></i>');
+                $(this).children('i').replaceWith('<i class="pull-right glyphicon glyphicon-minus"></i>');
                 $(this).addClass('facetview_open');
                 $('#facetview_' + $(this).attr('rel')).children('li').show();
             }
@@ -42,6 +43,7 @@
         // function to perform for sorting of filters
         var sortfilters = function (event) {
             event.preventDefault();
+            console.log('sortfilters');
             var sortwhat = $(this).attr('href');
             var which = 0;
             for (item in options.facets) {
@@ -71,6 +73,7 @@
 
         var editfilter = function (event) {
             event.preventDefault();
+            console.log('editfilter');
             var which = $(this).attr('rel');
             $('#facetview').append(getEditFilterModal(which));
             $('.facetview_removeedit').bind('click', removeedit);
@@ -81,8 +84,7 @@
         // trigger a search when a filter choice is clicked
         var clickfilterchoice = function (event) {
             event.preventDefault();
-//console.log(event);	
-//console.log($(this));			
+            console.log('clickfilterchoice');
             if ($(this).html().trim().length === 0) {
                 console.log('checkbox');
                 if (!$(this).is(':checked')) {
@@ -102,7 +104,7 @@
                         newobj += $(this).html().replace(/\(.*\)/, '');
                     else
                         newobj += $(this).attr("href");
-                    newobj += ' <i class="icon-remove"></i></a>';
+                    newobj += ' <i class="glyphicon glyphicon-remove"></i></a>';
                     $('#facetview_selectedfilters').append(newobj);
                     $('.facetview_filterselected').unbind('click', clearfilter);
                     $('.facetview_filterselected').bind('click', clearfilter);
@@ -119,7 +121,7 @@
                     newobj += $(this).html().replace(/\(.*\)/, '');
                 else
                     newobj += $(this).attr("href");
-                newobj += ' <i class="icon-remove"></i></a>';
+                newobj += ' <i class="glyphicon glyphicon-remove"></i></a>';
                 $('#facetview_selectedfilters').append(newobj);
                 $('.facetview_filterselected').unbind('click', clearfilter);
                 $('.facetview_filterselected').bind('click', clearfilter);
@@ -131,6 +133,7 @@
         // clear a filter when clear button is pressed, and re-do the search
         var clearfilter = function (event) {
             event.preventDefault();
+            console.log('clearfilter');
             $(this).remove();
             options.paging.from = 0;
             dosearch();
@@ -139,12 +142,14 @@
         // remove the edit modal from page altogether on close (rebuilt for each filter)
         var removeedit = function (event) {
             event.preventDefault();
+            console.log('removeedit');
             $('#facetview_editmodal').modal('hide');
             $('#facetview_editmodal').remove();
         }
         // update parameters and re-run the facet
         var dofacetedit = function (event) {
             event.preventDefault();
+            console.log('dofacetedit');
             var which = $(this).attr('rel');
 
             for (truc in options.facets[which]) {
@@ -156,14 +161,12 @@
             options.paging.from = 0;
             buildfilters();
             dosearch();
-            //if ( !$(this).parent().parent().siblings('.facetview_filtershow').hasClass('facetview_open') ) {
-            //    $(this).parent().parent().siblings('.facetview_filtershow').trigger('click')
-            //}
         };
 
         // adjust how many results are shown
         var morefacetvals = function (event) {
             event.preventDefault();
+            console.log('morefacetvals');
             var morewhat = options.facets[ $(this).attr('rel') ]
             if ('size' in morewhat) {
                 var currentval = morewhat['size'];
@@ -183,15 +186,17 @@
         };
 
         // insert a facet range once selected
+        // Work in progress
         var dofacetrange = function (event) {
             event.preventDefault();
+            console.log('dofacetrange');
             var rel = $('#facetview_rangerel').html();
             var range = $('#facetview_rangechoices').html();
             var newobj = '<a class="facetview_filterselected facetview_facetrange facetview_clear ' +
                     'btn btn-info" rel="' + rel +
                     '" alt="remove" title="remove"' +
                     ' href="' + $(this).attr("href") + '">' +
-                    range + ' <i class="icon-remove"></i></a>';
+                    range + ' <i class="glyphicon glyphicon-remove"></i></a>';
             $('#facetview_selectedfilters').append(newobj);
             $('.facetview_filterselected').unbind('click', clearfilter);
             $('.facetview_filterselected').bind('click', clearfilter);
@@ -203,12 +208,14 @@
         // remove the range modal from page altogether on close (rebuilt for each filter)
         var removerange = function (event) {
             event.preventDefault()
+            console.log('removerange');
             $('#facetview_rangemodal').modal('hide')
             $('#facetview_rangemodal').remove()
         };
         // build a facet range selector
         var facetrange = function (event) {
             event.preventDefault();
+            console.log('facetrange');
             $('#facetview').append(facetrangeModal);
             $('#facetview_rangemodal').append('<div id="facetview_rangerel" style="display:none;">' +
                     $(this).attr('rel') + '</div>');
@@ -328,7 +335,7 @@
                     'btn btn-info" rel="' + rel +
                     '" alt="remove" title="remove"' +
                     ' href="' + date_from.getTime() + '_' + date_to.getTime() + '">' +
-                    range + ' <i class="icon-remove"></i></a>';
+                    range + ' <i class="glyphicon glyphicon-remove"></i></a>';
             $('#facetview_selectedfilters').append(newobj);
             $('.facetview_filterselected').unbind('click', clearfilter);
             $('.facetview_filterselected').bind('click', clearfilter);
@@ -477,12 +484,12 @@
                 var thisfacet = options.addremovefacets[facet]
                 var filter = '<a class="btn '
                 var index = 0
-                var icon = '<i class="icon-plus"></i>'
+                var icon = '<i class="glyphicon glyphicon-plus"></i>'
                 for (var idx in options.facets) {
                     if (options.facets[idx].field == thisfacet) {
                         filter += 'btn-info facetview_filterexists'
                         index = idx
-                        icon = '<i class="icon-remove icon-white"></i> '
+                        icon = '<i class="glyphicon glyphicon-remove"></i> '
                     }
                 }
                 filter += ' facetview_filterchoose" style="margin-top:5px;" href="' + index + '" title="' + thisfacet + '">' + icon + thisfacet + '</a><br />'
@@ -501,43 +508,46 @@
 
             for (var idx in filters) {
                 var _filterTmpl = ' \
-                    <div id="facetview_filterbuttons" class="btn-group"> \
-                    <a style="text-align:left; min-width:70%;" class="facetview_filtershow btn" \
-                      rel="{{FILTER_NAME}}" href=""> \
-                      <!--i class="icon-plus"--></i> \
-                      {{FILTER_DISPLAY}}</a> \
-                      <a class="btn dropdown-toggle" data-toggle="dropdown" \
-                      href="#"><span class="caret"></span></a> \
-                      <ul class="dropdown-menu"> \
-                        <li><a class="facetview_sort facetview_count" href="{{FILTER_EXACT}}">sort by count</a></li> \
-                        <li><a class="facetview_sort facetview_term" href="{{FILTER_EXACT}}">sort by term</a></li> \
-                        <li><a class="facetview_sort facetview_rcount" href="{{FILTER_EXACT}}">sort reverse count</a></li> \
-                        <li><a class="facetview_sort facetview_rterm" href="{{FILTER_EXACT}}">sort reverse term</a></li> \
-                        <li class="divider"></li> \
-                        <li><a class="facetview_facetrange" rel="{{FACET_IDX}}" href="{{FILTER_EXACT}}">apply a filter range</a></li>{{FACET_VIS}} \
-                        <li><a class="facetview_morefacetvals" rel="{{FACET_IDX}}" href="{{FILTER_EXACT}}">show up to ({{FILTER_HOWMANY}})</a></li> \
-                        <li class="divider"></li> \
-                        <li><a class="facetview_editfilter" rel="{{FACET_IDX}}" href="{{FILTER_EXACT}}">Edit this filter</a></li> \
-                        </ul></div> \
-						 <ul id="facetview_{{FILTER_NAME}}" \
-                        class="facetview_filters"> \
+                    <div style="min-width:100%;" id="facetview_filterbuttons" class="btn-group"> \
+                        <button style="text-align:left; min-width:70%;" class="facetview_filtershow btn btn-default" rel="{{FILTER_NAME}}" type="button" >\
+                            {{FILTER_DISPLAY}}\
+                            <i class="pull-right glyphicon glyphicon-plus"></i>\
+                        </button>\
+                        <div class="btn-group" role="group">\
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+                                <span class="caret"></span>\
+                            </button>\
+                            <ul class="dropdown-menu"> \
+                              <li><a class="facetview_sort facetview_count" href="{{FILTER_EXACT}}">sort by count</a></li> \
+                              <li><a class="facetview_sort facetview_term" href="{{FILTER_EXACT}}">sort by term</a></li> \
+                              <li><a class="facetview_sort facetview_rcount" href="{{FILTER_EXACT}}">sort reverse count</a></li> \
+                              <li><a class="facetview_sort facetview_rterm" href="{{FILTER_EXACT}}">sort reverse term</a></li> \
+                              <li class="divider"></li> \
+                              <li><a class="facetview_facetrange" rel="{{FACET_IDX}}" href="{{FILTER_EXACT}}">apply a filter range</a></li>{{FACET_VIS}} \
+                              <li><a class="facetview_morefacetvals" rel="{{FACET_IDX}}" href="{{FILTER_EXACT}}">show up to ({{FILTER_HOWMANY}})</a></li> \
+                              <li class="divider"></li> \
+                              <li><a class="facetview_editfilter" rel="{{FACET_IDX}}" href="{{FILTER_EXACT}}">Edit this filter</a></li> \
+                              </ul>\
+                        </div>\
+                    </div>\
+                    <ul id="facetview_{{FILTER_NAME}}" class="facetview_filters"> \
                     	';
                 if (filters[idx]['type'] == 'date') {
                     _filterTmpl +=
                             '<div id="date-input" style="position:relative;margin-top:-15px;margin-bottom:10px;margin-left:-30px;"> \
 						   <input type="text" id="day_from" name="day_from" \
-						   size="2" style="width: 18px;" placeholder="DD"/> \
+						   size="2"  placeholder="DD"/> \
 						   <input type="text" id="month_from" name="month_from" size="2" \
-						   style="width: 22px;" placeholder="MM"/> \
+						    placeholder="MM"/> \
 						   <input type="text" id="year_from" name="year_from" size="4" \
-						   style="width: 34px;"  placeholder="YYYY"/> \
+						     placeholder="YYYY"/> \
 						   to <input type="text" id="day_to" name="day_to" size="2" \
-						   style="width: 18px;" placeholder="DD"" /> \
+						    placeholder="DD"" /> \
 						   <input type="text" id="month_to" name="month_to" size="2" \
-						   style="width: 22px;" placeholder="MM"/> \
+						    placeholder="MM"/> \
 					   	   <input type="text" id="year_to" name="year_to" size="4" \
-					       style="width: 34px;"  placeholder="YYYY"/> \
-					       <div id="validate-date-range" alt="set date range" title="set date range" rel="{{FACET_IDX}}" class="icon-ok" /></div>';
+					         placeholder="YYYY"/> \
+					       <div id="validate-date-range" alt="set date range" title="set date range" rel="{{FACET_IDX}}" class="glyphicon glyphicon-ok" /></div>';
                 }
                 _filterTmpl += '</ul>';
                 if (options.visualise_filters) {
@@ -565,21 +575,22 @@
                 }
             }
 
-            var temp_intro = '<a style="text-align:left; min-width:20%;margin-bottom:10px;" class="btn" \
-             		id="new_facet" href=""> \
-             		<i class="icon-plus"></i> add new facet </a> \
+            var temp_intro = '\
+                        <button style="text-align:left; min-width:20%;margin-bottom:10px;" class="btn btn-default" id="new_facet" href="" type="button" >\
+                            <i class="glyphicon glyphicon-plus"></i> add new facet \
+                        </button>\
 			';
             $('#facetview_filters').html("").append(temp_intro);
             $('#new_facet').bind('click', add_facet);
         
-            var temp_intro = '<form class="well" id="scope_area"><label class="checkbox">' +
-                    '<input type="checkbox" name="scientific" checked>Technical content</label>';
-            temp_intro += '<label class="checkbox">' +
-                    '<input type="checkbox" name="fulltext" checked>Full text available online</label>';
-            temp_intro += '<label class="checkbox">' +
-                    '<input type="checkbox" name="scholarly">Scholarly content</label>';
+            //var temp_intro = '<form class="well" id="scope_area"><label class="checkbox">' +
+            //        '<input type="checkbox" name="scientific" checked>Technical content</label>';
+            //temp_intro += '<label class="checkbox">' +
+            //        '<input type="checkbox" name="fulltext" checked>Full text available online</label>';
+            //temp_intro += '<label class="checkbox">' +
+            //        '<input type="checkbox" name="scholarly">Scholarly content</label>';
             //temp_intro += '<button type="button" class="btn" data-toggle="button">Custom scope restriction</button>';
-            temp_intro += '</form>';
+            //temp_intro += '</form>';
 
             $('#facetview_filters').html("").append(temp_intro);
             $('#scope_area').bind('click', setScope);
@@ -1473,7 +1484,7 @@
                     'btn btn-info" rel="' + facetKey +
                     '" alt="remove" title="remove"' +
                     ' href="' + facetValue + '">' +
-                    facetValueDisplay + ' <i class="icon-remove"></i></a>';
+                    facetValueDisplay + ' <i class="glyphicon glyphicon-remove"></i></a>';
             $('#facetview_selectedfilters').append(newobj);
             $('.facetview_filterselected').unbind('click', clearfilter);
             $('.facetview_filterselected').bind('click', clearfilter);
@@ -1581,13 +1592,13 @@
             }
 
             var metaTmpl = ' \
-              <div class="pagination"> \
-                <ul> \
-                  <li class="prev"><a id="facetview_decrement" href="{{from}}">&laquo; back</a></li> \
+              <nav> \
+                <ul class="pager"> \
+                  <li class="previous"><a id="facetview_decrement" href="{{from}}">&laquo; back</a></li> \
                   <li class="active"><a>{{from}} &ndash; {{to}} of {{total}}</a></li> \
                   <li class="next"><a id="facetview_increment" href="{{to}}">next &raquo;</a></li> \
                 </ul> \
-              </div> \
+              </nav> \
               ';
 
             $('#facetview_metadata').html("Not found...");
@@ -1653,7 +1664,7 @@
 
             //we load now in background the additional record information requiring a user interaction for
             // visualisation
-            $('#titleNaked', obj).each(function () {
+            $('.titleNaked', obj).each(function () {
                 if (options.collection == "npl") {
                     // annotations for the title
                     var index = $(this).attr('pos');
@@ -1673,13 +1684,12 @@
                 }
             });
 
-            $('#innen_abstract', obj).each(function () {
+            $('.innen_abstract', obj).each(function () {
                 // load biblio and abstract info. 
                 // pos attribute gives the result index, rel attribute gives the document ID 
                 var index = $(this).attr('pos');
                 var docID = $(this).attr('rel');
                 var localQuery;
-
                 if (options.collection == "npl") {
 
                     // abstract and further informations
@@ -1706,28 +1716,6 @@
                         }
                     });
 
-                }
-                else if (options.collection == "patent") {
-                    localQuery = {"fields": ["_id",
-                            "$teiCorpus.$TEI.$text.$front.$div.$p.$lang_en",
-                            "$teiCorpus.$TEI.$text.$front.$div.$p.$lang_de",
-                            "$teiCorpus.$TEI.$text.$front.$div.$p.$lang_fr"],
-                        "query": {"filtered": {"query": {"term": {"_id": docID}}}}};
-
-                    /*$.post(options.search_url, 
-                     {source : JSON.stringify(localQuery) }, 
-                     function(data) { displayAbstract(data, index); }, 
-                     "jsonp");*/
-                    $.ajax({
-                        type: "get",
-                        url: options.search_url,
-                        contentType: 'application/json',
-                        dataType: 'jsonp',
-                        data: {source: JSON.stringify(localQuery)},
-                        success: function (data) {
-                            displayAbstract(data, index);
-                        }
-                    });
                 }
             });
         };

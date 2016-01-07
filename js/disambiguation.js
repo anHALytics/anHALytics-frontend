@@ -26,8 +26,8 @@ var showexpand = function (sdata) {
     //console.log(jsonObject);
 
     $('#disambiguation_panel').empty();
-    var piece = '<div class="mini-layout fluid" style="background-color:#F7EDDC;"> \
-				   		 <div class="row-fluid"><div class="span11">';
+    var piece = '<div class="well" style="background-color:#F7EDDC;"> \
+				   		 <div class="row"><div class="col-md-12">';
     if (jsonObject['senses']) {
         piece += '<table class="table" style="width:100%;border:1px solid white;">';
         for (var sens in jsonObject['senses']) {
@@ -50,7 +50,7 @@ var showexpand = function (sdata) {
     }
 
 
-    piece += '</div><div class="span1"><div id="close-disambiguate-panel" \
+    piece += '</div><div class="col-md-1"><div id="close-disambiguate-panel" \
 					  style="position:relative;float:right;" class="icon-remove icon-white"/></div></div></div>';
     $('#disambiguation_panel').append(piece);
     $('#close-disambiguate-panel').bind('click', function () {
@@ -62,10 +62,10 @@ var showexpand = function (sdata) {
 
 var getPieceShowexpandNERD = function (jsonObject){
 
-    var piece = '<div class="mini-layout fluid" style="background-color:#F7EDDC;"> \
-				   		 <div class="row-fluid"><div class="span11" style="width:95%;">';
+    var piece = '<div class="well" style="background-color:#F7EDDC;"> \
+				   		 <div class="row"><div class="col-md-11">';
     if (jsonObject['entities']) {
-        piece += '<table class="table" style="width:100%;border:1px solid white;">';
+        piece += '<table class="table" style="border:1px solid white;">';
         for (var sens in jsonObject['entities']) {
             var entity = jsonObject['entities'][sens];
             var domains = entity.domains;
@@ -154,7 +154,7 @@ var getPieceShowexpandNERD = function (jsonObject){
      }*/
 
     piece += '</div><div><div id="close-disambiguate-panel" \
-					  style="position:relative;float:right;" class="icon-remove icon-white"/></div></div></div>';
+					  style="position:relative;float:right;" class="glyphicon glyphicon-remove icon-white"/></div></div></div>';
     return piece;
 };
 

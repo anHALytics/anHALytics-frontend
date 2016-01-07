@@ -1,0 +1,28 @@
+{
+  "name": "anHALytics-frontend",
+  "homepage": "https://github.com/anHALytics/anHALytics-frontend",
+  "authors": [
+    "achraf.azhar@inria.fr"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~1.11.3",
+    "jquery-ui": "~1.11.4",
+    "bootstrap": "~3.3.6",
+    "components-font-awesome": "~4.5.0",
+    "awesome-bootstrap-checkbox": "~0.3.5",
+    "d3": "3.5.12",
+    "protovis": "~3.2.0"
+  }
+}

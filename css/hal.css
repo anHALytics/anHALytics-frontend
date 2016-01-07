@@ -3,7 +3,7 @@
     * 
     *  Author: Patrice Lopez        
   	*/
-
+  
 .label {
   padding: 1px 3px 2px;
   font-size: 10px;
@@ -98,45 +98,6 @@
 .label.pubtype {
     background-color: #d9534f;
 	font-size: 8px;
-}
-
-
-html, body {
-  background-color: #2E2E2E;
-  color:#A4A4A4; 
-  word-break:normal;
-}
-body {
-  padding-top: 0px; /* 40px to make the container go all the way to the bottom of the topbar */
-  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color:#A4A4A4; 
-}
-
-.content {
-  /*background-color: #F2F2F2;*/
-  background-color: #FFF;
-  color:#848484;
-  padding: 20px;
-  margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
-  -webkit-border-radius: 0 0 6px 6px;
-     -moz-border-radius: 0 0 6px 6px;
-          border-radius: 0 0 6px 6px;
-  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-          box-shadow: 0 1px 2px rgba(0,0,0,.15);
-  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  word-break:normal;
-}
-
-.page-header {
-/*  background-color: #f5f5f5;*/
-  background-color:#585858;
-  padding: 20px 20px 10px;
-  margin: -20px -20px 20px;
-}
-
-.container > footer p {
-  text-align: center;
 }
 
 /* specific additions for the example index page */
@@ -334,13 +295,12 @@ span {word-break:normal;}
 /* Mini layout previews
 -------------------------------------------------- */
 .mini-layout {
-  border: 1px solid #ddd;
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;
-  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.075);
-     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.075);
-          box-shadow: 0 1px 2px rgba(0,0,0,.075);
+  -webkit-box-shadow: 0 0px 0px rgba(0,0,0,.075);
+     -moz-box-shadow: 0 0px 0px rgba(0,0,0,.075);
+          box-shadow: 0 0px 0px rgba(0,0,0,.075);
 }
 /*.mini-layout,
 .mini-layout .mini-layout-body,
