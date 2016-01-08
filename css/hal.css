@@ -426,6 +426,10 @@ span {word-break:normal;}
     background-color: #31B404;
 }
 
+.annotation_info{
+  display: none;
+}
+
 
 /* red: #BC0E0E */
 /* orange #FFAA00 */

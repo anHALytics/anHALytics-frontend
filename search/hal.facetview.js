@@ -1646,12 +1646,29 @@
                 buildrecord(index, $('#facetview_results'));
                 
                 $('#facetview_results tr:last-child').linkify();
+                //Handle the chevron on every action.
                 $("#abstract_" + index).on('shown.bs.collapse', function() {
-                    $('#button_abs'+ index ).find('span').addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
+                    $('#button_abs_collapse_'+ index ).find('span').addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
                 });
 
                 $("#abstract_" + index).on('hidden.bs.collapse', function() {
-                    $('#button_abs'+ index ).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
+                    $('#button_abs_collapse_'+ index ).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
+                });
+                
+                $("#authors_" + index).on('shown.bs.collapse', function() {
+                    $('#button_authors_collapse_'+ index ).find('span').addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
+                });
+
+                $("#authors_" + index).on('hidden.bs.collapse', function() {
+                    $('#button_authors_collapse_'+ index ).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
+                });
+                
+                $("#keywords_" + index).on('shown.bs.collapse', function() {
+                    $('#button_keywords_collapse_'+ index ).find('span').addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
+                });
+
+                $("#keywords_" + index).on('hidden.bs.collapse', function() {
+                    $('#button_keywords_collapse_'+ index ).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
                 });
             });
             MathJax.Hub.Queue(["Typeset", MathJax.Hub]);

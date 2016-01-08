@@ -17,6 +17,24 @@ var buildrecord = function (index, node) {
 
     var family = id;
 
+    result += '<div class="col-md-2">';
+    // add image where available
+
+    if (options.display_images) {
+
+        var ind = family.indexOf("-");
+        if ((ind != -1) && (family.length > ind) && (options.subcollection == "hal")) {
+            var pubNum = family.substring(ind + 1, family.length);
+
+            result += '<strong> <a href="https://hal.archives-ouvertes.fr/'
+                    + family + '" target="_blank" style="color: #0094DE;text-decoration:underline;" alt="see resource on HAL">' + family + '</a></strong>\
+<a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + family +
+                    '/document" target="_blank"><img class="img-thumbnail img-responsive" style="float:right; width: 70px" src="' +
+                    'https://hal.archives-ouvertes.fr/' + family + '/thumb' + '" /></a>';
+        }
+    }
+    result += '</div>';
+
     result += '<div class="col-md-10" class="height:100%;" id="myCollapsible_' + index + '" style="white-space:normal;">';
 
 
@@ -121,20 +139,35 @@ var buildrecord = function (index, node) {
             if (docid.indexOf('fulltext')) {
                 docid = docid.replace('.fulltext', '');
             }
-            result += '<span style="color:grey">' + docid
-                    + ' - </span> <strong><span '
+            if (options.subcollection == "hal") {
+
+
+                // document type
+                var type =
+                        jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology'];
+                if (type) {
+                    result += '<p><span class="label pubtype" style="white-space:normal;">' + type + '</span></p>';
+                    //piece += '<p><strong>' + type + '</strong></p>';
+                }
+            }
             if (titleID) {
-                result += ' class="titleNaked" pos="' + index + '" rel="' + titleID + '" ';
+                result += ' <strong><span class="titleNaked" pos="' + index + '" rel="' + titleID + '" ';
             }
             result += ' style="font-size:13px; color:black; white-space:normal;">' + title + '<span></strong>';
+
+
+
         }
         else {
             result += '<strong><span style="font-size:13px">' + title + '<span></strong>';
+
         }
     }
 
     result += '<br />';
 
+
+    result += '<strong>';
     var authorsLast = null;
     var authorsFirst = null;
 
@@ -237,9 +270,9 @@ var buildrecord = function (index, node) {
     doi = jsonObject["$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi"];
     if (doi) {
         doi = doi[0];
-        result += "DOI: <a target='_blank' href='http://dx.doi.org/" + doi + "'><em>" + doi + "</em></a>";
+        result += "DOI: <a target='_blank' style='color: #0094DE;' href='http://dx.doi.org/" + doi + "'>" + doi + "</a><br/>";
     }
-
+    result += '</strong>';
     // snippets 
     // Dominique Andlauer's strategy (sort of Google's one), at least one snippet per matched term, then 
     // per relevance, first we check the number of different matched terms
@@ -421,81 +454,38 @@ var buildrecord = function (index, node) {
             }
         }
     }
-    result += '<br/><a id="button_abs' + index + '" role="button" data-toggle="collapse" href="#abstract_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract</a>'
+
     result += '</div>';
-
-    // add image where available
-    if (options.display_images) {
-
-        var ind = family.indexOf("-");
-        if ((ind != -1) && (family.length > ind)) {
-            var pubNum = family.substring(ind + 1, family.length);
-            result += '<div class="col-md-2"><a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + family +
-                    '/document" target="_blank"><img class="img-thumbnail" style="float:right; " src="' +
-                    'https://hal.archives-ouvertes.fr/' + family + '/thumb' + '" /></a></div>';
-        }
-        else {
-            result += '<div class="col-md-2" />';
-        }
-    }
 
     //result += '</tr></table>';
     result += '</div>';
 
 
+    result += '<div id="myGroup">';
 
 
 
+    result += '<div class="panel">';
+    result += '<br/><a id="button_abs_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract</a>';
 
-    result += '<div class="row"><div id="abstract_' + index +
-            '" class="collapse">';  //#f8f8f8
-    if (index % 2) {
-        result += '<div class="well" style="background-color:#f8f8f8; padding-right:0px;">';
-    }
-    else {
-        result += '<div class="well" style="background-color:#ffffff;">';
-    }
-    //result += '<div class="class="container-fluid" style="border: 1px solid #DDD;">';
+    result += '<span style="display:inline-block; width: 290px;"></span>';
+    result += '<a id="button_authors_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#authors_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Authors</a>';
+    result += '<span style="display:inline-block; width: 290px;"></span>';
+    result += '<a id="button_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Keywords</a>';
+
 
 
     {
-        // we need to retrieve the extra biblio and abstract for this biblo item
-        result +=
-                '<div class="row innen_abstract"  pos="' + index + '" rel="' + family + '">';
         var piece = "";
-
-        //piece += '<div class="row-fluid">';
-
-        piece += '<div class="col-md-2">';
-        if (options.subcollection == "hal") {
-            piece += '<p><strong> <a href="https://hal.archives-ouvertes.fr/'
-                    + docid + '" target="_blank" style="text-decoration:underline;">'
-                    + docid + '</a></strong></p>';
-
-
-            // document type
-            var type =
-                    jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology'];
-            if (type) {
-                piece += '<p><span class="label pubtype" style="white-space:normal;">' + type + '</span></p>';
-                //piece += '<p><strong>' + type + '</strong></p>';
-            }
+        piece += '<div id="abstract_' + index +
+                '" class="well row collapse " pos="' + index + '" rel="' + family + '"';
+        if (index % 2) {
+            piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
         }
-
-        // authors and affiliation
-        var names =
-                jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName'];
-
-        if (names) {
-            for (var aut in names) {
-                var name_ = names[aut];
-                piece += '<p>' + name_ + '</p>';
-            }
+        else {
+            piece += 'style="background-color:#ffffff;">';
         }
-
-        piece += '</div>';
-
-        piece += '<div class="col-md-6">';
+        piece += '<div class="col-md-12">';
         // abstract, if any
         var abstract = null;
 
@@ -577,7 +567,55 @@ var buildrecord = function (index, node) {
         if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
             piece += '<p id="abstractNaked" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';
         }
+piece += '</div>';
+        piece += '</div>';
+    }
+    result += piece;
 
+
+    {
+        var piece = "";
+        piece += '<div id="authors_' + index +
+                '" class="well row collapse" pos="' + index + '" rel="' + family + '"';
+        if (index % 2) {
+            piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
+        }
+        else {
+            piece += 'style="background-color:#ffffff;">';
+        }
+
+        piece += '<div class="col-md-12">';
+
+        // authors and affiliation
+        var names =
+                jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName'];
+
+        if (names) {
+            for (var aut in names) {
+                var name_ = names[aut];
+                piece += '<p>' + name_ + '</p>';
+            }
+        }
+
+        piece += '</div>';
+        piece += '</div>';
+    }
+    result += piece;
+    
+    
+    {
+        
+        var piece = "";
+        piece += '<div id="keywords_' + index +
+                '" class="well row collapse" pos="' + index + '" rel="' + family + '"';
+        if (index % 2) {
+            piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
+        }
+        else {
+            piece += 'style="background-color:#ffffff;">';
+        }
+
+        piece += '<div class="col-md-8">';
         // keywords
         var keyword = null;
         var keywordIDs =
@@ -613,47 +651,16 @@ var buildrecord = function (index, node) {
         piece += '</div>';
 
         // info box for the entities
-        piece += '<div class="col-md-4">';
-        piece += '<span id="detailed_annot-' + index + '" />';
+        piece += '<div class="annotation_info">';
+        piece += '<span  id="detailed_annot-' + index + '" />';
         piece += "</div>";
 
         piece += "</div>";
-        result += piece;
-        result += '</div>';
+        
     }
-
-    //result += '</div>';
+    result += piece;
     result += '</div>';
-    result += "</div>";
-
-    result += "</div>";
-
-    if ((options['collection'] == 'npl')) {
-        var pdfURL = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.target'];
-        var docid = jsonObject._id;
-        if (pdfURL || docid) {
-            result += '<td>';
-            if (pdfURL) {
-                result += '<a href="' + pdfURL
-                        + '" target="_blank"><img src="data/images/pdf_icon_small.gif"></a>';
-            }
-            if (docid) {
-                if (options['subcollection'] == 'hal') {
-                    result += '<a href="http://hal.archives-ouvertes.fr/' + docid + '/en" target="_blank">hal</a>';
-                }
-                else if ((options['subcollection'] == 'zfn') && pdfURL) {
-                    //var urlToHeader = pdfURL.replace("pdf", "header.tei.xml");
-                    pdfURL = '' + pdfURL;
-                    var urlToHeader = pdfURL.replace(/pdf/g, 'header.tei.xml');
-                    result += '<a href="' + urlToHeader + '" target="_blank">tei</a>';
-                }
-            }
-            result += '</td>';
-        }
-    }
-    else {
-        result += '<td></td>';
-    }
+    result += '</div>';
 
     result += '</td></tr>';
 

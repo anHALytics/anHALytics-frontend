@@ -105,12 +105,37 @@ var displayAnnotations = function (data, index, id, origin) {
     var m = 0;
     for (var m in entities) {
         // set the info box
-        if (origin == "abstract")
-            $('#annot-abs-' + index + '-' + m).hover(viewEntity);
-        else if (origin == "keyword")
+        if (origin == "abstract") {
+            $('#annot-abs-' + index + '-' + m).click(viewEntity);
+
+            $('#annot-abs-' + index + '-' + m).popover({
+                html: true,
+                placement: 'bottom',
+                //trigger:'hover',
+                content: function () {
+                    return $('#detailed_annot-' + index).html();
+                }});
+        }
+        else if (origin == "keyword"){
             $('#annot-key-' + index + '-' + m + '-' + id).hover(viewEntity);
-        else
-            $('#annot-' + index + '-' + m).hover(viewEntity);
+            $('#annot-key-' + index + '-' + m + '-' + id).popover({
+                html: true,
+                placement: 'bottom',
+                trigger:'hover',
+                content: function () {
+                    return $('#detailed_annot-' + index).html();
+                }});
+        }
+        else{
+            $('#annot-' + index + '-' + m).click(viewEntity);
+            $('#annot-' + index + '-' + m).popover({
+                html: true,
+                placement: 'bottom',
+                //trigger:'hover',
+                content: function () {
+                    return $('#detailed_annot-' + index).html();
+                }});
+        }
     }
 }
 
@@ -245,10 +270,10 @@ function viewEntity(event) {
             sense = entity.sense.fineSense;
 
         string += "<div class='info-sense-box " + colorLabel +
-                "'><h3 style='color:#FFF;padding-left:10px;'>" + content.toUpperCase() +
+                "' ><h3 style='color:#FFF;padding-left:10px;'>" + content.toUpperCase() +
                 "</h3>";
         string += "<div class='container-fluid' style='background-color:#F9F9F9;color:#70695C;border:padding:5px;margin-top:5px;'>" +
-                "<table style='width:100%;background-color:#fff;border:0px'><tr style='background-color:#fff;border:0px;'><td style='background-color:#fff;border:0px;'>";
+                "<table style='background-color:#fff;'><tr style='background-color:#fff;border:0px;'><td style='background-color:#fff;border:0px;'>";
 
         if (type)
             string += "<p>Type: <b>" + type + "</b></p>";
@@ -305,6 +330,5 @@ function viewEntity(event) {
 
         string += "</div></div>";
         $('#detailed_annot-' + resultIndex).html(string);
-        $('#detailed_annot-' + resultIndex).show();
     }
 }
