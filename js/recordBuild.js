@@ -16,20 +16,20 @@ var buildrecord = function (index, node) {
     var id = options.data['ids'][index];
 
     var family = id;
-    
-        result += '<div class="col-md-10" class="height:100%;" id="myCollapsible_' + index + '" style="white-space:normal;">';
-    
+
+    result += '<div class="col-md-10" class="height:100%;" id="myCollapsible_' + index + '" style="white-space:normal;">';
+
 
     // date
     var date;
     var dates = null;
-        dates = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date'];
-        if (!dates) {
-            dates = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$when'];
-        }
-        if (!dates) {
-            dates = jsonObject['$teiCorpus.$teiHeader.$editionStmt.$edition.$date'];
-        }
+    dates = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date'];
+    if (!dates) {
+        dates = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$when'];
+    }
+    if (!dates) {
+        dates = jsonObject['$teiCorpus.$teiHeader.$editionStmt.$edition.$date'];
+    }
 
     var title;
     var titles = null;
@@ -40,7 +40,7 @@ var buildrecord = function (index, node) {
     // NPL
     titles = jsonObject['$teiCorpus.$teiHeader.$titleStmt.$title.$title-first'];
     titleIDs = jsonObject['$teiCorpus.$teiHeader.$titleStmt.xml:id'];
-    
+
     if (typeof titles == 'string') {
         title = titles;
     }
@@ -66,8 +66,8 @@ var buildrecord = function (index, node) {
 
     if (!title || (title.length === 0)) {
 
-            titles = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$title.$lang_en'];
-        
+        titles = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$title.$lang_en'];
+
         if (typeof titles == 'string') {
             title = titles;
         }
@@ -83,8 +83,8 @@ var buildrecord = function (index, node) {
 
     if (!title || (title.length === 0)) {
 
-            titles = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$title.$lang_fr'];
-        
+        titles = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$title.$lang_fr'];
+
         if (typeof titles == 'string') {
             title = titles;
         }
@@ -100,8 +100,8 @@ var buildrecord = function (index, node) {
 
     if (!title || (title.length === 0)) {
 
-            titles = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$title.$lang_de'];
-        
+        titles = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$title.$lang_de'];
+
         if (typeof titles == 'string') {
             title = titles;
         }
@@ -135,103 +135,110 @@ var buildrecord = function (index, node) {
 
     result += '<br />';
 
-        var authorsLast = null;
-        var authorsFirst = null;
+    var authorsLast = null;
+    var authorsFirst = null;
 
-        authorsLast = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$surname'];
-        var tempStr = "" + authorsLast;
-        authorsLast = tempStr.split(",");
-        authorsFirst = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$forename'];
-        tempStr = "" + authorsFirst;
-        authorsFirst = tempStr.split(",");
+    authorsLast = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$surname'];
+    var tempStr = "" + authorsLast;
+    authorsLast = tempStr.split(",");
+    authorsFirst = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$forename'];
+    tempStr = "" + authorsFirst;
+    authorsFirst = tempStr.split(",");
 
-        if (authorsLast.length < 4) {
-            for (var author in authorsLast) {
-                if (author === 0) {
-                    if (authorsFirst.length > 0) {
-                        result += authorsFirst[0][0] + ". ";
-                    }
-                    result += authorsLast[0];
+    if (authorsLast.length < 4) {
+        for (var author in authorsLast) {
+            if (author === 0) {
+                if (authorsFirst.length > 0) {
+                    result += authorsFirst[0][0] + ". ";
                 }
-                else {
-                    result += ", ";
-                    if (authorsFirst.length > author) {
-                        result += authorsFirst[author][0] + ". ";
-                    }
-                    result += authorsLast[author];
+                result += authorsLast[0];
+            }
+            else {
+                result += ", ";
+                if (authorsFirst.length > author) {
+                    result += authorsFirst[author][0] + ". ";
                 }
+                result += authorsLast[author];
             }
         }
-        else {
-            if (authorsFirst.length > 0) {
-                result += authorsFirst[0][0] + ". ";
-            }
-            result += authorsLast[0] + ' et al.';
+    }
+    else {
+        if (authorsFirst.length > 0) {
+            result += authorsFirst[0][0] + ". ";
         }
+        result += authorsLast[0] + ' et al.';
+    }
 
     // book, proceedings or journal title
-        var titleBook = null;
-        var titlesBook = null;
-        //if (options['collection'] == 'npl') {
-        titlesBook = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$lang_en'];
-        var titleBookTmp = null;
-        if (typeof titlesBook == 'string') {
-            titleBook = titlesBook;
-        }
-        else {
-            titleBook = titlesBook;
-            while ((typeof titleBook != 'string') && (typeof titleBook != 'undefined')) {
-                titleBookTmp = titleBook[0];
-                if (typeof titleBookTmp != 'undefined') {
-                    titleBook = titleBookTmp;
-                }
-                else {
-                    for (var x in titleBook) {
-                        titleBookTmp = titleBook[x];
-                    }
-                    if (titleBookTmp)
-                        titleBook = titleBookTmp[0];
-                    else
-                        titleBook = null;
-                    break;
-                }
-
+    var titleBook = null;
+    var titlesBook = null;
+    //if (options['collection'] == 'npl') {
+    titlesBook = jsonObject["$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$title-first"];
+    var titleBookTmp = null;
+    if (typeof titlesBook == 'string') {
+        titleBook = titlesBook;
+    }
+    else {
+        titleBook = titlesBook;
+        while ((typeof titleBook != 'string') && (typeof titleBook != 'undefined')) {
+            titleBookTmp = titleBook[0];
+            if (typeof titleBookTmp != 'undefined') {
+                titleBook = titleBookTmp;
             }
-        }
-        //}
-        if (titleBook && (titleBook.length > 1)) {
-            result += ' - <em>' + titleBook + '</em>';
-        }
-
-        var rawDate = JSON.stringify(dates);
-        if (rawDate != null) {
-            var ind1 = rawDate.indexOf('"');
-            var ind2 = rawDate.indexOf('"', ind1 + 1);
-            date = rawDate.substring(ind1, ind2 + 1);
-
-            if (date && (date.length > 1)) {
-                var year = date.substring(1, 5);
-                var month = null;
-                if (date.length > 6)
-                    month = date.substring(6, 8);
-                if ((month) && (month.length > 1) && (month[0] == "0")) {
-                    month = month.substring(1, month.length)
+            else {
+                for (var x in titleBook) {
+                    titleBookTmp = titleBook[x];
                 }
-                var day = null;
-                if (date.length > 9)
-                    day = date.substring(9, date.length - 1);
-                if ((day != undefined) && (day.length > 1) && (day[0] == "0")) {
-                    day = day.substring(1, day.length)
-                }
-                result += ' - <em>';
-                if ((day != undefined) && (day.length > 0))
-                    result += day + '.';
-                if ((month != undefined) && (month.length > 0))
-                    result += month + '.';
-                if (year != undefined)
-                    result += year + '</em>' + '<br />';
+                if (titleBookTmp)
+                    titleBook = titleBookTmp[0];
+                else
+                    titleBook = null;
+                break;
             }
+
         }
+    }
+    //}
+    if (titleBook && (titleBook.length > 1)) {
+        result += ' - <em>' + titleBook + '</em>';
+    }
+
+    var rawDate = JSON.stringify(dates);
+    if (rawDate != null) {
+        var ind1 = rawDate.indexOf('"');
+        var ind2 = rawDate.indexOf('"', ind1 + 1);
+        date = rawDate.substring(ind1, ind2 + 1);
+
+        if (date && (date.length > 1)) {
+            var year = date.substring(1, 5);
+            var month = null;
+            if (date.length > 6)
+                month = date.substring(6, 8);
+            if ((month) && (month.length > 1) && (month[0] == "0")) {
+                month = month.substring(1, month.length)
+            }
+            var day = null;
+            if (date.length > 9)
+                day = date.substring(9, date.length - 1);
+            if ((day != undefined) && (day.length > 1) && (day[0] == "0")) {
+                day = day.substring(1, day.length)
+            }
+            result += ' - <em>';
+            if ((day != undefined) && (day.length > 0))
+                result += day + '.';
+            if ((month != undefined) && (month.length > 0))
+                result += month + '.';
+            if (year != undefined)
+                result += year + '</em>' + '<br />';
+        }
+    }
+
+    var doi = null;
+    doi = jsonObject["$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi"];
+    if (doi) {
+        doi = doi[0];
+        result += "DOI: <a target='_blank' href='http://dx.doi.org/" + doi + "'><em>" + doi + "</em></a>";
+    }
 
     // snippets 
     // Dominique Andlauer's strategy (sort of Google's one), at least one snippet per matched term, then 
@@ -414,26 +421,31 @@ var buildrecord = function (index, node) {
             }
         }
     }
-result+='<a role="button" data-toggle="collapse" href="#abstract_' + index + '">Abstract</a>'
+    result += '<br/><a id="button_abs' + index + '" role="button" data-toggle="collapse" href="#abstract_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract</a>'
     result += '</div>';
 
     // add image where available
     if (options.display_images) {
 
-            var ind = family.indexOf("-");
-            if ((ind != -1) && (family.length > ind)) {
-                var pubNum = family.substring(ind + 1, family.length);
-                result += '<div class="col-md-2"><a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + family +
-                        '/document" target="_blank"><img class="img-thumbnail" style="float:right; " src="' +
-                        'https://hal.archives-ouvertes.fr/' + family + '/thumb' + '" /></a></div>';
-            }
-            else {
-                result += '<div class="col-md-2" />';
-            }
+        var ind = family.indexOf("-");
+        if ((ind != -1) && (family.length > ind)) {
+            var pubNum = family.substring(ind + 1, family.length);
+            result += '<div class="col-md-2"><a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + family +
+                    '/document" target="_blank"><img class="img-thumbnail" style="float:right; " src="' +
+                    'https://hal.archives-ouvertes.fr/' + family + '/thumb' + '" /></a></div>';
+        }
+        else {
+            result += '<div class="col-md-2" />';
+        }
     }
 
     //result += '</tr></table>';
     result += '</div>';
+
+
+
+
+
 
     result += '<div class="row"><div id="abstract_' + index +
             '" class="collapse">';  //#f8f8f8
@@ -444,14 +456,169 @@ result+='<a role="button" data-toggle="collapse" href="#abstract_' + index + '">
         result += '<div class="well" style="background-color:#ffffff;">';
     }
     //result += '<div class="class="container-fluid" style="border: 1px solid #DDD;">';
-    
+
 
     {
         // we need to retrieve the extra biblio and abstract for this biblo item
         result +=
                 '<div class="row innen_abstract"  pos="' + index + '" rel="' + family + '">';
-        //'"><div style="background:url(data/images/bar-loader.gif) '+
-        //'no-repeat center center; height:13px; "/></div>';
+        var piece = "";
+
+        //piece += '<div class="row-fluid">';
+
+        piece += '<div class="col-md-2">';
+        if (options.subcollection == "hal") {
+            piece += '<p><strong> <a href="https://hal.archives-ouvertes.fr/'
+                    + docid + '" target="_blank" style="text-decoration:underline;">'
+                    + docid + '</a></strong></p>';
+
+
+            // document type
+            var type =
+                    jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology'];
+            if (type) {
+                piece += '<p><span class="label pubtype" style="white-space:normal;">' + type + '</span></p>';
+                //piece += '<p><strong>' + type + '</strong></p>';
+            }
+        }
+
+        // authors and affiliation
+        var names =
+                jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName'];
+
+        if (names) {
+            for (var aut in names) {
+                var name_ = names[aut];
+                piece += '<p>' + name_ + '</p>';
+            }
+        }
+
+        piece += '</div>';
+
+        piece += '<div class="col-md-6">';
+        // abstract, if any
+        var abstract = null;
+
+        var abstractID = null;
+        var abstractIDs = jsonObject['$teiCorpus.$teiHeader.$profileDesc.xml:id'];
+        if (typeof abstractIDs == 'string') {
+            abstractID = abstractIDs;
+        }
+        else {
+            if (abstractIDs && (abstractIDs.length > 0)) {
+                abstractID = abstractIDs[0];
+                while ((typeof abstractID != 'string') && (typeof abstractID != 'undefined')) {
+                    abstractID = abstractID[0];
+                }
+            }
+        }
+
+        var abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en'];
+        if (typeof abstracts == 'string') {
+            abstract = abstracts;
+        }
+        else {
+            if (abstracts && (abstracts.length > 0)) {
+                abstract = abstracts[0];
+                while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                    abstract = abstract[0];
+                }
+            }
+        }
+
+        if (!abstract || (abstract.length == 0)) {
+            abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr'];
+
+            if (typeof abstracts == 'string') {
+                abstract = abstracts;
+            }
+            else {
+                if (abstracts && (abstracts.length > 0)) {
+                    abstract = abstracts[0];
+                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                        abstract = abstract[0];
+                    }
+                }
+            }
+        }
+
+        if (!abstract || (abstract.length == 0)) {
+            abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de'];
+
+            if (typeof abstracts == 'string') {
+                abstract = abstracts;
+            }
+            else {
+                if (abstracts && (abstracts.length > 0)) {
+                    abstract = abstracts[0];
+                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                        abstract = abstract[0];
+                    }
+                }
+            }
+        }
+
+        if (!abstract || (abstract.length == 0)) {
+            abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_es'];
+
+            if (typeof abstracts == 'string') {
+                abstract = abstracts;
+            }
+            else {
+                if (abstracts && (abstracts.length > 0)) {
+                    abstract = abstracts[0];
+                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                        abstract = abstract[0];
+                    }
+                }
+            }
+        }
+
+        if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
+            piece += '<p id="abstractNaked" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';
+        }
+
+        // keywords
+        var keyword = null;
+        var keywordIDs =
+                jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id'];
+        // we have a list of keyword IDs, each one corresponding to an independent annotation set
+        var keywords =
+                jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term'];
+
+        if (typeof keywords == 'string') {
+            keyword = keywords;
+        }
+        else {
+            var keyArray = keywords;
+            if (keyArray) {
+                for (var p in keyArray) {
+                    var keywordID = keywordIDs[p];
+                    if (p == 0) {
+                        keyword = '<span id="keywordsNaked"  pos="' + index + '" rel="' + keywordID + '">'
+                                + keyArray[p] + '</span>';
+                    }
+                    else {
+                        keyword += ', ' + '<span id="keywordsNaked"  pos="' + index + '" rel="' + keywordID + '">' +
+                                keyArray[p] + '</span>';
+                    }
+                }
+            }
+        }
+
+        if (keyword && (keyword.length > 0) && (keyword.trim().indexOf(" ") != -1)) {
+            piece += ' <p><strong>Keywords: </strong> ' + keyword + '</p>';
+        }
+
+        piece += '</div>';
+
+        // info box for the entities
+        piece += '<div class="col-md-4">';
+        piece += '<span id="detailed_annot-' + index + '" />';
+        piece += "</div>";
+
+        piece += "</div>";
+        result += piece;
         result += '</div>';
     }
 
@@ -491,4 +658,63 @@ result+='<a role="button" data-toggle="collapse" href="#abstract_' + index + '">
     result += '</td></tr>';
 
     node.append(result);
+
+    //we load now in background the additional record information requiring a user interaction for
+    // visualisation
+    $('.titleNaked', obj).each(function () {
+        if (options.collection == "npl") {
+            // annotations for the title
+            var index = $(this).attr('pos');
+            var titleID = $(this).attr('rel');
+            var localQuery = {"query": {"filtered": {"query": {"term": {"_id": titleID}}}}};
+
+            $.ajax({
+                type: "get",
+                url: options.search_url_annotations,
+                contentType: 'application/json',
+                dataType: 'jsonp',
+                data: {source: JSON.stringify(localQuery)},
+                success: function (data) {
+                    displayAnnotations(data, index, titleID, 'title');
+                }
+            });
+        }
+    });
+    $('#abstractNaked[rel="' + abstractID + '"]', obj).each(function () {
+        // annotations for the abstract
+        var index = $(this).attr('pos');
+        var titleID = $(this).attr('rel');
+        var localQuery = {"query": {"filtered": {"query": {"term": {"_id": abstractID}}}}};
+
+        $.ajax({
+            type: "get",
+            url: options.search_url_annotations,
+            contentType: 'application/json',
+            dataType: 'jsonp',
+            data: {source: JSON.stringify(localQuery)},
+            success: function (data) {
+                displayAnnotations(data, index, abstractID, 'abstract');
+            }
+        });
+    });
+
+    for (var p in keywordIDs) {
+        $('#keywordsNaked[rel="' + keywordIDs[p] + '"]', obj).each(function () {
+            // annotations for the keywords
+            var index = $(this).attr('pos');
+            var keywordID = $(this).attr('rel');
+            var localQuery = {"query": {"filtered": {"query": {"term": {"_id": keywordID}}}}};
+
+            $.ajax({
+                type: "get",
+                url: options.search_url_annotations,
+                contentType: 'application/json',
+                dataType: 'jsonp',
+                data: {source: JSON.stringify(localQuery)},
+                success: function (data) {
+                    displayAnnotations(data, index, keywordID, 'keyword');
+                }
+            });
+        });
+    }
 };

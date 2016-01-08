@@ -1644,7 +1644,15 @@
                 // write them out to the results div
                 //$('#facetview_results').append( buildrecord(index) );
                 buildrecord(index, $('#facetview_results'));
+                
                 $('#facetview_results tr:last-child').linkify();
+                $("#abstract_" + index).on('shown.bs.collapse', function() {
+                    $('#button_abs'+ index ).find('span').addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
+                });
+
+                $("#abstract_" + index).on('hidden.bs.collapse', function() {
+                    $('#button_abs'+ index ).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
+                });
             });
             MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
             // change filter options
@@ -1663,63 +1671,6 @@
                     $('.facetview_filtershow[rel=' + options.facets[each]['display'] + ']').trigger('click');
                 }
             }
-
-            //we load now in background the additional record information requiring a user interaction for
-            // visualisation
-            $('.titleNaked', obj).each(function () {
-                if (options.collection == "npl") {
-                    // annotations for the title
-                    var index = $(this).attr('pos');
-                    var titleID = $(this).attr('rel');
-                    var localQuery = {"query": {"filtered": {"query": {"term": {"_id": titleID}}}}};
-
-                    $.ajax({
-                        type: "get",
-                        url: options.search_url_annotations,
-                        contentType: 'application/json',
-                        dataType: 'jsonp',
-                        data: {source: JSON.stringify(localQuery)},
-                        success: function (data) {
-                            displayAnnotations(data, index, titleID, 'title');
-                        }
-                    });
-                }
-            });
-
-            $('.innen_abstract', obj).each(function () {
-                // load biblio and abstract info. 
-                // pos attribute gives the result index, rel attribute gives the document ID 
-                var index = $(this).attr('pos');
-                var docID = $(this).attr('rel');
-                var localQuery;
-                if (options.collection == "npl") {
-
-                    // abstract and further informations
-                    localQuery = {"fields": ["$teiCorpus.$teiHeader.$profileDesc.xml:id",
-                            "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
-                            "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr",
-                            "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de",
-                            "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
-                            "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi",
-                            "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName",
-                            '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology',
-                            "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",
-                            '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id'],
-                        "query": {"filtered": {"query": {"term": {"_id": docID}}}}};
-
-                    $.ajax({
-                        type: "get",
-                        url: options.search_url,
-                        contentType: 'application/json',
-                        dataType: 'jsonp',
-                        data: {source: JSON.stringify(localQuery)},
-                        success: function (data) {
-                            displayAbstract(data, index);
-                        }
-                    });
-
-                }
-            });
         };
         
         // execute a search

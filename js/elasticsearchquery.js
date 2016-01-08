@@ -9,10 +9,20 @@ var textFieldNPL = ['$teiCorpus.$teiHeader.$titleStmt.$title.$title-first',
 var textFieldsNPLReturned = ['$teiCorpus.$teiHeader.$titleStmt.$title.$title-first',
     '$teiCorpus.$teiHeader.$titleStmt.xml:id',
     '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date',
+    "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
     '$teiCorpus.$teiHeader.$editionStmt.$edition.$date',
     '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$surname',
     '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$forename',
     '$teiCorpus.$teiHeader.$sourceDesc.target',
+    "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi",
+    "$teiCorpus.$teiHeader.$profileDesc.xml:id",
+    "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
+    "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr",
+    "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de",
+    "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName",
+    '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology',
+    "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",
+    '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id',
 //			'$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology',
     '_id'
 ];
@@ -26,112 +36,112 @@ var elasticsearchquery = function () {
     var queried_fields = []; // list of queried fields for highlights   
 
     // fields to be returned
-    
-        qs['fields'] = textFieldsNPLReturned;
 
-        // simple query mode	
-        $('.facetview_filterselected', obj).each(function () {
-            // facet filter for a range of values
-            !bool ? bool = {'must': []} : "";
-            if ($(this).hasClass('facetview_facetrange')) {
-                var rel = options.facets[ $(this).attr('rel') ]['field'];
-                //var from_ = (parseInt( $('.facetview_lowrangeval', this).html() ) - 1970)* 365*24*60*60*1000;
-                //var to_ = (parseInt( $('.facetview_highrangeval', this).html() ) - 1970) * 365*24*60*60*1000 - 1;
-                var range = $(this).attr('href');
-                var ind = range.indexOf('_');
-                if (ind != -1) {
-                    var from_ = range.substring(0, ind);
-                    var to_ = range.substring(ind + 1, range.length);
-                    var rngs = {
-                        'from': "" + from_,
-                        'to': "" + to_
-                    };
-                    var obj = {'range': {}};
-                    obj['range'][ rel ] = rngs;
-                    bool['must'].push(obj);
-                    filtered = true;
-                }
-            }
-            else if (($(this).attr('rel').indexOf("$date") != -1) ||
-                    ($(this).attr('rel').indexOf("Date") != -1) ||
-                    ($(this).attr('rel').indexOf("when") != -1)) {
-                /// facet filter for a date
-                var rel = $(this).attr('rel');
-                var obj = {'range': {}};
-                var from_ = $(this).attr('href');
-                //var to_ = parseInt(from_) + 365*24*60*60*1000 - 1;
-                var to_ = parseInt(from_) + 365 * 24 * 60 * 60 * 1000;
+    qs['fields'] = textFieldsNPLReturned;
+
+    // simple query mode	
+    $('.facetview_filterselected', obj).each(function () {
+        // facet filter for a range of values
+        !bool ? bool = {'must': []} : "";
+        if ($(this).hasClass('facetview_facetrange')) {
+            var rel = options.facets[ $(this).attr('rel') ]['field'];
+            //var from_ = (parseInt( $('.facetview_lowrangeval', this).html() ) - 1970)* 365*24*60*60*1000;
+            //var to_ = (parseInt( $('.facetview_highrangeval', this).html() ) - 1970) * 365*24*60*60*1000 - 1;
+            var range = $(this).attr('href');
+            var ind = range.indexOf('_');
+            if (ind != -1) {
+                var from_ = range.substring(0, ind);
+                var to_ = range.substring(ind + 1, range.length);
                 var rngs = {
-                    'from': from_,
-                    'to': to_
+                    'from': "" + from_,
+                    'to': "" + to_
                 };
+                var obj = {'range': {}};
                 obj['range'][ rel ] = rngs;
                 bool['must'].push(obj);
                 filtered = true;
             }
-            else {
-                // other facet filter 
-                var obj = {'term': {}};
-                obj['term'][ $(this).attr('rel') ] = $(this).attr('href');
-                bool['must'].push(obj);
-                filtered = true;
-            }
-        });
-        for (var item in options.predefined_filters) {
-            // predefined filters to apply to all search and defined in the options
-            !bool ? bool = {'must': []} : "";
-            var obj = {'term': {}};
-            obj['term'][ item ] = options.predefined_filters[item];
+        }
+        else if (($(this).attr('rel').indexOf("$date") != -1) ||
+                ($(this).attr('rel').indexOf("Date") != -1) ||
+                ($(this).attr('rel').indexOf("when") != -1)) {
+            /// facet filter for a date
+            var rel = $(this).attr('rel');
+            var obj = {'range': {}};
+            var from_ = $(this).attr('href');
+            //var to_ = parseInt(from_) + 365*24*60*60*1000 - 1;
+            var to_ = parseInt(from_) + 365 * 24 * 60 * 60 * 1000;
+            var rngs = {
+                'from': from_,
+                'to': to_
+            };
+            obj['range'][ rel ] = rngs;
             bool['must'].push(obj);
             filtered = true;
         }
-        if (bool) {
-            // $('#facetview_freetext').val() != ""
-            //    ? bool['must'].push( {'query_string': { 'query': $('#facetview_freetext').val() } } )
-            //    : "";
-            var obj = {'query': {}};
-            var obj2 = {'bool': bool};
+        else {
+            // other facet filter 
+            var obj = {'term': {}};
+            obj['term'][ $(this).attr('rel') ] = $(this).attr('href');
+            bool['must'].push(obj);
+            filtered = true;
+        }
+    });
+    for (var item in options.predefined_filters) {
+        // predefined filters to apply to all search and defined in the options
+        !bool ? bool = {'must': []} : "";
+        var obj = {'term': {}};
+        obj['term'][ item ] = options.predefined_filters[item];
+        bool['must'].push(obj);
+        filtered = true;
+    }
+    if (bool) {
+        // $('#facetview_freetext').val() != ""
+        //    ? bool['must'].push( {'query_string': { 'query': $('#facetview_freetext').val() } } )
+        //    : "";
+        var obj = {'query': {}};
+        var obj2 = {'bool': bool};
 
-            /*if (nested) {
-             // case nested documents are queried 
-             obj['query'] = obj2;
-             // when nested documents are for the classes
-             obj['path'] = '$teiCorpus.$teiCorpus.$teiHeader.$profileDesc.$textClass';
-             // other cases in the future here...
-             
-             var obj3 = {'nested': obj};
-             var obj4 = {'filter': obj3};
-             }
-             else*/
-            {
-                // case no nested documents are queried
-                obj['query'] = obj2;
-                var obj4 = {'filter': obj};
-            }
+        /*if (nested) {
+         // case nested documents are queried 
+         obj['query'] = obj2;
+         // when nested documents are for the classes
+         obj['path'] = '$teiCorpus.$teiCorpus.$teiHeader.$profileDesc.$textClass';
+         // other cases in the future here...
+         
+         var obj3 = {'nested': obj};
+         var obj4 = {'filter': obj3};
+         }
+         else*/
+        {
+            // case no nested documents are queried
+            obj['query'] = obj2;
+            var obj4 = {'filter': obj};
+        }
 
-            if ($('#facetview_freetext').val() == "") {
-                obj4['query'] = {'match_all': {}};
-                    qs['sort'] = [{"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date": {"order": "desc"}}];
-                
-            }
-            else
-                obj4['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}};
-            qs['query'] = {'filtered': obj4};
-            //qs['query'] = {'bool': bool}
+        if ($('#facetview_freetext').val() == "") {
+            obj4['query'] = {'match_all': {}};
+            qs['sort'] = [{"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date": {"order": "desc"}}];
+
+        }
+        else
+            obj4['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}};
+        qs['query'] = {'filtered': obj4};
+        //qs['query'] = {'bool': bool}
+    }
+    else {
+        if ($('#facetview_freetext').val() != "") {
+            qs['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}}
         }
         else {
-            if ($('#facetview_freetext').val() != "") {
-                qs['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}}
+            if (!filtered) {
+                qs['query'] = {'match_all': {}};
             }
-            else {
-                if (!filtered) {
-                    qs['query'] = {'match_all': {}};
-                }
-                    qs['sort'] = [{"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date": {"order": "desc"}}];
-                
-            }
+            qs['sort'] = [{"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date": {"order": "desc"}}];
+
         }
-    
+    }
+
     // set any paging
     options.paging.from != 0 ? qs['from'] = options.paging.from : "";
     options.paging.size != 10 ? qs['size'] = options.paging.size : "";
@@ -184,7 +194,7 @@ var elasticsearchquery = function () {
     var theUrl = JSON.stringify(qs);
 
     //if (window.console != undefined) {
-        console.log(theUrl);
+    console.log(theUrl);
     //}
     return theUrl;
 };
