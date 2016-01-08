@@ -245,7 +245,7 @@
             $('#facetview_rangechoices .facetview_highrangeval').html(values[ values.length - 1]);
         };
 
-        var setScope = function () {
+        /*var setScope = function () {
             if ($('input[name=\"scientific\"]').attr('checked') && (options.scope != 'scientific')) {
                 options.scope = 'scientific';
                 options.paging.from = 0;
@@ -277,6 +277,7 @@
                 dosearch();
             }
         };
+        */
 
         var setDateRange = function () {
             var day_from = 1;
@@ -394,6 +395,7 @@
     
         var add_facet = function (event) {
             event.preventDefault();
+            
             var truc = {'field': 'undefined', 'display': 'new_facet', 'size': 0, 'type': '', 'view': 'hidden'};
             options.facets.push(truc);
             buildfilters();
@@ -592,8 +594,8 @@
             //temp_intro += '<button type="button" class="btn" data-toggle="button">Custom scope restriction</button>';
             //temp_intro += '</form>';
 
-            $('#facetview_filters').html("").append(temp_intro);
-            $('#scope_area').bind('click', setScope);
+            //$('#facetview_filters').html("").append(temp_intro);
+            //$('#scope_area').bind('click', setScope);
             
 
             $('#facetview_filters').append(thefilters);
