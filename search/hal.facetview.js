@@ -1699,7 +1699,7 @@
                 $.ajax({
                     type: "get",
                     url: options.search_url,
-                    data: {source: elasticsearchquery()},
+                    data: {source: elasticSearchQuery()},
                     // processData: false,
                     dataType: "jsonp",
                     success: showresults

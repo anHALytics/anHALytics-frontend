@@ -15,22 +15,23 @@ var buildrecord = function (index, node) {
     var type = null;
     var id = options.data['ids'][index];
 
-    var family = id;
 
     result += '<div class="col-md-2">';
     // add image where available
+var repositoryDocId;
+    var repositoryDocIds = null;
+    repositoryDocIds = jsonObject['$teiCorpus.repositoryDocId'];
+    repositoryDocId = repositoryDocIds[0];
 
     if (options.display_images) {
 
-        var ind = family.indexOf("-");
-        if ((ind != -1) && (family.length > ind) && (options.subcollection == "hal")) {
-            var pubNum = family.substring(ind + 1, family.length);
+        if (options.subcollection == "hal") {
 
             result += '<strong> <a href="https://hal.archives-ouvertes.fr/'
-                    + family + '" target="_blank" style="color: #0094DE;text-decoration:underline;" alt="see resource on HAL">' + family + '</a></strong>\
-<a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + family +
+                    + repositoryDocId + '" target="_blank" style="color: #0094DE;text-decoration:underline;" alt="see resource on HAL">' + repositoryDocId + '</a></strong>\
+<a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + repositoryDocId +
                     '/document" target="_blank"><img class="img-thumbnail img-responsive" style="float:right; width: 70px" src="' +
-                    'https://hal.archives-ouvertes.fr/' + family + '/thumb' + '" /></a>';
+                    'https://hal.archives-ouvertes.fr/' + repositoryDocId + '/thumb' + '" /></a>';
         }
     }
     result += '</div>';
@@ -463,13 +464,14 @@ var buildrecord = function (index, node) {
 
     result += '<div id="myGroup">';
 
-
+var names =
+                jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName'];
 
     result += '<div class="panel">';
     result += '<br/><a id="button_abs_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract</a>';
 
     result += '<span style="display:inline-block; width: 290px;"></span>';
-    result += '<a id="button_authors_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#authors_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Authors</a>';
+    result += '<a id="button_authors_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#authors_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Authors ('+names.length+')</a>';
     result += '<span style="display:inline-block; width: 290px;"></span>';
     result += '<a id="button_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Keywords</a>';
 
@@ -478,7 +480,7 @@ var buildrecord = function (index, node) {
     {
         var piece = "";
         piece += '<div id="abstract_' + index +
-                '" class="well row collapse " pos="' + index + '" rel="' + family + '"';
+                '" class="well row collapse " pos="' + index + '" rel="' + id + '"';
         if (index % 2) {
             piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
         }
@@ -576,7 +578,7 @@ piece += '</div>';
     {
         var piece = "";
         piece += '<div id="authors_' + index +
-                '" class="well row collapse" pos="' + index + '" rel="' + family + '"';
+                '" class="well row collapse" pos="' + index + '" rel="' + id + '"';
         if (index % 2) {
             piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
         }
@@ -587,14 +589,17 @@ piece += '</div>';
         piece += '<div class="col-md-12">';
 
         // authors and affiliation
-        var names =
-                jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName'];
+        
 
         if (names) {
+            var ids = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$idno.$type_anhalyticsID'];
+            piece += '<div class="row">';
             for (var aut in names) {
+                var id_ = ids[aut];
                 var name_ = names[aut];
-                piece += '<p>' + name_ + '</p>';
+                piece += '<div class="col-md-3"><a target="_blank" href="indexprofile.html?authorID='+id_+'" >' + name_ +'</a></div>';
             }
+            piece += '</div>';
         }
 
         piece += '</div>';
@@ -607,7 +612,7 @@ piece += '</div>';
         
         var piece = "";
         piece += '<div id="keywords_' + index +
-                '" class="well row collapse" pos="' + index + '" rel="' + family + '"';
+                '" class="well row collapse" pos="' + index + '" rel="' + id + '"';
         if (index % 2) {
             piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
         }

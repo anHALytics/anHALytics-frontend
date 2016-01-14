@@ -6,7 +6,8 @@ var textFieldNPL = ['$teiCorpus.$teiHeader.$titleStmt.$title.$title-first',
     '$teiCorpus.$text.$body.$p.'
 ];
 
-var textFieldsNPLReturned = ['$teiCorpus.$teiHeader.$titleStmt.$title.$title-first',
+var textFieldsNPLReturned = ['$teiCorpus.repositoryDocId',
+    '$teiCorpus.$teiHeader.$titleStmt.$title.$title-first',
     '$teiCorpus.$teiHeader.$titleStmt.xml:id',
     '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date',
     "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
@@ -20,6 +21,7 @@ var textFieldsNPLReturned = ['$teiCorpus.$teiHeader.$titleStmt.$title.$title-fir
     "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr",
     "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de",
     "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName",
+    "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$idno.$type_anhalyticsID",
     '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology',
     "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",
     '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id',
@@ -28,7 +30,7 @@ var textFieldsNPLReturned = ['$teiCorpus.$teiHeader.$titleStmt.$title.$title-fir
 ];
 
 // build the search query URL based on current params
-var elasticsearchquery = function () {
+var elasticSearchQuery = function () {
     var qs = {};
     var bool = false;
     //var nested = false;
