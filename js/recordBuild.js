@@ -166,6 +166,7 @@ var repositoryDocId;
     }
 
     result += '<br />';
+    result += '<br />';
 
 
     result += '<strong>';
@@ -597,7 +598,7 @@ piece += '</div>';
             for (var aut in names) {
                 var id_ = ids[aut];
                 var name_ = names[aut];
-                piece += '<div class="col-md-3"><a target="_blank" href="indexprofile.html?authorID='+id_+'" >' + name_ +'</a></div>';
+                piece += '<div class="col-md-3"><a target="_blank" href="profile.html?authorID='+id_+'" >' + name_ +'</a></div>';
             }
             piece += '</div>';
         }

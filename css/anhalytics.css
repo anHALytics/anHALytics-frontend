@@ -4,8 +4,8 @@ body {
     color: #A4A4A4;
     background-color: #2E2E2E;
     //color: #333;
-    font-size: 13px;
-    line-height: 1.6;
+    font-size: 12px;
+    line-height: 1.5;
 }
 
 .no-padding {
@@ -24,11 +24,9 @@ body {
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
-}
-.content-container {
     /* background-color: #F2F2F2; */
     background-color: #FFF;
-    color: #848484;
+    color: #222;
     padding: 20px;
     -webkit-border-radius: 0 0 6px 6px;
     -moz-border-radius: 0 0 6px 6px;
@@ -36,8 +34,9 @@ body {
     -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
     box-shadow: 0 1px 2px rgba(0,0,0,.15);
-    font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     word-break: normal;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 

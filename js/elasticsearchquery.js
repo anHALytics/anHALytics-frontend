@@ -9,12 +9,12 @@ var textFieldNPL = ['$teiCorpus.$teiHeader.$titleStmt.$title.$title-first',
 var textFieldsNPLReturned = ['$teiCorpus.repositoryDocId',
     '$teiCorpus.$teiHeader.$titleStmt.$title.$title-first',
     '$teiCorpus.$teiHeader.$titleStmt.xml:id',
-    '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date',
+    '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub',
     "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
-    '$teiCorpus.$teiHeader.$editionStmt.$edition.$date',
+    '$teiCorpus.$teiHeader.$editionStmt.$edition.$date$type_whenSubmitted',
     '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$surname',
     '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$forename',
-    '$teiCorpus.$teiHeader.$sourceDesc.target',
+    '$teiCorpus.$teiHeader.$editionStmt.$edition.target',
     "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi",
     "$teiCorpus.$teiHeader.$profileDesc.xml:id",
     "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
@@ -123,7 +123,7 @@ var elasticSearchQuery = function () {
 
         if ($('#facetview_freetext').val() == "") {
             obj4['query'] = {'match_all': {}};
-            qs['sort'] = [{"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date": {"order": "desc"}}];
+            qs['sort'] = [{"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub": {"order": "desc"}}];
 
         }
         else
@@ -139,7 +139,7 @@ var elasticSearchQuery = function () {
             if (!filtered) {
                 qs['query'] = {'match_all': {}};
             }
-            qs['sort'] = [{"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date": {"order": "desc"}}];
+            qs['sort'] = [{"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub": {"order": "desc"}}];
 
         }
     }
