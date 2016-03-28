@@ -134,9 +134,6 @@ var buildrecord = function (index, node) {
     if (title && (title.length > 1) && !titleAnnotated) {
         if (options['collection'] == 'npl') {
             var docid = id;
-            if (docid.indexOf('fulltext')) {
-                docid = docid.replace('.fulltext', '');
-            }
             if (options.subcollection == "hal") {
 
 
@@ -144,20 +141,20 @@ var buildrecord = function (index, node) {
                 var type =
                         jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology'];
                 if (type) {
-                    result += '<p><span class="label pubtype" style="white-space:normal;">' + type + '</span></p>';
+                    result += '<p><a href="publication.html?pubID='+id+'"><span class="label pubtype" style="white-space:normal;">' + type + '</span></a></p>';
                     //piece += '<p><strong>' + type + '</strong></p>';
                 }
             }
             if (titleID) {
-                result += ' <strong><span class="titleNaked" pos="' + index + '" rel="' + titleID + '" ';
+                result += ' <strong><a target="_blank" href="publication.html?pubID='+id+'"><span class="titleNaked" pos="' + index + '" rel="' + titleID + '" ';
             }
-            result += ' style="font-size:13px; color:black; white-space:normal;">' + title + '<span></strong>';
+            result += ' style="font-size:13px; color:black; white-space:normal;">' + title + '</span></a></strong>';
 
 
 
         }
         else {
-            result += '<strong><span style="font-size:13px">' + title + '<span></strong>';
+            result += '<strong><span style="font-size:13px">' + title + '</span></strong>';
 
         }
     }
