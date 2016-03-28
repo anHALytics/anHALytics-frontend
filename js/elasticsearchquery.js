@@ -6,7 +6,7 @@ var textFieldNPL = ['$teiCorpus.$teiHeader.$titleStmt.$title.$title-first',
     '$teiCorpus.$text.$body.$p.'
 ];
 
-var textFieldsNPLReturned = ['$teiCorpus.repositoryDocId',
+var textFieldsNPLReturned = ['repositoryDocId',
     '$teiCorpus.$teiHeader.$titleStmt.$title.$title-first',
     '$teiCorpus.$teiHeader.$titleStmt.xml:id',
     '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub',
