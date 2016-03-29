@@ -2,10 +2,10 @@
 var thefacetview_simple = ' \
            <div id="facetview"> \
              <div class="row"> \
-               <div class="col-md-3 nopadding"> \
+               <div class="col-md-3 "> \
                  <div id="facetview_filters"></div> \
                </div> \
-               <div class="col-md-9 nopadding" id="facetview_rightcol" > \
+               <div class="col-md-9" id="facetview_rightcol" style="position:relative; left:0px; margin-left:-15px; margin-right:0px; " > \
                     <div id="facetview_searchbar" class="input-group"> \
                     <span class="input-group-addon" id="sizing-addon1"> <span class="glyphicon glyphicon-search"  aria-hidden="true"></span></span> \
                     <input type="text" class="form-control" id="facetview_freetext" name="q" value="" aria-describedby="sizing-addon1" placeholder="search term" autofocus /> \

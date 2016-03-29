@@ -160,10 +160,9 @@ var buildrecord = function (index, node) {
     }
 
     result += '<br />';
-    result += '<br />';
 
 
-    result += '<strong>';
+    result += '<strong style="font-size:11px">';
     var authorsLast = null;
     var authorsFirst = null;
 
@@ -266,7 +265,7 @@ var buildrecord = function (index, node) {
     doi = jsonObject["$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi"];
     if (doi) {
         doi = doi[0];
-        result += "DOI: <a target='_blank' style='color: #0094DE;' href='http://dx.doi.org/" + doi + "'>" + doi + "</a><br/>";
+        result += " <br />DOI: <a target='_blank' style='color: #0094DE;' href='http://dx.doi.org/" + doi + "'>" + doi + "</a><br/>";
     }
     result += '</strong>';
     // snippets 
