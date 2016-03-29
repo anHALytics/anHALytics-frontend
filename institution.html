@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html ng-app="institution">
+    <head>
+        <meta charset="utf-8" />
+        <title>Demo HAL</title>
+        <link rel="icon" type="image/x-icon" href="data/images/favicon.ico"/> 
+        <link rel="shortcut icon" type="image/x-icon" href="data/images/favicon.ico"/>
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/anhalytics.css"/>
+
+
+        <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script> 
+        <script type="text/javascript" src="bower_components/angular/angular.min.js"></script> 
+        <script type="text/javascript" src="bower_components/elasticsearch/elasticsearch.angular.js"></script> 
+        <script type="text/javascript" src="js/institution/institution.js"></script>
+        <script type="text/javascript" src="js/extension.js"></script>
+    </head>
+    <body ng-controller="InstitutionController">
+        <header>
+            <div class="header-container">
+
+                <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a><img src="data/images/logo_INRIA_fr.png"  style="width:150px;"></a></div>
+                <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a><img src="data/images/hal.logo.png"  style="width:95px;"></a></div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-5 no-padding"></div>
+                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-4 pull-right no-padding"></div>
+
+            </div>
+        </header>
+
+        <div class="institution-content container">
+            <div class="facility-wrapper ">
+
+                <div class="institution-header full-width-element clearfix">
+                    <div style="width: 982px; margin: 15px auto;">
+                        <div class="facility-header-image lf"> 
+                            <div>   
+                                <div class="c-img-xl"> <a href="" class="img-placeholder">
+                                        <img src="data/images/institution.png" class="photo "/> 
+                                    </a> 
+                                </div>  
+                            </div> 
+                        </div>
+
+                        <div class="facility-header-info lf"> 
+                            <h1><a>
+                                    <span ng-repeat="name in organisation['_source']['names']">{{name}} .
+                                    </span>
+                                </a>
+                            </h1> 
+                            <div >{{organisation['_source']['address']['settlement']}}, {{organisation['_source']['address']['country']}}
+                            </div> 
+                            
+                        </div>
+                    </div>  
+                </div>
+                
+                <hr style="margin-top:5px; margin-bottom:5px; margin-right:0 !important">
+                
+                <div class="clear"></div>
+                
+                
+                <div class="row facility-main-wrapper" >
+                    
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="row">
+                                <div class="col-md-7 c-content">
+                                    <div class="row c-box top-departments">
+                                    <h2>Departments <small class="rf"> 
+                                            <a href="institution/{{organisation['_source']['organisationId']}}/departments">View all</a> </small> </h2>
+                                        
+                                        <div class="department-list-item-with-stats" ng-repeat="relation in organisation['_source']['relations']"> 
+                                            <div class="info"> 
+                                                <div class="name"> 
+                                                    <a href="institution.html?orgID={{relation['organisationId']}}">
+                                                        <span ng-repeat="name in relation['names']">{{name}} -
+                                                        </span></a> </div> 
+                                                <div class="stats">  
+                                                    <div class="stat"> 
+                                                        <div class="number">1,502
+                                                        </div> <div class="caption">Total Impact Points
+                                                        </div> 
+                                                    </div>   
+                                                    <div class="stat"> 
+                                                        <div class="number">106</div> 
+                                                        <div class="caption">Members</div> 
+                                                    </div>  
+                                                    <div class="clear">
+                                                        
+                                                    </div> 
+                                                </div> 
+                                            </div> 
+                                        </div>
+                                        
+                                        
+                                        
+                                        </div>
+                                    
+                                    
+                                    <div class="row c-box institution-publications-content">
+                                        
+                                        <h2>Recent Publications 
+                                            <small class="rf">
+                                                <a href="institution/{{organisation['_source']['organisationId']}}/publications?nav=overview">View all
+                                                </a>
+                                            </small>
+                                        </h2>
+                                        
+                                        <ul>
+                                            <li class="c-list-item li-publication" ng-repeat="pub in publications">
+                                                
+                                                <div class="indent-left">  
+                                                    <div class="fulltext-thumb ">    
+                                                        <a class="publication-preview open-viewer" href="https://hal.archives-ouvertes.fr/{{pub['_source']['uri'] }}/document" target="_blank">
+                                                            <div class="preview-img">
+                                                                <img class=" lazyloaded "
+                                                                     src="https://hal.archives-ouvertes.fr/{{pub['_source']['uri']}}/thumb">
+                                                            </div>      
+                                                        </a>    
+                                                    </div>  
+                                                </div>
+                                                
+                                                
+                                                <div class="indent-right">    </div>
+                                                
+                                                <div style="margin-top: -2px">  
+                                                    <h5 class="pub-type-and-title">  
+                                                        <span class="publication-type">{{pub['_source']['publication']['type']}}:</span>    
+                                                        <a target="_blank" href="publication.html?pubID={{pub['_source']['docID']}}"> 
+                                                            <span>{{pub['_source']['publication']['doc_title']}}
+                                                            </span> 
+                                                        </a>     
+                                                    </h5>  
+                                                </div>
+                                                
+                                                <div class="authors">     
+                                                    <a ng-repeat="author in pub['_source']['authors']" href="profile.html?authorID={{author['personId']}}" class="authors">
+                                                        {{author['fullname']}} · </a>  
+                                                </div>
+                                                
+                                                
+                                                <div class="abstract"> 
+                                                    <span ng-hide="addClient" > 
+                                                        <a ng-click="addClient = true">[Show abstract]</a> 
+                                                    </span> 
+                                                    <span  ng-show="addClient"> 
+                                                        <a href="javascript:" ng-click="addClient = false">[Hide abstract]
+                                                        </a><br> 
+                                                        <strong >ABSTRACT:</strong> {{abstracts[$index]}}
+                                                    </span> <br> 
+                                                    <span>
+                                                        <strong >Keywords:</strong> {{keywords[$index]}}
+                                                        
+                                                    </span>
+                                                </div>
+                                                
+                                                <div>   
+                                                    <span class="ico-publication-fulltext reset-background">
+                                                        
+                                                    </span> Full-text   · Article · Dec 2015  
+                                                </div>
+                                            </li>
+                                            
+                                            
+                                            
+                                            
+                                        </ul>
+                                        </div>
+                                    
+                                    <div class="c-box institution-info">
+                                        
+                                        <h4 class="no-margin">Information</h4>
+                                        
+                                        <ul>
+                                            <li class="institution-info-item " data-fields="street,zip,city,state,country"> 
+                                                <div class="indent-left"> Address </div> 
+                                                <div class="indent-right">  
+                                                </div>   
+                                                {{organisation['_source']['address']['addrLine']}}, {{organisation['_source']['address']['postCode']}}, {{organisation['_source']['address']['settlement']}}, {{organisation['_source']['address']['country']}} 
+                                            </li>
+                                            
+                                            
+                                            <li class="institution-info-item" data-fields="headOfInstitution"> 
+                                                <div class="indent-left"> Head of Institution
+                                                </div> 
+                                                <div class="indent-right">  
+                                                </div>   Владимир Бумбаширевић    
+                                            </li>
+                                            
+                                            <li class="institution-info-item" data-fields="institutionWebsite"> 
+                                                <div class="indent-left"> Website 
+                                                </div> 
+                                                <div class="indent-right">  
+                                                </div>   {{organisation['_source']['url']}}
+                                            </li>
+                                            
+                                            <li class="institution-info-item" data-fields="phone"> 
+                                                <div class="indent-left"> Phone </div> 
+                                                <div class="indent-right">  
+                                                </div>    +381 11 3207-445    
+                                            </li>
+                                            
+                                            <li class="institution-info-item" data-fields="fax"> 
+                                                <div class="indent-left"> Fax 
+                                                </div> 
+                                                <div class="indent-right">  
+                                                </div>   2638-912, 3207-481    
+                                            </li>
+                                        </ul>   
+                                        
+                                        <div class="clear"></div>
+                                    </div> 
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="facility-stats c-box">
+                                        <div class="section-row last with-appendix"> 
+                                            <div class="section teaser"> 
+                                                <div class="section-value">  
+                                                    <a href="institution/University_Name/department/School_of_Medicine/publications">
+                                                        {{publications.length}}
+                                                    </a>   
+                                                </div> 
+                                                <div class="section-label"> Publications 
+                                                </div> 
+                                            </div>
+                                            <!--
+                                            <div class="section"> 
+                                                <div class="section-value">
+                                                    1,501.98 
+                                                </div> 
+                                                <div class="section-label"> Total Impact Points 
+                                                </div> 
+                                            </div>-->
+                                            
+                                            <div class="section"> 
+                                                <div class="section-value"> {{organisation['_source']['authors'].length}} 
+                                                </div> 
+                                                <div class="section-label"> Authors 
+                                                </div> 
+                                            </div>
+                                            </div>
+                                        
+                                    </div>
+                                    
+                                    <div class="profile-coauthors people-list-s c-box">
+                                        <h4> 
+                                            <strong class="lf"> 
+                                                <a>MEMBERS</a> 
+                                            </strong> <small class="rf ">
+                                                <a>View all</a>  </small> 
+                                        </h4>
+                                        <div> <div class="authors-block">
+                                                <ul> 
+                                                    <li class="people-item" ng-repeat="author in organisation['_source']['authors']">  
+                                                        <div class="indent-left"> 
+                                                            <div class="c-img-s people-img">  
+                                                                <a href=""> 
+                                                                    <img class=" lazyloaded" style="height:'30px'; width:'30px'" src="data/images/profile_default_s.jpg"> 
+                                                                </a>   
+                                                            </div> 
+                                                        </div> 
+                                                        <div class="indent-right">   
+                                                        </div> 
+                                                        <div class="indent-content"> 
+                                                            <h5>  
+                                                                <a href="profile.html?authorID={{author['personId']}}" class="display-name">{{author['fullname']}}</a>    
+                                                                <span class="meta" style="font-weight: normal;"> &nbsp; 
+                                                                    <span style="white-space: nowrap;">
+                                                                        <a class="score-link" href="profile/personName/reputation"> 
+                                                                            <span class="ico-rgscore-m">
+                                                                                
+                                                                            </span>5.52 
+                                                                        </a> ·
+                                                                            
+                                                                        <span title="Impact Points" class="profile-profile-impact-factor-number"> 
+                                                                            <a class="score-link" href="profile/personName/publications">
+                                                                                <span class="ico-impact-factor">
+                                                                                </span>1.33</a>   
+                                                                        </span> · 
+                                                                        <a href="javascript:void(0);" class="shared-pub-count">
+                                                                            (50)
+                                                                        </a>
+                                                                    </span> 
+                                                                </span>  
+                                                            </h5> 
+                                                            <div class="truncate-single-line meta">   
+                                                                <a class="meta" href="institution/University_Name" title="University of University_Name">University_Name</a>     
+                                                            </div>  
+                                                        </div>    
+                                                    </li>
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+                                    </ul></div>
+                                </div>
+                            </div>
+                                    
+                                    
+                                    
+                                    <div class="row c-box institution-collaboration-teaser"> 
+                                        <div class="institution-top-collaborations">
+                                            <h4 style="text-transform: uppercase;">
+                                                <strong>Top Collaborating Institutions
+                                                </strong>
+                                            </h4>
+                                            
+                                            <ul class="institution-list-s">
+                                                
+                                                <li class="institution-list-item-with-stats "> 
+                                                    <div class="image">
+                                                        <a class="image-wrapper" href="institution/Vinca_Institute_of_Nuclear_Sciences"> 
+                                                            <span style="display: block; width:50px; height:50px; background: white url(data/images/institution1.png) center center no-repeat;">
+                                                            
+                                                            </span> 
+                                                        </a>
+                                                    </div>
+                                                    
+                                                    <div class="info"> 
+                                                        <div class="name"> 
+                                                            <a href="institution/Vinca_Institute_of_Nuclear_Sciences">Vinča Institute of Nuclear Sciences
+                                                            </a> 
+                                                        </div> 
+                                                        <div class="stats">  
+                                                            <div class="stat"> 
+                                                                <div class="number">2,622</div> 
+                                                                <div class="caption">Total Impact Points</div> 
+                                                            </div>   
+                                                            <div class="stat"> 
+                                                                <div class="number">364</div> 
+                                                                <div class="caption">Members</div> 
+                                                            </div>  
+                                                            <div class="clear"></div> 
+                                                        </div> 
+                                                    </div>
+                                                    
+                                                    </li>
+                                                    
+                                            </ul>
+                                            
+                                        </div>
+                                        
+                                        
+                                        <div class="map-wrapper"> 
+                                            <h4 class="lf">Collaborations
+                                            </h4>
+                                            <div> 
+                                                <div style="">
+                                                
+                                                </div>
+                                                     This map visualizes which other institutions researchers from 
+                                                     <span style="font-weight: bold"><span ng-repeat="name in organisation['_source']['names']">{{name}} .
+                                    </span></span>
+                                                      have collaborated with. 
+                                            </div>
+                                            
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                        </div>
+                    
+                </div> 
+            </div>
+
+
+        </div>
+        <footer>
+            <p>&copy; The contributors - 2016 </p>
+        </footer>
+    </body>
+</html>

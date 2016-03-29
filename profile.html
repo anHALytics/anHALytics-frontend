@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html ng-app="profile">
     <head>
         <meta charset="utf-8" />
         <title>Demo HAL</title>
@@ -8,330 +8,331 @@
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/anhalytics.css"/>
-        <link rel="stylesheet" href="css/profile.css"/>
 
         <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-
+        <script type="text/javascript" src="bower_components/angular/angular.min.js"></script> 
+        <script type="text/javascript" src="bower_components/elasticsearch/elasticsearch.angular.js"></script> 
         <script type="text/javascript" src="js/extension.js"></script>
-        <script type="text/javascript" src="profile/profile.js"></script>
+        <script type="text/javascript" src="js/profile/profile.js"></script>
     </head>
 
-    <body>
+    <body ng-controller="ProfileController">
 
         <header>
             <div class="header-container">
-                <div class="container">
-                    <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a><img src="data/images/logo_INRIA_fr.png"  style="width:150px;"></a></div>
-                    <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a><img src="data/images/hal.logo.png"  style="width:95px;"></a></div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-5 no-padding"></div>
-                    <div class="col-lg-4 col-md-4 col-sm-3 col-xs-4 pull-right no-padding"></div>
-                </div>
+                <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a><img src="data/images/logo_INRIA_fr.png"  style="width:150px;"></a></div>
+                <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a><img src="data/images/hal.logo.png"  style="width:95px;"></a></div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-5 no-padding"></div>
+                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-4 pull-right no-padding"></div>
+
             </div>
         </header>
-        <div class="content-container container">
+        <div class="profile-content container ">
             <div style="padding-bottom: 90px !important;" class="no-padding">
-                <div class="row profile-content">
-                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <div class="row no-margin">
-                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                                <img id="profile-avatar" src="data/images/default.jpg">
-                            </div>
-                            
-                            <div style="padding-top:10px;padding-left:30px;padding-right:30px" class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                                <h1 ><span id="fullname" >FirstName LastName </span>&nbsp;
-                                    <i style="color:lightgray" class="fa fa-check-circle-o font-xs ng-scope">
-                                        
-                                    </i>
-                                    <hr style="margin-top:5px; margin-bottom:5px; margin-right:0 !important">
-                                </h1>
-                            
-                                <ul class="list-unstyled">
-                                    
-                                    <li><p class="text-muted">
-                                            <i style="width: 20px;" class="fa fa-institution">
-                                            </i>
-                                            <span id="title" style="width:90%;">Directeur de l\'information scientifique au CNRS</span>
-                                        </p>
-                                    </li>
-                                    <li><p class="text-muted">
-                                            <i style="width: 20px;" class="fa fa-phone"></i>
-                                            <span id="phone" class="txt-color-darken">+33 (0) 3 83 59 20 37</span>
-                                        </p>
-                                    </li>
-                                    
-                                    <li><p class="text-muted">
-                                            <i style="width: 20px;" class="fa fa-envelope">
-                                                
-                                            </i><!--span.txt-color-darken {{ profile.contact.email }}-->
-                                            <span id="email" class="txt-color-darken"> profile.contact.email </span>
-                                        </p>
-                                    </li>
-                                    
-                                    <li><p class="text-muted">
-                                            <i style="width: 20px;" class="fa fa-globe">
-                                                
-                                            </i>
-                                            <a id="url" href="http://www.loria.fr/~romary/" >http://www.loria.fr/~romary/</a>
-                                        </p>
-                                    </li>
-                                    
-                                </ul>
-                            
+                <div class="profile-content">
+                    <div class="row no-margin profile-header">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 profile-header-image lf">
+                            <div class="profile-image-wrapper">
+                                <img class="" ng-if="!profile['_source']['photo']" src="data/images/default.jpg">
+                                <img class="" ng-if="profile['_source']['photo']" src="http://{{profile['_source']['photo']}}">
                             </div>
                         </div>
-                        <div style="margin-top:10px;" class="row no-margin hidden-mobile">
-                            
-                            <div id="popover_radar" class="col-sm-3 hidden-xs" >
-                                <radar data="statistics" style="margin-top:20px;margin-left:auto;margin-right:auto;display: block;" class="ng-isolate-scope"><svg width="161.37" height="161.37" class="vizSvg"><rect id="axis-separator" x="0" y="0" width="0" height="0"></rect><g transform="translate(80.685, 80.685)"><g class="circle-ticks"><circle r="0" class="circle" style="stroke: rgb(204, 204, 204); fill: rgba(200, 200, 0, 0.0980392);"><text text-anchor="middle" dy="0">0</text></circle></g><g class="circle-ticks"><circle r="36.083428952914105" class="circle" style="stroke: rgb(204, 204, 204); fill: rgba(200, 200, 0, 0.0980392);"><text text-anchor="middle" dy="-36.083428952914105">0.2</text></circle></g><g class="circle-ticks"><circle r="51.02967460213714" class="circle" style="stroke: rgb(204, 204, 204); fill: rgba(200, 200, 0, 0.0980392);"><text text-anchor="middle" dy="-51.02967460213714">0.4</text></circle></g><g class="circle-ticks"><circle r="62.49833225774909" class="circle" style="stroke: rgb(204, 204, 204); fill: rgba(200, 200, 0, 0.0980392);"><text text-anchor="middle" dy="-62.49833225774909">0.6</text></circle></g><g class="circle-ticks"><circle r="72.16685790582821" class="circle" style="stroke: rgb(204, 204, 204); fill: rgba(200, 200, 0, 0.0980392);"><text text-anchor="middle" dy="-72.16685790582821">0.8</text></circle></g><g class="circle-ticks"><circle r="80.685" class="circle" style="stroke: rgb(204, 204, 204); fill: rgba(200, 200, 0, 0.0980392);"><text text-anchor="middle" dy="-80.685">1</text></circle></g><g transform="rotate(-90)translate(80.685)" class="line-ticks" popover="detail" popover-trigger="mouseenter"><line x2="-80.685" style="stroke: rgb(204, 204, 204); fill: none;"></line><text class="radar-label" text-anchor="end">#Papers</text></g><g transform="rotate(-38.57142857142858)translate(80.685)" class="line-ticks" popover="detail" popover-trigger="mouseenter"><line x2="-80.685" style="stroke: rgb(204, 204, 204); fill: none;"></line><text class="radar-label" text-anchor="end">#Citation</text></g><g transform="rotate(12.857142857142847)translate(80.685)" class="line-ticks" popover="detail" popover-trigger="mouseenter"><line x2="-80.685" style="stroke: rgb(204, 204, 204); fill: none;"></line><text class="radar-label" text-anchor="end">H-Index</text></g><g transform="rotate(64.28571428571428)translate(80.685)" class="line-ticks" popover="detail" popover-trigger="mouseenter"><line x2="-80.685" style="stroke: rgb(204, 204, 204); fill: none;"></line><text class="radar-label" text-anchor="end">G-Index</text></g><g transform="rotate(115.7142857142857)translate(80.685)" class="line-ticks" popover="detail" popover-trigger="mouseenter"><line x2="-80.685" style="stroke: rgb(204, 204, 204); fill: none;"></line><text class="radar-label" text-anchor="start" transform="rotate(180)">Sociability</text></g><g transform="rotate(167.14285714285717)translate(80.685)" class="line-ticks" popover="detail" popover-trigger="mouseenter"><line x2="-80.685" style="stroke: rgb(204, 204, 204); fill: none;"></line><text class="radar-label" text-anchor="start" transform="rotate(180)">Diversity</text></g><g transform="rotate(218.57142857142856)translate(80.685)" class="line-ticks" popover="detail" popover-trigger="mouseenter"><line x2="-80.685" style="stroke: rgb(204, 204, 204); fill: none;"></line><text class="radar-label" text-anchor="start" transform="rotate(180)">Activity</text></g><g class="radar_series" style="fill: grey; stroke: grey;"><path class="line" d="M2.9258357171286546e-15,-47.78252340455608L36.01963220210574,-28.72469815851103L55.62247505418703,12.695466960547089L21.540361012094586,44.729020531506954L-32.43643002722741,67.35494097995914L-63.57789517715817,14.511239689647343L-35.4736566181983,-28.2892971593653" style="stroke-width: 1px; fill: rgba(10, 150, 20, 0.498039);"></path><circle class="curr-point" r="0"></circle><circle r="0" class="clicked-point"></circle></g></g></svg></radar>
-                                <a id="recalculate" href="javascript:void(0)" class="btn btn-default btn-xs pull-right"><i class="fa fa-refresh"></i></a>
-                            </div>
-                            <div style="padding-left:30px;padding-right:30px" class="col-sm-9 col-xs-12">
-                                <p style="padding-bottom: 0px;" class="text-muted no-margin"><span style="border-bottom:0px solid #57889c;padding-bottom: 0px;color:#555;"><i style="width: 20px;" class="fa fa-area-chart"></i>Research Interests</span></p>
-                                <hr class="no-padding no-margin">
-                                <div style="margin-right: -3%;" class="col-md-12 no-padding">interests</div>
-                            </div>
-                        </div>
-                    
-                    </div>
-                    <div style="margin-top:20px;padding-left:0;padding-right: 35px;" class="col-md-4 hidden-sm hidden-xs">
-                        <div class="no-padding shadow-5 font-xs">
-                            <ul style="background: url('data/images/breadcrumbs.png') repeat;" class="nav nav-tabs tabs-pull-right font-xs">
-                                <li class="active"><a href="#ego" data-toggle="tab" style="padding-bottom:5px;padding-top:5px" aria-expanded="true">Ego Network</a></li><!--li--><!--    a.no-margin(href='#comm', data-toggle='tab', style="padding-bottom:5px;padding-top:5px")--><!--        | Community-->
-                                <li class=""><a href="#similarPersons" data-toggle="tab" style="padding-bottom:5px;padding-top:5px" aria-expanded="false">Similar Authors</a></li>
-                            </ul>
-                            
-                            <div id="searchTabContent" class="tab-content padding-10">
-                                <div id="ego" class="tab-pane fade people-results active in"></div>
-                                <div id="similarPersons" class="tab-pane fade people-results"></div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="col-xs-12"><hr style="margin-top:0">
-                    <hr style="margin-top:0">
-                </div>
-                
-                <div style="padding-left: 20px; padding-right: 20px; padding-top: 20px" class="row">
-                    <div style="z-index:10" class="col-md-2">
-                        <div style="width:100%" class="tabs-left">
-                            <div style="width:100%" class="tabs-left">
-                                <ul id="demo-pill-nav" style="width:100%" class="nav nav-tabs tabs-left">
-                                    <li><a href="#about" data-toggle="tab">Overview</a></li>
-                                    <li class="active"><a href="#publication" data-toggle="tab">Papers<span style="background-color: #428bca" class="badge txt-color-white pull-right">123</span></a></li>
-                                    <li><a href="#merge" data-toggle="tab" >Merge</a></li></ul></div>
-                        </div>
-                        </div>
-                    
-                    <div id="content-detail" class="col-md-10 col-sm-12 tab-content">
-                        <div id="about" class="tab-pane fade">
-                            <div class="profile-info-block">
-                                <div class="col-md-6 col-xs-12 padding-left-0">
-                                    <div class="shadow-5">
-                                        <div class="headline">
-                                            <h2>
-                                                <i class="fa fa-archive"></i>
-                                                <span class="ng-binding">Information</span>
-                                            </h2>
-                                            </div>
-                                        <div>
-                                            <ul class="list-unstyled">
-                                                    <li>
-                                                        <p class="text-muted"><i style="width: 20px;" class="fa fa-user"></i><strong >Name: &nbsp;</strong><span class="txt-color-darken">Laurent Romary</span></p>
-                                                    </li>
-                                                    <li><p class="text-muted"><i style="width: 20px;" class="fa fa-user"></i><strong>名字(Chinese Name): &nbsp;</strong><span class="txt-color-darken "></span></p>
-                                                    </li>
-                                                    <li><p class="text-muted"><i style="width: 20px;" class="fa fa-briefcase"></i><strong>Position: &nbsp;</strong><span class="txt-color-darken"></span></p></li>
-                                                    <li><p class="text-muted"><i style="width: 20px;" class="fa fa-phone"></i><strong>Phone: &nbsp;</strong><span class="txt-color-darken">+33 (0) 3 83 59 20 37</span></p></li>
-                                                    <li><p class="text-muted"><i style="width: 20px;" class="fa fa-fax"></i><strong>Fax: &nbsp;</strong><span class="txt-color-darken "></span></p></li>
-                                                    <li><p class="text-muted"><i style="width: 20px;" class="fa fa-envelope"></i><strong>Email: &nbsp;</strong></p></li>
-                                                    <li><p class="text-muted"><i style="width: 20px;" class="fa fa-institution"></i><strong>Affiliation: &nbsp;</strong><span class="txt-color-darken">Directeur de l\'information scientifique au CNRS</span></p></li>
-                                                    <li><p class="text-muted"><i style="width: 20px;" class="fa fa-building"></i><strong>Address: &nbsp;</strong><span class="txt-color-darken">LORIA - Equipe Langue et Dialogue Campus scientifique BP 239 54506 Vandoeuvre-lès-Nancy CEDEX France</span></p></li>                                                    
-                                                    <li><p class="text-muted"><i style="width: 20px;" class="fa fa-globe"></i><strong>Homepage: &nbsp;</strong><a href="http://www.loria.fr/~romary/">http://www.loria.fr/~romary/</a></p></li>                                                    
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="shadow-5">
-                                        <div class="headline">
-                                            <h2>
-                                                <i class="fa fa-graduation-cap"></i>
-                                                <span>Education</span>
-                                            </h2>
-                                        </div>
-                                        <div>
-                                            <ul class="list-unstyled "></ul>
-                                        </div>
-                                    </div>
-                                    <div class="shadow-5">
-                                        <div class="headline">
-                                            <h2>
-                                                <i class="glyphicon glyphicon-briefcase"></i>
-                                                <span>Experience</span>
-                                            </h2>
-                                        </div>
-                                        <div>
-                                            <ul class="list-unstyled "></ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-xs-12 padding-right-0">
-                                    <div class="shadow-5">
-                                        <div class="headline">
-                                            <h2>
-                                                <i class="fa fa-flask"></i>
-                                                <span>Skills</span>
-                                            </h2>
-                                        </div>
-                                        <div>
-                                            <ul class="list-unstyled "></ul>
-                                        </div>
-                                    </div>
-                                    <div class="shadow-5">
-                                        <div class="headline">
-                                            <h2>
-                                                <i class="glyphicon glyphicon-user"></i>
-                                                <span>Bio</span>
-                                            </h2>
-                                        </div>
-                                        <div>
-                                            <ul class="list-unstyled "></ul>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div id="publication" class="tab-pane fade active in">
-                            <div class="shadow-5">
-                                <ul id="pubTab" style="background: url('/img/breadcrumbs.png') repeat;" class="nav nav-tabs tabs-pull-right bordered hidden-mobile">
-                                    <li><a href="#citation" data-toggle="tab">By Citation</a></li>
-                                    <li class="active"><a href="#year" data-toggle="tab" >By Year</a></li>
-                                    
-                                </ul>
-                                <div id="pubTabContent" class="tab-content padding-10">
-                                    <div id="year" class="tab-pane fade active in">
-                                    <div class="btn-toolbar">
-                                        <div class="btn-group">
-                                            <div class="btn btn-sm btn-default">All
-                                                <br clear="none">(123)
-                                            </div>
-                                            
-                                            <div type="button" class="btn btn-sm btn-default ng-binding active">Recent
-                                                
-                                                <br clear="none">20
-                                            </div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2015
-                                            </div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2014
-                                            </div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2013
-                                            </div>
-                                            
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2012</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2011</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2010</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2009</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2008</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2007</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2006</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2005</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2004</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2003</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2002</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2001</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">2000</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">1999</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">1998</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">1997</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">1996</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">1995</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">1994</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">1993</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">1992</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">1991</div>
-                                            <div type="button" class="btn btn-xs btn-default hidden-mobile ng-binding ng-scope">1990</div>
-                                            
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="pubs">
-                                            <div class="pub-item">
-                                                <span class="badge bg-color-greenBlue pull-left">123
-                                                </span>
-                                                <span style="padding-top: 20px;margin: 10px 0;" class="timeline-seperator text-center">
-                                                </span>
-                                                <div style="padding: 0 10px" class="pub-item pub-list">
-                                                    <ul>
-                                                        <li style="list-style: none;">
-                                                            <a href="/archive/55323c2245cec66b6f9db4be">
-                                                                <strong>: serialising the ISO SynAF syntactic object model</strong>
-                                                            </a>
-                                                            <a class="pull-right">
-                                                                <small style="font-weight:bold" class="text-muted pull-right text-danger">Cited by 6
-                                                                </small>
-                                                            </a>
-                                                            <ul style="margin-top:5px" class="list-inline font-xs">
-                                                                <li>
-                                                                    <span>  Laurent Romary</span>   
-                                                                    <span>  Florian Zipser</span> 
-                                                                    </li>
-                                                                    </ul>
-                                                            <p style="margin-top:5px" class="font-xs"><a  style="margin-right:5px" >Language Resources and Evaluation</a><span class="text-muted">(2015)</span></p>
-                                                            
-                                                            <ul class="list-inline font-xs">
-                                                                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#55323c2245cec66b6f9db4be" class="text-success font-xs"><i class="fa fa-book">&nbsp;</i>Bibtex</a>
-                                                                </li>
-                                                                
-                                                                <li><a href="http://dx.doi.org/10.1007/s10579-014-9288-x" target="_blank" class="text-primary"><i class="fa fa-globe">&nbsp;</i>http://dx.doi.org/10.1007/s10579-014-9288-x</a></li>
-                                                            </ul>
-                                        </div>
-                                    </div>
-                                            <div class="pub-item">
-                                                <span class="badge bg-color-greenBlue pull-left">123
-                                                </span>
-                                                <span style="padding-top: 20px;margin: 10px 0;" class="timeline-seperator text-center">
-                                                </span>
-                                                <div style="padding: 0 10px" class="pub-item pub-list">
-                                                    <ul>
-                                                        <li style="list-style: none;">
-                                                            <a href="/archive/55323c2245cec66b6f9db4be">
-                                                                <strong>: serialising the ISO SynAF syntactic object model</strong>
-                                                            </a>
-                                                            <a class="pull-right">
-                                                                <small style="font-weight:bold" class="text-muted pull-right text-danger">Cited by 6
-                                                                </small>
-                                                            </a>
-                                                            <ul style="margin-top:5px" class="list-inline font-xs">
-                                                                <li>
-                                                                    <span>  Laurent Romary</span>   
-                                                                    <span>  Florian Zipser</span> 
-                                                                    </li>
-                                                                    </ul>
-                                                            <p style="margin-top:5px" class="font-xs"><a  style="margin-right:5px" >Language Resources and Evaluation</a><span class="text-muted">(2015)</span></p>
-                                                            
-                                                            <ul class="list-inline font-xs">
-                                                                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#55323c2245cec66b6f9db4be" class="text-success font-xs"><i class="fa fa-book">&nbsp;</i>Bibtex</a>
-                                                                </li>
-                                                                
-                                                                <li><a href="http://dx.doi.org/10.1007/s10579-014-9288-x" target="_blank" class="text-primary"><i class="fa fa-globe">&nbsp;</i>http://dx.doi.org/10.1007/s10579-014-9288-x</a></li>
-                                                            </ul>
-                                        </div>
-                                    </div>
-                                    </div>
-                                    
-                                </div></div>
-                        </div>
-                    </div></div></div></div>
 
+                        <div style="padding-top:10px;padding-left:30px;padding-right:30px" class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+
+                            <div class="profile-header-personal lf js-wexp-profile-header">
+                                <h1 class="profile-header-name">
+                                    <a href="profile/{{profile['_id']}}" >{{profile['_source']['fullname']}}</a>
+                                    <a class="score-link" href="profile/{{profile['_id']}}/reputation" > 
+                                        <span class="ico-rgscore-m"></span>9.50 
+                                    </a>
+
+                                </h1>
+
+                                <!--<div class="profile-degree"> <div class="title">  PhD   </div>  </div>-->
+
+                                <div class="profile-position" > <div>  <i style="width: 20px;" class="fa fa-institution">
+                                        </i>
+                                        <span id="title" style="width:90%;">  PhD  </span>  
+                                    </div>  
+                                </div>
+
+
+                                <!--<div class="profile-institution org" ng-repeat="affiliation in profile['_source']['affiliations']">  --> 
+                                <div class="profile-institution org">    
+                                    <a ng-repeat="name in profile['_source']['affiliations'][0]['names']" href="institution.html?orgID={{profile['_source']['affiliations'][0]['organisationId']}}" title="{{name}}" target="_blank"> 
+                                        {{name}}  ·  
+                                    </a>{{profile['_source']['affiliations'][0]['addrLine']}} · {{profile['_source']['affiliations'][0]['type']}}  · {{profile['_source']['affiliations'][0]['url']}}
+                                </div>
+
+                                <div class="profile-phone" > <div>  
+                                        <i style="width: 20px;" class="fa fa-phone"></i>
+                                        <span id="phone" class="txt-color-darken">{{profile['_source']['phone']}}</span>  
+                                    </div>
+                                </div>
+
+                                <div class="profile-email" > <div>  
+                                        <i style="width: 20px;" class="fa fa-envelope">
+
+                                        </i><!--span.txt-color-darken {{ profile.contact.email }}-->
+                                        <span id="email" class="txt-color-darken">{{profile['_source']['email']}} </span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-url" > <div> <p class="text-muted">
+                                            <i style="width: 20px;" class="fa fa-globe">
+
+                                            </i>
+                                            <a id="url" href="{{profile['_source']['url']}}" >{{profile['_source']['url']}}</a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr style="margin-top:5px; margin-bottom:5px; margin-right:0 !important">
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row profile-main-wrapper">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-7 c-content">
+                                    <div>
+                                        <!-- STATS -->
+                                        <div class="row c-box profile-highlights-stats stats-list">
+                                            <div class="col-md-4 stats-item active publication-count">
+                                                <a href="profile/personname/publications"> 
+                                                    <div class="stats-count">{{profile['_source']['publications'].length}} </div> <div class="stats-label">Publications</div>
+
+                                                </a>
+                                            </div>
+                                            <div class="col-md-4 stats-item">
+                                                <a href="profile/personname/citations" > 
+                                                    <div class="stats-count" >251 </div> <div class="stats-label" >Citations</div>
+
+                                                </a> 
+
+                                            </div>
+                                            <div class="col-md-4 stats-item">
+                                                <a href="profile/personname/citations" > 
+                                                    <div class="stats-count" >251</div> <div class="stats-label" >Reads</div> 
+
+                                                </a> 
+
+                                            </div>
+
+
+
+                                        </div>
+
+                                        <!-- PUBLICATIONS -->
+
+                                        <div class="row c-box profile-highlights-publications">
+                                            <h4> <strong class="lf"> 
+                                                    <a href="">Featured publications</a> 
+                                                </strong> 
+                                                <small class="rf">   
+                                                    <a href="">View all</a>  
+                                                </small> 
+                                            </h4>
+
+                                            <ul>
+                                                <li class="c-list-item li-publication" ng-repeat="pub in publications">
+                                                    <div class="indent-left"></div>
+                                                    <div class="indent-right">    </div>
+
+                                                    <div style="margin-top: -2px">  
+                                                        <h5 >  
+                                                            <span class="publication-type">{{pub['_source']['publication']['type']}}:</span>    
+                                                            <a href="publication.html?pubID={{pub['_id']}}">
+                                                                <span>{{pub['_source']['publication']['doc_title']}}
+                                                                </span> </a>    
+                                                        </h5>  
+                                                    </div>
+
+                                                    <div class="authors">     
+                                                        <a href="profile.html?authorID={{author['personId']}}" class="authors " ng-repeat="author in pub['_source']['authors']">{{author['fullname']}} · </a>                                                   </div>
+
+                                                    <div class="pub-stats"> 
+                                                        <div class="pub-stat">
+                                                            <a href="publication/2895396/stats"> 
+                                                                <div class="stat-count">14</div> 
+                                                                <div class="stat-label">Reads</div> </a>
+
+                                                        </div> 
+                                                        <div class="pub-stat">
+                                                            <a href="publication/28953/stats"> 
+                                                                <div class="stat-count">0</div> 
+                                                                <div class="stat-label">Citations</div> 
+                                                            </a>
+
+                                                        </div> 
+                                                    </div>
+                                                </li>
+
+
+                                            </ul>
+
+                                        </div> 
+
+                                        <!-- KEY WORDS -->
+                                        <div class="row c-box abstract-keyword-editor-container keyword-editor-teaser profile-keyword-editor-teaser">
+                                            <h4> <strong class="lf">
+                                                    <a >Topics<small>(8)</small>
+                                                    </a>
+                                                </strong>  
+                                            </h4>
+                                            <ul class="lf keyword-list" >  
+                                                <li class="keyword-list-token-container">
+                                                    <div class="keyword-list-token keyword-list-token-following"> 
+                                                        <a href="topic/artificial_intelligence" class="keyword-list-token-text"> Artificial Intelligence 
+                                                        </a> 
+                                                    </div>                                                      
+                                                </li>
+                                                <li class="keyword-list-token-container">
+                                                    <div class="keyword-list-token keyword-list-token-following"> 
+                                                        <a href="topic/artificial_intelligence" class="keyword-list-token-text"> Artificial Intelligence 
+                                                        </a> 
+                                                    </div>                                                      
+                                                </li>
+                                                <li class="keyword-list-token-container">
+                                                    <div class="keyword-list-token keyword-list-token-following"> 
+                                                        <a href="topic/artificial_intelligence" class="keyword-list-token-text"> Artificial Intelligence 
+                                                        </a> 
+                                                    </div>                                                      
+                                                </li>
+                                                <li class="keyword-list-token-container">
+                                                    <div class="keyword-list-token keyword-list-token-following"> 
+                                                        <a href="topic/artificial_intelligence" class="keyword-list-token-text"> Artificial Intelligence 
+                                                        </a> 
+                                                    </div>                                                      
+                                                </li>
+                                                <li class="keyword-list-token-container">
+                                                    <div class="keyword-list-token keyword-list-token-following"> 
+                                                        <a href="topic/artificial_intelligence" class="keyword-list-token-text"> Artificial Intelligence 
+                                                        </a> 
+                                                    </div>                                                      
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <!-- AFFILIATIONS -->
+                                    <div class="c-box"> 
+                                        <ul> 
+                                            <li class="institution-list-item ">
+                                                <div class="indent-left"> 
+                                                    <div class="c-img-m">
+                                                        <a href=""> 
+                                                            <img  src="data/images/institution.png">
+                                                        </a> 
+                                                    </div>
+                                                </div> 
+                                                <div class="indent-content institution org"> 
+                                                    <div class="institution-name"> <strong>
+                                                            <a ng-repeat="name in profile['_source']['affiliations'][0]['names']" href="institution.html?orgID={{profile['_source']['affiliations'][0]['organisationId']}}" title="{{name}}" target="_blank"> 
+                                                                {{name}}  ·  
+                                                            </a>
+                                                        </strong> </div>   
+                                                    <div class="institution-dept">  Faculty of Philology 
+                                                    </div>    
+                                                    <div class="text-gray-lighter institution-location"> 
+                                                        {{profile['_source']['affiliations'][0]['address']['settlement']}}, {{profile['_source']['affiliations'][0]['address']['country']}}
+                                                    </div>  
+                                                </div> </li>  
+                                        </ul> 
+                                    </div>
+
+                                    <!-- COAUTHORS -->
+                                    <div class="profile-coauthors people-list-s c-box" >
+                                        <h4> 
+                                            <strong class="lf"> 
+                                                <a >Top Co-authors</a> 
+                                            </strong> <small class="rf ">
+                                                <a >View all</a>  </small> 
+                                        </h4>
+                                        <div > <div class="authors-block">
+                                                <ul> 
+                                                    <li class="people-item" ng-repeat="coauthor in coauthors">  
+                                                        <div class="indent-left"> 
+                                                            <div class="c-img-s people-img">  
+                                                                <a href=""> 
+                                                                    <img class="lazyloaded" style="height:'30px'; width:'30px';"  src="data/images/profile_default_s.jpg" /> 
+                                                                </a>   
+                                                            </div> 
+                                                        </div> 
+                                                        <div class="indent-right">   
+                                                        </div> 
+                                                        <div class="indent-content"> 
+                                                            <h5>  
+                                                                <a href="profile.html?authorID={{coauthor['personId']}}" class="display-name">{{coauthor['fullname']}}</a>    
+                                                                <span class="meta" style="font-weight: normal;"> &nbsp; 
+                                                                     
+                                                                </span>  
+                                                            </h5>
+                                                        </div>    
+                                                    </li>
+
+
+
+
+                                            </div>             
+
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <!-- SKILLS -->
+                                    <div class="c-box profile-highlights-skills ">
+                                        <h4> <strong class="lf">
+                                                <a href="profile/personname/info">Skills and expertise<small>(11)</small></a></strong>  
+                                            <small class="rf"><a href="profile/personname/info">View all</a
+                                                ></small>
+                                        </h4>
+                                        <div class="profile-skill-list"> <div class="skills-pill-list"> 
+                                                <div class="skills-pill-list-inner">  
+                                                    <div class="profile-skill"> 
+                                                        <div class="skill-container js-endorserlist " >  
+                                                            <span class="endorsement-count" id="yui_3_14_1_1_1458142248234_3813">5</span>   
+                                                            <span class="skill-link"> <span class="lf">Natural Language Processing</span> 
+                                                            </span> </div>   
+                                                    </div>  
+
+
+                                                    <div class="profile-skill"> 
+                                                        <div class="skill-container js-endorserlist " >  
+                                                            <span class="endorsement-count" id="yui_3_14_1_1_1458142248234_3813">3</span>   
+                                                            <span class="skill-link"> <span class="lf">Morphology</span> 
+                                                            </span> </div>   
+                                                    </div>
+
+                                                    <div class="profile-skill"> 
+                                                        <div class="skill-container js-endorserlist " >  
+                                                            <span class="endorsement-count" id="yui_3_14_1_1_1458142248234_3813">2</span>   
+                                                            <span class="skill-link"> <span class="lf">Ontologies</span> 
+                                                            </span> </div>   
+                                                    </div>
+                                                </div> </div>  </div>
+
+                                    </div>
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
 
-        
-         <footer>
-                <p>&copy; The contributors - 2016 </p>
+
+        <footer>
+            <p>&copy; The contributors - 2016 </p>
         </footer>
     </body>
 </html>

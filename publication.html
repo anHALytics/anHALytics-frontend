@@ -1,76 +1,161 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="publication">
     <head>
         <meta charset="utf-8" />
-        <title>Demo HAL</title>
+        <title>Publication</title>
         <link rel="icon" type="image/x-icon" href="data/images/favicon.ico"/> 
         <link rel="shortcut icon" type="image/x-icon" href="data/images/favicon.ico"/>
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/anhalytics.css"/>
-        <link rel="stylesheet" href="css/publication.css"/>
 
-                
+
         <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script> 
-        
+
+        <script type="text/javascript" src="bower_components/angular/angular.min.js"></script> 
+        <script type="text/javascript" src="bower_components/elasticsearch/elasticsearch.angular.js"></script> 
+        <script type="text/javascript" src="js/publication/publication.js"></script> 
         <script type="text/javascript" src="js/extension.js"></script>
-        <script type="text/javascript" src="publication/publication.js"></script>
-        <script type="text/javascript" src="publication/references.js"></script>
     </head>
-    <body>
+    <body ng-controller="PublicationController">
         <header>
             <div class="header-container">
-                <div class="container">
-                    <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a><img src="data/images/logo_INRIA_fr.png"  style="width:150px;"></a></div>
-                    <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a><img src="data/images/hal.logo.png"  style="width:95px;"></a></div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-5 no-padding"></div>
-                    <div class="col-lg-4 col-md-4 col-sm-3 col-xs-4 pull-right no-padding"></div>
-                </div>
-            </div>
-        </header>
-        
-        <div class="content-container container">
-            <div class="row">
-            <div class="col-md-9">
-                <h1 id="title">    
-                    Dynamic Serialization: Improving Energy Consumption in Eager-Eager Hardware Transactional Memory Systems
-                </h1>
-            </div>
-                <div class="col-md-3">
-                <span class="pull-right center-block">
-                    <br/><br/><a id="fulltext" aria-label="Download or View Full Text as PDF" href="/stamp/stamp.jsp?tp=&amp;arnumber=6169553" class="btn btn-warning btn-lg">
-                        Full Text as PDF</a>
-                </span>
+
+                <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a><img src="data/images/logo_INRIA_fr.png"  style="width:150px;"></a></div>
+                <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a><img src="data/images/hal.logo.png"  style="width:95px;"></a></div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-5 no-padding"></div>
+                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-4 pull-right no-padding"></div>
 
             </div>
-            
-        
+        </header>
+
+
+        <div class="publication-content container" ng-controller="PanelController as panel">
+            <div class="row" >
+
+                <ul class="nav nav-pills publication-sidebar-link">
+
+                    <li class="col-12 col-sm-2 " ng-class="{ active:panel.isSelected('Overview')}"><a href ng-click="panel.selectTab('Overview')" >Overview</a></li>
+                    <li class="col-12 col-sm-3 " ng-class="{ active:panel.isSelected('References')}"><a href ng-click="panel.selectTab('References')" >References</a></li>
+                    <li class="col-12 col-sm-3 " ng-class="{ active:panel.isSelected('Citations')}"><a href ng-click="panel.selectTab('Citations')" >Citations</a></li>
+                    <li class="col-12 col-sm-3 " ng-class="{ active:panel.isSelected('Figures')}"><a href ng-click="panel.selectTab('Figures')" >Figures</a></li>
+                </ul>
+                <div class="col-md-9" >
+                    <h1 class="publication-title">    
+                        {{ publication['_source']['publication']['doc_title']}}
+                    </h1>
+                </div>
+                <div class="col-md-3">
+                    <span class="pull-right center-block">
+                        <br/><br/><a id="fulltext" target="_blank" aria-label="Download or View Full Text as PDF" href="http://hal.archives-ouvertes.fr/{{ publication['_source']['uri']}}/document" class="btn btn-warning btn-lg">
+                            Full Text as PDF</a>
+                    </span>
+
+                </div>
+
+
             </div>
             <hr/>
-            <ul class="nav nav-tabs " style="font-size: 24px;">
-                
-                <li class="col-12 col-sm-2 nav active"><a href="#Overview" data-toggle="tab">Overview</a></li>
-                <li class="col-12 col-sm-2 nav"><a href="#Abstract" data-toggle="tab">Abstract</a></li>
-                <li class="col-12 col-sm-2 nav"><a href="#Authors" data-toggle="tab">Authors</a></li>
-                <li class="col-12 col-sm-2 nav"><a href="#References" data-toggle="tab">References</a></li>
-                <li class="col-12 col-sm-2 nav"><a href="#CitedBy" data-toggle="tab">Cited By</a></li>
-                <li class="col-12 col-sm-2 nav"><a href="#Keywords" data-toggle="tab">Keywords</a></li>
-            </ul>
 
             <!-- Tab panes -->
             <div class="tab-content">
-                <div class="tab-pane fade in active" id="Overview">Content inside tab Overview</div>
-                <div class="tab-pane fade" id="Abstract">Content inside tab Abstract</div>
-                <div class="tab-pane fade" id="Authors">Content inside tab Authors</div>
-                <div class="tab-pane fade" id="References">Content inside tab References</div>
-                <div class="tab-pane fade" id="CitedBy">Content inside tab CitedBy</div>
-                <div class="tab-pane fade" id="Keywords">Content inside tab Keywords</div>
+                <div class="panel" ng-show="panel.isSelected('Overview')" >
+                    <div class="publication-meta-text-block" >
+                        <div class="publication-meta text-sans-serif" >
+                            <strong class="publication-meta-type text-uppercase" >{{ publication['_source']['publication']['type']}}</strong>
+                            <span >&nbsp;·&nbsp;</span><span >{{ publication['_source']['publication']['date_printed']}}</span>
+
+                            <span >&ensp;</span><span class="publication-meta-separator" >with</span>
+                            <span>&ensp;</span><span class="publication-meta-stats text-uppercase" >0 Reads</span></div>
+
+
+                        <div class="publication-meta-secondary" >
+                            <span>
+                                <span ng-if="publication['_source']['publication']['monograph']">
+                                    {{  publication['_source']['publication']['monograph']['type']+" : "+publication['_source']['publication']['monograph']['title'] +" "+" pages: "+ publication['_source']['publication']['start_page']+"-"+publication['_source']['publication']['end_page']}}
+                                </span>
+                                </br>
+                                <span ng-if="publication['_source']['publication']['monograph']['conference']">
+                                    <strong>Meeting : </strong>
+                                    {{ publication['_source']['publication']['monograph']['conference']['title'] + " " +publication['_source']['publication']['monograph']['conference']['start_date'] +" " +publication['_source']['publication']['monograph']['conference']['end_date']+" " +publication['_source']['publication']['monograph']['conference']['address']['settlement']+" " +publication['_source']['publication']['monograph']['conference']['address']['country'] }}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <hr/>
+                    <div class="publication-author-list">
+                        <ul>
+                            <li class="publication-author-list-item" ng-repeat="author in publication['_source']['authors']">
+
+                                <div class="publication-author-list-item-info" >
+                                    <img class="publication-author-list-item-image" src="data/images/profile_default_s.jpg" >
+                                    <div class="publication-author-list-item-text" ><div class="publication-author-name-line" >
+                                            <a target="_blank" href="profile.html?authorID={{author['personId']}}" class="publication-author-name">{{author['fullname']}}</a></div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <hr/>
+                    <div class="publication-abstract">
+                        <h1 class="publication-abstract-title">Abstract</h1>
+                        <div class="publication-abstract-text" >
+                            <span class="foldable-text" >
+                                <span >
+                                    <span >{{abstract}}
+                                    </span>
+
+                                </span>
+                            </span>
+
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="publication-keywords">
+                        <span class="foldable-text" >
+                            <span >
+                                <strong>Keywords :</strong>
+                                <span>
+                                    {{keywords}}
+
+                                </span>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="panel" ng-show="panel.isSelected('References')">
+                    <div class="publication-citations-container pub-citations-list">  
+                        <ul class="c-list">
+                            <li class="c-list-item li-publication" ng-repeat="item in publication['_source']['references']">
+                                <div class="indent-right"></div>     
+                                <div style="margin-top: -2px">  
+                                    <h5>    
+                                        <a href="">
+                                            {{ item['doc_title']}}
+                                        </a>     
+                                    </h5>  
+                                </div>
+
+                                <div class="publication-meta publication-meta">    {{ item['monograph']['title']}}  · {{ item['type']}} · {{ item['date_electronic']}} · pp : {{ item['start_page']}} - {{ item['end_page']}} · {{ item['volume']}} · {{ item['publisher']['name']}} </div>
+                                <div class="publication-author-list">  
+                                    <span class="publication-author" ng-repeat="author in item['authors']">  
+                                        <img class="img-circle" src="data/images/profile_default_s.jpg" style="height: 20px;"> 
+                                        <a href="profile.html?authorID={{author['personId']}}" class="publication-author-link ga-publication-author-link">{{author['fullname']}} · </a>   
+                                    </span>   
+                                </div>
+                            </li>
+                        </ul> 
+                    </div>
+                </div>
+                <div class="panel" ng-show="panel.isSelected('Citations')">Content inside tab Citations</div>
+                <div class="panel" ng-show="panel.isSelected('Figures')">Content inside tab Figures</div>
             </div>
         </div>
-        
         <footer>
-                <p>&copy; The contributors - 2016 </p>
+            <p>&copy; The contributors - 2016 </p>
         </footer>
     </body>
 </html>
