@@ -536,7 +536,7 @@
                     	';
                 if (filters[idx]['type'] == 'date') {
                     _filterTmpl +=
-                            '<div id="date-input" style="position:relative;margin-top:-15px;margin-bottom:10px;margin-left:-30px;"> \
+                            '<div id="date-input" style="position:relative;margin-top:-15px;margin-bottom:10px;"> \
 						   <input type="text" id="day_from" name="day_from" \
 						   size="2"  placeholder="DD"/> \
 						   <input type="text" id="month_from" name="month_from" size="2" \
@@ -655,7 +655,7 @@
                 }
                 else {
                     vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;left:-10px;"> \
-	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart" style="position:relative;left:-18px;"> \
+	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart" style="position:relative;"> \
 	                    </div> \
 	                    </div>';
                 }
@@ -675,6 +675,9 @@
             }
             else if (options.facets[idx]['type'] == 'taxonomy') {
                 wheel($(this).attr('rel'), $(this).attr('href'), parentWidth * 0.8,
+                        'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
+            }else if (options.facets[idx]['type'] == 'tag'){
+                cloud($(this).attr('rel'), $(this).attr('href'), parentWidth * 0.8,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
             }
             else {
@@ -1480,6 +1483,59 @@
                     });
         };
 
+        var cloud = function (facetidx, facetkey, width, place, update) {
+
+            var facetkey = options.facets[facetidx]['display'];
+            var facetfield = options.facets[facetidx]['field'];
+            var facets = options.data['facets'][facetkey];
+            data = [];
+            var vis = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2");
+            if (update) {
+                vis.selectAll("svg").remove();
+            }
+            for (var fct in facets) {
+                data.push(fct);
+            }
+            $('#' + place).show();
+            var fill = d3.scale.category20();
+            var r = width;
+            var cloude = d3.layout.cloud().size([r, r])
+                    .words(data.map(function (d) {
+                        return {text: d, size: 15 };
+                    }))
+                    .rotate(function () {
+                        return 0;
+                    })
+                    .fontSize(function (d) {
+                        return d.size;
+                    })
+                    .on("end", draw)
+                    .start();
+            function draw(words) {
+                d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2").append("svg")
+                        .attr("width", r * 1.5)
+                        .attr("height", r)
+                        .append("g")
+                        .attr("transform", "translate(150,150)")
+                        .selectAll("text")
+                        .data(words)
+                        .enter().append("text")
+                        .style("font-size", function (d) {
+                            return d.size + "px";
+                        })
+                        .style("fill", function (d, i) {
+                            return fill(i);
+                        })
+                        .attr("text-anchor", "middle")
+                        .attr("transform", function (d) {
+                            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                        })
+                        .text(function (d) {
+                            return d.text;
+                        });
+            }
+            
+            };
         // normal click on a graphical facet
         var clickGraph = function (facetKey, facetValueDisplay, facetValue) {
             var newobj = '<a class="facetview_filterselected facetview_clear ' +

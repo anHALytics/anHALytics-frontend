@@ -18,6 +18,7 @@
         <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>  
         <script type="text/javascript" src="lib/linkify/1.0/jquery.linkify-1.0-min.js"></script>
         <script type="text/javascript" src="bower_components/d3/d3.min.js "></script>
+        <script type="text/javascript" src="bower_components/d3-cloud/build/d3.layout.cloud.js "></script>
         <script type="text/javascript" src="bower_components/protovis/protovis-r3.2.js"></script>
         <script type="text/javascript" src="lib/Porter-Stemmer/stemmer.js"></script>
 
@@ -43,7 +44,7 @@ var options = $.extend(defaults, {
     facets: [
         {'field': '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub', 'display': 'publication_date', 'type': 'date', 'view': 'graphic'},
         {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halDomain_abbrev', 'display': 'subject-headers', 'size': 20, 'type': 'taxonomy', 'view': 'graphic'},
-        {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term', 'display': 'keywords', 'size': 10, 'type': 'entity', 'view': 'textual'},
+        {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term', 'display': 'keywords', 'size': 10, 'type': 'tag', 'view': 'graphic'},
         {'field':
                     '$teiCorpus.$teiHeader.$profileDesc.$langUsage.$language', 'display': 'language', 'size': 6, 'type': 'country', 'view': 'graphic'},
         {'field':
