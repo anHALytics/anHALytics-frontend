@@ -1568,9 +1568,9 @@
 
             var urlNERD = "http://" + options.host_nerd;
             if ((!options.port_nerd) || (options.port_nerd.length == 0))
-                urlNERD += options.port_nerd + "processERDSearchQuery";
+                urlNERD += options.port_nerd + "/nerd/processERDSearchQuery";
             else
-                urlNERD += ":" + options.port_nerd + "/processERDSearchQuery";
+                urlNERD += ":" + options.port_nerd + "/nerd/processERDSearchQuery";
             $.ajax({
                 type: "POST",
                 url: urlNERD,

@@ -103,7 +103,7 @@ var getPieceShowexpandNERD = function (jsonObject){
                     sens + '" href="' + wikipedia + '" rel="$teiCorpus.$standoff.wikipediaExternalRef">';
             piece += '<input type="checkbox" id="selectEntity' + sens
                     + '" name="selectEntity' + sens + '" value="0" href="'
-                    + wikipedia + '" rel="$TEI.$standoff.wikipediaExternalRef">';
+                    + preferredTerm + '" rel="$teiCorpus.$standoff.preferredTerm">';
             piece += '<label for="selectEntity' + sens + '" id="label' + sens + '"> <strong>' + entity.rawName + '&nbsp;</strong> </label></div></td>';
             //piece += '<td><strong>' + entity.rawName + '&nbsp;</strong></td><td>'+ 
             if (preferredTerm) {
