@@ -145,8 +145,9 @@ var buildrecord = function (index, node) {
                     //piece += '<p><strong>' + type + '</strong></p>';
                 }
             }
+            result += ' <strong><a target="_blank" href="publication.html?pubID='+id+'"><span class="titleNaked" pos="' + index+'" ';
             if (titleID) {
-                result += ' <strong><a target="_blank" href="publication.html?pubID='+id+'"><span class="titleNaked" pos="' + index + '" rel="' + titleID + '" ';
+                result += 'rel="' + titleID + '" ';
             }
             result += ' style="font-size:13px; color:black; white-space:normal;">' + title + '</span></a></strong>';
 
