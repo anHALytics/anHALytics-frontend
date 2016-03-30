@@ -449,11 +449,10 @@ var buildrecord = function (index, node) {
             }
         }
     }
-
-    result += '</div>';
+    
 
     //result += '</tr></table>';
-    result += '</div>';
+    
 
 
     result += '<div id="myGroup">';
@@ -461,12 +460,13 @@ var buildrecord = function (index, node) {
     var names =
             jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName'];
 
+ 
     result += '<div class="panel">';
     result += '<br/><a id="button_abs_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract</a>';
 
-    result += '<span style="display:inline-block; width: 290px;"></span>';
+    result += '<span style="display:inline-block; width: 250px;"></span>';
     result += '<a id="button_authors_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#authors_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Authors (' + names.length + ')</a>';
-    result += '<span style="display:inline-block; width: 290px;"></span>';
+    result += '<span style="display:inline-block; width: 250px;"></span>';
     result += '<a id="button_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Keywords</a>';
 
 
@@ -474,7 +474,7 @@ var buildrecord = function (index, node) {
     {
         var piece = "";
         piece += '<div id="abstract_' + index +
-                '" class="well row collapse " pos="' + index + '" rel="' + id + '"';
+                '" class="row collapse " pos="' + index + '" rel="' + id + '"';
         if (index % 2) {
             piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
         }
@@ -561,7 +561,7 @@ var buildrecord = function (index, node) {
         }
 
         if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
-            piece += '<p id="abstractNaked" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';
+            piece += '<p id="abstractNaked" class="well" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';
         }
         piece += '</div>';
         piece += '</div>';
@@ -572,7 +572,7 @@ var buildrecord = function (index, node) {
     {
         var piece = "";
         piece += '<div id="authors_' + index +
-                '" class="well row collapse" pos="' + index + '" rel="' + id + '"';
+                '" class="collapse" pos="' + index + '" rel="' + id + '"';
         if (index % 2) {
             piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
         }
@@ -587,7 +587,7 @@ var buildrecord = function (index, node) {
 
         if (names) {
             var ids = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$idno.$type_anhalyticsID'];
-            piece += '<div class="row">';
+            piece += '<div class="well row">';
             for (var aut in names) {
                 var id_ = ids[aut];
                 var name_ = names[aut];
@@ -606,7 +606,7 @@ var buildrecord = function (index, node) {
 
         var piece = "";
         piece += '<div id="keywords_' + index +
-                '" class="well row collapse" pos="' + index + '" rel="' + id + '"';
+                '" class="row collapse" pos="' + index + '" rel="' + id + '"';
         if (index % 2) {
             piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
         }
@@ -644,7 +644,7 @@ var buildrecord = function (index, node) {
         }
 
         if (keyword && (keyword.length > 0) && (keyword.trim().indexOf(" ") != -1)) {
-            piece += ' <p><strong>Keywords: </strong> ' + keyword + '</p>';
+            piece += ' <p class="well"><strong>Keywords: </strong> ' + keyword + '</p>';
         }
 
         piece += '</div>';
@@ -660,7 +660,8 @@ var buildrecord = function (index, node) {
     result += piece;
     result += '</div>';
     result += '</div>';
-
+    result += '</div>';
+result += '</div>';
     result += '</td></tr>';
 
     node.append(result);

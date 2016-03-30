@@ -42,7 +42,7 @@ and open the template in the editor.
                         <div class="facility-header-image lf"> 
                             <div>   
                                 <div class="c-img-xl"> <a href="" class="img-placeholder">
-                                        <img src="data/images/institution.png" class="photo "/> 
+                                        <img src="data/images/institution.jpg" class="photo "/> 
                                     </a> 
                                 </div>  
                             </div> 
@@ -56,9 +56,47 @@ and open the template in the editor.
                             </h1> 
                             <div >{{organisation['_source']['address']['settlement']}}, {{organisation['_source']['address']['country']}}
                             </div> 
+                            <ul >
+                                            <li class="institution-info-item " data-fields="street,zip,city,state,country"> 
+                                                <div class="indent-left"> Address </div> 
+                                                <div class="indent-right"> 
+                                                    {{organisation['_source']['address']['addrLine']}}, {{organisation['_source']['address']['postCode']}}, {{organisation['_source']['address']['settlement']}}, {{organisation['_source']['address']['country']}}
+                                                </div>   
+                                                </li>
+                                            
+                                            
+                                            <li class="institution-info-item" data-fields="headOfInstitution"> 
+                                                <div class="indent-left"> Head of Institution
+                                                </div> 
+                                                <div class="indent-right">  
+                                                </div>      
+                                            </li>
+                                            
+                                            <li class="institution-info-item" data-fields="institutionWebsite"> 
+                                                <div class="indent-left"> Website 
+                                                </div> 
+                                                <div class="indent-right">  
+                                                </div>   {{organisation['_source']['url']}}
+                                            </li>
+                                            
+                                            <li class="institution-info-item" data-fields="phone"> 
+                                                <div class="indent-left"> Phone </div> 
+                                                <div class="indent-right">  
+                                                </div>
+                                            </li>
+                                            
+                                            <li class="institution-info-item" data-fields="fax"> 
+                                                <div class="indent-left"> Fax 
+                                                </div> 
+                                                <div class="indent-right">  
+                                                </div>   
+                                            </li>
+                                        </ul> 
                             
-                        </div>
-                    </div>  
+                        </div> </div>  
+                                        
+                                          
+                                         
                 </div>
                 
                 <hr style="margin-top:5px; margin-bottom:5px; margin-right:0 !important">
@@ -83,13 +121,14 @@ and open the template in the editor.
                                                         <span ng-repeat="name in relation['names']">{{name}} -
                                                         </span></a> </div> 
                                                 <div class="stats">  
-                                                    <div class="stat"> 
+                                                    <!--<div class="stat"> 
                                                         <div class="number">1,502
                                                         </div> <div class="caption">Total Impact Points
                                                         </div> 
                                                     </div>   
+                                                    -->
                                                     <div class="stat"> 
-                                                        <div class="number">106</div> 
+                                                        <div class="number">{{organisation['_source']['authors'].length}} </div> 
                                                         <div class="caption">Members</div> 
                                                     </div>  
                                                     <div class="clear">
@@ -164,7 +203,7 @@ and open the template in the editor.
                                                 <div>   
                                                     <span class="ico-publication-fulltext reset-background">
                                                         
-                                                    </span> Full-text   · Article · Dec 2015  
+                                                    </span> {{pub['_source']['publication']['monograph']['title']}}  · {{pub['_source']['publication']['date_electronic']}}  
                                                 </div>
                                             </li>
                                             
@@ -174,49 +213,7 @@ and open the template in the editor.
                                         </ul>
                                         </div>
                                     
-                                    <div class="c-box institution-info">
-                                        
-                                        <h4 class="no-margin">Information</h4>
-                                        
-                                        <ul>
-                                            <li class="institution-info-item " data-fields="street,zip,city,state,country"> 
-                                                <div class="indent-left"> Address </div> 
-                                                <div class="indent-right">  
-                                                </div>   
-                                                {{organisation['_source']['address']['addrLine']}}, {{organisation['_source']['address']['postCode']}}, {{organisation['_source']['address']['settlement']}}, {{organisation['_source']['address']['country']}} 
-                                            </li>
-                                            
-                                            
-                                            <li class="institution-info-item" data-fields="headOfInstitution"> 
-                                                <div class="indent-left"> Head of Institution
-                                                </div> 
-                                                <div class="indent-right">  
-                                                </div>   Владимир Бумбаширевић    
-                                            </li>
-                                            
-                                            <li class="institution-info-item" data-fields="institutionWebsite"> 
-                                                <div class="indent-left"> Website 
-                                                </div> 
-                                                <div class="indent-right">  
-                                                </div>   {{organisation['_source']['url']}}
-                                            </li>
-                                            
-                                            <li class="institution-info-item" data-fields="phone"> 
-                                                <div class="indent-left"> Phone </div> 
-                                                <div class="indent-right">  
-                                                </div>    +381 11 3207-445    
-                                            </li>
-                                            
-                                            <li class="institution-info-item" data-fields="fax"> 
-                                                <div class="indent-left"> Fax 
-                                                </div> 
-                                                <div class="indent-right">  
-                                                </div>   2638-912, 3207-481    
-                                            </li>
-                                        </ul>   
-                                        
-                                        <div class="clear"></div>
-                                    </div> 
+                                    
                                 </div>
                                 <div class="col-md-5">
                                     <div class="facility-stats c-box">
@@ -272,6 +269,7 @@ and open the template in the editor.
                                                             <h5>  
                                                                 <a href="profile.html?authorID={{author['personId']}}" class="display-name">{{author['fullname']}}</a>    
                                                                 <span class="meta" style="font-weight: normal;"> &nbsp; 
+                                                                    <!--
                                                                     <span style="white-space: nowrap;">
                                                                         <a class="score-link" href="profile/personName/reputation"> 
                                                                             <span class="ico-rgscore-m">
@@ -288,6 +286,7 @@ and open the template in the editor.
                                                                             (50)
                                                                         </a>
                                                                     </span> 
+                                                                    -->
                                                                 </span>  
                                                             </h5> 
                                                             <div class="truncate-single-line meta">   
@@ -315,7 +314,7 @@ and open the template in the editor.
                                             </h4>
                                             
                                             <ul class="institution-list-s">
-                                                
+                                                <!--
                                                 <li class="institution-list-item-with-stats "> 
                                                     <div class="image">
                                                         <a class="image-wrapper" href="institution/Vinca_Institute_of_Nuclear_Sciences"> 
@@ -342,8 +341,10 @@ and open the template in the editor.
                                                             <div class="clear"></div> 
                                                         </div> 
                                                     </div>
+                                                   
                                                     
                                                     </li>
+                                                 -->
                                                     
                                             </ul>
                                             

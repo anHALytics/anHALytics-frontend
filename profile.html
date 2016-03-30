@@ -42,12 +42,9 @@
 
                         <div style="padding-top:10px;padding-left:30px;padding-right:30px" class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
 
-                            <div class="profile-header-personal lf js-wexp-profile-header">
+                            <div class="profile-header-personal lf">
                                 <h1 class="profile-header-name">
                                     <a href="profile/{{profile['_id']}}" >{{profile['_source']['fullname']}}</a>
-                                    <a class="score-link" href="profile/{{profile['_id']}}/reputation" > 
-                                        <span class="ico-rgscore-m"></span>9.50 
-                                    </a>
 
                                 </h1>
 
@@ -59,13 +56,6 @@
                                     </div>  
                                 </div>
 
-
-                                <!--<div class="profile-institution org" ng-repeat="affiliation in profile['_source']['affiliations']">  --> 
-                                <div class="profile-institution org">    
-                                    <a ng-repeat="name in profile['_source']['affiliations'][0]['names']" href="institution.html?orgID={{profile['_source']['affiliations'][0]['organisationId']}}" title="{{name}}" target="_blank"> 
-                                        {{name}}  ·  
-                                    </a>{{profile['_source']['affiliations'][0]['addrLine']}} · {{profile['_source']['affiliations'][0]['type']}}  · {{profile['_source']['affiliations'][0]['url']}}
-                                </div>
 
                                 <div class="profile-phone" > <div>  
                                         <i style="width: 20px;" class="fa fa-phone"></i>
@@ -89,6 +79,33 @@
                                         </p>
                                     </div>
                                 </div>
+                                <!--<div class="profile-institution org" ng-repeat="affiliation in profile['_source']['affiliations']">  --> 
+                                <!-- AFFILIATIONS -->
+                                    <div class="c-box"> 
+                                        <ul> 
+                                            <li class="institution-list-item ">
+                                                <div class="indent-left"> 
+                                                    <div class="c-img-m">
+                                                        <a href=""> 
+                                                            <img  src="data/images/institution.jpg">
+                                                        </a> 
+                                                    </div>
+                                                </div> 
+                                                <div class="indent-content institution org"> 
+                                                    <div class="institution-name"> <strong>
+                                                            <a ng-repeat="name in profile['_source']['affiliations'][0]['names']" href="institution.html?orgID={{profile['_source']['affiliations'][0]['organisationId']}}" title="{{name}}" target="_blank"> 
+                                                                {{name}}  ·  
+                                                            </a>
+                                                        </strong> </div>   
+                                                    <div class="institution-dept">  Faculty of Philology 
+                                                    </div>    
+                                                    <div class="text-gray-lighter institution-location"> 
+                                                        {{profile['_source']['affiliations'][0]['address']['settlement']}}, {{profile['_source']['affiliations'][0]['address']['country']}}
+                                                    </div>  
+                                                </div> </li>  
+                                        </ul> 
+                                    </div>
+
                                 <hr style="margin-top:5px; margin-bottom:5px; margin-right:0 !important">
 
 
@@ -100,38 +117,12 @@
                             <div class="row">
                                 <div class="col-md-7 c-content">
                                     <div>
-                                        <!-- STATS -->
-                                        <div class="row c-box profile-highlights-stats stats-list">
-                                            <div class="col-md-4 stats-item active publication-count">
-                                                <a href="profile/personname/publications"> 
-                                                    <div class="stats-count">{{profile['_source']['publications'].length}} </div> <div class="stats-label">Publications</div>
-
-                                                </a>
-                                            </div>
-                                            <div class="col-md-4 stats-item">
-                                                <a href="profile/personname/citations" > 
-                                                    <div class="stats-count" >251 </div> <div class="stats-label" >Citations</div>
-
-                                                </a> 
-
-                                            </div>
-                                            <div class="col-md-4 stats-item">
-                                                <a href="profile/personname/citations" > 
-                                                    <div class="stats-count" >251</div> <div class="stats-label" >Reads</div> 
-
-                                                </a> 
-
-                                            </div>
-
-
-
-                                        </div>
 
                                         <!-- PUBLICATIONS -->
 
                                         <div class="row c-box profile-highlights-publications">
                                             <h4> <strong class="lf"> 
-                                                    <a href="">Featured publications</a> 
+                                                    <a href="">Recent publications</a> 
                                                 </strong> 
                                                 <small class="rf">   
                                                     <a href="">View all</a>  
@@ -155,7 +146,7 @@
                                                     <div class="authors">     
                                                         <a href="profile.html?authorID={{author['personId']}}" class="authors " ng-repeat="author in pub['_source']['authors']">{{author['fullname']}} · </a>                                                   </div>
 
-                                                    <div class="pub-stats"> 
+                                                    <!--<div class="pub-stats"> 
                                                         <div class="pub-stat">
                                                             <a href="publication/2895396/stats"> 
                                                                 <div class="stat-count">14</div> 
@@ -170,6 +161,7 @@
 
                                                         </div> 
                                                     </div>
+                                                    -->
                                                 </li>
 
 
@@ -221,31 +213,34 @@
                                     </div>
                                 </div>
                                 <div class="col-md-5">
-                                    <!-- AFFILIATIONS -->
-                                    <div class="c-box"> 
-                                        <ul> 
-                                            <li class="institution-list-item ">
-                                                <div class="indent-left"> 
-                                                    <div class="c-img-m">
-                                                        <a href=""> 
-                                                            <img  src="data/images/institution.png">
-                                                        </a> 
-                                                    </div>
-                                                </div> 
-                                                <div class="indent-content institution org"> 
-                                                    <div class="institution-name"> <strong>
-                                                            <a ng-repeat="name in profile['_source']['affiliations'][0]['names']" href="institution.html?orgID={{profile['_source']['affiliations'][0]['organisationId']}}" title="{{name}}" target="_blank"> 
-                                                                {{name}}  ·  
-                                                            </a>
-                                                        </strong> </div>   
-                                                    <div class="institution-dept">  Faculty of Philology 
-                                                    </div>    
-                                                    <div class="text-gray-lighter institution-location"> 
-                                                        {{profile['_source']['affiliations'][0]['address']['settlement']}}, {{profile['_source']['affiliations'][0]['address']['country']}}
-                                                    </div>  
-                                                </div> </li>  
-                                        </ul> 
-                                    </div>
+                                    
+                                        <!-- STATS -->
+                                        <div class="row c-box profile-highlights-stats stats-list">
+                                            <div class="col-md-6 stats-item active publication-count">
+                                                <a href="profile/personname/publications"> 
+                                                    <div class="stats-count">{{profile['_source']['publications'].length}} </div> 
+                                                    <div class="stats-label">Publications</div>
+
+                                                </a>
+                                            </div>
+                                            <div class="col-md-6 stats-item">
+                                                <a href="profile/personname/citations" > 
+                                                    <div class="stats-count" >8 </div> <div class="stats-label" >Citations</div>
+
+                                                </a> 
+
+                                            </div>
+                                            <!--<div class="col-md-4 stats-item">
+                                                <a href="profile/personname/citations" > 
+                                                    <div class="stats-count" >251</div> <div class="stats-label" >Reads</div> 
+
+                                                </a> 
+
+                                            </div>-->
+
+
+
+                                        </div>
 
                                     <!-- COAUTHORS -->
                                     <div class="profile-coauthors people-list-s c-box" >
