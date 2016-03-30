@@ -628,7 +628,7 @@ var buildrecord = function (index, node) {
         }
         else {
             var keyArray = keywords;
-            if (keyArray) {
+            if (keyArray  && keywordIDs) {
                 for (var p in keyArray) {
                     var keywordID = keywordIDs[p];
                     if (p == 0) {
