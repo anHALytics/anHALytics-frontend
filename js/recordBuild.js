@@ -590,6 +590,7 @@ var buildrecord = function (index, node) {
             var ids = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$idno.$type_anhalyticsID'];
             piece += '<div class="well row">';
             for (var aut in names) {
+                if(ids)
                 var id_ = ids[aut];
                 var name_ = names[aut];
                 piece += '<div class="col-md-3"><a target="_blank" href="profile.html?authorID=' + id_ + '" >' + name_ + '</a></div>';
