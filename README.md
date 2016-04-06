@@ -29,3 +29,10 @@ AnHALytics is a work at early stage and a work in progress. It is evolving rapid
 
 If you are interested in contributing to the project, please contact <patrice.lopez@inria.fr>. 
 
+
+## Frontends
+
+The front-end javascript web application will call ElasticSearch service. In addition, the front-end can also call the (N)ERD service for performing query disambiguation. Update the file ```js/resource/config.js``` with the elasticsearch server host/port (exposing the different indexes built by the module ```anhalytics-core```) and the (N)ERD server host/port.
+
+Some elements of the search frontend have been inspired by [FacetView 1](https://github.com/okfn/facetview) from Open Knowledge Foundation and Cottage Labs, thanks to them!
+
