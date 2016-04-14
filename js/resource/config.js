@@ -5,7 +5,7 @@ var defaults = {
     service: "local", // access to service can be local or proxy, depending on security requirements
     proxy_host: "http://localhost:8080/proxy/",    
     search_url: 'http://localhost:9200/anhalytics_teis/_search?', // the URL against which to submit searches
-    search_url_annotations: 'http://localhost:9200/anhalytics_annotations/_search?',
+    search_url_annotations: 'http://localhost:9200/annotations_nerd/_search?',
     search_index: 'elasticsearch',    
     query_parameter: "q", // the query parameter if required for setting to the search URL
     collection: 'npl',

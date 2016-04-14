@@ -80,7 +80,7 @@
             $('#facetview_dofacetedit').bind('click', dofacetedit);
             $('#facetview_editmodal').modal('show');
         };
-              
+
         // trigger a search when a filter choice is clicked
         var clickfilterchoice = function (event) {
             event.preventDefault();
@@ -138,7 +138,7 @@
             options.paging.from = 0;
             dosearch();
         }
-        
+
         // remove the edit modal from page altogether on close (rebuilt for each filter)
         var removeedit = function (event) {
             event.preventDefault();
@@ -246,38 +246,38 @@
         };
 
         /*var setScope = function () {
-            if ($('input[name=\"scientific\"]').attr('checked') && (options.scope != 'scientific')) {
-                options.scope = 'scientific';
-                options.paging.from = 0;
-                dosearch();
-            }
-            else if (!($('input[name=\"scientific\"]').attr('checked')) && (options.scope == 'scientific')) {
-                options.scope = null;
-                options.paging.from = 0;
-                dosearch();
-            }
-            if (($('input[name=\"fulltext\"]').attr('checked')) && (!options['fulltext'])) {
-                options['fulltext'] = true;
-                options.paging.from = 0;
-                dosearch();
-            }
-            else if (!($('input[name=\"fulltext\"]').attr('checked')) && (options['fulltext'])) {
-                options['fulltext'] = false;
-                options.paging.from = 0;
-                dosearch();
-            }
-            if (($('input[name=\"scholarly\"]').attr('checked')) && (!options['scholarly'])) {
-                options['scholarly'] = true;
-                options.paging.from = 0;
-                dosearch();
-            }
-            else if (!($('input[name=\"scholarly\"]').attr('checked')) && (options['scholarly'])) {
-                options['scholarly'] = false;
-                options.paging.from = 0;
-                dosearch();
-            }
-        };
-        */
+         if ($('input[name=\"scientific\"]').attr('checked') && (options.scope != 'scientific')) {
+         options.scope = 'scientific';
+         options.paging.from = 0;
+         dosearch();
+         }
+         else if (!($('input[name=\"scientific\"]').attr('checked')) && (options.scope == 'scientific')) {
+         options.scope = null;
+         options.paging.from = 0;
+         dosearch();
+         }
+         if (($('input[name=\"fulltext\"]').attr('checked')) && (!options['fulltext'])) {
+         options['fulltext'] = true;
+         options.paging.from = 0;
+         dosearch();
+         }
+         else if (!($('input[name=\"fulltext\"]').attr('checked')) && (options['fulltext'])) {
+         options['fulltext'] = false;
+         options.paging.from = 0;
+         dosearch();
+         }
+         if (($('input[name=\"scholarly\"]').attr('checked')) && (!options['scholarly'])) {
+         options['scholarly'] = true;
+         options.paging.from = 0;
+         dosearch();
+         }
+         else if (!($('input[name=\"scholarly\"]').attr('checked')) && (options['scholarly'])) {
+         options['scholarly'] = false;
+         options.paging.from = 0;
+         dosearch();
+         }
+         };
+         */
 
         var setDateRange = function () {
             var day_from = 1;
@@ -328,8 +328,6 @@
             var date_from = new Date(year_from, month_from, day_from, 0, 0, 0, 0);
             var date_to = new Date(year_to, month_to, day_to, 0, 0, 0, 0);
 
-            //console.log(date_from.toString('yyyy-MM-dd'));
-            //console.log(date_to.toString('yyyy-MM-dd'));
 
             var rel = $(this).attr('rel');
             var newobj = '<a class="facetview_filterselected facetview_facetrange facetview_clear ' +
@@ -392,10 +390,10 @@
             }
             $('.facetview_filterchoice').bind('click', clickfilterchoice);
         };
-    
+
         var add_facet = function (event) {
             event.preventDefault();
-            
+
             var truc = {'field': 'undefined', 'display': 'new_facet', 'size': 0, 'type': '', 'view': 'hidden'};
             options.facets.push(truc);
             buildfilters();
@@ -501,7 +499,7 @@
             $('#facetview_showarf').bind('click', showarf);
             $('.facetview_filterchoose').bind('click', addremovefacet);
         };
-    
+
         // pass a list of filters to be displayed
         var buildfilters = function () {
             var filters = options.facets;
@@ -509,11 +507,12 @@
             var thefilters = "";
 
             for (var idx in filters) {
-                var _filterTmpl = ' \
+                var _filterTmpl = '<div class="row">';
+                _filterTmpl += ' \
                     <div style="min-width:100%;" id="facetview_filterbuttons" class="btn-group"> \
-                        <button style="text-align:left; min-width:70%;" class="facetview_filtershow btn btn-default" rel="{{FILTER_NAME}}" type="button" >\
-                            {{FILTER_DISPLAY}}\
+                        <button style="text-align:left; min-width:80%;" class="facetview_filtershow btn btn-default" rel="{{FILTER_NAME}}" type="button" >\
                             <i class="pull-right glyphicon glyphicon-plus"></i>\
+                            {{FILTER_DISPLAY}}\
                         </button>\
                         <div class="btn-group" role="group">\
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
@@ -552,6 +551,7 @@
 					       <div id="validate-date-range" alt="set date range" title="set date range" rel="{{FACET_IDX}}" class="glyphicon glyphicon-ok" /></div>';
                 }
                 _filterTmpl += '</ul>';
+                _filterTmpl += '</div>';
                 if (options.visualise_filters) {
                     var vis = '<li><a class="facetview_visualise" rel="{{FACET_IDX}}" href="{{FILTER_DISPLAY}}">visualise this filter</a></li>';
                     thefilters += _filterTmpl.replace(/{{FACET_VIS}}/g, vis);
@@ -577,14 +577,15 @@
                 }
             }
 
-            var temp_intro = '\
+            var temp_intro = '<div class="row">\
                         <button style="text-align:left; min-width:20%;margin-bottom:10px;" class="btn btn-default" id="new_facet" href="" type="button" >\
                             <i class="glyphicon glyphicon-plus"></i> add new facet \
                         </button>\
+                        </div>\
 			';
             $('#facetview_filters').html("").append(temp_intro);
             $('#new_facet').bind('click', add_facet);
-        
+
             //var temp_intro = '<form class="well" id="scope_area"><label class="checkbox">' +
             //        '<input type="checkbox" name="scientific" checked>Technical content</label>';
             //temp_intro += '<label class="checkbox">' +
@@ -596,7 +597,7 @@
 
             //$('#facetview_filters').html("").append(temp_intro);
             //$('#scope_area').bind('click', setScope);
-            
+
 
             $('#facetview_filters').append(thefilters);
             options.visualise_filters ? $('.facetview_visualise').bind('click', show_vis) : "";
@@ -636,25 +637,25 @@
 
             if (!update) {
                 if ((options.facets[idx]['type'] == 'class') || (options.facets[idx]['type'] == 'country')) {
-                    vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;top:5px;left:-10px;"> \
+                    vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;top:5px;"> \
 	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart"> \
 	                    </div> \
 	                    </div>';
                 }
                 else if (options.facets[idx]['type'] == 'entity') {
-                    vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;left:-10px;"> \
+                    vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;"> \
 	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart"> \
 	                    </div> \
 	                    </div>';
                 }
                 else if (options.facets[idx]['type'] == 'taxonomy') {
-                    vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;top:5px;left:-15px"> \
+                    vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;top:5px;"> \
 	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart"> \
 	                    </div> \
 	                    </div>';
                 }
                 else {
-                    vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;left:-10px;"> \
+                    vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;"> \
 	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart" style="position:relative;"> \
 	                    </div> \
 	                    </div>';
@@ -676,7 +677,7 @@
             else if (options.facets[idx]['type'] == 'taxonomy') {
                 wheel($(this).attr('rel'), $(this).attr('href'), parentWidth * 0.8,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
-            }else if (options.facets[idx]['type'] == 'tag'){
+            } else if (options.facets[idx]['type'] == 'tag') {
                 cloud($(this).attr('rel'), $(this).attr('href'), parentWidth * 0.8,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
             }
@@ -1501,7 +1502,7 @@
             var r = width;
             var cloude = d3.layout.cloud().size([r, r])
                     .words(data.map(function (d) {
-                        return {text: d, size: 15 };
+                        return {text: d, size: 15};
                     }))
                     .rotate(function () {
                         return 0;
@@ -1534,8 +1535,8 @@
                             return d.text;
                         });
             }
-            
-            };
+
+        };
         // normal click on a graphical facet
         var clickGraph = function (facetKey, facetValueDisplay, facetValue) {
             var newobj = '<a class="facetview_filterselected facetview_clear ' +
@@ -1700,31 +1701,31 @@
                 // write them out to the results div
                 //$('#facetview_results').append( buildrecord(index) );
                 buildrecord(index, $('#facetview_results'));
-                
+
                 $('#facetview_results tr:last-child').linkify();
                 //Handle the chevron on every action.
-                $("#abstract_" + index).on('shown.bs.collapse', function() {
-                    $('#button_abs_collapse_'+ index ).find('span').addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
+                $("#abstract_" + index).on('shown.bs.collapse', function () {
+                    $('#button_abs_collapse_' + index).find('span').addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
                 });
 
-                $("#abstract_" + index).on('hidden.bs.collapse', function() {
-                    $('#button_abs_collapse_'+ index ).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
-                });
-                
-                $("#authors_" + index).on('shown.bs.collapse', function() {
-                    $('#button_authors_collapse_'+ index ).find('span').addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
+                $("#abstract_" + index).on('hidden.bs.collapse', function () {
+                    $('#button_abs_collapse_' + index).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
                 });
 
-                $("#authors_" + index).on('hidden.bs.collapse', function() {
-                    $('#button_authors_collapse_'+ index ).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
-                });
-                
-                $("#keywords_" + index).on('shown.bs.collapse', function() {
-                    $('#button_keywords_collapse_'+ index ).find('span').addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
+                $("#authors_" + index).on('shown.bs.collapse', function () {
+                    $('#button_authors_collapse_' + index).find('span').addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
                 });
 
-                $("#keywords_" + index).on('hidden.bs.collapse', function() {
-                    $('#button_keywords_collapse_'+ index ).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
+                $("#authors_" + index).on('hidden.bs.collapse', function () {
+                    $('#button_authors_collapse_' + index).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
+                });
+
+                $("#keywords_" + index).on('shown.bs.collapse', function () {
+                    $('#button_keywords_collapse_' + index).find('span').addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
+                });
+
+                $("#keywords_" + index).on('hidden.bs.collapse', function () {
+                    $('#button_keywords_collapse_' + index).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
                 });
             });
             MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
@@ -1744,8 +1745,173 @@
                     $('.facetview_filtershow[rel=' + options.facets[each]['display'] + ']').trigger('click');
                 }
             }
+
+
+
+            $('.innen_abstract', obj).each(function () {
+                // load biblio and abstract info. 
+                // pos attribute gives the result index, rel attribute gives the document ID 
+                var index = $(this).attr('pos');
+                var docID = $(this).attr('rel');
+                var localQuery;
+                // abstract and further informations
+                localQuery = {"fields": ["$teiCorpus.$teiHeader.$profileDesc.xml:id",
+                        "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
+                        "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr",
+                        "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de"
+                                //"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
+                                //"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi",
+                                //"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName",
+                                //'$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology',
+                                //"$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",
+                                //'$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id'
+                    ],
+                    "query": {"filtered": {"query": {"term": {"_id": docID}}}}};
+
+                $.ajax({
+                    type: "get",
+                    url: options.search_url,
+                    contentType: 'application/json',
+                    dataType: 'jsonp',
+                    data: {source: JSON.stringify(localQuery)},
+                    success: function (data) {
+                        displayAbstract(data, index);
+                    }
+                });
+            });
+
+
         };
-        
+
+
+        var displayAbstract = function (data, index) {
+            var jsonObject = null;
+            if (!data) {
+                return;
+            }
+            if (data.hits) {
+                if (data.hits.hits) {
+                    jsonObject = eval(data.hits.hits[0]);
+                }
+            }
+            if (!jsonObject) {
+                return;
+            }
+
+            if (options.collection == "npl") {
+            var docid = jsonObject._id;
+            var piece = "";
+// abstract, if any
+            jsonObject = jsonObject.fields;
+            if (!jsonObject) {
+                return;
+            }
+            var abstract = null;
+
+            var abstractID = null;
+            var abstractIDs = jsonObject['$teiCorpus.$teiHeader.$profileDesc.xml:id'];
+            if (typeof abstractIDs == 'string') {
+                abstractID = abstractIDs;
+            }
+            else {
+                if (abstractIDs && (abstractIDs.length > 0)) {
+                    abstractID = abstractIDs[0];
+                    while ((typeof abstractID != 'string') && (typeof abstractID != 'undefined')) {
+                        abstractID = abstractID[0];
+                    }
+                }
+            }
+
+            var abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en'];
+            if (typeof abstracts == 'string') {
+                abstract = abstracts;
+            }
+            else {
+                if (abstracts && (abstracts.length > 0)) {
+                    abstract = abstracts[0];
+                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                        abstract = abstract[0];
+                    }
+                }
+            }
+
+            if (!abstract || (abstract.length == 0)) {
+                abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr'];
+
+                if (typeof abstracts == 'string') {
+                    abstract = abstracts;
+                }
+                else {
+                    if (abstracts && (abstracts.length > 0)) {
+                        abstract = abstracts[0];
+                        while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                            abstract = abstract[0];
+                        }
+                    }
+                }
+            }
+
+            if (!abstract || (abstract.length == 0)) {
+                abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de'];
+
+                if (typeof abstracts == 'string') {
+                    abstract = abstracts;
+                }
+                else {
+                    if (abstracts && (abstracts.length > 0)) {
+                        abstract = abstracts[0];
+                        while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                            abstract = abstract[0];
+                        }
+                    }
+                }
+            }
+
+            if (!abstract || (abstract.length == 0)) {
+                abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_es'];
+
+                if (typeof abstracts == 'string') {
+                    abstract = abstracts;
+                }
+                else {
+                    if (abstracts && (abstracts.length > 0)) {
+                        abstract = abstracts[0];
+                        while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                            abstract = abstract[0];
+                        }
+                    }
+                }
+            }
+            piece += '<div class="col-md-12">';
+
+            if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
+                piece += '<p id="abstractNaked" class="well" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';
+            }
+            piece += '</div>';
+
+            $('.innen_abstract[rel="' + docid + '"]').append(piece);
+
+            $('#abstractNaked[rel="' + abstractID + '"]', obj).each(function () {
+                // annotations for the abstract
+                var index = $(this).attr('pos');
+                var titleID = $(this).attr('rel');
+                var localQuery = {"query": {"filtered": {"query": {"term": {"_id": abstractID}}}}};
+
+                $.ajax({
+                    type: "get",
+                    url: options.search_url_annotations,
+                    contentType: 'application/json',
+                    dataType: 'jsonp',
+                    data: {source: JSON.stringify(localQuery)},
+                    success: function (data) {
+                        displayAnnotations(data, index, abstractID, 'abstract');
+                    }
+                });
+            });
+            }
+        };
+
+
         // execute a search
         var dosearch = function () {
             // update the options with the latest q value

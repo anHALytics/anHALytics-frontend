@@ -39,13 +39,7 @@ var buildrecord = function (index, node) {
     // date
     var date;
     var dates = null;
-    dates = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date'];
-    if (!dates) {
-        dates = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$when'];
-    }
-    if (!dates) {
-        dates = jsonObject['$teiCorpus.$teiHeader.$editionStmt.$edition.$date'];
-    }
+    dates = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub'];
 
     var title;
     var titles = null;
@@ -141,15 +135,15 @@ var buildrecord = function (index, node) {
                 var type =
                         jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology'];
                 if (type) {
-                    result += '<p><a href="publication.html?pubID='+id+'"><span class="label pubtype" style="white-space:normal;">' + type + '</span></a></p>';
+                    result += '<div class="row"><a href="publication.html?pubID='+id+'"><span class="label pubtype" style="white-space:normal;">' + type + '</span></a></div>';
                     //piece += '<p><strong>' + type + '</strong></p>';
                 }
             }
-            result += ' <strong><a target="_blank" href="publication.html?pubID='+id+'"><span class="titleNaked" pos="' + index+'" ';
+            result += ' <div class="row" style="margin-bottom: 10px"><strong><a target="_blank" href="publication.html?pubID='+id+'"><span class="titleNaked" pos="' + index+'" ';
             if (titleID) {
                 result += 'rel="' + titleID + '" ';
             }
-            result += ' style="font-size:13px; color:black; white-space:normal;">' + title + '</span></a></strong>';
+            result += ' style="font-size:13px; color:black; white-space:normal;">' + title + '</span></a></strong></div>';
 
 
 
@@ -160,10 +154,8 @@ var buildrecord = function (index, node) {
         }
     }
 
-    result += '<br />';
 
-
-    result += '<strong style="font-size:11px">';
+    result += '<div class="row" style="margin-bottom: 10px" ><strong style="font-size:11px">';
     var authorsLast = null;
     var authorsFirst = null;
 
@@ -183,11 +175,13 @@ var buildrecord = function (index, node) {
                 result += authorsLast[0];
             }
             else {
-                result += ", ";
                 if (authorsFirst.length > author) {
                     result += authorsFirst[author][0] + ". ";
                 }
                 result += authorsLast[author];
+                
+                if(author < authorsLast.length -1)
+                result += ", ";
             }
         }
     }
@@ -258,7 +252,7 @@ var buildrecord = function (index, node) {
             if ((month != undefined) && (month.length > 0))
                 result += month + '.';
             if (year != undefined)
-                result += year + '</em>' + '<br />';
+                result += year + '</em>';
         }
     }
 
@@ -266,10 +260,142 @@ var buildrecord = function (index, node) {
     doi = jsonObject["$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi"];
     if (doi) {
         doi = doi[0];
-        result += " <br />DOI: <a target='_blank' style='color: #0094DE;' href='http://dx.doi.org/" + doi + "'>" + doi + "</a><br/>";
+        result += " - <a target='_blank' style='color: #0094DE;' href='http://dx.doi.org/" + doi + "'>" + doi + "</a>";
     }
-    result += '</strong>';
-    // snippets 
+    result += '</strong></div>';
+    
+
+    //result += '</tr></table>';
+    
+
+
+    result += '<div id="myGroup" class= "row">';
+
+    var names =
+            jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName'];
+
+ 
+    result += '<div class="panel">';
+    result += '<div class="row">';
+    result += '<div class="col-md-4"><a id="button_abs_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract</a></div>';
+
+    result += '<div class="col-md-4"><a id="button_authors_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#authors_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Authors (' + names.length + ')</a></div>';
+    result += '<div class="col-md-4"><a id="button_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Keywords</a></div>';
+result += '</div>';
+
+
+    {
+        var piece = "";
+        piece += '<div id="abstract_' + index +
+                '" class="innen_abstract row collapse " pos="' + index + '" rel="' + id + '"';
+        if (index % 2) {
+            piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
+        }
+        else {
+            piece += 'style="background-color:#ffffff;">';
+        }
+        
+        piece += '</div>';
+    }
+result += piece;
+
+    {
+        var piece = "";
+        piece += '<div id="authors_' + index +
+                '" class="collapse" pos="' + index + '" rel="' + id + '"';
+        if (index % 2) {
+            piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
+        }
+        else {
+            piece += 'style="background-color:#ffffff;">';
+        }
+
+        piece += '<div class="col-md-12">';
+
+        // authors and affiliation
+
+
+        if (names) {
+            var ids = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$idno.$type_anhalyticsID'];
+            piece += '<div class="well row">';
+            for (var aut in names) {
+                if(ids)
+                var id_ = ids[aut];
+                var name_ = names[aut];
+                piece += '<div class="col-md-3"><a target="_blank" href="profile.html?authorID=' + id_ + '" >' + name_ + '</a></div>';
+            }
+            piece += '</div>';
+        }
+
+        piece += '</div>';
+        piece += '</div>';
+    }
+    result += piece;
+
+
+    {
+
+        var piece = "";
+        piece += '<div id="keywords_' + index +
+                '" class="row collapse" pos="' + index + '" rel="' + id + '"';
+        if (index % 2) {
+            piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
+        }
+        else {
+            piece += 'style="background-color:#ffffff;">';
+        }
+
+        piece += '<div class="col-md-8">';
+        // keywords
+        var keyword = null;
+        var keywordIDs =
+                jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id'];
+        // we have a list of keyword IDs, each one corresponding to an independent annotation set
+        var keywords =
+                jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term'];
+
+        if (typeof keywords == 'string') {
+            keyword = keywords;
+        }
+        else {
+            var keyArray = keywords;
+            if (keyArray  && keywordIDs) {
+                for (var p in keyArray) {
+                    var keywordID = keywordIDs[p];
+                    if (p == 0) {
+                        keyword = '<span id="keywordsNaked"  pos="' + index + '" rel="' + keywordID + '">'
+                                + keyArray[p] + '</span>';
+                    }
+                    else {
+                        keyword += ', ' + '<span id="keywordsNaked"  pos="' + index + '" rel="' + keywordID + '">' +
+                                keyArray[p] + '</span>';
+                    }
+                }
+            }
+        }
+
+        if (keyword && (keyword.length > 0) && (keyword.trim().indexOf(" ") != -1)) {
+            piece += ' <p class="well"><strong>Keywords: </strong> ' + keyword + '</p>';
+        }
+
+        piece += '</div>';
+
+        // info box for the entities
+        piece += '<div class="annotation_info">';
+        piece += '<span  id="detailed_annot-' + index + '" />';
+        piece += "</div>";
+
+        piece += "</div>";
+
+    }
+    result += piece;
+    
+    result += '</div>';
+    result += '</div>';
+    
+    
+    result += '<div class="row">';
+// snippets 
     // Dominique Andlauer's strategy (sort of Google's one), at least one snippet per matched term, then 
     // per relevance, first we check the number of different matched terms
     if (options.snippet_style == "andlauer") {
@@ -424,6 +550,7 @@ var buildrecord = function (index, node) {
             //var snippets = jsonObject2['_all'];
             //console.log(snippets);
             var totalDisplayed = 0;
+            
             for (var n in jsonObject2) {
                 var snippets = jsonObject2[n];
                 for (var i = 0; i < snippets.length; i++) {
@@ -451,220 +578,16 @@ var buildrecord = function (index, node) {
         }
     }
     
-
-    //result += '</tr></table>';
+            result += '</div>';
+    result += '</div>';
+    result += '</div>';
     
-
-
-    result += '<div id="myGroup">';
-
-    var names =
-            jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName'];
-
- 
-    result += '<div class="panel">';
-    result += '<br/><a id="button_abs_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract</a>';
-
-    result += '<span style="display:inline-block; width: 250px;"></span>';
-    result += '<a id="button_authors_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#authors_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Authors (' + names.length + ')</a>';
-    result += '<span style="display:inline-block; width: 250px;"></span>';
-    result += '<a id="button_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Keywords</a>';
-
-
-
-    {
-        var piece = "";
-        piece += '<div id="abstract_' + index +
-                '" class="row collapse " pos="' + index + '" rel="' + id + '"';
-        if (index % 2) {
-            piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
-        }
-        else {
-            piece += 'style="background-color:#ffffff;">';
-        }
-        piece += '<div class="col-md-12">';
-        // abstract, if any
-        var abstract = null;
-
-        var abstractID = null;
-        var abstractIDs = jsonObject['$teiCorpus.$teiHeader.$profileDesc.xml:id'];
-        if (typeof abstractIDs == 'string') {
-            abstractID = abstractIDs;
-        }
-        else {
-            if (abstractIDs && (abstractIDs.length > 0)) {
-                abstractID = abstractIDs[0];
-                while ((typeof abstractID != 'string') && (typeof abstractID != 'undefined')) {
-                    abstractID = abstractID[0];
-                }
-            }
-        }
-
-        var abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en'];
-        if (typeof abstracts == 'string') {
-            abstract = abstracts;
-        }
-        else {
-            if (abstracts && (abstracts.length > 0)) {
-                abstract = abstracts[0];
-                while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                    abstract = abstract[0];
-                }
-            }
-        }
-
-        if (!abstract || (abstract.length == 0)) {
-            abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr'];
-
-            if (typeof abstracts == 'string') {
-                abstract = abstracts;
-            }
-            else {
-                if (abstracts && (abstracts.length > 0)) {
-                    abstract = abstracts[0];
-                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                        abstract = abstract[0];
-                    }
-                }
-            }
-        }
-
-        if (!abstract || (abstract.length == 0)) {
-            abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de'];
-
-            if (typeof abstracts == 'string') {
-                abstract = abstracts;
-            }
-            else {
-                if (abstracts && (abstracts.length > 0)) {
-                    abstract = abstracts[0];
-                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                        abstract = abstract[0];
-                    }
-                }
-            }
-        }
-
-        if (!abstract || (abstract.length == 0)) {
-            abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_es'];
-
-            if (typeof abstracts == 'string') {
-                abstract = abstracts;
-            }
-            else {
-                if (abstracts && (abstracts.length > 0)) {
-                    abstract = abstracts[0];
-                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                        abstract = abstract[0];
-                    }
-                }
-            }
-        }
-
-        if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
-            piece += '<p id="abstractNaked" class="well" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';
-        }
-        piece += '</div>';
-        piece += '</div>';
-    }
-    result += piece;
-
-
-    {
-        var piece = "";
-        piece += '<div id="authors_' + index +
-                '" class="collapse" pos="' + index + '" rel="' + id + '"';
-        if (index % 2) {
-            piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
-        }
-        else {
-            piece += 'style="background-color:#ffffff;">';
-        }
-
-        piece += '<div class="col-md-12">';
-
-        // authors and affiliation
-
-
-        if (names) {
-            var ids = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$idno.$type_anhalyticsID'];
-            piece += '<div class="well row">';
-            for (var aut in names) {
-                if(ids)
-                var id_ = ids[aut];
-                var name_ = names[aut];
-                piece += '<div class="col-md-3"><a target="_blank" href="profile.html?authorID=' + id_ + '" >' + name_ + '</a></div>';
-            }
-            piece += '</div>';
-        }
-
-        piece += '</div>';
-        piece += '</div>';
-    }
-    result += piece;
-
-
-    {
-
-        var piece = "";
-        piece += '<div id="keywords_' + index +
-                '" class="row collapse" pos="' + index + '" rel="' + id + '"';
-        if (index % 2) {
-            piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
-        }
-        else {
-            piece += 'style="background-color:#ffffff;">';
-        }
-
-        piece += '<div class="col-md-8">';
-        // keywords
-        var keyword = null;
-        var keywordIDs =
-                jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id'];
-        // we have a list of keyword IDs, each one corresponding to an independent annotation set
-        var keywords =
-                jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term'];
-
-        if (typeof keywords == 'string') {
-            keyword = keywords;
-        }
-        else {
-            var keyArray = keywords;
-            if (keyArray  && keywordIDs) {
-                for (var p in keyArray) {
-                    var keywordID = keywordIDs[p];
-                    if (p == 0) {
-                        keyword = '<span id="keywordsNaked"  pos="' + index + '" rel="' + keywordID + '">'
-                                + keyArray[p] + '</span>';
-                    }
-                    else {
-                        keyword += ', ' + '<span id="keywordsNaked"  pos="' + index + '" rel="' + keywordID + '">' +
-                                keyArray[p] + '</span>';
-                    }
-                }
-            }
-        }
-
-        if (keyword && (keyword.length > 0) && (keyword.trim().indexOf(" ") != -1)) {
-            piece += ' <p class="well"><strong>Keywords: </strong> ' + keyword + '</p>';
-        }
-
-        piece += '</div>';
-
-        // info box for the entities
-        piece += '<div class="annotation_info">';
-        piece += '<span  id="detailed_annot-' + index + '" />';
-        piece += "</div>";
-
-        piece += "</div>";
-
-    }
-    result += piece;
-    result += '</div>';
-    result += '</div>';
-    result += '</div>';
 result += '</div>';
     result += '</td></tr>';
+
+
+
+
 
     node.append(result);
 
@@ -688,23 +611,6 @@ result += '</div>';
                 }
             });
         }
-    });
-    $('#abstractNaked[rel="' + abstractID + '"]', obj).each(function () {
-        // annotations for the abstract
-        var index = $(this).attr('pos');
-        var titleID = $(this).attr('rel');
-        var localQuery = {"query": {"filtered": {"query": {"term": {"_id": abstractID}}}}};
-
-        $.ajax({
-            type: "get",
-            url: options.search_url_annotations,
-            contentType: 'application/json',
-            dataType: 'jsonp',
-            data: {source: JSON.stringify(localQuery)},
-            success: function (data) {
-                displayAnnotations(data, index, abstractID, 'abstract');
-            }
-        });
     });
 
     for (var p in keywordIDs) {

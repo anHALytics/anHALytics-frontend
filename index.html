@@ -52,7 +52,7 @@ var options = $.extend(defaults, {
         {'field': '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$affiliation.$org.$orgName', 'display': 'Organisation', 'size': 6, 'type': 'entity', 'view': 'textual'},
         {'field': '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName', 'display': 'Author', 'size': 10, 'type': 'entity', 'view': 'graphic'},
         {'field':
-                    '$teiCorpus.$standoff.preferredTerm', 'display': 'concepts', 'size': 10, 'type': 'entity', 'view': 'textual'},
+                    '$teiCorpus.$standoff.$nerd.preferredTerm', 'display': 'concepts', 'size': 10, 'type': 'entity', 'view': 'textual'}
     ]
 });
 

@@ -97,13 +97,13 @@ var getPieceShowexpandNERD = function (jsonObject){
             var preferredTerm = entity.preferredTerm;
 
             piece += '<tr id="selectLine' + sens + '" href="'
-                    + wikipedia + '" rel="$teiCorpus.$standoff.wikipediaExternalRef"><td id="selectArea' + sens + '" href="'
-                    + wikipedia + '" rel="$teiCorpus.$standoff.wikipediaExternalRef">';
+                    + wikipedia + '" rel="$teiCorpus.$standoff.$nerd.wikipediaExternalRef"><td id="selectArea' + sens + '" href="'
+                    + wikipedia + '" rel="$teiCorpus.$standoff.$nerd.wikipediaExternalRef">';
             piece += '<div class="checkbox checkbox-inline checkbox-danger" id="selectEntityBlock' +
-                    sens + '" href="' + wikipedia + '" rel="$teiCorpus.$standoff.wikipediaExternalRef">';
+                    sens + '" href="' + wikipedia + '" rel="$teiCorpus.$standoff.$nerd.wikipediaExternalRef">';
             piece += '<input type="checkbox" id="selectEntity' + sens
                     + '" name="selectEntity' + sens + '" value="0" href="'
-                    + preferredTerm + '" rel="$teiCorpus.$standoff.preferredTerm">';
+                    + preferredTerm + '" rel="$teiCorpus.$standoff.$nerd.preferredTerm">';
             piece += '<label for="selectEntity' + sens + '" id="label' + sens + '"> <strong>' + entity.rawName + '&nbsp;</strong> </label></div></td>';
             //piece += '<td><strong>' + entity.rawName + '&nbsp;</strong></td><td>'+ 
             if (preferredTerm) {
