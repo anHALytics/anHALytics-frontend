@@ -531,22 +531,22 @@
                               </ul>\
                         </div>\
                     </div>\
-                    <ul id="facetview_{{FILTER_NAME}}" class="facetview_filters"> \
+                    <ul id="facetview_{{FILTER_NAME}}" style="margin-left:15px;" class="facetview_filters"> \
                     	';
                 if (filters[idx]['type'] == 'date') {
                     _filterTmpl +=
-                            '<div id="date-input" style="position:relative;margin-top:-15px;margin-bottom:10px;"> \
-						   <input type="text" id="day_from" name="day_from" \
-						   size="2"  placeholder="DD"/> \
-						   <input type="text" id="month_from" name="month_from" size="2" \
+                            '<div id="date-input" style="position:relative;margin-bottom:10px;"> \
+						   From : <input type="number" id="day_from" name="day_from" \
+						   size="2" min="1" max="31" placeholder="DD"/> \
+						   <input type="number" id="month_from" name="month_from" size="2" min="1" max="12"\
 						    placeholder="MM"/> \
-						   <input type="text" id="year_from" name="year_from" size="4" \
-						     placeholder="YYYY"/> \
-						   to <input type="text" id="day_to" name="day_to" size="2" \
+						   <input type="number" id="year_from" name="year_from" size="4" min="1970" max="9999"\
+						     placeholder="YYYY"/> </br>\
+						   To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<input type="number" id="day_to" name="day_to" size="2" maxlength="2" min="1" max="31" \
 						    placeholder="DD"" /> \
-						   <input type="text" id="month_to" name="month_to" size="2" \
+						   <input type="number" id="month_to" name="month_to" size="2"  min="1" max="12" \
 						    placeholder="MM"/> \
-					   	   <input type="text" id="year_to" name="year_to" size="4" \
+					   	   <input type="number" id="year_to" name="year_to" size="4" min="1970" max="9999"\
 					         placeholder="YYYY"/> \
 					       <div id="validate-date-range" alt="set date range" title="set date range" rel="{{FACET_IDX}}" class="glyphicon glyphicon-ok" /></div>';
                 }
@@ -1494,15 +1494,21 @@
             if (update) {
                 vis.selectAll("svg").remove();
             }
+
+            var numb = 0;
             for (var fct in facets) {
+                if (numb >= options.facets[facetidx]['size']) {
+                    break;
+                }
                 data.push(fct);
+                numb++;
             }
             $('#' + place).show();
             var fill = d3.scale.category20();
             var r = width;
             var cloude = d3.layout.cloud().size([r, r])
                     .words(data.map(function (d) {
-                        return {text: d, size: 15};
+                        return {text: d, size: 17};
                     }))
                     .rotate(function () {
                         return 0;
@@ -1514,10 +1520,10 @@
                     .start();
             function draw(words) {
                 d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2").append("svg")
-                        .attr("width", r * 1.5)
+                        .attr("width", r)
                         .attr("height", r)
                         .append("g")
-                        .attr("transform", "translate(150,150)")
+                        .attr("transform", "translate(100,100)")
                         .selectAll("text")
                         .data(words)
                         .enter().append("text")
@@ -1529,11 +1535,13 @@
                         })
                         .attr("text-anchor", "middle")
                         .attr("transform", function (d) {
-                            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                            return "translate(" + [d.x, d.y] + ")";
                         })
                         .text(function (d) {
                             return d.text;
-                        });
+                        }).on("click", function (d) {
+                    clickGraph(facetfield, d.text, d.text);
+                });
             }
 
         };
@@ -1799,45 +1807,30 @@
             }
 
             if (options.collection == "npl") {
-            var docid = jsonObject._id;
-            var piece = "";
+                var docid = jsonObject._id;
+                var piece = "";
 // abstract, if any
-            jsonObject = jsonObject.fields;
-            if (!jsonObject) {
-                return;
-            }
-            var abstract = null;
+                jsonObject = jsonObject.fields;
+                if (!jsonObject) {
+                    return;
+                }
+                var abstract = null;
 
-            var abstractID = null;
-            var abstractIDs = jsonObject['$teiCorpus.$teiHeader.$profileDesc.xml:id'];
-            if (typeof abstractIDs == 'string') {
-                abstractID = abstractIDs;
-            }
-            else {
-                if (abstractIDs && (abstractIDs.length > 0)) {
-                    abstractID = abstractIDs[0];
-                    while ((typeof abstractID != 'string') && (typeof abstractID != 'undefined')) {
-                        abstractID = abstractID[0];
+                var abstractID = null;
+                var abstractIDs = jsonObject['$teiCorpus.$teiHeader.$profileDesc.xml:id'];
+                if (typeof abstractIDs == 'string') {
+                    abstractID = abstractIDs;
+                }
+                else {
+                    if (abstractIDs && (abstractIDs.length > 0)) {
+                        abstractID = abstractIDs[0];
+                        while ((typeof abstractID != 'string') && (typeof abstractID != 'undefined')) {
+                            abstractID = abstractID[0];
+                        }
                     }
                 }
-            }
 
-            var abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en'];
-            if (typeof abstracts == 'string') {
-                abstract = abstracts;
-            }
-            else {
-                if (abstracts && (abstracts.length > 0)) {
-                    abstract = abstracts[0];
-                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                        abstract = abstract[0];
-                    }
-                }
-            }
-
-            if (!abstract || (abstract.length == 0)) {
-                abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr'];
-
+                var abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en'];
                 if (typeof abstracts == 'string') {
                     abstract = abstracts;
                 }
@@ -1849,65 +1842,80 @@
                         }
                     }
                 }
-            }
 
-            if (!abstract || (abstract.length == 0)) {
-                abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de'];
+                if (!abstract || (abstract.length == 0)) {
+                    abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr'];
 
-                if (typeof abstracts == 'string') {
-                    abstract = abstracts;
-                }
-                else {
-                    if (abstracts && (abstracts.length > 0)) {
-                        abstract = abstracts[0];
-                        while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                            abstract = abstract[0];
+                    if (typeof abstracts == 'string') {
+                        abstract = abstracts;
+                    }
+                    else {
+                        if (abstracts && (abstracts.length > 0)) {
+                            abstract = abstracts[0];
+                            while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                                abstract = abstract[0];
+                            }
                         }
                     }
                 }
-            }
 
-            if (!abstract || (abstract.length == 0)) {
-                abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_es'];
+                if (!abstract || (abstract.length == 0)) {
+                    abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de'];
 
-                if (typeof abstracts == 'string') {
-                    abstract = abstracts;
-                }
-                else {
-                    if (abstracts && (abstracts.length > 0)) {
-                        abstract = abstracts[0];
-                        while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                            abstract = abstract[0];
+                    if (typeof abstracts == 'string') {
+                        abstract = abstracts;
+                    }
+                    else {
+                        if (abstracts && (abstracts.length > 0)) {
+                            abstract = abstracts[0];
+                            while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                                abstract = abstract[0];
+                            }
                         }
                     }
                 }
-            }
-            piece += '<div class="col-md-12">';
 
-            if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
-                piece += '<p id="abstractNaked" class="well" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';
-            }
-            piece += '</div>';
+                if (!abstract || (abstract.length == 0)) {
+                    abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_es'];
 
-            $('.innen_abstract[rel="' + docid + '"]').append(piece);
-
-            $('#abstractNaked[rel="' + abstractID + '"]', obj).each(function () {
-                // annotations for the abstract
-                var index = $(this).attr('pos');
-                var titleID = $(this).attr('rel');
-                var localQuery = {"query": {"filtered": {"query": {"term": {"_id": abstractID}}}}};
-
-                $.ajax({
-                    type: "get",
-                    url: options.search_url_annotations,
-                    contentType: 'application/json',
-                    dataType: 'jsonp',
-                    data: {source: JSON.stringify(localQuery)},
-                    success: function (data) {
-                        displayAnnotations(data, index, abstractID, 'abstract');
+                    if (typeof abstracts == 'string') {
+                        abstract = abstracts;
                     }
+                    else {
+                        if (abstracts && (abstracts.length > 0)) {
+                            abstract = abstracts[0];
+                            while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                                abstract = abstract[0];
+                            }
+                        }
+                    }
+                }
+                piece += '<div class="col-md-12">';
+
+                if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
+                    piece += '<p id="abstractNaked" class="well" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';
+                }
+                piece += '</div>';
+
+                $('.innen_abstract[rel="' + docid + '"]').append(piece);
+
+                $('#abstractNaked[rel="' + abstractID + '"]', obj).each(function () {
+                    // annotations for the abstract
+                    var index = $(this).attr('pos');
+                    var titleID = $(this).attr('rel');
+                    var localQuery = {"query": {"filtered": {"query": {"term": {"_id": abstractID}}}}};
+
+                    $.ajax({
+                        type: "get",
+                        url: options.search_url_annotations,
+                        contentType: 'application/json',
+                        dataType: 'jsonp',
+                        data: {source: JSON.stringify(localQuery)},
+                        success: function (data) {
+                            displayAnnotations(data, index, abstractID, 'abstract');
+                        }
+                    });
                 });
-            });
             }
         };
 

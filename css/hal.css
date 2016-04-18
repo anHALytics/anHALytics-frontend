@@ -4,10 +4,6 @@
   *  Author: Patrice Lopez        
       */
 
-.container {
-    max-width: 1200px;
-}
-
 .label {
     padding: 1px 3px 2px;
     font-size: 10px;
@@ -184,7 +180,7 @@ span.section-active { color: #BC0E0E; }
 .table tr{background-color:#FFFFFF;}
 .table tbody tr.highlight td { background-color: #F2DEDE; word-break:normal; }
 
-p {word-break:normal;}
+p {word-break:normal;font-size: 13px;}
 span {word-break:normal;}
 
 .info-sense-box,.details-list {

@@ -1,7 +1,7 @@
 var defaults = {
-    api_key:"", // this is a google key for freebase image service
-    host_nerd: "localhost",
-    port_nerd: "8080",
+    api_key:"AIzaSyBLNMpXpWZxcR9rbjjFQHn_ULbU-w1EZ5U", // this is a google key for freebase image service
+    host_nerd: "traces1.saclay.inria.fr",
+    port_nerd: "",
     service: "local", // access to service can be local or proxy, depending on security requirements
     proxy_host: "http://localhost:8080/proxy/",    
     search_url: 'http://localhost:9200/anhalytics_teis/_search?', // the URL against which to submit searches

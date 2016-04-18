@@ -10,6 +10,7 @@ var thefacetview_simple = ' \
                         <span class="input-group-addon" id="sizing-addon1"> <span class="glyphicon glyphicon-search"  aria-hidden="true"></span></span> \
                         <input type="text" class="form-control" id="facetview_freetext" name="q" value="" aria-describedby="sizing-addon1" placeholder="search term" autofocus /> \
                         <div class="input-group-btn">\
+                        <a type="button" class="btn" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html" target="_blank"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>\
                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-cog"></span>\
                          <span class="caret"></span></button>\
                          <ul class="dropdown-menu">\

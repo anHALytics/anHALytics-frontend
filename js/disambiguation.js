@@ -118,10 +118,10 @@ var getPieceShowexpandNERD = function (jsonObject){
             }
 
             if (freebase != null) {
-                var urlImage = 'https://usercontent.googleapis.com/freebase/v1/image' + freebase;
-                urlImage += '?maxwidth=150';
-                urlImage += '&maxheight=150';
-                urlImage += '&key=' + options.api_key;
+                var urlImage = 'https://usercontent.googleapis.com/freebase/v1/image' + freebase+'?';
+                urlImage += 'maxheight=250';
+                urlImage += '&';
+                urlImage += 'key=' + options.api_key;
                 piece += '<img src="' + urlImage + '" alt="' + freebase + '"/>';
             }
 

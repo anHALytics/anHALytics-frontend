@@ -96,9 +96,6 @@ var displayAnnotations = function (data, index, id, origin) {
     }
 
     //var result = '<strong><span style="font-size:13px">' + text + '<span></strong>';
-    if (origin == "abstract")
-        $('[rel="' + id + '"]').html('<strong>Abstract: </strong>' + text);
-    else
         $('[rel="' + id + '"]').html(text);
 
     // now set the popovers/view event 
