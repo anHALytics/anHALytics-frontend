@@ -53,6 +53,8 @@ var options = $.extend(defaults, {
         {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$fullName', 'display': 'Author', 'size': 10, 'type': 'entity', 'view': 'graphic'},
         {'field':
                     '$teiCorpus.$standoff.$nerd.preferredTerm', 'display': 'concepts', 'size': 10, 'type': 'entity', 'view': 'textual'}
+        {'field':
+                    '$teiCorpus.$standoff.$keyterm.preferredTerm', 'display': 'keyterms', 'size': 10, 'type': 'entity', 'view': 'textual'}
     ]
 });
 
