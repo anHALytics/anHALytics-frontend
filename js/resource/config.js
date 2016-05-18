@@ -4,7 +4,7 @@ var defaults = {
     port_nerd: "",
     service: "local", // access to service can be local or proxy, depending on security requirements
     proxy_host: "http://localhost:8080/proxy/",    
-    search_url: 'http://localhost:9200/anhalytics_teis/_search?', // the URL against which to submit searches
+    search_url: 'http://localhost:9200/anhalytics_fulltextteis/_search?', // the URL against which to submit searches
     search_url_annotations: 'http://localhost:9200/annotations_nerd/_search?',
     search_index: 'elasticsearch',    
     query_parameter: "q", // the query parameter if required for setting to the search URL
@@ -22,7 +22,7 @@ var defaults = {
     predefined_filters: {}, // predefined filters to apply to all searches
     paging: {
         from: 0, // where to start the results from
-        size: 10                   // how many results to get
+        size: 12                   // how many results to get
     },
     mode_query: "simple", // query input, possible values: simple, complex, nl, semantic, analytics
     complex_fields: 0, // number of fields introduced in the complex query form

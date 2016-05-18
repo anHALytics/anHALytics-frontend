@@ -42,19 +42,36 @@
         <script type="text/javascript">
 var options = $.extend(defaults, {
     facets: [
-        {'field': '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub', 'display': 'publication_date', 'type': 'date', 'view': 'graphic'},
+        {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub', 'display': 'publication_date', 'type': 'date', 'view': 'graphic'},
         {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halDomain_abbrev', 'display': 'subject-headers', 'size': 20, 'type': 'taxonomy', 'view': 'graphic'},
         {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term', 'display': 'keywords', 'size': 10, 'type': 'tag', 'view': 'graphic'},
         {'field':
                     '$teiCorpus.$teiHeader.$profileDesc.$langUsage.$language', 'display': 'language', 'size': 6, 'type': 'country', 'view': 'graphic'},
         {'field':
-                    '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$affiliation.$org.$desc.$address.key', 'display': 'country', 'size': 6, 'type': 'country', 'view': 'graphic'},
-        {'field': '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$affiliation.$org.$orgName', 'display': 'Organisation', 'size': 6, 'type': 'entity', 'view': 'textual'},
-        {'field': '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName', 'display': 'Author', 'size': 10, 'type': 'entity', 'view': 'graphic'},
+                    '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$desc.$address.key', 'display': 'country', 'size': 6, 'type': 'country', 'view': 'graphic'},
+        {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$orgName', 'display': 'Organisation', 'size': 6, 'type': 'entity', 'view': 'textual'},
+        {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$fullName', 'display': 'Author', 'size': 10, 'type': 'entity', 'view': 'graphic'},
         {'field':
                     '$teiCorpus.$standoff.$nerd.preferredTerm', 'display': 'concepts', 'size': 10, 'type': 'entity', 'view': 'textual'}
     ]
 });
+
+ var record_metadata = {
+        id:"_id",    
+        repositoryDocId: "repositoryDocId",
+        title:"$teiCorpus.$teiHeader.$fileDesc.$titleStmt.$title.$title-first",
+        titleid:"$teiCorpus.$teiHeader.$fileDesc.$titleStmt.xml:id",
+        datepub: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub",
+        monogr_title:"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
+        author_surname:"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$surname",
+        author_forename:"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$forename",
+        author_fullname:"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$fullName",
+        doi:"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$idno.$type_doi",
+        anhalyticsid:"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$idno.$type_anhalyticsID",
+        typology:"$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology",
+        keywordsid:"$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id",
+        keywords:"$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term"
+    };
 
         </script>
 
@@ -63,7 +80,7 @@ var options = $.extend(defaults, {
         <script type="text/javascript">
 
 jQuery(document).ready(function ($) {
-    $('.facet-view-simple').facetview(options);
+    $('.facet-view-simple').facetview(options, record_metadata);
 
 
     // set up form

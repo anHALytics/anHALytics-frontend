@@ -1,37 +1,22 @@
-var textFieldNPL = ['$teiCorpus.$teiHeader.$titleStmt.$title.$title-first',
-    '$teiCorpus.$text.$front.$div.$p.',
-    '$teiCorpus.$text.$body.$head.',
-    '$teiCorpus.$text.$body.$div.',
-    '$teiCorpus.$text.$body.$figure.$head.',
-    '$teiCorpus.$text.$body.$p.'
-];
-
-var textFieldsNPLReturned = ['repositoryDocId',
-    '$teiCorpus.$teiHeader.$titleStmt.$title.$title-first',
-    '$teiCorpus.$teiHeader.$titleStmt.xml:id',
-    '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub',
-    "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
-    '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$surname',
-    '$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$forename',
-    "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName",
-    "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi",
-    "$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$idno.$type_anhalyticsID",
-    '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology',
-    "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",
-    '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id',
-//			'$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology',
-    '_id'
-];
-
 // build the search query URL based on current params
 var elasticSearchQuery = function () {
+
     var qs = {};
     var bool = false;
     //var nested = false;
     var filtered = false; // true if a filter at least applies to the query
     var queried_fields = []; // list of queried fields for highlights   
+    //sorting field
+    var datepub = $.fn.facetview.record_metadata.datepub;
+    var date = {};
+    date[datepub] = {"order": "desc"};
 
     // fields to be returned
+    var textFieldsNPLReturned = new Array();
+
+    for (var key in $.fn.facetview.record_metadata) {
+        textFieldsNPLReturned.push($.fn.facetview.record_metadata[key]);
+    }
 
     qs['fields'] = textFieldsNPLReturned;
 
@@ -57,8 +42,7 @@ var elasticSearchQuery = function () {
                 bool['must'].push(obj);
                 filtered = true;
             }
-        }
-        else if (($(this).attr('rel').indexOf("$date") != -1) ||
+        } else if (($(this).attr('rel').indexOf("$date") != -1) ||
                 ($(this).attr('rel').indexOf("Date") != -1) ||
                 ($(this).attr('rel').indexOf("when") != -1)) {
             /// facet filter for a date
@@ -74,8 +58,7 @@ var elasticSearchQuery = function () {
             obj['range'][ rel ] = rngs;
             bool['must'].push(obj);
             filtered = true;
-        }
-        else {
+        } else {
             // other facet filter 
             var obj = {'term': {}};
             obj['term'][ $(this).attr('rel') ] = $(this).attr('href');
@@ -117,23 +100,20 @@ var elasticSearchQuery = function () {
 
         if ($('#facetview_freetext').val() == "") {
             obj4['query'] = {'match_all': {}};
-            qs['sort'] = [{"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub": {"order": "desc"}}];
+            qs['sort'] = [date];
 
-        }
-        else
+        } else
             obj4['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}};
         qs['query'] = {'filtered': obj4};
         //qs['query'] = {'bool': bool}
-    }
-    else {
+    } else {
         if ($('#facetview_freetext').val() != "") {
             qs['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}}
-        }
-        else {
+        } else {
             if (!filtered) {
                 qs['query'] = {'match_all': {}};
             }
-            qs['sort'] = [{"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub": {"order": "desc"}}];
+            qs['sort'] = [date];
 
         }
     }
@@ -153,8 +133,7 @@ var elasticSearchQuery = function () {
             obj['interval'] = "year";
             //obj['size'] = 5; 
             qs['facets'][nameFacet] = {"date_histogram": obj};
-        }
-        else {
+        } else {
             obj['size'] = options.facets[item]['size'] + 50;
             // this 50 is a magic number due to the following ES bug:
             // https://github.com/elasticsearch/elasticsearch/issues/1305
@@ -178,8 +157,7 @@ var elasticSearchQuery = function () {
     for (var fie in queried_fields) {
         if (options['snippet_style'] == 'andlauer') {
             qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 100};
-        }
-        else {
+        } else {
             qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 3};
         }
     }

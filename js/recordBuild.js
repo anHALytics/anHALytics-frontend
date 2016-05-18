@@ -18,7 +18,7 @@ var buildrecord = function (index, node) {
     result += '<div class="col-md-2">';
     // add image where available
     var repositoryDocId;
-    repositoryDocId = jsonObject['repositoryDocId'];
+    repositoryDocId = jsonObject[$.fn.facetview.record_metadata.repositoryDocId];
 
     if (options.display_images) {
 
@@ -39,7 +39,7 @@ var buildrecord = function (index, node) {
     // date
     var date;
     var dates = null;
-    dates = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub'];
+    dates = jsonObject[$.fn.facetview.record_metadata.datepub];
 
     var title;
     var titles = null;
@@ -48,8 +48,8 @@ var buildrecord = function (index, node) {
     var titleAnnotated = null;
 
     // NPL
-    titles = jsonObject['$teiCorpus.$teiHeader.$titleStmt.$title.$title-first'];
-    titleIDs = jsonObject['$teiCorpus.$teiHeader.$titleStmt.xml:id'];
+    titles = jsonObject[$.fn.facetview.record_metadata.title];
+    titleIDs = jsonObject[$.fn.facetview.record_metadata.titleid];
 
     if (typeof titles == 'string') {
         title = titles;
@@ -73,10 +73,10 @@ var buildrecord = function (index, node) {
             }
         }
     }
-
+/*
     if (!title || (title.length === 0)) {
 
-        titles = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$title.$lang_en'];
+        titles = jsonObject[$.fn.facetview.record_metadata.titleen];
 
         if (typeof titles == 'string') {
             title = titles;
@@ -93,7 +93,7 @@ var buildrecord = function (index, node) {
 
     if (!title || (title.length === 0)) {
 
-        titles = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$title.$lang_fr'];
+        titles = jsonObject[$.fn.facetview.record_metadata.titlefr];
 
         if (typeof titles == 'string') {
             title = titles;
@@ -110,7 +110,7 @@ var buildrecord = function (index, node) {
 
     if (!title || (title.length === 0)) {
 
-        titles = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$title.$lang_de'];
+        titles = jsonObject[$.fn.facetview.record_metadata.titlede];
 
         if (typeof titles == 'string') {
             title = titles;
@@ -124,7 +124,7 @@ var buildrecord = function (index, node) {
             }
         }
     }
-
+*/
     if (title && (title.length > 1) && !titleAnnotated) {
         if (options['collection'] == 'npl') {
             var docid = id;
@@ -133,7 +133,7 @@ var buildrecord = function (index, node) {
 
                 // document type
                 var type =
-                        jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology'];
+                        jsonObject[$.fn.facetview.record_metadata.typology];
                 if (type) {
                     result += '<div class="row"><a href="publication.html?pubID='+id+'"><span class="label pubtype" style="white-space:normal;">' + type + '</span></a></div>';
                     //piece += '<p><strong>' + type + '</strong></p>';
@@ -159,10 +159,10 @@ var buildrecord = function (index, node) {
     var authorsLast = null;
     var authorsFirst = null;
 
-    authorsLast = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$surname'];
+    authorsLast = jsonObject[$.fn.facetview.record_metadata.author_surname];
     var tempStr = "" + authorsLast;
     authorsLast = tempStr.split(",");
-    authorsFirst = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$forename'];
+    authorsFirst = jsonObject[$.fn.facetview.record_metadata.author_forename];
     tempStr = "" + authorsFirst;
     authorsFirst = tempStr.split(",");
 
@@ -196,7 +196,7 @@ var buildrecord = function (index, node) {
     var titleBook = null;
     var titlesBook = null;
     //if (options['collection'] == 'npl') {
-    titlesBook = jsonObject["$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$title-first"];
+    titlesBook = jsonObject[$.fn.facetview.record_metadata.monogr_title];
     var titleBookTmp = null;
     if (typeof titlesBook == 'string') {
         titleBook = titlesBook;
@@ -257,7 +257,7 @@ var buildrecord = function (index, node) {
     }
 
     var doi = null;
-    doi = jsonObject["$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi"];
+    doi = jsonObject[$.fn.facetview.record_metadata.doi];
     if (doi) {
         doi = doi[0];
         result += " - <a target='_blank' style='color: #0094DE;' href='http://dx.doi.org/" + doi + "'>" + doi + "</a>";
@@ -272,13 +272,12 @@ var buildrecord = function (index, node) {
     result += '<div id="myGroup" class= "row">';
 
     var names =
-            jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName'];
+            jsonObject[$.fn.facetview.record_metadata.author_fullname];
 
  
     result += '<div class="panel">';
     result += '<div class="row">';
     result += '<div class="col-md-4"><a id="button_abs_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract</a></div>';
-
     result += '<div class="col-md-4"><a id="button_authors_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#authors_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Authors (' + names.length + ')</a></div>';
     result += '<div class="col-md-4"><a id="button_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Keywords</a></div>';
 result += '</div>';
@@ -316,7 +315,7 @@ result += piece;
 
 
         if (names) {
-            var ids = jsonObject['$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$idno.$type_anhalyticsID'];
+            var ids = jsonObject[$.fn.facetview.record_metadata.anhalyticsid];
             piece += '<div class="well row">';
             for (var aut in names) {
                 if(ids)
@@ -349,10 +348,10 @@ result += piece;
         // keywords
         var keyword = null;
         var keywordIDs =
-                jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id'];
+                jsonObject[$.fn.facetview.record_metadata.keywordsid];
         // we have a list of keyword IDs, each one corresponding to an independent annotation set
         var keywords =
-                jsonObject['$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term'];
+                jsonObject[$.fn.facetview.record_metadata.keywords];
 
         if (typeof keywords == 'string') {
             keyword = keywords;

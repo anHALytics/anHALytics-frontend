@@ -5,8 +5,10 @@
 
 // now the display function
 (function ($) {
-    $.fn.facetview = function (options) {
+    $.fn.facetview = function (options, record_metadata) {
 
+
+        $.fn.facetview.record_metadata = record_metadata;
         // and add in any overrides from the call
         // these options are also overridable by URL parameters
         // facetview options are declared as a function so they are available externally
@@ -536,17 +538,17 @@
                 if (filters[idx]['type'] == 'date') {
                     _filterTmpl +=
                             '<div id="date-input" style="position:relative;margin-bottom:10px;"> \
-						   From : <input type="number" id="day_from" name="day_from" \
-						   size="2" min="1" max="31" placeholder="DD"/> \
-						   <input type="number" id="month_from" name="month_from" size="2" min="1" max="12"\
+						   From : <input type="text" id="day_from" name="day_from" \
+						   size="2" maxlength="2" placeholder="DD"/> \
+						   <input type="text" id="month_from" name="month_from" size="2" maxlength="2"\
 						    placeholder="MM"/> \
-						   <input type="number" id="year_from" name="year_from" size="4" min="1970" max="9999"\
+						   <input type="text" id="year_from" name="year_from" size="4" maxlength="4"\
 						     placeholder="YYYY"/> </br>\
-						   To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<input type="number" id="day_to" name="day_to" size="2" maxlength="2" min="1" max="31" \
+						   To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<input type="text" id="day_to" name="day_to" size="2" maxlength="2" \
 						    placeholder="DD"" /> \
-						   <input type="number" id="month_to" name="month_to" size="2"  min="1" max="12" \
+						   <input type="text" id="month_to" name="month_to" size="2"  maxlength="2" \
 						    placeholder="MM"/> \
-					   	   <input type="number" id="year_to" name="year_to" size="4" min="1970" max="9999"\
+					   	   <input type="text" id="year_to" name="year_to" size="4" maxlength="4"\
 					         placeholder="YYYY"/> \
 					       <div id="validate-date-range" alt="set date range" title="set date range" rel="{{FACET_IDX}}" class="glyphicon glyphicon-ok" /></div>';
                 }
@@ -1692,6 +1694,7 @@
             var data = null;
             if (options.search_index == "elasticsearch") {
                 // default is elasticsearch
+                console.log(sdata);
                 data = parseresultsElasticSearch(sdata);
             }
             else {
