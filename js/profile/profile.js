@@ -52,6 +52,7 @@
             client.search({
                 index: 'anhalytics_kb',
                 type: 'publications',
+                size:200,//could be tuned..
                 body: {
                     "query": {
                         "filtered": {
@@ -104,13 +105,16 @@
                         var keywords = fields["$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term"];
                         var interests = fields["$teiCorpus.$standoff.$category.category"];
                         //nerd categories are more reliable
-
-                        for (var i = 0; i < interests.length && i < 4; i++) {
+if(interests){
+                        for (var i = 0; i < interests.length && $scope.keywords.length < 6; i++) {
                             $scope.interests.push(interests[i]);
                         }
-                        for (var i = 0; i < keywords.length && i < 5; i++) {
+                    }
+                    if(keywords){
+                        for (var i = 0; i < keywords.length && $scope.keywords.length < 6; i++) {
                             $scope.keywords.push(keywords[i]);
                         }
+                    }
                     }
                 }
             });

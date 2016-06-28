@@ -43,7 +43,7 @@
                             <ul class="ra-list no-marker">
                                 <li>Research Area(s)
                                 </li>
-                                <li ng-repeat="interest in interests">
+                                <li ng-repeat="interest in interests track by $index">
                                     <a href="https://en.wikipedia.org/wiki/{{interest}}" target="_blank">{{interest}}</a>
                                 </li>
                                 
@@ -83,7 +83,7 @@
                             <span >{{profile['_source']['email']}} </span>
                         </div>
                         
-                        <div>  
+                        <div ng-if="profile['_source']['identifers']">  
                             <i style="width: 20px;" class="fa fa-info">
 
                             </i><!--span.txt-color-darken {{ profile.contact.email }}-->
@@ -102,7 +102,7 @@
                             </h2>
 
                             <ul>  
-                                <li ng-repeat="interest in interests">
+                                <li ng-repeat="interest in interests track by $index">
                                     <div > 
                                         <a href="https://en.wikipedia.org/wiki/{{interest}}" target="_blank"> {{interest}} 
                                         </a> 
@@ -116,7 +116,7 @@
                             </h2>
 
                             <ul  >  
-                                <li ng-repeat="keyword in keywords">
+                                <li ng-repeat="keyword in keywords track by $index">
                                     <div > 
                                         <a href="" > {{keyword}} 
                                         </a> 
