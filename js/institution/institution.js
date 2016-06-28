@@ -12,7 +12,7 @@
         var url_options = $.getUrlVars();
         var orgID = url_options.orgID;
         client.search({
-            index: 'anhalytics_metadatas',
+            index: 'anhalytics_kb',
             type: 'organisations',
             body: {
                 "query":
@@ -30,7 +30,7 @@
             $scope.keywords = [];
             for (var i = 0; i < $scope.organisation['_source']['publications'].length; i++) {
                 client.search({
-                    index: 'anhalytics_metadatas',
+                    index: 'anhalytics_kb',
                     type: 'publications',
                     size: 1,
                     body: {
@@ -47,7 +47,7 @@
                 });
 
                 client.search({
-                    index: 'anhalytics_teis',
+                    index: 'anhalytics_fulltextteis',
                     body: {
                         "fields": [
                             "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",

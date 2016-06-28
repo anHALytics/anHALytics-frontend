@@ -22,305 +22,164 @@
 
         <header>
             <div class="header-container">
-                    <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a><img src="data/images/logo_INRIA_fr.png"  style="padding-left:40px;padding-top:10px;width:200px;"></a></div>
-                    <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a><img src="data/images/hal.logo.png"  style="padding-left:40px;padding-top:10px;width:140px;"></a></div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-5 no-padding"></div>
-                    <div class="col-lg-4 col-md-4 col-sm-3 col-xs-4 pull-right no-padding"></div>
+                <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a href=""><img src="data/images/LogoAnhalitycs.png" style="padding-left:5px;padding-top:20px;width:1000px;"></a></div>
+                <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a href="https://www.inria.fr" target="_blank"><img src="data/images/logo_INRIA_fr.png"  style="padding-left:40px;padding-top:10px;width:200px;"></a></div>
+                <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a href="https://hal.archives-ouvertes.fr/" target="_blank"><img src="data/images/hal.logo.png"  style="padding-left:40px;padding-top:10px;width:140px;"></a></div>
+                <div class="col-lg-4 col-md-5 col-sm-5 col-xs-4 no-padding"></div>
             </div>
         </header>
-        <div class="profile-content container ">
-            <div style="padding-bottom: 90px !important;" class="no-padding">
-                <div class="profile-content">
-                    <div class="row no-margin profile-header">
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 profile-header-image lf">
-                            <div class="profile-image-wrapper">
-                                <img class="" ng-if="!profile['_source']['photo']" src="data/images/default.jpg">
-                                <img class="" ng-if="profile['_source']['photo']" src="http://{{profile['_source']['photo']}}">
-                            </div>
+        <div class="container ">
+            <div class="profile-content">
+                <h1>
+                    <a href="profile/{{profile['_id']}}" >{{profile['_source'].names[0]['fullname']}}</a>
+
+                </h1>
+                <div class="row ">
+                    <div class="my-col-4 sidebar">
+                        <div class="profile-unit">
+                            <img class="" ng-if="!profile['_source']['photo']" src="data/images/default.jpg">
+                            <img class="" ng-if="profile['_source']['photo']" src="http://{{profile['_source']['photo']}}">
+
+                            <ul class="ra-list no-marker">
+                                <li>Research Area(s)
+                                </li>
+                                <li ng-repeat="interest in interests">
+                                    <a href="https://en.wikipedia.org/wiki/{{interest}}" target="_blank">{{interest}}</a>
+                                </li>
+                                
+                            </ul>
                         </div>
-
-                        <div style="padding-top:10px;padding-left:30px;padding-right:30px" class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-
-                            <div class="profile-header-personal lf">
-                                <h1 class="profile-header-name">
-                                    <a href="profile/{{profile['_id']}}" >{{profile['_source']['fullname']}}</a>
-
-                                </h1>
-
-                                <!--<div class="profile-degree"> <div class="title">  PhD   </div>  </div>-->
-
-                                <div class="profile-position" > <div>  <i style="width: 20px;" class="fa fa-institution">
-                                        </i>
-                                        <span id="title" style="width:90%;">  PhD  </span>  
-                                    </div>  
-                                </div>
-
-
-                                <div class="profile-phone" > <div>  
-                                        <i style="width: 20px;" class="fa fa-phone"></i>
-                                        <span id="phone" class="txt-color-darken">{{profile['_source']['phone']}}</span>  
-                                    </div>
-                                </div>
-
-                                <div class="profile-email" > <div>  
-                                        <i style="width: 20px;" class="fa fa-envelope">
-
-                                        </i><!--span.txt-color-darken {{ profile.contact.email }}-->
-                                        <span id="email" class="txt-color-darken">{{profile['_source']['email']}} </span>
-                                    </div>
-                                </div>
-
-                                <div class="profile-url" > <div> <p class="text-muted">
-                                            <i style="width: 20px;" class="fa fa-globe">
-
-                                            </i>
-                                            <a id="url" href="{{profile['_source']['url']}}" >{{profile['_source']['url']}}</a>
-                                        </p>
-                                    </div>
-                                </div>
-                                <!--<div class="profile-institution org" ng-repeat="affiliation in profile['_source']['affiliations']">  --> 
-                                <!-- AFFILIATIONS -->
-                                    <div class="c-box"> 
-                                        <ul> 
-                                            <li class="institution-list-item ">
-                                                <div class="indent-left"> 
-                                                    <div class="c-img-m">
-                                                        <a href=""> 
-                                                            <img  src="data/images/institution.jpg">
-                                                        </a> 
-                                                    </div>
-                                                </div> 
-                                                <div class="indent-content institution org"> 
-                                                    <div class="institution-name"> <strong>
-                                                            <a ng-repeat="name in profile['_source']['affiliations'][0]['names']" href="institution.html?orgID={{profile['_source']['affiliations'][0]['organisationId']}}" title="{{name}}" target="_blank"> 
-                                                                {{name}}  ·  
-                                                            </a>
-                                                        </strong> </div>   
-                                                    <div class="institution-dept">  Faculty of Philology 
-                                                    </div>    
-                                                    <div class="text-gray-lighter institution-location"> 
-                                                        {{profile['_source']['affiliations'][0]['address']['settlement']}}, {{profile['_source']['affiliations'][0]['address']['country']}}
-                                                    </div>  
-                                                </div> </li>  
-                                        </ul> 
-                                    </div>
-
-                                <hr style="margin-top:5px; margin-bottom:5px; margin-right:0 !important">
-
-
-                            </div>
+                        <div>
+                            <a href="profile/personname/citations" >
+                                <div >0 Citations</div>
+                            </a> 
                         </div>
                     </div>
-                    <div class="row profile-main-wrapper">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-7 c-content">
-                                    <div>
-
-                                        <!-- PUBLICATIONS -->
-
-                                        <div class="row c-box profile-highlights-publications">
-                                            <h4> <strong class="lf"> 
-                                                    <a href="">Recent publications</a> 
-                                                </strong> 
-                                                <small class="rf">   
-                                                    <a href="">View all</a>  
-                                                </small> 
-                                            </h4>
-
-                                            <ul>
-                                                <li class="c-list-item li-publication" ng-repeat="pub in publications">
-                                                    <div class="indent-left"></div>
-                                                    <div class="indent-right">    </div>
-
-                                                    <div style="margin-top: -2px">  
-                                                        <h5 >  
-                                                            <span class="publication-type">{{pub['_source']['publication']['type']}}:</span>    
-                                                            <a href="publication.html?pubID={{pub['_id']}}">
-                                                                <span>{{pub['_source']['publication']['doc_title']}}
-                                                                </span> </a>    
-                                                        </h5>  
-                                                    </div>
-
-                                                    <div class="authors">     
-                                                        <a href="profile.html?authorID={{author['personId']}}" class="authors " ng-repeat="author in pub['_source']['authors']">{{author['fullname']}} · </a>                                                   </div>
-
-                                                    <!--<div class="pub-stats"> 
-                                                        <div class="pub-stat">
-                                                            <a href="publication/2895396/stats"> 
-                                                                <div class="stat-count">14</div> 
-                                                                <div class="stat-label">Reads</div> </a>
-
-                                                        </div> 
-                                                        <div class="pub-stat">
-                                                            <a href="publication/28953/stats"> 
-                                                                <div class="stat-count">0</div> 
-                                                                <div class="stat-label">Citations</div> 
-                                                            </a>
-
-                                                        </div> 
-                                                    </div>
-                                                    -->
-                                                </li>
 
 
-                                            </ul>
-
-                                        </div> 
-
-                                        <!-- KEY WORDS -->
-                                        <div class="row c-box abstract-keyword-editor-container keyword-editor-teaser profile-keyword-editor-teaser">
-                                            <h4> <strong class="lf">
-                                                    <a >Topics<small>(8)</small>
-                                                    </a>
-                                                </strong>  
-                                            </h4>
-                                            <ul class="lf keyword-list" >  
-                                                <li class="keyword-list-token-container">
-                                                    <div class="keyword-list-token keyword-list-token-following"> 
-                                                        <a href="topic/artificial_intelligence" class="keyword-list-token-text"> Artificial Intelligence 
-                                                        </a> 
-                                                    </div>                                                      
-                                                </li>
-                                                <li class="keyword-list-token-container">
-                                                    <div class="keyword-list-token keyword-list-token-following"> 
-                                                        <a href="topic/artificial_intelligence" class="keyword-list-token-text"> Artificial Intelligence 
-                                                        </a> 
-                                                    </div>                                                      
-                                                </li>
-                                                <li class="keyword-list-token-container">
-                                                    <div class="keyword-list-token keyword-list-token-following"> 
-                                                        <a href="topic/artificial_intelligence" class="keyword-list-token-text"> Artificial Intelligence 
-                                                        </a> 
-                                                    </div>                                                      
-                                                </li>
-                                                <li class="keyword-list-token-container">
-                                                    <div class="keyword-list-token keyword-list-token-following"> 
-                                                        <a href="topic/artificial_intelligence" class="keyword-list-token-text"> Artificial Intelligence 
-                                                        </a> 
-                                                    </div>                                                      
-                                                </li>
-                                                <li class="keyword-list-token-container">
-                                                    <div class="keyword-list-token keyword-list-token-following"> 
-                                                        <a href="topic/artificial_intelligence" class="keyword-list-token-text"> Artificial Intelligence 
-                                                        </a> 
-                                                    </div>                                                      
-                                                </li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    
-                                        <!-- STATS -->
-                                        <div class="row c-box profile-highlights-stats stats-list">
-                                            <div class="col-md-6 stats-item active publication-count">
-                                                <a href="profile/personname/publications"> 
-                                                    <div class="stats-count">{{profile['_source']['publications'].length}} </div> 
-                                                    <div class="stats-label">Publications</div>
-
-                                                </a>
-                                            </div>
-                                            <div class="col-md-6 stats-item">
-                                                <a href="profile/personname/citations" > 
-                                                    <div class="stats-count" >8 </div> <div class="stats-label" >Citations</div>
-
-                                                </a> 
-
-                                            </div>
-                                            <!--<div class="col-md-4 stats-item">
-                                                <a href="profile/personname/citations" > 
-                                                    <div class="stats-count" >251</div> <div class="stats-label" >Reads</div> 
-
-                                                </a> 
-
-                                            </div>-->
+                    <div class="my-col-8 mainbar">
 
 
-
-                                        </div>
-
-                                    <!-- COAUTHORS -->
-                                    <div class="profile-coauthors people-list-s c-box" >
-                                        <h4> 
-                                            <strong class="lf"> 
-                                                <a >Top Co-authors</a> 
-                                            </strong> <small class="rf ">
-                                                <a >View all</a>  </small> 
-                                        </h4>
-                                        <div > <div class="authors-block">
-                                                <ul> 
-                                                    <li class="people-item" ng-repeat="coauthor in coauthors">  
-                                                        <div class="indent-left"> 
-                                                            <div class="c-img-s people-img">  
-                                                                <a href=""> 
-                                                                    <img class="lazyloaded" style="height:'30px'; width:'30px';"  src="data/images/profile_default_s.jpg" /> 
-                                                                </a>   
-                                                            </div> 
-                                                        </div> 
-                                                        <div class="indent-right">   
-                                                        </div> 
-                                                        <div class="indent-content"> 
-                                                            <h5>  
-                                                                <a href="profile.html?authorID={{coauthor['personId']}}" class="display-name">{{coauthor['fullname']}}</a>    
-                                                                <span class="meta" style="font-weight: normal;"> &nbsp; 
-                                                                     
-                                                                </span>  
-                                                            </h5>
-                                                        </div>    
-                                                    </li>
-
-
-
-
-                                            </div>             
-
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                    <!-- SKILLS -->
-                                    <div class="c-box profile-highlights-skills ">
-                                        <h4> <strong class="lf">
-                                                <a href="profile/personname/info">Skills and expertise<small>(11)</small></a></strong>  
-                                            <small class="rf"><a href="profile/personname/info">View all</a
-                                                ></small>
-                                        </h4>
-                                        <div class="profile-skill-list"> <div class="skills-pill-list"> 
-                                                <div class="skills-pill-list-inner">  
-                                                    <div class="profile-skill"> 
-                                                        <div class="skill-container js-endorserlist " >  
-                                                            <span class="endorsement-count" id="yui_3_14_1_1_1458142248234_3813">5</span>   
-                                                            <span class="skill-link"> <span class="lf">Natural Language Processing</span> 
-                                                            </span> </div>   
-                                                    </div>  
-
-
-                                                    <div class="profile-skill"> 
-                                                        <div class="skill-container js-endorserlist " >  
-                                                            <span class="endorsement-count" id="yui_3_14_1_1_1458142248234_3813">3</span>   
-                                                            <span class="skill-link"> <span class="lf">Morphology</span> 
-                                                            </span> </div>   
-                                                    </div>
-
-                                                    <div class="profile-skill"> 
-                                                        <div class="skill-container js-endorserlist " >  
-                                                            <span class="endorsement-count" id="yui_3_14_1_1_1458142248234_3813">2</span>   
-                                                            <span class="skill-link"> <span class="lf">Ontologies</span> 
-                                                            </span> </div>   
-                                                    </div>
-                                                </div> </div>  </div>
-
-                                    </div>
-
-                                    
-                                </div>
-                            </div>
+                        <div>  
+                                <div> 
+                                            <i style="width: 20px;" class="fa fa-institution">
+                            </i><a href="institution.html?orgID={{profile['_source']['affiliations'][0]['organisationId']}}" title="{{profile['_source']['affiliations'][0]['names'][0].name}}" target="_blank"> 
+                                {{profile['_source']['affiliations'][0]['names'][0].name}}
+                                    </a> 
+                                </div>   
+                                <div ng-if="profile['_source']['affiliations'][0]['address']"> 
+                                    {{profile['_source']['affiliations'][0]['address']['settlement']}}{{profile['_source']['affiliations'][0]['address']['country']}}
+                                </div>  
+                        </div>
+                        <div ng-if="profile['_source']['phone']">  
+                            <i style="width: 20px;" class="fa fa-phone"></i>
+                            <span>{{profile['_source']['phone']}}</span>  
                         </div>
 
+                        <div>  
+                            <i style="width: 20px;" class="fa fa-envelope">
+
+                            </i><!--span.txt-color-darken {{ profile.contact.email }}-->
+                            <span >{{profile['_source']['email']}} </span>
+                        </div>
+
+                        <div ng-if="profile['_source']['url']"> 
+                                <i style="width: 20px;" class="fa fa-globe">
+
+                                </i>
+                                <a href="{{profile['_source']['url']}}" >{{profile['_source']['url']}}</a>
+                        </div>
+
+                        <div class="profile-research-interests">
+                            <h2 >Research Interests
+                            </h2>
+
+                            <ul>  
+                                <li ng-repeat="interest in interests">
+                                    <div > 
+                                        <a href="https://en.wikipedia.org/wiki/{{interest}}" target="_blank"> {{interest}} 
+                                        </a> 
+                                    </div>                                                      
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="profile-keywords">
+                            <h2 >Keywords
+                            </h2>
+
+                            <ul  >  
+                                <li ng-repeat="keyword in keywords">
+                                    <div > 
+                                        <a href="" > {{keyword}} 
+                                        </a> 
+                                    </div>                                                      
+                                </li>
+                            </ul>
+                        </div>
                     </div>
+
+
                 </div>
+                <div class="row ">
+                    <div class="my-col-4 sidebar">
+                        <h2> Co-authors
+                            <a href="">View all</a> 
+                        </h2>
+                        <div>
+                            <ul>
+                                <li class="co-author" ng-repeat="coauthor in coauthors"> 
+
+                                    <div > 
+                                        <a href="profile.html?authorID={{coauthor['personId']}}"> 
+                                            <img  src="data/images/profile_default_s.jpg" /> 
+                                        </a>   
+                                        <a href="profile.html?authorID={{coauthor['personId']}}">{{coauthor.names[0]['fullname']}}</a>
+                                    </div>    
+                                </li>
+                            </ul> 
+                        </div>  
+                    </div>
+
+
+
+                    <div class="my-col-8 mainbar">
+                        <div class="profile-publications">
+                            <h2>Publications
+
+                                <a href="profile/personname/publications"> {{profile['_source']['publications'].length}} </a>
+
+                                <a href="">View all</a> 
+                            </h2>
+
+                            <ul class="pub-list">
+                                <li ng-repeat="pub in publications">
+
+                                    <a class="pdf-icon pull-right" href="http://hal.archives-ouvertes.fr/{{ pub['_source']['uri']}}/document" target="_blank">&nbsp;</a> 
+                                    <p class="pub-title">  
+                                        <span >{{pub['_source']['publication']['type']}}:</span>    
+                                        <a href="publication.html?pubID={{pub['_id']}}">
+                                            <span>{{pub['_source']['publication']['doc_title']}}
+                                            </span> </a>    
+                                    </p> 
+
+                                    <p >     
+                                        <a href="profile.html?authorID={{author['personId']}}" ng-repeat="author in pub['_source']['authors']">{{author.names[0]['fullname']}}, </a>
+                                    </p>
+                                    <p >{{pub['_source']['publication']['monograph']['title']}}</p> 
+
+                                </li>
+
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
             </div>
         </div>
 

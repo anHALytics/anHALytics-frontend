@@ -19,6 +19,7 @@ var defaults = {
     description: "", // a description of the current search to embed in the display
     default_url_params: {}, // any params that the search URL needs by default
     q: "", // default query value
+    query_field:"",
     predefined_filters: {}, // predefined filters to apply to all searches
     paging: {
         from: 0, // where to start the results from

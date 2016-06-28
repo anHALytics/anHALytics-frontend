@@ -53,8 +53,7 @@ var buildrecord = function (index, node) {
 
     if (typeof titles == 'string') {
         title = titles;
-    }
-    else {
+    } else {
         if (titles) {
             title = titles[0];
             while ((typeof title != 'string') && (typeof title != 'undefined')) {
@@ -64,8 +63,7 @@ var buildrecord = function (index, node) {
     }
     if (typeof titleIDs == 'string') {
         titleID = titleIDs;
-    }
-    else {
+    } else {
         if (titleIDs) {
             titleID = titleIDs[0];
             while ((typeof title != 'string') && (typeof title != 'undefined')) {
@@ -73,58 +71,58 @@ var buildrecord = function (index, node) {
             }
         }
     }
-/*
-    if (!title || (title.length === 0)) {
-
-        titles = jsonObject[$.fn.facetview.record_metadata.titleen];
-
-        if (typeof titles == 'string') {
-            title = titles;
-        }
-        else {
-            if (titles) {
-                title = titles[0];
-                while ((typeof title != 'string') && (typeof title != 'undefined')) {
-                    title = title[0];
-                }
-            }
-        }
-    }
-
-    if (!title || (title.length === 0)) {
-
-        titles = jsonObject[$.fn.facetview.record_metadata.titlefr];
-
-        if (typeof titles == 'string') {
-            title = titles;
-        }
-        else {
-            if (titles) {
-                title = titles[0];
-                while ((typeof title != 'string') && (typeof title != 'undefined')) {
-                    title = title[0];
-                }
-            }
-        }
-    }
-
-    if (!title || (title.length === 0)) {
-
-        titles = jsonObject[$.fn.facetview.record_metadata.titlede];
-
-        if (typeof titles == 'string') {
-            title = titles;
-        }
-        else {
-            if (titles) {
-                title = titles[0];
-                while ((typeof title != 'string') && (typeof title != 'undefined')) {
-                    title = title[0];
-                }
-            }
-        }
-    }
-*/
+    /*
+     if (!title || (title.length === 0)) {
+     
+     titles = jsonObject[$.fn.facetview.record_metadata.titleen];
+     
+     if (typeof titles == 'string') {
+     title = titles;
+     }
+     else {
+     if (titles) {
+     title = titles[0];
+     while ((typeof title != 'string') && (typeof title != 'undefined')) {
+     title = title[0];
+     }
+     }
+     }
+     }
+     
+     if (!title || (title.length === 0)) {
+     
+     titles = jsonObject[$.fn.facetview.record_metadata.titlefr];
+     
+     if (typeof titles == 'string') {
+     title = titles;
+     }
+     else {
+     if (titles) {
+     title = titles[0];
+     while ((typeof title != 'string') && (typeof title != 'undefined')) {
+     title = title[0];
+     }
+     }
+     }
+     }
+     
+     if (!title || (title.length === 0)) {
+     
+     titles = jsonObject[$.fn.facetview.record_metadata.titlede];
+     
+     if (typeof titles == 'string') {
+     title = titles;
+     }
+     else {
+     if (titles) {
+     title = titles[0];
+     while ((typeof title != 'string') && (typeof title != 'undefined')) {
+     title = title[0];
+     }
+     }
+     }
+     }
+     */
     if (title && (title.length > 1) && !titleAnnotated) {
         if (options['collection'] == 'npl') {
             var docid = id;
@@ -135,11 +133,11 @@ var buildrecord = function (index, node) {
                 var type =
                         jsonObject[$.fn.facetview.record_metadata.typology];
                 if (type) {
-                    result += '<div class="row"><a href="publication.html?pubID='+id+'"><span class="label pubtype" style="white-space:normal;">' + type + '</span></a></div>';
+                    result += '<div class="row"><a href="publication.html?pubID=' + id + '"><span class="label pubtype" style="white-space:normal;">' + type + '</span></a></div>';
                     //piece += '<p><strong>' + type + '</strong></p>';
                 }
             }
-            result += ' <div class="row" style="margin-bottom: 10px"><strong><a target="_blank" href="publication.html?pubID='+id+'"><span class="titleNaked" pos="' + index+'" ';
+            result += ' <div class="row" style="margin-bottom: 10px"><strong><a target="_blank" href="publication.html?pubID=' + id + '"><span id="titleNaked" pos="' + index + '" ';
             if (titleID) {
                 result += 'rel="' + titleID + '" ';
             }
@@ -147,8 +145,7 @@ var buildrecord = function (index, node) {
 
 
 
-        }
-        else {
+        } else {
             result += '<strong><span style="font-size:13px">' + title + '</span></strong>';
 
         }
@@ -173,19 +170,17 @@ var buildrecord = function (index, node) {
                     result += authorsFirst[0][0] + ". ";
                 }
                 result += authorsLast[0];
-            }
-            else {
+            } else {
                 if (authorsFirst.length > author) {
                     result += authorsFirst[author][0] + ". ";
                 }
                 result += authorsLast[author];
-                
-                if(author < authorsLast.length -1)
-                result += ", ";
+
+                if (author < authorsLast.length - 1)
+                    result += ", ";
             }
         }
-    }
-    else {
+    } else {
         if (authorsFirst.length > 0) {
             result += authorsFirst[0][0] + ". ";
         }
@@ -200,15 +195,13 @@ var buildrecord = function (index, node) {
     var titleBookTmp = null;
     if (typeof titlesBook == 'string') {
         titleBook = titlesBook;
-    }
-    else {
+    } else {
         titleBook = titlesBook;
         while ((typeof titleBook != 'string') && (typeof titleBook != 'undefined')) {
             titleBookTmp = titleBook[0];
             if (typeof titleBookTmp != 'undefined') {
                 titleBook = titleBookTmp;
-            }
-            else {
+            } else {
                 for (var x in titleBook) {
                     titleBookTmp = titleBook[x];
                 }
@@ -263,10 +256,10 @@ var buildrecord = function (index, node) {
         result += " - <a target='_blank' style='color: #0094DE;' href='http://dx.doi.org/" + doi + "'>" + doi + "</a>";
     }
     result += '</strong></div>';
-    
+
 
     //result += '</tr></table>';
-    
+
 
 
     result += '<div id="myGroup" class= "row">';
@@ -274,13 +267,13 @@ var buildrecord = function (index, node) {
     var names =
             jsonObject[$.fn.facetview.record_metadata.author_fullname];
 
- 
+
     result += '<div class="panel">';
-    result += '<div class="row">';
+    //result += '<div class="row">';
     result += '<div class="col-md-4"><a id="button_abs_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract</a></div>';
     result += '<div class="col-md-4"><a id="button_authors_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#authors_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Authors (' + names.length + ')</a></div>';
     result += '<div class="col-md-4"><a id="button_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Keywords</a></div>';
-result += '</div>';
+    //result += '</div>';
 
 
     {
@@ -288,15 +281,14 @@ result += '</div>';
         piece += '<div id="abstract_' + index +
                 '" class="innen_abstract row collapse " pos="' + index + '" rel="' + id + '"';
         if (index % 2) {
-            piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
+            piece += 'style="background-color:#f8f8f8; padding-right:-30px;">';
+        } else {
+            piece += 'style="background-color:#ffffff; padding-right:-30px;">';
         }
-        else {
-            piece += 'style="background-color:#ffffff;">';
-        }
-        
+
         piece += '</div>';
     }
-result += piece;
+    result += piece;
 
     {
         var piece = "";
@@ -304,8 +296,7 @@ result += piece;
                 '" class="collapse" pos="' + index + '" rel="' + id + '"';
         if (index % 2) {
             piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
-        }
-        else {
+        } else {
             piece += 'style="background-color:#ffffff;">';
         }
 
@@ -316,10 +307,10 @@ result += piece;
 
         if (names) {
             var ids = jsonObject[$.fn.facetview.record_metadata.anhalyticsid];
-            piece += '<div class="well row">';
+            piece += '<div class="row">';
             for (var aut in names) {
-                if(ids)
-                var id_ = ids[aut];
+                if (ids)
+                    var id_ = ids[aut];
                 var name_ = names[aut];
                 piece += '<div class="col-md-3"><a target="_blank" href="profile.html?authorID=' + id_ + '" >' + name_ + '</a></div>';
             }
@@ -339,8 +330,7 @@ result += piece;
                 '" class="row collapse" pos="' + index + '" rel="' + id + '"';
         if (index % 2) {
             piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
-        }
-        else {
+        } else {
             piece += 'style="background-color:#ffffff;">';
         }
 
@@ -355,17 +345,15 @@ result += piece;
 
         if (typeof keywords == 'string') {
             keyword = keywords;
-        }
-        else {
+        } else {
             var keyArray = keywords;
-            if (keyArray  && keywordIDs) {
+            if (keyArray && keywordIDs) {
                 for (var p in keyArray) {
                     var keywordID = keywordIDs[p];
                     if (p == 0) {
                         keyword = '<span id="keywordsNaked"  pos="' + index + '" rel="' + keywordID + '">'
                                 + keyArray[p] + '</span>';
-                    }
-                    else {
+                    } else {
                         keyword += ', ' + '<span id="keywordsNaked"  pos="' + index + '" rel="' + keywordID + '">' +
                                 keyArray[p] + '</span>';
                     }
@@ -374,7 +362,7 @@ result += piece;
         }
 
         if (keyword && (keyword.length > 0) && (keyword.trim().indexOf(" ") != -1)) {
-            piece += ' <p class="well"><strong>Keywords: </strong> ' + keyword + '</p>';
+            piece += ' <p ><strong>Keywords: </strong> ' + keyword + '</p>';
         }
 
         piece += '</div>';
@@ -388,12 +376,15 @@ result += piece;
 
     }
     result += piece;
-    
+
     result += '</div>';
     result += '</div>';
-    
-    
+
+    result += '</div>';
+    result += '</div>';
+
     result += '<div class="row">';
+    result += '<div class="col-md-12">';
 // snippets 
     // Dominique Andlauer's strategy (sort of Google's one), at least one snippet per matched term, then 
     // per relevance, first we check the number of different matched terms
@@ -415,8 +406,7 @@ result += piece;
                                 var term = stemmer(snippets[i].substring(inddd + 8, inddd2).toLowerCase());
                                 if (activeTerms.length == 0) {
                                     activeTerms.push(term);
-                                }
-                                else {
+                                } else {
                                     var present = false;
                                     for (var k in activeTerms) {
                                         if (activeTerms[k] == term) {
@@ -429,12 +419,10 @@ result += piece;
                                     }
                                 }
                                 indd = inddd2 + 1;
-                            }
-                            else {
+                            } else {
                                 break;
                             }
-                        }
-                        else {
+                        } else {
                             break;
                             //indd = snippets[i].length;
                         }
@@ -461,8 +449,7 @@ result += piece;
                                 var term = stemmer(snippets[i].substring(inddd + 8, inddd2).toLowerCase());
                                 if (localTerms.length == 0) {
                                     localTerms.push(term);
-                                }
-                                else {
+                                } else {
                                     var present = false;
                                     for (var k in activeTerms) {
                                         if (localTerms[k] == term) {
@@ -474,12 +461,10 @@ result += piece;
                                         localTerms.push(term);
                                 }
                                 indd = inddd2 + 1;
-                            }
-                            else {
+                            } else {
                                 break;
                             }
-                        }
-                        else {
+                        } else {
                             break;
                         }
                     }
@@ -489,8 +474,7 @@ result += piece;
                         for (var dumm in localTerms) {
                             passiveTerms.push(localTerms[dumm])
                         }
-                    }
-                    else {
+                    } else {
                         var previousState = passiveTerms.length;
                         for (var dumm in localTerms) {
                             var present = false;
@@ -531,8 +515,7 @@ result += piece;
                         max = newSnippets[dumm].length;
                     }
                     result += '...<span style="font-size:12px"><em>' + newSnippets[dumm].substring(indd, max) + '</em></span>...<br />';
-                }
-                else {
+                } else {
                     result += '...<span style="font-size:12px"><em>' + newSnippets[dumm] + '</em></span>...<br />';
                 }
                 totalDisplayed++;
@@ -541,15 +524,14 @@ result += piece;
                 }
             }
         }
-    }
-    else {
+    } else {
         // here default strategy, snippet ranking per relevance
         if (highlight) {
             var jsonObject2 = eval(highlight);
             //var snippets = jsonObject2['_all'];
             //console.log(snippets);
             var totalDisplayed = 0;
-            
+
             for (var n in jsonObject2) {
                 var snippets = jsonObject2[n];
                 for (var i = 0; i < snippets.length; i++) {
@@ -561,8 +543,7 @@ result += piece;
                             max = snippets[i].length;
                         }
                         result += '...<span style="font-size:12px"><em>' + snippets[i].substring(indd, max) + '</em></span>...<br />';
-                    }
-                    else {
+                    } else {
                         result += '...<span style="font-size:12px"><em>' + snippets[i] + '</em></span>...<br />';
                     }
                     totalDisplayed++;
@@ -576,59 +557,145 @@ result += piece;
             }
         }
     }
-    
-            result += '</div>';
-    result += '</div>';
-    result += '</div>';
-    
 result += '</div>';
+    result += '</div>';
+
+    result += '</div>';
     result += '</td></tr>';
-
-
-
-
 
     node.append(result);
 
-    //we load now in background the additional record information requiring a user interaction for
-    // visualisation
-    $('.titleNaked', obj).each(function () {
-        if (options.collection == "npl") {
-            // annotations for the title
-            var index = $(this).attr('pos');
-            var titleID = $(this).attr('rel');
-            var localQuery = {"query": {"filtered": {"query": {"term": {"_id": titleID}}}}};
-
-            $.ajax({
-                type: "get",
-                url: options.search_url_annotations,
-                contentType: 'application/json',
-                dataType: 'jsonp',
-                data: {source: JSON.stringify(localQuery)},
-                success: function (data) {
-                    displayAnnotations(data, index, titleID, 'title');
-                }
-            });
+    // load biblio and abstract info. 
+    // pos attribute gives the result index, rel attribute gives the document ID 
+    // abstract and further informations
+    var localQuery = {"fields": ["$teiCorpus.$teiHeader.$profileDesc.xml:id",
+            "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
+            "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr",
+            "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de"
+                    //"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
+                    //"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi",
+                    //"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName",
+                    //'$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology',
+                    //"$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",
+                    //'$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id'
+        ],
+        "query": {"filtered": {"query": {"term": {"_id": id}}}}};
+    $.ajax({
+        type: "get",
+        url: options.search_url,
+        contentType: 'application/json',
+        dataType: 'json',
+        data: {source: JSON.stringify(localQuery)},
+        success: function (data) {
+            displayAbstract(data, index);
         }
     });
+    displayTitleAnnotation(titleID);
+    displayKeywordAnnotation(keywordIDs);
+};
 
-    for (var p in keywordIDs) {
-        $('#keywordsNaked[rel="' + keywordIDs[p] + '"]', obj).each(function () {
-            // annotations for the keywords
-            var index = $(this).attr('pos');
-            var keywordID = $(this).attr('rel');
-            var localQuery = {"query": {"filtered": {"query": {"term": {"_id": keywordID}}}}};
+var displayAbstract = function (data, index) {
+    var jsonObject = null;
+    if (!data) {
+        return;
+    }
+    if (data.hits) {
+        if (data.hits.hits) {
+            jsonObject = eval(data.hits.hits[0]);
+        }
+    }
+    if (!jsonObject) {
+        return;
+    }
 
-            $.ajax({
-                type: "get",
-                url: options.search_url_annotations,
-                contentType: 'application/json',
-                dataType: 'jsonp',
-                data: {source: JSON.stringify(localQuery)},
-                success: function (data) {
-                    displayAnnotations(data, index, keywordID, 'keyword');
+    if (options.collection == "npl") {
+        var docid = jsonObject._id;
+        var piece = "";
+// abstract, if any
+        jsonObject = jsonObject.fields;
+        if (!jsonObject) {
+            return;
+        }
+        var abstract = null;
+
+        var abstractID = null;
+        var abstractIDs = jsonObject['$teiCorpus.$teiHeader.$profileDesc.xml:id'];
+        if (typeof abstractIDs == 'string') {
+            abstractID = abstractIDs;
+        } else {
+            if (abstractIDs && (abstractIDs.length > 0)) {
+                abstractID = abstractIDs[0];
+                while ((typeof abstractID != 'string') && (typeof abstractID != 'undefined')) {
+                    abstractID = abstractID[0];
                 }
-            });
-        });
+            }
+        }
+
+        var abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en'];
+        if (typeof abstracts == 'string') {
+            abstract = abstracts;
+        } else {
+            if (abstracts && (abstracts.length > 0)) {
+                abstract = abstracts[0];
+                while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                    abstract = abstract[0];
+                }
+            }
+        }
+
+        if (!abstract || (abstract.length == 0)) {
+            abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr'];
+
+            if (typeof abstracts == 'string') {
+                abstract = abstracts;
+            } else {
+                if (abstracts && (abstracts.length > 0)) {
+                    abstract = abstracts[0];
+                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                        abstract = abstract[0];
+                    }
+                }
+            }
+        }
+
+        if (!abstract || (abstract.length == 0)) {
+            abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de'];
+
+            if (typeof abstracts == 'string') {
+                abstract = abstracts;
+            } else {
+                if (abstracts && (abstracts.length > 0)) {
+                    abstract = abstracts[0];
+                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                        abstract = abstract[0];
+                    }
+                }
+            }
+        }
+
+        if (!abstract || (abstract.length == 0)) {
+            abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_es'];
+
+            if (typeof abstracts == 'string') {
+                abstract = abstracts;
+            } else {
+                if (abstracts && (abstracts.length > 0)) {
+                    abstract = abstracts[0];
+                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
+                        abstract = abstract[0];
+                    }
+                }
+            }
+        }
+        piece += '<div class="col-md-10">';
+
+        if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
+            piece += '<p id="abstractNaked" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';
+        }
+        piece += '</div>';
+
+        $('.innen_abstract[rel="' + docid + '"]').append(piece);
+
+        displayAbstractAnnotation(abstractID);
     }
 };

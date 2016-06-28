@@ -20,6 +20,8 @@ var elasticSearchQuery = function () {
 
     qs['fields'] = textFieldsNPLReturned;
 
+
+
     // simple query mode	
     $('.facetview_filterselected', obj).each(function () {
         // facet filter for a range of values

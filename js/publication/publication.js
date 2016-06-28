@@ -23,7 +23,7 @@
         var pubID = url_options.pubID;
 // search for documents
         client.search({
-            index: 'anhalytics_metadatas',
+            index: 'anhalytics_kb',
             type: 'publications',
             size: 1,
             body: {
@@ -37,10 +37,11 @@
 
         }).then(function (response) {
             $scope.publication = response.hits.hits[0];
+            console.log($scope.publication);
         });
 
         client.search({
-            index: 'anhalytics_teis',
+            index: 'anhalytics_fulltextteis',
             body: {
                 "fields": [
                     "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",

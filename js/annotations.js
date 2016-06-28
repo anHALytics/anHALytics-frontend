@@ -1,3 +1,72 @@
+var displayTitleAnnotation = function (titleID) {
+
+    //we load now in background the additional record information requiring a user interaction for
+    // visualisation
+    $('#titleNaked[rel="' + titleID + '"]').each(function () {
+        if (options.collection == "npl") {
+            // annotations for the title
+var index = $(this).attr('pos');
+            var titleID = $(this).attr('rel');
+            var localQuery = {"query": {"filtered": {"query": {"term": {"_id": titleID}}}}};
+
+            $.ajax({
+                type: "get",
+                url: options.search_url_annotations,
+                contentType: 'application/json',
+                dataType: 'jsonp',
+                data: {source: JSON.stringify(localQuery)},
+                success: function (data) {
+                    displayAnnotations(data, index, titleID, 'title');
+                }
+            });
+        }
+    });
+}
+
+var displayAbstractAnnotation = function (abstractID) {
+    $('#abstractNaked[rel="' + abstractID + '"]').each(function () {
+        // annotations for the abstract
+        var index = $(this).attr('pos');
+        var titleID = $(this).attr('rel');
+        var localQuery = {"query": {"filtered": {"query": {"term": {"_id": abstractID}}}}};
+
+        $.ajax({
+            type: "get",
+            url: options.search_url_annotations,
+            contentType: 'application/json',
+            dataType: 'jsonp',
+            data: {source: JSON.stringify(localQuery)},
+            success: function (data) {
+                displayAnnotations(data, index, abstractID, 'abstract');
+            }
+        });
+    });
+}
+
+var displayKeywordAnnotation = function(keywordIDs){
+    
+    for (var p in keywordIDs) {
+        $('#keywordsNaked[rel="' + keywordIDs[p] + '"]').each(function () {
+            // annotations for the keywords
+            var index = $(this).attr('pos');
+            var keywordID = $(this).attr('rel');
+            var localQuery = {"query": {"filtered": {"query": {"term": {"_id": keywordID}}}}};
+
+            $.ajax({
+                type: "get",
+                url: options.search_url_annotations,
+                contentType: 'application/json',
+                dataType: 'jsonp',
+                data: {source: JSON.stringify(localQuery)},
+                success: function (data) {
+                    displayAnnotations(data, index, keywordID, 'keyword');
+                }
+            });
+        });
+    }
+    
+}
+
 var displayAnnotations = function (data, index, id, origin) {
     var jsonObject = null;
     if (!data) {
@@ -21,8 +90,7 @@ var displayAnnotations = function (data, index, id, origin) {
             options.data['' + origin][index] = [];
         }
         options.data['' + origin][index][id] = jsonObject['_source']['annotation']['nerd'];
-    }
-    else
+    } else
         options.data['' + origin][index] = jsonObject['_source']['annotation']['nerd'];
     //console.log('annotation for ' + id);
     //console.log(jsonObject);
@@ -59,12 +127,10 @@ var displayAnnotations = function (data, index, id, origin) {
             // we have a problem in the initial sort of the entities
             // the server response is not compatible with the client 
             console.log("Sorting of entities as present in the server's response not valid for this client.");
-        }
-        else if ((start == lastMaxIndex) || (end > lastMaxIndex)) {
+        } else if ((start == lastMaxIndex) || (end > lastMaxIndex)) {
             // overlap
             end = lastMaxIndex;
-        }
-        else {
+        } else {
             // we produce the annotation on the string
             if (origin == "abstract") {
                 text = text.substring(0, start) +
@@ -74,16 +140,14 @@ var displayAnnotations = function (data, index, id, origin) {
                         '" style="cursor:hand;cursor:pointer;white-space: normal;" >'
                         + text.substring(start, end) + '</span></span>'
                         + text.substring(end, text.length + 1);
-            }
-            else if (origin == "keyword") {
+            } else if (origin == "keyword") {
                 text = text.substring(0, start) +
                         '<span id="annot-key-' + index + '-' + (entities.length - m - 1) + '-' + id
                         + '" rel="popover" data-color="' + label + '">' +
                         '<span class="label ' + label + '" style="cursor:hand;cursor:pointer;" >'
                         + text.substring(start, end) + '</span></span>'
                         + text.substring(end, text.length + 1);
-            }
-            else {
+            } else {
                 text = text.substring(0, start) +
                         '<span id="annot-' + index + '-' + (entities.length - m - 1) +
                         '" rel="popover" data-color="' + label + '">' +
@@ -96,7 +160,7 @@ var displayAnnotations = function (data, index, id, origin) {
     }
 
     //var result = '<strong><span style="font-size:13px">' + text + '<span></strong>';
-        $('[rel="' + id + '"]').html(text);
+    $('[rel="' + id + '"]').html(text);
 
     // now set the popovers/view event 
     var m = 0;
@@ -112,18 +176,16 @@ var displayAnnotations = function (data, index, id, origin) {
                 content: function () {
                     return $('#detailed_annot-' + index).html();
                 }});
-        }
-        else if (origin == "keyword"){
+        } else if (origin == "keyword") {
             $('#annot-key-' + index + '-' + m + '-' + id).hover(viewEntity);
             $('#annot-key-' + index + '-' + m + '-' + id).popover({
                 html: true,
                 placement: 'bottom',
-                trigger:'hover',
+                trigger: 'hover',
                 content: function () {
                     return $('#detailed_annot-' + index).html();
                 }});
-        }
-        else{
+        } else {
             $('#annot-' + index + '-' + m).click(viewEntity);
             $('#annot-' + index + '-' + m).popover({
                 html: true,
@@ -164,8 +226,7 @@ function viewEntity(event) {
         resultIndex = parseInt(localID.substring(ind1 + 1, ind3));
         //abstractSentenceNumber = parseInt(localID.substring(ind2+1,ind3));
         entityNumber = parseInt(localID.substring(ind3 + 1, localID.length));
-    }
-    else if (localID.indexOf("-key-") != -1) {
+    } else if (localID.indexOf("-key-") != -1) {
         // the entity is located in the keywords
         inKeyword = true;
         var ind1 = localID.indexOf('-');
@@ -175,8 +236,7 @@ function viewEntity(event) {
         resultIndex = parseInt(localID.substring(ind1 + 1, ind3));
         entityNumber = parseInt(localID.substring(ind2 + 1, ind3));
         idNumber = localID.substring(ind3 + 1, localID.length);
-    }
-    else {
+    } else {
         // the entity is located in the title
         var ind1 = localID.indexOf('-');
         var ind2 = localID.lastIndexOf('-');
@@ -199,12 +259,11 @@ function viewEntity(event) {
                 && (options.data['abstract'][resultIndex]['entities'])
                 ) {
             localSize = options.data['abstract'][resultIndex]
-                    ['entities'].length;
+            ['entities'].length;
             entity = options.data['abstract'][resultIndex]
-                    ['entities'][localSize - entityNumber - 1];
+            ['entities'][localSize - entityNumber - 1];
         }
-    }
-    else if (inKeyword) {
+    } else if (inKeyword) {
         //console.log(resultIndex + " " + entityNumber + " " + idNumber);
         //console.log(options.data['keyword'][resultIndex][idNumber]['entities']);
 
@@ -213,12 +272,11 @@ function viewEntity(event) {
                 && (options.data['keyword'][resultIndex][idNumber]['entities'])
                 ) {
             localSize = options.data['keyword'][resultIndex][idNumber]
-                    ['entities'].length;
+            ['entities'].length;
             entity = options.data['keyword'][resultIndex][idNumber]
-                    ['entities'][localSize - entityNumber - 1];
+            ['entities'][localSize - entityNumber - 1];
         }
-    }
-    else {
+    } else {
         //console.log(resultIndex + " " + " " + entityNumber);
         //console.log(options.data['title'][resultIndex]['entities']);
 
@@ -245,8 +303,7 @@ function viewEntity(event) {
             colorLabel = type;
         else if (domains && domains.length > 0) {
             colorLabel = domain;
-        }
-        else
+        } else
             colorLabel = entity.rawName;
 
         var start = parseInt(entity.offsetStart, 10);

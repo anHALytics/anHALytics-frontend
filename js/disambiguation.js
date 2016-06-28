@@ -62,8 +62,7 @@ var showexpand = function (sdata) {
 
 var getPieceShowexpandNERD = function (jsonObject){
 
-    var piece = '<div class="well" style="background-color:#F7EDDC;"> \
-				   		 <div class="row"><div class="col-md-11">';
+    var piece = '<div class="well col-md-12" style="background-color:#F7EDDC;">';
     if (jsonObject['entities']) {
         piece += '<table class="table" style="border:1px solid white;">';
         for (var sens in jsonObject['entities']) {
@@ -152,13 +151,14 @@ var getPieceShowexpandNERD = function (jsonObject){
     /*for (var surf in jsonObject['paraphrases']) {
      piece += '<p>' + jsonObject['paraphrases'][surf] + '</p>';
      }*/
-
-    piece += '</div><div><div id="close-disambiguate-panel" \
-					  style="position:relative;float:right;" class="glyphicon glyphicon-remove icon-white"/></div></div></div>';
+piece += '</div></div>';
+//    piece += '</div><div><div id="close-disambiguate-panel" \
+//					  style="position:relative;float:right;" class="glyphicon glyphicon-remove icon-white"/></div></div></div>';
     return piece;
 };
 
 var activateDisambButton = function () {
+    //console.log($('#facetview_freetext').val());
     if ($('#facetview_freetext').val()) {
         $('#disambiguate').attr("disabled", false);
     }

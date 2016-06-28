@@ -25,7 +25,7 @@
         var url_options = $.getUrlVars();
         var authorID = url_options.authorID;
         client.search({
-            index: 'anhalytics_metadatas',
+            index: 'anhalytics_kb',
             type: 'authors',
             size: 1,
             body: {
@@ -40,12 +40,14 @@
         }).then(function (response) {
             $scope.profile = response.hits.hits[0];
             $scope.publications = [];
+            $scope.interests = [];
+            $scope.keywords = [];
             $scope.coauthors = [];
             var coauthors = [];
             for (var i = 0; i < $scope.profile['_source']['publications'].length; i++) {
                 //console.log($scope.profile['_source']['publications'][i]);
                 client.search({
-                    index: 'anhalytics_metadatas',
+                    index: 'anhalytics_kb',
                     type: 'publications',
                     body: {
                         "query":
@@ -67,6 +69,39 @@
                             }
                         }
                     }
+                });
+
+
+                client.search({
+                    index: 'anhalytics_fulltextteis',
+                    body: {
+                        "fields": [
+                            "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",
+                            "$teiCorpus.$standoff.$category.category"],
+                        "query":
+                                {
+                                    "match": {
+                                        _id: $scope.profile['_source']['publications'][i].docID
+                                    }
+                                }
+                    }
+
+                }).then(function (response) {
+
+                    var fields = response.hits.hits[0].fields;
+                    if (fields) {
+                        var keywords = fields["$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term"];
+                        var interests = fields["$teiCorpus.$standoff.$category.category"];
+                        //nerd categories are more reliable
+                        
+                        for (var i = 0; i < interests.length && i<4; i++) {
+                            $scope.interests.push(interests[i]);
+                        }
+                        for (var i = 0; i < keywords.length && i<5; i++) {
+                            $scope.keywords.push(keywords[i]);
+                        }
+                    }
+
                 });
 
             }

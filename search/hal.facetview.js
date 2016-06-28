@@ -17,6 +17,7 @@
         $.fn.facetview.options = $.extend(options, url_options);
         var options = $.fn.facetview.options;
 
+var mode="";
         //var fillDefaultColor = '#FF8000';
         var fillDefaultColor = '#BC0E0E';
         //var fillDefaultColor = '#FF9900';
@@ -34,8 +35,7 @@
                 $(this).children('i').replaceWith('<i class="pull-right glyphicon glyphicon-plus"></i>');
                 $(this).removeClass('facetview_open');
                 $('#facetview_' + $(this).attr('rel')).children('li').hide();
-            }
-            else {
+            } else {
                 $(this).children('i').replaceWith('<i class="pull-right glyphicon glyphicon-minus"></i>');
                 $(this).addClass('facetview_open');
                 $('#facetview_' + $(this).attr('rel')).children('li').show();
@@ -57,14 +57,11 @@
             }
             if ($(this).hasClass('facetview_count')) {
                 options.facets[which]['order'] = 'count';
-            }
-            else if ($(this).hasClass('facetview_term')) {
+            } else if ($(this).hasClass('facetview_term')) {
                 options.facets[which]['order'] = 'term';
-            }
-            else if ($(this).hasClass('facetview_rcount')) {
+            } else if ($(this).hasClass('facetview_rcount')) {
                 options.facets[which]['order'] = 'reverse_count';
-            }
-            else if ($(this).hasClass('facetview_rterm')) {
+            } else if ($(this).hasClass('facetview_rterm')) {
                 options.facets[which]['order'] = 'reverse_term';
             }
             dosearch();
@@ -96,8 +93,7 @@
                     });
                     options.paging.from = 0;
                     dosearch();
-                }
-                else {
+                } else {
                     var newobj = '<a class="facetview_filterselected facetview_clear ' +
                             'btn btn-info" rel="' + $(this).attr("rel") +
                             '" alt="remove" title="remove"' +
@@ -113,8 +109,7 @@
                     options.paging.from = 0;
                     dosearch();
                 }
-            }
-            else {
+            } else {
                 var newobj = '<a class="facetview_filterselected facetview_clear ' +
                         'btn btn-info" rel="' + $(this).attr("rel") +
                         '" alt="remove" title="remove"' +
@@ -363,8 +358,7 @@
                                 ' (' + addCommas(records[item]) + ')</a></li>';
                         $('#facetview_' + options.facets[each]['display']).append(append);
                     }
-                }
-                else {
+                } else {
                     var records = data["facets"][ options.facets[each]['display'] ];
                     var numb = 0;
                     for (var item in records) {
@@ -557,8 +551,7 @@
                 if (options.visualise_filters) {
                     var vis = '<li><a class="facetview_visualise" rel="{{FACET_IDX}}" href="{{FILTER_DISPLAY}}">visualise this filter</a></li>';
                     thefilters += _filterTmpl.replace(/{{FACET_VIS}}/g, vis);
-                }
-                else {
+                } else {
                     thefilters += _filterTmpl.replace(/{{FACET_VIS}}/g, '');
                 }
                 thefilters = thefilters.replace(/{{FILTER_NAME}}/g, filters[idx]['display'])
@@ -566,8 +559,7 @@
 
                 if ('size' in filters[idx]) {
                     thefilters = thefilters.replace(/{{FILTER_HOWMANY}}/gi, filters[idx]['size']);
-                }
-                else {
+                } else {
                     // default if size is not indicated in the parameters
                     thefilters = thefilters.replace(/{{FILTER_HOWMANY}}/gi, 6);
                 }
@@ -643,20 +635,17 @@
 	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart"> \
 	                    </div> \
 	                    </div>';
-                }
-                else if (options.facets[idx]['type'] == 'entity') {
+                } else if (options.facets[idx]['type'] == 'entity') {
                     vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;"> \
 	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart"> \
 	                    </div> \
 	                    </div>';
-                }
-                else if (options.facets[idx]['type'] == 'taxonomy') {
+                } else if (options.facets[idx]['type'] == 'taxonomy') {
                     vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;top:5px;"> \
 	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart"> \
 	                    </div> \
 	                    </div>';
-                }
-                else {
+                } else {
                     vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;"> \
 	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart" style="position:relative;"> \
 	                    </div> \
@@ -670,20 +659,17 @@
             if ((options.facets[idx]['type'] == 'class') || (options.facets[idx]['type'] == 'country')) {
                 donut2($(this).attr('rel'), $(this).attr('href'),
                         parentWidth * 0.8, 'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
-            }
-            else if (options.facets[idx]['type'] == 'date') {
+            } else if (options.facets[idx]['type'] == 'date') {
                 timeline($(this).attr('rel'), parentWidth * 0.75,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart");
                 $('#date-input').show();
-            }
-            else if (options.facets[idx]['type'] == 'taxonomy') {
+            } else if (options.facets[idx]['type'] == 'taxonomy') {
                 wheel($(this).attr('rel'), $(this).attr('href'), parentWidth * 0.8,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
             } else if (options.facets[idx]['type'] == 'tag') {
                 cloud($(this).attr('rel'), $(this).attr('href'), parentWidth * 0.8,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
-            }
-            else {
+            } else {
                 bubble($(this).attr('rel'), parentWidth * 0.8,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
             }
@@ -777,8 +763,7 @@
                             datas.push({'term': item4, 'count': records[item], 'source': item, 'relCount': 0});
                         }
                         datas.push({'term': item2, 'count': records[item], 'source': item, 'relCount': 0});
-                    }
-                    else {
+                    } else {
                         var found3 = false;
                         for (var p in datas) {
                             if (datas[p].term == item3) {
@@ -792,8 +777,7 @@
                         }
                         datas.push({'term': item2, 'count': records[item], 'source': item, 'relCount': 0});
                     }
-                }
-                else {
+                } else {
                     var found2 = false;
                     for (var p in datas) {
                         if (datas[p].term == item2) {
@@ -1042,8 +1026,7 @@
             if (records.length === 0) {
                 $('#' + place).hide();
                 return;
-            }
-            else {
+            } else {
                 var siz = 0;
                 for (var item in records) {
                     siz++;
@@ -1317,8 +1300,7 @@
                         }
                         if (year === 0) {
                             year = '00';
-                        }
-                        else if (year < 10) {
+                        } else if (year < 10) {
                             year = '0' + year;
                         }
                         return year;
@@ -1375,8 +1357,7 @@
             if (facets.length === 0) {
                 $('#' + place).hide();
                 return;
-            }
-            else {
+            } else {
                 var siz = 0;
                 for (var item in facets) {
                     siz++;
@@ -1569,7 +1550,10 @@
 
         var disambiguateNERD = function () {
             var queryText = $('#facetview_freetext').val();
-            doexpandNERD(queryText);
+            if ($('#disambiguation_panel').children().length > 0)
+                $('#disambiguation_panel').empty();
+            else
+                doexpandNERD(queryText);
         };
 
         // call the NERD service and propose senses to the user for his query
@@ -1611,9 +1595,9 @@
 
             piece = getPieceShowexpandNERD(jsonObject);
             $('#disambiguation_panel').append(piece);
-            $('#close-disambiguate-panel').bind('click', function () {
-                $('#disambiguation_panel').hide();
-            })
+//            $('#close-disambiguate-panel').bind('click', function () {
+//                $('#disambiguation_panel').hide();
+//            })
 
             // we need to bind the checkbox...
             for (var sens in jsonObject['entities']) {
@@ -1641,6 +1625,7 @@
             event.preventDefault();
             if ($(this).html() != '..') {
                 options.paging.from = parseInt($(this).attr('href'));
+                $('html, body').animate({scrollTop: 0}, 'slow');
                 dosearch();
             }
         };
@@ -1694,10 +1679,8 @@
             var data = null;
             if (options.search_index == "elasticsearch") {
                 // default is elasticsearch
-                console.log(sdata);
                 data = parseresultsElasticSearch(sdata);
-            }
-            else {
+            } else {
                 // nothing to do :(
                 return;
             }
@@ -1749,8 +1732,7 @@
                     //if ($('.facetview_filterselected[rel=' + options.facets[each]['field'] + "]" ).length == 0 )
                     if ($('#facetview_visualisation_' + options.facets[each]['display'] + '_chart').length == 0)
                         $('.facetview_visualise[href=' + options.facets[each]['display'] + ']').trigger('click');
-                }
-                else if ((!$('.facetview_filtershow[rel=' + options.facets[each]['display'] +
+                } else if ((!$('.facetview_filtershow[rel=' + options.facets[each]['display'] +
                         ']').hasClass('facetview_open'))
                         && (options.facets[each]['view'] == 'textual')) {
                     $('.facetview_filtershow[rel=' + options.facets[each]['display'] + ']').trigger('click');
@@ -1759,174 +1741,14 @@
 
 
 
-            $('.innen_abstract', obj).each(function () {
-                // load biblio and abstract info. 
-                // pos attribute gives the result index, rel attribute gives the document ID 
-                var index = $(this).attr('pos');
-                var docID = $(this).attr('rel');
-                var localQuery;
-                // abstract and further informations
-                localQuery = {"fields": ["$teiCorpus.$teiHeader.$profileDesc.xml:id",
-                        "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
-                        "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr",
-                        "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de"
-                                //"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
-                                //"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi",
-                                //"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName",
-                                //'$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology',
-                                //"$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",
-                                //'$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id'
-                    ],
-                    "query": {"filtered": {"query": {"term": {"_id": docID}}}}};
-
-                $.ajax({
-                    type: "get",
-                    url: options.search_url,
-                    contentType: 'application/json',
-                    dataType: 'jsonp',
-                    data: {source: JSON.stringify(localQuery)},
-                    success: function (data) {
-                        displayAbstract(data, index);
-                    }
-                });
-            });
-
-
         };
 
 
-        var displayAbstract = function (data, index) {
-            var jsonObject = null;
-            if (!data) {
-                return;
-            }
-            if (data.hits) {
-                if (data.hits.hits) {
-                    jsonObject = eval(data.hits.hits[0]);
-                }
-            }
-            if (!jsonObject) {
-                return;
-            }
 
-            if (options.collection == "npl") {
-                var docid = jsonObject._id;
-                var piece = "";
-// abstract, if any
-                jsonObject = jsonObject.fields;
-                if (!jsonObject) {
-                    return;
-                }
-                var abstract = null;
-
-                var abstractID = null;
-                var abstractIDs = jsonObject['$teiCorpus.$teiHeader.$profileDesc.xml:id'];
-                if (typeof abstractIDs == 'string') {
-                    abstractID = abstractIDs;
-                }
-                else {
-                    if (abstractIDs && (abstractIDs.length > 0)) {
-                        abstractID = abstractIDs[0];
-                        while ((typeof abstractID != 'string') && (typeof abstractID != 'undefined')) {
-                            abstractID = abstractID[0];
-                        }
-                    }
-                }
-
-                var abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en'];
-                if (typeof abstracts == 'string') {
-                    abstract = abstracts;
-                }
-                else {
-                    if (abstracts && (abstracts.length > 0)) {
-                        abstract = abstracts[0];
-                        while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                            abstract = abstract[0];
-                        }
-                    }
-                }
-
-                if (!abstract || (abstract.length == 0)) {
-                    abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr'];
-
-                    if (typeof abstracts == 'string') {
-                        abstract = abstracts;
-                    }
-                    else {
-                        if (abstracts && (abstracts.length > 0)) {
-                            abstract = abstracts[0];
-                            while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                                abstract = abstract[0];
-                            }
-                        }
-                    }
-                }
-
-                if (!abstract || (abstract.length == 0)) {
-                    abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de'];
-
-                    if (typeof abstracts == 'string') {
-                        abstract = abstracts;
-                    }
-                    else {
-                        if (abstracts && (abstracts.length > 0)) {
-                            abstract = abstracts[0];
-                            while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                                abstract = abstract[0];
-                            }
-                        }
-                    }
-                }
-
-                if (!abstract || (abstract.length == 0)) {
-                    abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_es'];
-
-                    if (typeof abstracts == 'string') {
-                        abstract = abstracts;
-                    }
-                    else {
-                        if (abstracts && (abstracts.length > 0)) {
-                            abstract = abstracts[0];
-                            while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                                abstract = abstract[0];
-                            }
-                        }
-                    }
-                }
-                piece += '<div class="col-md-12">';
-
-                if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
-                    piece += '<p id="abstractNaked" class="well" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';
-                }
-                piece += '</div>';
-
-                $('.innen_abstract[rel="' + docid + '"]').append(piece);
-
-                $('#abstractNaked[rel="' + abstractID + '"]', obj).each(function () {
-                    // annotations for the abstract
-                    var index = $(this).attr('pos');
-                    var titleID = $(this).attr('rel');
-                    var localQuery = {"query": {"filtered": {"query": {"term": {"_id": abstractID}}}}};
-
-                    $.ajax({
-                        type: "get",
-                        url: options.search_url_annotations,
-                        contentType: 'application/json',
-                        dataType: 'jsonp',
-                        data: {source: JSON.stringify(localQuery)},
-                        success: function (data) {
-                            displayAnnotations(data, index, abstractID, 'abstract');
-                        }
-                    });
-                });
-            }
-        };
 
 
         // execute a search
         var dosearch = function () {
-            // update the options with the latest q value
-            options.q = $('#facetview_freetext').val();
             // make the search query
             if (options.search_index == "elasticsearch") {
                 $.ajax({
@@ -1935,9 +1757,12 @@
                     data: {source: elasticSearchQuery()},
                     // processData: false,
                     dataType: "jsonp",
-                    success: showresults
+                    success: function (data) {
+                        showresults(data);
+                    }
                 });
             }
+
         };
 
         // adjust how many results are shown
@@ -1955,13 +1780,13 @@
 
         // what to do when ready to go
         var whenready = function () {
+            $("#facetview_presentation").remove();
             // append the facetview object to this object
-            var thefacetview;
-            thefacetview = thefacetview_simple;
 
-
-            thefacetview = thefacetview.replace(/{{HOW_MANY}}/gi, options.paging.size);
-            $(obj).append(thefacetview);
+            var facetview_howmany = $("#facetview_howmany").text();
+            facetview_howmany = facetview_howmany.replace(/{{HOW_MANY}}/gi, options.paging.size);
+            $("#facetview_howmany").text(facetview_howmany);
+            //$(obj).append(thefacetview);
             // setup search option triggers
             $('#facetview_partial_match').bind('click', fixmatch);
             $('#facetview_exact_match').bind('click', fixmatch);
@@ -1972,12 +1797,10 @@
 
 
             // resize the searchbar
-            var thewidth = $('#facetview_searchbar').parent().width();
-            $('#facetview_searchbar').css('width', thewidth / 2 + 70 + 'px'); // -50
-            $('#facetview_freetext').css('width', thewidth / 2 + 32 + 'px'); // -88
+            //var thewidth = $('#facetview_searchbar').parent().width();
+            //$('#facetview_searchbar').css('width', thewidth / 2 + 70 + 'px'); // -50
+            //$('#facetview_freetext').css('width', thewidth / 2 + 32 + 'px'); // -88
 
-            $('#disambiguate').bind('click', disambiguateNERD);
-            $('#disambiguation_panel').hide();
 
             //$('#harvest').hide();
 
@@ -1991,50 +1814,79 @@
             // append the filters to the facetview object
             buildfilters();
 
-            $('#facetview_freetext', obj).bindWithDelay('keyup', dosearch, options.freetext_submit_delay);
-            $('#facetview_freetext', obj).bind('keyup', activateDisambButton);
+            //$('#facetview_freetext', obj).bindWithDelay('keyup', dosearch, options.freetext_submit_delay);
             //$('#facetview_freetext', obj).bind('keyup', activateHarvestButton);
 
 
             // trigger the search once on load, to get all results
             dosearch();
+
         };
+
+
+
+
+
+        $('#disambiguate').click(disambiguateNERD);
+        $('#disambiguation_panel').hide();
 
         // ===============================================
         // now create the plugin on the page
-        return this.each(function () {
-            // get this object
-            obj = $(this);
+        return $(document).ready(function (e) {
+            var url_options = $.getUrlVars();
+            // update the options with the latest q value
+            options.q = url_options.q;
+            $('#example-single').val(url_options.mode);
+            $('#example-single').multiselect({
+                onChange: function (element, checked) {
+                    var brands = $('#example-single option:selected');
+                    window.location.href = window.location.href.replace(/[\?#].*|$/, "?mode=" + brands.val());
+                }
+            });
 
-            // check for remote config options, then do first search
-            if (options.config_file) {
-                $.ajax({
-                    type: "get",
-                    url: options.config_file,
-                    dataType: "jsonp",
-                    success: function (data) {
-                        options = $.extend(options, data);
-                        whenready();
-                    },
-                    error: function () {
-                        $.ajax({
-                            type: "get",
-                            url: options.config_file,
-                            success: function (data) {
-                                options = $.extend(options, $.parseJSON(data));
-                                whenready();
-                            },
-                            error: function () {
-                                whenready();
-                            }
-                        });
-                    }
-                });
+            $("#facetview_freetext").keyup(function (e) {
+                // get this object
+                obj = $(this);
+                activateDisambButton();
+                options.q = $("#facetview_freetext").val();
+                if (e.keyCode == 13 && options.q) {
+                    window.location.href = window.location.href.replace(/[\&#].*|$/, "&q=" + options.q);
+                    //whenready();
+                }
+            });
+
+
+            if (options.q) {
+                $("#facetview_freetext").text(options.q);
+                // check for remote config options, then do first search
+                if (options.config_file) {
+                    $.ajax({
+                        type: "get",
+                        url: options.config_file,
+                        dataType: "jsonp",
+                        success: function (data) {
+                            options = $.extend(options, data);
+                            whenready();
+                        },
+                        error: function () {
+                            $.ajax({
+                                type: "get",
+                                url: options.config_file,
+                                success: function (data) {
+                                    options = $.extend(options, $.parseJSON(data));
+                                    whenready();
+                                },
+                                error: function () {
+                                    whenready();
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    whenready();
+                }
             }
-            else {
-                whenready();
-            }
-        }); // end of the function  
+        });
 
     };
 
