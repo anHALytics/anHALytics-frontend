@@ -196,10 +196,10 @@
                                     <span  ng-show="addClient"> 
                                         <a href="javascript:" ng-click="addClient = false">[Hide abstract]
                                         </a><br> 
-                                        <strong >ABSTRACT:</strong> {{abstracts[$index]}}
+                                        <strong >ABSTRACT:</strong> {{abstracts[pub['_source']['docID']]}}
                                     </span> <br> 
                                     <span>
-                                        <strong >Keywords:</strong> {{keywords[$index]}}
+                                        <strong >Keywords:</strong> {{keywords[pub['_source']['docID']]}}
 
                                     </span>
                                 </p>

@@ -44,24 +44,31 @@
             $scope.keywords = [];
             $scope.coauthors = [];
             var coauthors = [];
-            for (var i = 0; i < $scope.profile['_source']['publications'].length; i++) {
-                //console.log($scope.profile['_source']['publications'][i]);
-                client.search({
-                    index: 'anhalytics_kb',
-                    type: 'publications',
-                    body: {
-                        "query":
-                                {
-                                    "match": {
-                                        _id: $scope.profile['_source']['publications'][i].docID
-                                    }
-                                }
-                    }
 
-                }).then(function (response) {
-                    $scope.publications.push(response.hits.hits[0]);
-                    for (var j = 0; j < response.hits.hits[0]['_source']['authors'].length; j++) {
-                        var coauthor = response.hits.hits[0]['_source']['authors'][j];
+            var terms = [];
+            for (var i = 0; i < $scope.profile['_source']['publications'].length; i++) {
+                terms.push({"term": {"_id": $scope.profile['_source']['publications'][i].docID}});
+            }
+            client.search({
+                index: 'anhalytics_kb',
+                type: 'publications',
+                body: {
+                    "query": {
+                        "filtered": {
+                            "filter": {
+                                "bool": {
+                                    "should": terms
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }).then(function (response) {
+                for (hit in response.hits.hits) {
+                    $scope.publications.push(response.hits.hits[hit]);
+                    for (var j = 0; j < response.hits.hits[hit]['_source']['authors'].length; j++) {
+                        var coauthor = response.hits.hits[hit]['_source']['authors'][j];
                         if (coauthor['personId'] != url_options.authorID) {
                             if (!coauthorExists(coauthor, $scope.coauthors)) {
                                 coauthor['hits'] = 1;
@@ -69,48 +76,45 @@
                             }
                         }
                     }
-                });
+                }
+            });
 
 
-                client.search({
-                    index: 'anhalytics_fulltextteis',
-                    body: {
-                        "fields": [
-                            "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",
-                            "$teiCorpus.$standoff.$category.category"],
-                        "query":
-                                {
-                                    "match": {
-                                        _id: $scope.profile['_source']['publications'][i].docID
-                                    }
+            client.search({
+                index: 'anhalytics_fulltextteis',
+                body: {
+                    "fields": [
+                        "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",
+                        "$teiCorpus.$standoff.$category.category"],
+                    "query": {
+                        "filtered": {
+                            "filter": {
+                                "bool": {
+                                    "should": terms
                                 }
+                            }
+                        }
                     }
+                }
 
-                }).then(function (response) {
-
-                    var fields = response.hits.hits[0].fields;
+            }).then(function (response) {
+                for (hit in response.hits.hits) {
+                    var fields = response.hits.hits[hit].fields;
                     if (fields) {
                         var keywords = fields["$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term"];
                         var interests = fields["$teiCorpus.$standoff.$category.category"];
                         //nerd categories are more reliable
-                        
-                        for (var i = 0; i < interests.length && i<4; i++) {
+
+                        for (var i = 0; i < interests.length && i < 4; i++) {
                             $scope.interests.push(interests[i]);
                         }
-                        for (var i = 0; i < keywords.length && i<5; i++) {
+                        for (var i = 0; i < keywords.length && i < 5; i++) {
                             $scope.keywords.push(keywords[i]);
                         }
                     }
-
-                });
-
-            }
-
+                }
+            });
 
         });
-
-
-
-
     });
 })();
