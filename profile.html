@@ -82,6 +82,13 @@
                             </i><!--span.txt-color-darken {{ profile.contact.email }}-->
                             <span >{{profile['_source']['email']}} </span>
                         </div>
+                        
+                        <div>  
+                            <i style="width: 20px;" class="fa fa-info">
+
+                            </i><!--span.txt-color-darken {{ profile.contact.email }}-->
+                            <span ng-repeat="identifier in profile['_source']['identifers']"><strong>{{identifier.type}}</strong> : {{identifier.id}}, </span>
+                        </div>
 
                         <div ng-if="profile['_source']['url']"> 
                                 <i style="width: 20px;" class="fa fa-globe">
