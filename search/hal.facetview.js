@@ -17,7 +17,7 @@
         $.fn.facetview.options = $.extend(options, url_options);
         var options = $.fn.facetview.options;
 
-var mode="";
+        var mode = "";
         //var fillDefaultColor = '#FF8000';
         var fillDefaultColor = '#BC0E0E';
         //var fillDefaultColor = '#FF9900';
@@ -1850,7 +1850,10 @@ var mode="";
                 activateDisambButton();
                 options.q = $("#facetview_freetext").val();
                 if (e.keyCode == 13 && options.q) {
-                    window.location.href = window.location.href.replace(/[\&#].*|$/, "&q=" + options.q);
+                    if (url_options.mode)
+                        window.location.href = window.location.href.replace(/[\&#].*|$/, "&q=" + options.q);
+                    else
+                        window.location.href = window.location.href.replace(/[\?#].*|$/, "?q=" + options.q);
                     //whenready();
                 }
             });
