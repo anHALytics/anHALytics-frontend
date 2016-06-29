@@ -106,7 +106,7 @@
                         var interests = fields["$teiCorpus.$standoff.$category.category"];
                         //nerd categories are more reliable
 if(interests){
-                        for (var i = 0; i < interests.length && $scope.keywords.length < 6; i++) {
+                        for (var i = 0; i < interests.length && $scope.interests.length < 6; i++) {
                             $scope.interests.push(interests[i]);
                         }
                     }
