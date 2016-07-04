@@ -159,10 +159,15 @@ piece += '</div></div>';
 
 var activateDisambButton = function () {
     //console.log($('#facetview_freetext').val());
-    if ($('#facetview_freetext').val()) {
+    //if ($('#facetview_freetext').val()) {
         $('#disambiguate').attr("disabled", false);
-    }
-    else {
+//    }
+//    else {
+//        $('#disambiguate').attr("disabled", true);
+//    }
+};
+
+var deactivateDisambButton = function () {
+
         $('#disambiguate').attr("disabled", true);
-    }
 };

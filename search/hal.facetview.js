@@ -1849,17 +1849,22 @@
                 obj = $(this);
                 activateDisambButton();
                 options.q = $("#facetview_freetext").val();
+                
                 if (e.keyCode == 13 && options.q) {
                     if (url_options.mode)
                         window.location.href = window.location.href.replace(/[\&#].*|$/, "&q=" + options.q);
                     else
                         window.location.href = window.location.href.replace(/[\?#].*|$/, "?q=" + options.q);
                     //whenready();
-                }
+                } else if(!options.q)
+                    deactivateDisambButton();
             });
 
 
             if (options.q) {
+                options.q = unescape(options.q);
+                activateDisambButton();
+                console.log(options.q);
                 $("#facetview_freetext").text(options.q);
                 // check for remote config options, then do first search
                 if (options.config_file) {

@@ -375,6 +375,14 @@ span {word-break:normal;}
     background-color: #585858; color: white;
 }
 
+.popover-content{
+    width:400px;  
+}
+
+.popover{
+    max-width: inherit;
+    max-height: inherit;
+}
 
 /* DOMAINS */
 .info-sense-box.biology {

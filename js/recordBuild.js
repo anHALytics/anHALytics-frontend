@@ -262,13 +262,13 @@ var buildrecord = function (index, node) {
 
 
 
-    result += '<div id="myGroup" class= "row">';
+    result += '<div id="myGroup" class= "row"  style="padding-right:30px;">';
 
     var names =
             jsonObject[$.fn.facetview.record_metadata.author_fullname];
 
 
-    result += '<div class="panel">';
+    result += '<div class="panel" >';
     //result += '<div class="row">';
     result += '<div class="col-md-4"><a id="button_abs_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract</a></div>';
     result += '<div class="col-md-4"><a id="button_authors_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#authors_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Authors (' + names.length + ')</a></div>';
@@ -281,9 +281,9 @@ var buildrecord = function (index, node) {
         piece += '<div id="abstract_' + index +
                 '" class="innen_abstract row collapse " pos="' + index + '" rel="' + id + '"';
         if (index % 2) {
-            piece += 'style="background-color:#f8f8f8; padding-right:-30px;">';
+            piece += 'style="background-color:#f8f8f8;">';
         } else {
-            piece += 'style="background-color:#ffffff; padding-right:-30px;">';
+            piece += 'style="background-color:#ffffff;">';
         }
 
         piece += '</div>';
@@ -687,7 +687,7 @@ var displayAbstract = function (data, index) {
                 }
             }
         }
-        piece += '<div class="col-md-10">';
+        piece += '<div class="col-md-12">';
 
         if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
             piece += '<p id="abstractNaked" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';

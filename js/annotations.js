@@ -2,13 +2,13 @@ var displayTitleAnnotation = function (titleID) {
 
     //we load now in background the additional record information requiring a user interaction for
     // visualisation
+    
     $('#titleNaked[rel="' + titleID + '"]').each(function () {
         if (options.collection == "npl") {
             // annotations for the title
 var index = $(this).attr('pos');
             var titleID = $(this).attr('rel');
             var localQuery = {"query": {"filtered": {"query": {"term": {"_id": titleID}}}}};
-
             $.ajax({
                 type: "get",
                 url: options.search_url_annotations,
@@ -171,7 +171,7 @@ var displayAnnotations = function (data, index, id, origin) {
 
             $('#annot-abs-' + index + '-' + m).popover({
                 html: true,
-                placement: 'bottom',
+                placement: $.fn.placement,
                 //trigger:'hover',
                 content: function () {
                     return $('#detailed_annot-' + index).html();
@@ -180,7 +180,7 @@ var displayAnnotations = function (data, index, id, origin) {
             $('#annot-key-' + index + '-' + m + '-' + id).hover(viewEntity);
             $('#annot-key-' + index + '-' + m + '-' + id).popover({
                 html: true,
-                placement: 'bottom',
+                placement: $.fn.placement,
                 trigger: 'hover',
                 content: function () {
                     return $('#detailed_annot-' + index).html();
@@ -189,7 +189,7 @@ var displayAnnotations = function (data, index, id, origin) {
             $('#annot-' + index + '-' + m).click(viewEntity);
             $('#annot-' + index + '-' + m).popover({
                 html: true,
-                placement: 'bottom',
+                placement: $.fn.placement,
                 //trigger:'hover',
                 content: function () {
                     return $('#detailed_annot-' + index).html();
@@ -197,6 +197,9 @@ var displayAnnotations = function (data, index, id, origin) {
         }
     }
 }
+
+
+
 
 /** 
  * View the full entity information in the infobox 
@@ -326,7 +329,7 @@ function viewEntity(event) {
         string += "<div class='info-sense-box " + colorLabel +
                 "' ><h3 style='color:#FFF;padding-left:10px;'>" + content.toUpperCase() +
                 "</h3>";
-        string += "<div class='container-fluid' style='background-color:#F9F9F9;color:#70695C;border:padding:5px;margin-top:5px;'>" +
+        string += "<div class='container-fluid' style='background-color:#F9F9F9;color:#70695C;'>" +
                 "<table style='background-color:#fff;'><tr style='background-color:#fff;border:0px;'><td style='background-color:#fff;border:0px;'>";
 
         if (type)
