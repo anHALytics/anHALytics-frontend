@@ -1856,7 +1856,7 @@
                     activateDisambButton();
                 else
                     deactivateDisambButton();
-                if (e.keyCode == 13 && options.q) {
+                if (e.keyCode == 13 && (options.q || $("#facetview_selectedfilters").children().length > 0)) {
 //                    if (url_options.mode)
 //                        window.location.href = window.location.href.replace(/[\&#].*|$/, "&q=" + options.q);
 //                    else
