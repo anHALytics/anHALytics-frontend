@@ -98,6 +98,7 @@
                             'btn btn-info" rel="' + $(this).attr("rel") +
                             '" alt="remove" title="remove"' +
                             ' href="' + $(this).attr("href") + '">';
+                    newobj += $(this).attr("display")+":";
                     if ($(this).html().trim().length > 0)
                         newobj += $(this).html().replace(/\(.*\)/, '');
                     else
@@ -114,6 +115,7 @@
                         'btn btn-info" rel="' + $(this).attr("rel") +
                         '" alt="remove" title="remove"' +
                         ' href="' + $(this).attr("href") + '">';
+                newobj += $(this).attr("display")+":";
                 if ($(this).html().trim().length > 0)
                     newobj += $(this).html().replace(/\(.*\)/, '');
                 else
@@ -354,7 +356,7 @@
                         var years = theDate.getFullYear();
                         var append = '<li><a class="facetview_filterchoice' +
                                 '" rel="' + options.facets[each]['field'] +
-                                '" href="' + item + '">' + years +
+                                '" href="' + item + '" display="'+options.facets[each]['display']+'">' +years +
                                 ' (' + addCommas(records[item]) + ')</a></li>';
                         $('#facetview_' + options.facets[each]['display']).append(append);
                     }
@@ -370,7 +372,9 @@
                         if (options.facets[each]['display'].indexOf('class') != -1)
                             item2 = item.replace(/\s/g, '');
                         var append = '<li><a class="facetview_filterchoice' +
-                                '" rel="' + options.facets[each]['field'] + '" href="' + item + '">' + item2 +
+                                '" rel="' + options.facets[each]['field'] + '" href="' + item + '" display="'+options.facets[each]['display']+'">'
+                                
+                                + item2 +
                                 ' (' + addCommas(records[item]) + ')</a></li>';
                         $('#facetview_' + options.facets[each]['display']).append(append);
                         numb++;
@@ -936,7 +940,7 @@
                     }
                 }
 
-                clickGraph(facetfield, theName, theName);
+                clickGraph(facetfield, facetkey, theName, theName);
 
                 path.transition()
                         .duration(duration)
@@ -1109,9 +1113,9 @@
                         var term = entries[index].term;
                         var source = entries[index].source;
                         if (source)
-                            clickGraph(facetfield, term, source);
+                            clickGraph(facetfield, facetkey, term, source);
                         else
-                            clickGraph(facetfield, term, term);
+                            clickGraph(facetfield, facetkey, facetfield, term, term);
                     })
                     .append("path")
                     //.attr("fill", function(d, i) { return color(entries[i]['relCount']); })
@@ -1155,9 +1159,9 @@
                         var term = entries[index].term;
                         var source = entries[index].source;
                         if (source)
-                            clickGraph(facetfield, term, source);
+                            clickGraph(facetfield, facetkey, term, source);
                         else
-                            clickGraph(facetfield, term, term);
+                            clickGraph(facetfield, facetkey, facetfield, term, term);
                     });
 
             // Store the currently-displayed angles in this._current.
@@ -1336,7 +1340,7 @@
                     .event("mousedown", function (d) {
                         var time = entries[this.index].time;
                         var date = new Date(parseInt(time));
-                        clickGraph(facetfield, date.getFullYear(), time);
+                        clickGraph(facetfield, facetkey, date.getFullYear(), time);
                     })
 
                     // Add thick stroke to the chart
@@ -1431,9 +1435,9 @@
                     });
             node.on('click', function (d) {
                 if (d.data)
-                    clickGraph(facetfield, d.data.className, d.data.className);
+                    clickGraph(facetfield, facetkey, d.data.className, d.data.className);
                 else
-                    clickGraph(facetfield, d.className, d.className);
+                    clickGraph(facetfield, facetkey, d.className, d.className);
             });
 
             var vis2 = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2").select("svg")
@@ -1461,9 +1465,9 @@
                     })
                     .on("mousedown", function (d) {
                         if (d.data)
-                            clickGraph(facetfield, d.data.className, d.data.className);
+                            clickGraph(facetfield, facetkey, d.data.className, d.data.className);
                         else
-                            clickGraph(facetfield, d.className, d.className);
+                            clickGraph(facetfield, facetkey, d.className, d.className);
                     });
         };
 
@@ -1523,18 +1527,18 @@
                         .text(function (d) {
                             return d.text;
                         }).on("click", function (d) {
-                    clickGraph(facetfield, d.text, d.text);
+                    clickGraph(facetfield, facetkey, d.text, d.text);
                 });
             }
 
         };
         // normal click on a graphical facet
-        var clickGraph = function (facetKey, facetValueDisplay, facetValue) {
+        var clickGraph = function (facetfield, facetKey, facetValueDisplay, facetValue) {
             var newobj = '<a class="facetview_filterselected facetview_clear ' +
-                    'btn btn-info" rel="' + facetKey +
+                    'btn btn-info" rel="' + facetfield +
                     '" alt="remove" title="remove"' +
                     ' href="' + facetValue + '">' +
-                    facetValueDisplay + ' <i class="glyphicon glyphicon-remove"></i></a>';
+                    facetKey+":"+facetValueDisplay + ' <i class="glyphicon glyphicon-remove"></i></a>';
             $('#facetview_selectedfilters').append(newobj);
             $('.facetview_filterselected').unbind('click', clearfilter);
             $('.facetview_filterselected').bind('click', clearfilter);
