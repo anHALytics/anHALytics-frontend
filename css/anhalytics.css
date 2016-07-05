@@ -65,9 +65,7 @@ body {
 }
 
 .container {
-    /* background-color: #F2F2F2; */
-    background-image: url('../data/images/gray_jean.png');
-    background-repeat: repeat;
+     background-color: white; 
     color: #222;
     padding: 20px;
     word-break: normal;
