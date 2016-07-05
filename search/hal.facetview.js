@@ -537,8 +537,8 @@
 						   <input type="text" id="month_from" name="month_from" size="2" maxlength="2"\
 						    placeholder="MM"/> \
 						   <input type="text" id="year_from" name="year_from" size="4" maxlength="4"\
-						     placeholder="YYYY"/> </br>\
-						   To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<input type="text" id="day_to" name="day_to" size="2" maxlength="2" \
+						     placeholder="YYYY"/>\
+						   To&nbsp;:&nbsp;<input type="text" id="day_to" name="day_to" size="2" maxlength="2" \
 						    placeholder="DD"" /> \
 						   <input type="text" id="month_to" name="month_to" size="2"  maxlength="2" \
 						    placeholder="MM"/> \
@@ -1833,6 +1833,7 @@
         // ===============================================
         // now create the plugin on the page
         return $(document).ready(function (e) {
+
             var url_options = $.getUrlVars();
             // update the options with the latest q value
             options.q = url_options.q;
@@ -1846,7 +1847,7 @@
             });
 
             $("#facetview_freetext").keyup(function (e) {
-
+                
                 // get this object
                 obj = $(this);
                 options.q = $("#facetview_freetext").val();
@@ -1856,8 +1857,6 @@
                 else
                     deactivateDisambButton();
                 if (e.keyCode == 13 && options.q) {
-
-                    console.log($("#selected-field").text().trim());
 //                    if (url_options.mode)
 //                        window.location.href = window.location.href.replace(/[\&#].*|$/, "&q=" + options.q);
 //                    else
@@ -1896,10 +1895,6 @@
                     }
                 }
             });
-
-
-            if (options.q) {
-            }
         });
 
     };
