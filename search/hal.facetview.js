@@ -1839,60 +1839,66 @@
             $('#example-single').val(url_options.mode);
             $('#example-single').multiselect({
                 onChange: function (element, checked) {
-                    var brands = $('#example-single option:selected');
-                    window.location.href = window.location.href.replace(/[\?#].*|$/, "?mode=" + brands.val());
+                    options.brands = $('#example-single option:selected');
+                    
+                    //window.location.href = window.location.href.replace(/[\?#].*|$/, "?mode=" + brands.val());
                 }
             });
 
             $("#facetview_freetext").keyup(function (e) {
+
                 // get this object
                 obj = $(this);
-                activateDisambButton();
                 options.q = $("#facetview_freetext").val();
-                
-                if (e.keyCode == 13 && options.q) {
-                    if (url_options.mode)
-                        window.location.href = window.location.href.replace(/[\&#].*|$/, "&q=" + options.q);
-                    else
-                        window.location.href = window.location.href.replace(/[\?#].*|$/, "?q=" + options.q);
-                    //whenready();
-                } else if(!options.q)
+
+                if (options.q)
+                    activateDisambButton();
+                else
                     deactivateDisambButton();
+                if (e.keyCode == 13 && options.q) {
+
+                    console.log($("#selected-field").text().trim());
+//                    if (url_options.mode)
+//                        window.location.href = window.location.href.replace(/[\&#].*|$/, "&q=" + options.q);
+//                    else
+//                        window.location.href = window.location.href.replace(/[\?#].*|$/, "?q=" + options.q);
+//
+//                    options.q = unescape(options.q);
+//                    activateDisambButton();
+                    console.log(options.q);
+//                    $("#facetview_freetext").text(options.q);
+                    // check for remote config options, then do first search
+                    if (options.config_file) {
+                        $.ajax({
+                            type: "get",
+                            url: options.config_file,
+                            dataType: "jsonp",
+                            success: function (data) {
+                                options = $.extend(options, data);
+                                whenready();
+                            },
+                            error: function () {
+                                $.ajax({
+                                    type: "get",
+                                    url: options.config_file,
+                                    success: function (data) {
+                                        options = $.extend(options, $.parseJSON(data));
+                                        whenready();
+                                    },
+                                    error: function () {
+                                        whenready();
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        whenready();
+                    }
+                }
             });
 
 
             if (options.q) {
-                options.q = unescape(options.q);
-                activateDisambButton();
-                console.log(options.q);
-                $("#facetview_freetext").text(options.q);
-                // check for remote config options, then do first search
-                if (options.config_file) {
-                    $.ajax({
-                        type: "get",
-                        url: options.config_file,
-                        dataType: "jsonp",
-                        success: function (data) {
-                            options = $.extend(options, data);
-                            whenready();
-                        },
-                        error: function () {
-                            $.ajax({
-                                type: "get",
-                                url: options.config_file,
-                                success: function (data) {
-                                    options = $.extend(options, $.parseJSON(data));
-                                    whenready();
-                                },
-                                error: function () {
-                                    whenready();
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    whenready();
-                }
             }
         });
 
