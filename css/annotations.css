@@ -10,6 +10,7 @@
     font-weight: bold;
     color: #ffffff;
     text-transform: uppercase;
+    text-decoration: none;
     white-space: nowrap;
     background-color: #87A1A8;
     -webkit-border-radius: 3px;
@@ -162,10 +163,10 @@ pre, pre.prettyprint {
     .atv { color: #060 }
 }
 
-a:focus{outline:thin dotted #BC0E0E;outline:5px auto -webkit-focus-ring-color;outline-offset:-2px;}
+/*a:focus{outline:thin dotted #BC0E0E;outline:5px auto -webkit-focus-ring-color;outline-offset:-2px;}
 a:hover,a:active{outline:0;color:#BC0E0E;}
 a{color:#767676;text-decoration:none;}                
-a:hover{color:#BC0E0E;text-decoration:underline;}
+a:hover{color:#BC0E0E;text-decoration:underline;}*/
 
 h3{ color:#70695C; }
 
@@ -432,10 +433,6 @@ span {word-break:normal;}
 }
 .info-sense-box.environment {
     background-color: #31B404;
-}
-
-.annotation_info{
-    display: none;
 }
 
 

@@ -124,11 +124,11 @@ var buildrecord = function (index, node) {
     if (title && (title.length > 1) && !titleAnnotated) {
         if (options['collection'] == 'npl') {
             var docid = id;
-            result += ' <div class="row" style="margin-bottom: 10px"><strong><a target="_blank" href="publication.html?pubID=' + id + '"><span id="titleNaked" pos="' + index + '" ';
+            result += ' <div class="row" style="margin-bottom: 10px"><strong><span id="titleNaked" pos="' + index + '" ';
             if (titleID) {
                 result += 'rel="' + titleID + '" ';
             }
-            result += ' style="font-size:13px; color:black; white-space:normal;">' + title + '</span></a></strong></div>';
+            result += ' style="font-size:13px; color:black; white-space:normal;">' + title + '</span></strong></div>';
 
 
 
@@ -259,8 +259,8 @@ var buildrecord = function (index, node) {
         result += " - <a target='_blank' style='color: #0094DE;' href='http://dx.doi.org/" + doi + "'>" + doi + "</a>";
     }
     result += '</strong></div>';
-
-    result += '<div class="row"><a id="button_abstract_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract/Keywords</a></div>';
+result += '<div class="row"><a target="_blank" href="publication.html?pubID=' + id + '" style="font-size:11px">(More details)</a></div>';
+    result += '<div class="row"><a id="button_abstract_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span style="font-size:11px">Abstract/Keywords</a></div>';
 
     result += '</div>';
     result += '</div>';
