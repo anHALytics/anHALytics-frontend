@@ -1,16 +1,16 @@
 var defaults = {
-    api_key:"AIzaSyBLNMpXpWZxcR9rbjjFQHn_ULbU-w1EZ5U", // this is a google key for freebase image service
+    api_key: "AIzaSyBLNMpXpWZxcR9rbjjFQHn_ULbU-w1EZ5U", // this is a google key for freebase image service
     host_nerd: "traces1.saclay.inria.fr",
     port_nerd: "",
     service: "local", // access to service can be local or proxy, depending on security requirements
-    proxy_host: "http://localhost:8080/proxy/",    
+    proxy_host: "http://localhost:8080/proxy/",
     search_url: 'http://localhost:9200/anhalytics_fulltextteis/_search?', // the URL against which to submit searches
     search_url_annotations: 'http://localhost:9200/annotations_nerd/_search?',
-    search_index: 'elasticsearch',    
+    search_index: 'elasticsearch',
     query_parameter: "q", // the query parameter if required for setting to the search URL
     collection: 'npl',
     subcollection: 'hal',
-    snippet_style: 'andlauer',   
+    snippet_style: 'andlauer',
     freetext_submit_delay: "200", // delay for auto-update of search results in ms
     display_images: true, // whether or not to display images found in links in search results    
     config_file: false, // a remote config file URL
@@ -19,7 +19,7 @@ var defaults = {
     description: "", // a description of the current search to embed in the display
     default_url_params: {}, // any params that the search URL needs by default
     q: "", // default query value
-    query_field:"",
+    query_field: "",
     predefined_filters: {}, // predefined filters to apply to all searches
     paging: {
         from: 0, // where to start the results from
@@ -27,6 +27,10 @@ var defaults = {
     },
     mode_query: "simple", // query input, possible values: simple, complex, nl, semantic, analytics
     complex_fields: 0, // number of fields introduced in the complex query form
+    wikimediaURL_EN: 'https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=200&pageids=',
+    wikimediaURL_FR: 'https://fr.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=200&pageids=',
+    wikimediaURL_DE: 'https://de.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=200&pageids=',
+    imgCache: {}
 };
 
 

@@ -2,11 +2,11 @@ var displayTitleAnnotation = function (titleID) {
 
     //we load now in background the additional record information requiring a user interaction for
     // visualisation
-    
+
     $('#titleNaked[rel="' + titleID + '"]').each(function () {
         if (options.collection == "npl") {
             // annotations for the title
-var index = $(this).attr('pos');
+            var index = $(this).attr('pos');
             var titleID = $(this).attr('rel');
             var localQuery = {"query": {"filtered": {"query": {"term": {"_id": titleID}}}}};
             $.ajax({
@@ -43,8 +43,8 @@ var displayAbstractAnnotation = function (abstractID) {
     });
 }
 
-var displayKeywordAnnotation = function(keywordIDs){
-    
+var displayKeywordAnnotation = function (keywordIDs) {
+
     for (var p in keywordIDs) {
         $('#keywordsNaked[rel="' + keywordIDs[p] + '"]').each(function () {
             // annotations for the keywords
@@ -64,7 +64,7 @@ var displayKeywordAnnotation = function(keywordIDs){
             });
         });
     }
-    
+
 }
 
 var displayAnnotations = function (data, index, id, origin) {
@@ -303,7 +303,6 @@ function viewEntity(event) {
             conf = conf.substring(0, 4);
         var definitions = entity.definitions;
         var wikipedia = entity.wikipediaExternalRef;
-        var freebase = entity.freeBaseExternalRef;
         var content = entity.rawName; //$(this).text();
         var preferredTerm = entity.preferredTerm;
 
@@ -341,12 +340,13 @@ function viewEntity(event) {
 
         string += "</td><td style='align:right;background-color:#fff'>";
 
-        if (freebase != null) {
-            var urlImage = 'https://usercontent.googleapis.com/freebase/v1/image' + freebase;
-            urlImage += '?maxwidth=150';
-            urlImage += '&maxheight=150';
-            urlImage += '&key=' + options.api_key;
-            string += '<img src="' + urlImage + '" alt="' + freebase + '"/>';
+        if (wikipedia != null) {
+            //var file = wikipediaHTMLResult(wikipedia, resultIndex);
+//            urlImage += '?maxwidth=150';
+//            urlImage += '&maxheight=150';
+//            urlImage += '&key=' + options.api_key;
+            string += '<span id="img-' + wikipedia + '"><script type="text/javascript">lookupWikiMediaImage("' + wikipedia + '")</script></span>';
+
         }
 
         string += "</td></tr></table>";
@@ -354,24 +354,59 @@ function viewEntity(event) {
         if ((definitions != null) && (definitions.length > 0)) {
             string += "<p>" + definitions[0].definition + "</p>";
         }
-        if ((wikipedia != null) || (freebase != null)) {
-            string += '<p>Reference: '
+            
             if (wikipedia != null) {
+                string += '<p>Reference: '
                 string += '<a href="http://en.wikipedia.org/wiki?curid=' +
                         wikipedia +
                         '" target="_blank"><img style="max-width:28px;max-height:22px;margin-top:5px;" src="data/images/wikipedia.png"/></a>';
             }
-            if (freebase != null) {
-                string += '<a href="http://www.freebase.com' +
-                        freebase +
-                        '" target="_blank"><img style="max-width:28px;max-height:22px;margin-top:5px;" src="data/images/freebase_icon.png"/></a>';
-
-            }
             string += '</p>';
-        }
+        
 
         string += "</div></div>";
         $('#detailed_annot-' + resultIndex).html(string);
-        $('#detailed_annot-'+resultIndex).show();
+        $('#detailed_annot-' + resultIndex).show();
+    }
+}
+
+window.lookupWikiMediaImage = function (wikipedia, lang) {
+
+    // first look in the local cache
+    if (lang + wikipedia in options.imgCache) {
+        var imgUrl = options.imgCache[lang + wikipedia];
+        var document = (window.content) ? window.content.document : window.document;
+        var spanNode = document.getElementById("img-" + wikipedia);
+        spanNode.innerHTML = '<img src="' + imgUrl + '"/>';
+    } else {
+        // otherwise call the wikipedia API
+        var theUrl = null;
+        if (lang == 'fr')
+            theUrl = options.wikimediaURL_FR + wikipedia;
+        else if (lang == 'de')
+            theUrl = options.wikimediaURL_DE + wikipedia;
+        else
+            theUrl = options.wikimediaURL_EN + wikipedia;
+        // note: we could maybe use the en crosslingual correspondance for getting more images in case of non-English pages
+        $.ajax({
+            url: theUrl,
+            jsonp: "callback",
+            dataType: "jsonp",
+            xhrFields: {withCredentials: true},
+            success: function (response) {
+                var document = (window.content) ? window.content.document : window.document;
+                var spanNode = document.getElementById("img-" + wikipedia);
+                if (response.query && spanNode) {
+                    if (response.query.pages[wikipedia]) {
+                        if (response.query.pages[wikipedia].thumbnail) {
+                            var imgUrl = response.query.pages[wikipedia].thumbnail.source;
+                            spanNode.innerHTML = '<img src="' + imgUrl + '"/>';
+                            // add to local cache for next time
+                            options.imgCache[lang + wikipedia] = imgUrl;
+                        }
+                    }
+                }
+            }
+        });
     }
 }
