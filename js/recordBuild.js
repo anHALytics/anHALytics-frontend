@@ -24,9 +24,7 @@ var buildrecord = function (index, node) {
 
         if (options.subcollection == "hal") {
 
-            result += '<strong> <a href="https://hal.archives-ouvertes.fr/'
-                    + repositoryDocId + '" target="_blank" style="color: #0094DE;text-decoration:underline;" alt="see resource on HAL">' + repositoryDocId + '</a></strong>\
-<a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + repositoryDocId +
+            result += '<a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + repositoryDocId +
                     '/document" target="_blank"><img class="img-thumbnail img-responsive" style="float:right; width: 70px" src="' +
                     'https://hal.archives-ouvertes.fr/' + repositoryDocId + '/thumb' + '" /></a>';
         }
@@ -126,17 +124,6 @@ var buildrecord = function (index, node) {
     if (title && (title.length > 1) && !titleAnnotated) {
         if (options['collection'] == 'npl') {
             var docid = id;
-            if (options.subcollection == "hal") {
-
-
-                // document type
-                var type =
-                        jsonObject[$.fn.facetview.record_metadata.typology];
-                if (type) {
-                    result += '<div class="row"><a href="publication.html?pubID=' + id + '"><span class="label pubtype" style="white-space:normal;">' + type + '</span></a></div>';
-                    //piece += '<p><strong>' + type + '</strong></p>';
-                }
-            }
             result += ' <div class="row" style="margin-bottom: 10px"><strong><a target="_blank" href="publication.html?pubID=' + id + '"><span id="titleNaked" pos="' + index + '" ';
             if (titleID) {
                 result += 'rel="' + titleID + '" ';
@@ -275,10 +262,10 @@ var buildrecord = function (index, node) {
 
     result += '<div class="row"><a id="button_abstract_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract/Keywords</a></div>';
 
-result += '</div>';
     result += '</div>';
-    
-result += '<div class="panel" >';
+    result += '</div>';
+
+    result += '<div class="panel" >';
 
     {
         var piece = "";
@@ -289,8 +276,20 @@ result += '<div class="panel" >';
         } else {
             piece += 'style="background-color:#ffffff;">';
         }
-        piece+= '<div class="col-md-8" style="margin-left:10px;">';
-        piece+= '<p class="innen_abstract" pos="' + index + '" rel="' + id + '"></p>';
+        piece += '<div class="col-md-8" style="margin-left:10px;">';
+        if (options.subcollection == "hal") {
+
+            piece += '<p><strong> <a href="https://hal.archives-ouvertes.fr/'
+                    + repositoryDocId + '" target="_blank" style="margin-right:10px; color: #0094DE;text-decoration:underline;" alt="see resource on HAL">' + repositoryDocId + '</a></strong>';
+            // document type
+            var type =
+                    jsonObject[$.fn.facetview.record_metadata.typology];
+            if (type) {
+                piece += '<a href="publication.html?pubID=' + id + '"><span class="label pubtype" style="white-space:normal;">' + type + '</span></a></p>';
+                //piece += '<p><strong>' + type + '</strong></p>';
+            }
+        }
+        piece += '<p class="innen_abstract" pos="' + index + '" rel="' + id + '"></p>';
 // keywords
         var keyword = null;
         var keywordIDs =
@@ -320,8 +319,8 @@ result += '<div class="panel" >';
         if (keyword && (keyword.length > 0) && (keyword.trim().indexOf(" ") != -1)) {
             piece += ' <p ><strong>Keywords: </strong> ' + keyword + '</p>';
         }
-        
-        piece+= '</div>';
+
+        piece += '</div>';
         // info box for the entities
         piece += '<div class="annotation_info col-md-4">';
         piece += '<span  id="detailed_annot-' + index + '" />';
