@@ -153,38 +153,54 @@ var buildrecord = function (index, node) {
 
 
     result += '<div class="row" style="margin-bottom: 10px" ><strong style="font-size:11px">';
-    var authorsLast = null;
-    var authorsFirst = null;
+//    var authorsLast = null;
+//    var authorsFirst = null;
+//
+//    authorsLast = jsonObject[$.fn.facetview.record_metadata.author_surname];
+//    var tempStr = "" + authorsLast;
+//    authorsLast = tempStr.split(",");
+//    authorsFirst = jsonObject[$.fn.facetview.record_metadata.author_forename];
+//    tempStr = "" + authorsFirst;
+//    authorsFirst = tempStr.split(",");
+//
+//    if (authorsLast.length < 4) {
+//        for (var author in authorsLast) {
+//            if (author === 0) {
+//                if (authorsFirst.length > 0) {
+//                    result += authorsFirst[0][0] + ". ";
+//                }
+//                result += authorsLast[0];
+//            } else {
+//                if (authorsFirst.length > author) {
+//                    result += authorsFirst[author][0] + ". ";
+//                }
+//                result += authorsLast[author];
+//
+//                if (author < authorsLast.length - 1)
+//                    result += ", ";
+//            }
+//        }
+//    } else {
+//        if (authorsFirst.length > 0) {
+//            result += authorsFirst[0][0] + ". ";
+//        }
+//        result += authorsLast[0] + ' et al.';
+//    }
 
-    authorsLast = jsonObject[$.fn.facetview.record_metadata.author_surname];
-    var tempStr = "" + authorsLast;
-    authorsLast = tempStr.split(",");
-    authorsFirst = jsonObject[$.fn.facetview.record_metadata.author_forename];
-    tempStr = "" + authorsFirst;
-    authorsFirst = tempStr.split(",");
-
-    if (authorsLast.length < 4) {
-        for (var author in authorsLast) {
-            if (author === 0) {
-                if (authorsFirst.length > 0) {
-                    result += authorsFirst[0][0] + ". ";
-                }
-                result += authorsLast[0];
-            } else {
-                if (authorsFirst.length > author) {
-                    result += authorsFirst[author][0] + ". ";
-                }
-                result += authorsLast[author];
-
-                if (author < authorsLast.length - 1)
-                    result += ", ";
-            }
+    var names =
+            jsonObject[$.fn.facetview.record_metadata.author_fullname];
+    if (names) {
+        var ids = jsonObject[$.fn.facetview.record_metadata.anhalyticsid];
+        for (var aut in names) {
+            if (ids)
+                var id_ = ids[aut];
+            var name_ = "";
+            if (aut == names.length - 1)
+                name_ = names[aut];
+            else
+                name_ = names[aut] + ', ';
+            result += '<a target="_blank" href="profile.html?authorID=' + id_ + '" >' + name_ + '</a>';
         }
-    } else {
-        if (authorsFirst.length > 0) {
-            result += authorsFirst[0][0] + ". ";
-        }
-        result += authorsLast[0] + ' et al.';
     }
 
     // book, proceedings or journal title
@@ -257,85 +273,25 @@ var buildrecord = function (index, node) {
     }
     result += '</strong></div>';
 
+    result += '<div class="row"><a id="button_abstract_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract/Keywords</a></div>';
 
-    //result += '</tr></table>';
-
-
-
-    result += '<div id="myGroup" class= "row"  style="padding-right:30px;">';
-
-    var names =
-            jsonObject[$.fn.facetview.record_metadata.author_fullname];
-
-
-    result += '<div class="panel" >';
-    //result += '<div class="row">';
-    result += '<div class="col-md-4"><a id="button_abs_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Abstract</a></div>';
-    result += '<div class="col-md-4"><a id="button_authors_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#authors_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Authors (' + names.length + ')</a></div>';
-    result += '<div class="col-md-4"><a id="button_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span>Keywords</a></div>';
-    //result += '</div>';
-
+result += '</div>';
+    result += '</div>';
+    
+result += '<div class="panel" >';
 
     {
         var piece = "";
-        piece += '<div id="abstract_' + index +
-                '" class="innen_abstract row collapse " pos="' + index + '" rel="' + id + '"';
+        piece += '<div id="abstract_keywords_' + index +
+                '" class=" row collapse "';
         if (index % 2) {
             piece += 'style="background-color:#f8f8f8;">';
         } else {
             piece += 'style="background-color:#ffffff;">';
         }
-
-        piece += '</div>';
-    }
-    result += piece;
-
-    {
-        var piece = "";
-        piece += '<div id="authors_' + index +
-                '" class="collapse" pos="' + index + '" rel="' + id + '"';
-        if (index % 2) {
-            piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
-        } else {
-            piece += 'style="background-color:#ffffff;">';
-        }
-
-        piece += '<div class="col-md-12">';
-
-        // authors and affiliation
-
-
-        if (names) {
-            var ids = jsonObject[$.fn.facetview.record_metadata.anhalyticsid];
-            piece += '<div class="row">';
-            for (var aut in names) {
-                if (ids)
-                    var id_ = ids[aut];
-                var name_ = names[aut];
-                piece += '<div class="col-md-3"><a target="_blank" href="profile.html?authorID=' + id_ + '" >' + name_ + '</a></div>';
-            }
-            piece += '</div>';
-        }
-
-        piece += '</div>';
-        piece += '</div>';
-    }
-    result += piece;
-
-
-    {
-
-        var piece = "";
-        piece += '<div id="keywords_' + index +
-                '" class="row collapse" pos="' + index + '" rel="' + id + '"';
-        if (index % 2) {
-            piece += 'style="background-color:#f8f8f8; padding-right:0px;">';
-        } else {
-            piece += 'style="background-color:#ffffff;">';
-        }
-
-        piece += '<div class="col-md-8">';
-        // keywords
+        piece+= '<div class="col-md-8" style="margin-left:10px;">';
+        piece+= '<p class="innen_abstract" pos="' + index + '" rel="' + id + '"></p>';
+// keywords
         var keyword = null;
         var keywordIDs =
                 jsonObject[$.fn.facetview.record_metadata.keywordsid];
@@ -364,23 +320,16 @@ var buildrecord = function (index, node) {
         if (keyword && (keyword.length > 0) && (keyword.trim().indexOf(" ") != -1)) {
             piece += ' <p ><strong>Keywords: </strong> ' + keyword + '</p>';
         }
-
-        piece += '</div>';
-
+        
+        piece+= '</div>';
         // info box for the entities
-        piece += '<div class="annotation_info">';
+        piece += '<div class="annotation_info col-md-4">';
         piece += '<span  id="detailed_annot-' + index + '" />';
         piece += "</div>";
-
-        piece += "</div>";
-
+        piece += '</div>';
     }
     result += piece;
 
-    result += '</div>';
-    result += '</div>';
-
-    result += '</div>';
     result += '</div>';
 
     result += '<div class="row">';
@@ -557,7 +506,7 @@ var buildrecord = function (index, node) {
             }
         }
     }
-result += '</div>';
+    result += '</div>';
     result += '</div>';
 
     result += '</div>';
@@ -687,12 +636,10 @@ var displayAbstract = function (data, index) {
                 }
             }
         }
-        piece += '<div class="col-md-12">';
 
         if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
-            piece += '<p id="abstractNaked" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</p>';
+            piece += '<strong>Abstract: </strong><span id="abstractNaked" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</span>';
         }
-        piece += '</div>';
 
         $('.innen_abstract[rel="' + docid + '"]').append(piece);
 
