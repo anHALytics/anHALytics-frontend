@@ -673,9 +673,6 @@
             } else if (options.facets[idx]['type'] == 'tag') {
                 cloud($(this).attr('rel'), $(this).attr('href'), parentWidth * 0.8,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
-            } else {
-                bubble($(this).attr('rel'), parentWidth * 0.8,
-                        'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
             }
 
         };
@@ -1352,123 +1349,6 @@
                     .root.canvas(place)
                     // And render it.
                     .render();
-        };
-
-        var bubble = function (facetidx, width, place, update) {
-            var facetkey = options.facets[facetidx]['display'];
-            var facetfield = options.facets[facetidx]['field'];
-            var facets = options.data['facets'][facetkey];
-            if (facets.length === 0) {
-                $('#' + place).hide();
-                return;
-            } else {
-                var siz = 0;
-                for (var item in facets) {
-                    siz++;
-                }
-                if (siz === 0) {
-                    $('#' + place).hide();
-                    return;
-                }
-            }
-            $('#' + place).show();
-
-            var data = {"children": []};
-            var count = 0;
-            var numb = 0;
-            for (var fct in facets) {
-                if (numb >= options.facets[facetidx]['size']) {
-                    break;
-                }
-
-                var arr = {
-                    "className": fct,
-                    "packageName": count++,
-                    "value": facets[fct]
-                };
-                data["children"].push(arr);
-                numb++;
-            }
-
-            var r = width,
-                    format = d3.format(",d"),
-                    fill = d3.scale.linear().domain([0, 5]).range(["#FF7700", "#FCE6D4"]);
-            var bubblee = d3.layout.pack()
-                    .sort(null)
-                    .size([r, r]);
-
-            var vis = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2");
-            if (update) {
-                vis.selectAll("svg").remove();
-            }
-
-            vis = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2").append("svg:svg")
-                    .attr("width", r * 1.5)
-                    .attr("height", r)
-                    .attr("class", "bubble");
-            var node = vis.selectAll("g.node")
-                    .data(bubblee(data)
-                            .filter(function (d) {
-                                return !d.children;
-                            }))
-                    .enter().append("svg:g")
-                    .attr("class", "node")
-                    .attr("transform", function (d) {
-                        return "translate(" + d.x + "," + d.y + ")";
-                    });
-            node.append("svg:title")
-                    .text(function (d) {
-                        if (d.data)
-                            return d.data.className + ": " + format(d.data.value);
-                        else
-                            return d.className + ": " + format(d.value);
-                    });
-            node.append("svg:circle")
-                    .attr("r", function (d) {
-                        return d.r;
-                    })
-                    .style("fill", function (d) {
-                        if (d.data)
-                            return fill(d.data.packageName);
-                        else
-                            return fill(d.packageName);
-                    });
-            node.on('click', function (d) {
-                if (d.data)
-                    clickGraph(facetfield, facetkey, d.data.className, d.data.className);
-                else
-                    clickGraph(facetfield, facetkey, d.className, d.className);
-            });
-
-            var vis2 = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2").select("svg")
-                    .append("svg")
-                    .attr("width", r * 1.5)
-                    .attr("height", r)
-                    .selectAll("g.node")
-                    .data(bubblee(data)
-                            .filter(function (d) {
-                                return !d.children;
-                            }))
-                    .enter().append("svg:g")
-                    .attr("class", "node")
-                    .attr("transform", function (d) {
-                        return "translate(" + d.x + "," + d.y + ")";
-                    })
-                    .append("svg:text")
-                    .attr("text-anchor", "middle")
-                    .attr("dy", ".3em")
-                    .text(function (d) {
-                        if (d.data && d.data.className)
-                            return d.data.className.substr(0, 10) + ".. (" + d.data.value + ")";
-                        else if (d.className)
-                            return d.className.substr(0, 10) + ".. (" + d.value + ")";
-                    })
-                    .on("mousedown", function (d) {
-                        if (d.data)
-                            clickGraph(facetfield, facetkey, d.data.className, d.data.className);
-                        else
-                            clickGraph(facetfield, facetkey, d.className, d.className);
-                    });
         };
 
         var cloud = function (facetidx, facetkey, width, place, update) {
