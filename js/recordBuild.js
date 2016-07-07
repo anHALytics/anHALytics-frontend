@@ -322,7 +322,7 @@ var buildrecord = function (index, node) {
 
         piece += '</div>';
         // info box for the entities
-        piece += '<div class="annotation_info col-md-4">';
+        piece += '<div class="col-md-4" style="margin-right:-10px;">';
         piece += '<span  id="detailed_annot-' + index + '" />';
         piece += "</div>";
         piece += '</div>';

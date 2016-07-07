@@ -135,7 +135,7 @@ var displayAnnotations = function (data, index, id, origin) {
             if (origin == "abstract") {
                 text = text.substring(0, start) +
                         '<span id="annot-abs-' + index + '-' + (entities.length - m - 1) +
-                        '" rel="popover" data-color="' + label + '">' +
+                        '" data-color="' + label + '">' +
                         '<span class="label ' + label +
                         '" style="cursor:hand;cursor:pointer;white-space: normal;" >'
                         + text.substring(start, end) + '</span></span>'
@@ -143,14 +143,14 @@ var displayAnnotations = function (data, index, id, origin) {
             } else if (origin == "keyword") {
                 text = text.substring(0, start) +
                         '<span id="annot-key-' + index + '-' + (entities.length - m - 1) + '-' + id
-                        + '" rel="popover" data-color="' + label + '">' +
+                        + '" data-color="' + label + '">' +
                         '<span class="label ' + label + '" style="cursor:hand;cursor:pointer;" >'
                         + text.substring(start, end) + '</span></span>'
                         + text.substring(end, text.length + 1);
             } else {
                 text = text.substring(0, start) +
                         '<span id="annot-' + index + '-' + (entities.length - m - 1) +
-                        '" rel="popover" data-color="' + label + '">' +
+                        '" data-color="' + label + '">' +
                         '<span class="label ' + label + '" style="cursor:hand;cursor:pointer;" >'
                         + text.substring(start, end) + '</span></span>'
                         + text.substring(end, text.length + 1);
@@ -167,33 +167,19 @@ var displayAnnotations = function (data, index, id, origin) {
     for (var m in entities) {
         // set the info box
         if (origin == "abstract") {
-            $('#annot-abs-' + index + '-' + m).click(viewEntity);
+            $('#annot-abs-' + index + '-' + m).hover(viewEntity);
 
-            $('#annot-abs-' + index + '-' + m).popover({
-                html: true,
-                placement: $.fn.placement,
-                //trigger:'hover',
-                content: function () {
-                    return $('#detailed_annot-' + index).html();
-                }});
+//            $('#annot-abs-' + index + '-' + m).popover({
+//                html: true,
+//                placement: $.fn.placement,
+//                //trigger:'hover',
+//                content: function () {
+//                    return $('#detailed_annot-' + index).html();
+//                }});
         } else if (origin == "keyword") {
             $('#annot-key-' + index + '-' + m + '-' + id).hover(viewEntity);
-            $('#annot-key-' + index + '-' + m + '-' + id).popover({
-                html: true,
-                placement: $.fn.placement,
-                trigger: 'hover',
-                content: function () {
-                    return $('#detailed_annot-' + index).html();
-                }});
         } else {
-            $('#annot-' + index + '-' + m).click(viewEntity);
-            $('#annot-' + index + '-' + m).popover({
-                html: true,
-                placement: $.fn.placement,
-                //trigger:'hover',
-                content: function () {
-                    return $('#detailed_annot-' + index).html();
-                }});
+            $('#annot-' + index + '-' + m).hover(viewEntity);
         }
     }
 }
@@ -311,7 +297,6 @@ function viewEntity(event) {
 
         var start = parseInt(entity.offsetStart, 10);
         var end = parseInt(entity.offsetEnd, 10);
-
         var subType = entity.subtype;
         var conf = entity.nerd_score;
         if (conf && conf.length > 4)
@@ -387,5 +372,6 @@ function viewEntity(event) {
 
         string += "</div></div>";
         $('#detailed_annot-' + resultIndex).html(string);
+        $('#detailed_annot-'+resultIndex).show();
     }
 }
