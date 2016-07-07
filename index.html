@@ -6,8 +6,8 @@
         <link rel="icon" type="image/x-icon" href="data/images/favicon.ico"/> 
         <link rel="shortcut icon" type="image/x-icon" href="data/images/favicon.ico"/>
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
-
-        <link rel="stylesheet" href="bower_components/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" type="text/css"/>
+        <!--
+                <link rel="stylesheet" href="bower_components/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" type="text/css"/>-->
         <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"/>
         <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">
@@ -21,7 +21,7 @@
         <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>  
 
-        <script type="text/javascript" src="bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
+        <!--        <script type="text/javascript" src="bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>-->
         <script type="text/javascript" src="lib/linkify/1.0/jquery.linkify-1.0-min.js"></script>
         <script type="text/javascript" src="bower_components/d3/d3.min.js "></script>
         <script type="text/javascript" src="bower_components/d3-cloud/build/d3.layout.cloud.js "></script>
@@ -50,13 +50,13 @@
                 facets: [
                     {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub', 'display': 'publication_date', 'type': 'date', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halDomain_abbrev', 'display': 'subject-headers', 'size': 20, 'type': 'taxonomy', 'view': 'graphic'},
-                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term', 'display': 'keywords', 'size': 10, 'type': 'tag', 'view': 'graphic'},
+                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.notAnalyzed', 'display': 'keywords', 'size': 10, 'type': 'tag', 'view': 'graphic'},
                     {'field':
                                 '$teiCorpus.$teiHeader.$profileDesc.$langUsage.$language', 'display': 'language', 'size': 6, 'type': 'country', 'view': 'graphic'},
                     {'field':
                                 '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$desc.$address.key', 'display': 'country', 'size': 6, 'type': 'country', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$orgName', 'display': 'Organisation', 'size': 6, 'type': 'entity', 'view': 'textual'},
-                    {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$fullName', 'display': 'Author', 'size': 10, 'type': 'entity', 'view': 'graphic'},
+                    {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$fullName.notAnalyzed', 'display': 'Author', 'size': 10, 'type': 'entity', 'view': 'graphic'},
                     {'field':
                                 '$teiCorpus.$standoff.$nerd.preferredTerm', 'display': 'concepts', 'size': 10, 'type': 'entity', 'view': 'textual'},
                     {'field':
@@ -69,17 +69,18 @@
                 id: "_id",
                 repositoryDocId: "repositoryDocId",
                 title: "$teiCorpus.$teiHeader.$fileDesc.$titleStmt.$title.$title-first",
+                abstract: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
                 titleid: "$teiCorpus.$teiHeader.$fileDesc.$titleStmt.xml:id",
                 datepub: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub",
                 monogr_title: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
                 author_surname: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$surname",
                 author_forename: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$forename",
-                author_fullname: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$fullName",
+                author_fullname: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$fullName.analyzed",
                 doi: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$idno.$type_doi",
                 anhalyticsid: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$idno.$type_anhalyticsID",
                 typology: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology",
                 keywordsid: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id",
-                keywords: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term"
+                keywords: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.analyzed",
             };
 
 
@@ -88,7 +89,8 @@
         <script type="text/javascript" src="search/hal.facetview.js"></script>
 
         <script type="text/javascript">
-
+            $(function () {
+            });
             $(function () {
 
 
@@ -105,9 +107,6 @@
                 });
             });
 
-            $(document).ready(function () {
-                
-            });
         </script>
     </head>
 
@@ -120,7 +119,7 @@
                 <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a href="https://hal.archives-ouvertes.fr/" target="_blank"><img src="data/images/hal.logo.png"  style="padding-left:40px;padding-top:10px;width:140px;"></a></div>
                 <div class="col-lg-4 col-md-5 col-sm-5 col-xs-4 no-padding"></div>
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-4 pull-right no-padding"><small><span style="padding-left:40px;color:#AE0C0C;position:relative; float:right;">
-                             <a href="">Documentation</a>
+                            <a href="">Documentation</a>
                             <a href="index.html?mode_query=simple">simple</a> 
                             <a href="dashboard.html">dashboard</a>
                         </span></small></div>
@@ -141,36 +140,13 @@
                             <div id="facetview_filters"></div>
                         </div>
                         <div class="col-md-9" id="facetview_rightcol" style="position:relative;" >
-
-                            <div id="facetview_searchbar" class="row input-group">
-                                <div class="input-group-btn"> 
-                                    <select id="example-single">
-                                        <option value="all">All</option>
-                                        <option value="author_fullname">Author</option>
-                                        <option value="keywords">Keyword</option>
-                                        <option value="abstract">Abstract</option>
-                                        <option value="title">Title</option>
-                                    </select>
-
-                                </div>         <input type="text" class="form-control" id="facetview_freetext" name="q" value="" aria-describedby="sizing-addon1" placeholder="search term" autofocus />
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="glyphicon glyphicon-cog"></span>
-                                        <span class="caret"></span></button>
-                                    <ul class="dropdown-menu">
-                                        <li><a id="facetview_partial_match" href="">partial match</a></li>
-                                        <li><a id="facetview_exact_match" href="">exact match</a></li>
-                                        <li><a id="facetview_fuzzy_match" href="">fuzzy match</a></li>
-                                        <li><a id="facetview_match_all" href="">match all</a></li>
-                                        <li><a id="facetview_match_any" href="">match any</a></li>
-                                        <li><a href="#">clear all</a></li>
-                                        <li class="divider"></li>
-                                        <li><a target="_blank" href="http://lucene.apache.org/java/2_9_1/queryparsersyntax.html">query syntax doc.</a></li>
-                                        <li class="divider"></li>
-                                        <li><a id="facetview_howmany" href="#">results per page ({{HOW_MANY}})</a></li>
-                                    </ul>
-                                    <button type="button" id="disambiguate" class="btn" disabled="true" data-toggle="button">Disamb./Expand</button>
-                                </div>
+                            <div style="text-align:left; min-width:20%;margin-bottom:10px;" class="row">
+                                <button class="btn btn-default" id="facetview_fieldbuttons" href="" type="button">                           
+                                    <i class="glyphicon glyphicon-plus"></i> add new search field                        
+                                </button>
+                            </div>
+                            <div id="facetview_searchbars">
+                                
                             </div>
                             <div style="clear:both;" id="facetview_selectedfilters"></div>
                             <div class="row" id="results_summary"></div>

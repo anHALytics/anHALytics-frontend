@@ -157,17 +157,17 @@ piece += '</div></div>';
     return piece;
 };
 
-var activateDisambButton = function () {
+var activateDisambButton = function (num) {
     //console.log($('#facetview_freetext').val());
     //if ($('#facetview_freetext').val()) {
-        $('#disambiguate').attr("disabled", false);
+        $('#disambiguate'+num).attr("disabled", false);
 //    }
 //    else {
 //        $('#disambiguate').attr("disabled", true);
 //    }
 };
 
-var deactivateDisambButton = function () {
+var deactivateDisambButton = function (num) {
 
-        $('#disambiguate').attr("disabled", true);
+        $('#disambiguate'+num).attr("disabled", true);
 };

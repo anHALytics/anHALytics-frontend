@@ -98,7 +98,7 @@
                             'btn btn-info" rel="' + $(this).attr("rel") +
                             '" alt="remove" title="remove"' +
                             ' href="' + $(this).attr("href") + '">';
-                    newobj += $(this).attr("display")+":";
+                    newobj += $(this).attr("display") + ":";
                     if ($(this).html().trim().length > 0)
                         newobj += $(this).html().replace(/\(.*\)/, '');
                     else
@@ -115,7 +115,7 @@
                         'btn btn-info" rel="' + $(this).attr("rel") +
                         '" alt="remove" title="remove"' +
                         ' href="' + $(this).attr("href") + '">';
-                newobj += $(this).attr("display")+":";
+                newobj += $(this).attr("display") + ":";
                 if ($(this).html().trim().length > 0)
                     newobj += $(this).html().replace(/\(.*\)/, '');
                 else
@@ -356,7 +356,7 @@
                         var years = theDate.getFullYear();
                         var append = '<li><a class="facetview_filterchoice' +
                                 '" rel="' + options.facets[each]['field'] +
-                                '" href="' + item + '" display="'+options.facets[each]['display']+'">' +years +
+                                '" href="' + item + '" display="' + options.facets[each]['display'] + '">' + years +
                                 ' (' + addCommas(records[item]) + ')</a></li>';
                         $('#facetview_' + options.facets[each]['display']).append(append);
                     }
@@ -372,8 +372,8 @@
                         if (options.facets[each]['display'].indexOf('class') != -1)
                             item2 = item.replace(/\s/g, '');
                         var append = '<li><a class="facetview_filterchoice' +
-                                '" rel="' + options.facets[each]['field'] + '" href="' + item + '" display="'+options.facets[each]['display']+'">'
-                                
+                                '" rel="' + options.facets[each]['field'] + '" href="' + item + '" display="' + options.facets[each]['display'] + '">'
+
                                 + item2 +
                                 ' (' + addCommas(records[item]) + ')</a></li>';
                         $('#facetview_' + options.facets[each]['display']).append(append);
@@ -1538,7 +1538,7 @@
                     'btn btn-info" rel="' + facetfield +
                     '" alt="remove" title="remove"' +
                     ' href="' + facetValue + '">' +
-                    facetKey+":"+facetValueDisplay + ' <i class="glyphicon glyphicon-remove"></i></a>';
+                    facetKey + ":" + facetValueDisplay + ' <i class="glyphicon glyphicon-remove"></i></a>';
             $('#facetview_selectedfilters').append(newobj);
             $('.facetview_filterselected').unbind('click', clearfilter);
             $('.facetview_filterselected').bind('click', clearfilter);
@@ -1553,7 +1553,9 @@
         // ===============================================
 
         var disambiguateNERD = function () {
-            var queryText = $('#facetview_freetext').val();
+            var thenum = $(this).attr("id").match(/\d+/)[0] // "3"
+            var queryText = $('#facetview_freetext' + thenum).val();
+            console.log($('#disambiguation_panel').children().length > 0);
             if ($('#disambiguation_panel').children().length > 0)
                 $('#disambiguation_panel').empty();
             else
@@ -1591,7 +1593,7 @@
 
             var jsonObject = parseDisambNERD(sdata);
 
-            $('#disambiguation_panel').empty();
+            //$('#disambiguation_panel').empty();
 
             /*for (var surf in jsonObject['paraphrases']) {
              piece += '<p>' + jsonObject['paraphrases'][surf] + '</p>';
@@ -1813,7 +1815,7 @@
             !options.paging.from ? options.paging.from = 0 : "";
 
             // set any default search values into the search bar
-            $('#facetview_freetext').val() == "" && options.q != "" ? $('#facetview_freetext').val(options.q) : ""
+//            $('#facetview_freetext').val() == "" && options.q != "" ? $('#facetview_freetext').val(options.q) : ""
 
             // append the filters to the facetview object
             buildfilters();
@@ -1827,40 +1829,77 @@
 
         };
 
-
-
-
-
-        $('#disambiguate').click(disambiguateNERD);
         $('#disambiguation_panel').hide();
 
-        // ===============================================
-        // now create the plugin on the page
-        return $(document).ready(function (e) {
+        var searchbar = '<div id="facetview_searchbar{{NUMBER}}" class="row input-group clonedDiv">\
+<div class="btn-group">\
+<button id="selected-tei-field{{NUMBER}}" class=" btn btn-default dropdown-toggle" data-toggle="dropdown" >\
+all<span class="caret"></span>\
+</button>\
+<ul class="dropdown-menu tei-fields">\
+<li><a href="#">all</a></li>\
+<li><a href="#">author</a></li>\
+<li><a href="#">title</a></li>\
+<li><a href="#">abstract</a></li>\
+<li><a href="#">keyword</a></li>\
+</ul>\
+</div>\
+<div class="btn-group"> \
+<button id="selected-lang-field{{NUMBER}}" class=" selected-lang-field btn btn-default dropdown-toggle" data-toggle="dropdown">\
+all<span class="caret"></span>\
+</button>\
+<ul class="dropdown-menu lang-fields">\
+<li><a href="#">all</a></li>\
+<li><a href="#">en</a></li>\
+<li><a href="#">fr</a></li>\
+<li><a href="#">de</a></li>\
+</ul>\
+</div>  \
+<div class="btn-group"> \
+<button id="selected-bool-field{{NUMBER}}" class="selected-bool-field btn btn-default dropdown-toggle" data-toggle="dropdown">\
+should<span class="caret"></span>\
+</button>\
+<ul class="dropdown-menu bool-fields">\
+<li><a href="#">should</a></li>\
+<li><a href="#">must</a></li>\
+<li><a href="#">must_not</a></li>\
+</ul>\
+</div>\
+<div style="min-width: 300px;" class="btn-group">\
+<input type="text" class="form-control" id="facetview_freetext{{NUMBER}}" name="q" value="" aria-describedby="sizing-addon1" placeholder="search term" autofocus />\
+</div>\
+<div class="btn-group">\
+<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+<span class="glyphicon glyphicon-cog"></span>\
+<span class="caret"></span></button>\
+<ul class="dropdown-menu">\
+<li><a id="facetview_partial_match" href="">partial match</a></li>\
+<li><a id="facetview_exact_match" href="">exact match</a></li>\
+<li><a id="facetview_fuzzy_match" href="">fuzzy match</a></li>\
+<li><a id="facetview_match_all" href="">match all</a></li>\
+<li><a id="facetview_match_any" href="">match any</a></li>\
+<li><a href="#">clear all</a></li>\
+<li class="divider"></li>\
+<li><a target="_blank" href="http://lucene.apache.org/java/2_9_1/queryparsersyntax.html">query syntax doc.</a></li>\
+<li class="divider"></li>\
+<li><a id="facetview_howmany" href="#">results per page ({{HOW_MANY}})</a></li>\
+</ul>\
+<button type="button" id="disambiguate{{NUMBER}}" class="btn btn-default" disabled="true" data-toggle="button">Disamb./Expand</button>\
+</div>\
+</div>';
 
-            var url_options = $.getUrlVars();
-            // update the options with the latest q value
-            options.q = url_options.q;
-            $('#example-single').val(url_options.mode);
-            $('#example-single').multiselect({
-                onChange: function (element, checked) {
-                    options.brands = $('#example-single option:selected');
-                    
-                    //window.location.href = window.location.href.replace(/[\?#].*|$/, "?mode=" + brands.val());
-                }
-            });
 
-            $("#facetview_freetext").keyup(function (e) {
-                
-                // get this object
-                obj = $(this);
-                options.q = $("#facetview_freetext").val();
+        var keyPress = function (e) {
 
-                if (options.q)
-                    activateDisambButton();
-                else
-                    deactivateDisambButton();
-                if (e.keyCode == 13 && (options.q || $("#facetview_selectedfilters").children().length > 0)) {
+            // get this object
+            obj = $(this);
+            options.q = $(this).val();
+            var thenum = $(this).attr("id").match(/\d+/)[0] // "3"
+            if (options.q)
+                activateDisambButton(thenum);
+            else
+                deactivateDisambButton(thenum);
+            if (e.keyCode == 13 && (options.q || $("#facetview_selectedfilters").children().length > 0)) {
 //                    if (url_options.mode)
 //                        window.location.href = window.location.href.replace(/[\&#].*|$/, "&q=" + options.q);
 //                    else
@@ -1868,37 +1907,95 @@
 //
 //                    options.q = unescape(options.q);
 //                    activateDisambButton();
-                    console.log(options.q);
 //                    $("#facetview_freetext").text(options.q);
-                    // check for remote config options, then do first search
-                    if (options.config_file) {
-                        $.ajax({
-                            type: "get",
-                            url: options.config_file,
-                            dataType: "jsonp",
-                            success: function (data) {
-                                options = $.extend(options, data);
-                                whenready();
-                            },
-                            error: function () {
-                                $.ajax({
-                                    type: "get",
-                                    url: options.config_file,
-                                    success: function (data) {
-                                        options = $.extend(options, $.parseJSON(data));
-                                        whenready();
-                                    },
-                                    error: function () {
-                                        whenready();
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                        whenready();
-                    }
+                // check for remote config options, then do first search
+                if (options.config_file) {
+                    $.ajax({
+                        type: "get",
+                        url: options.config_file,
+                        dataType: "jsonp",
+                        success: function (data) {
+                            options = $.extend(options, data);
+                            whenready();
+                        },
+                        error: function () {
+                            $.ajax({
+                                type: "get",
+                                url: options.config_file,
+                                success: function (data) {
+                                    options = $.extend(options, $.parseJSON(data));
+                                    whenready();
+                                },
+                                error: function () {
+                                    whenready();
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    whenready();
                 }
+            }
+        }
+
+
+        // ===============================================
+        // now create the plugin on the page
+        return $(document).ready(function (e) {
+
+
+
+            $("#facetview_searchbars").append(searchbar.replace(/{{NUMBER}}/gi, "1"));
+            $("#facetview_freetext1").keyup(keyPress);
+            $('#disambiguate1').click(disambiguateNERD);
+            
+            $("#facetview_fieldbuttons").on("click", function () {
+                var cloneIndex = $(".clonedDiv").length + 1;
+                $("#facetview_searchbars").append(searchbar.replace(/{{NUMBER}}/gi, cloneIndex));
+                $(".tei-fields li a").click(function () {
+                    var selText = $(this).text();
+                    $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
+                });
+                $(".lang-fields li a").click(function () {
+                    var selText = $(this).text();
+                    $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
+                });
+                $(".bool-fields li a").click(function () {
+                    var selText = $(this).text();
+                    $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
+                });
+                $("#facetview_freetext" + cloneIndex).keyup(keyPress);
+
+                $('#disambiguate' + cloneIndex).click(disambiguateNERD);
+                cloneIndex++;
             });
+
+            $(".tei-fields li a").click(function () {
+                var selText = $(this).text();
+                $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
+            });
+            $(".lang-fields li a").click(function () {
+                var selText = $(this).text();
+                $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
+            });
+            $(".bool-fields li a").click(function () {
+                var selText = $(this).text();
+                $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
+            });
+
+
+//            var url_options = $.getUrlVars();
+//            // update the options with the latest q value
+//            options.q = url_options.q;
+//            $('#example-single').val(url_options.mode);
+//            $('#example-single').multiselect({
+//                onChange: function (element, checked) {
+//                    options.brands = $('#example-single option:selected');
+//                    
+//                    //window.location.href = window.location.href.replace(/[\?#].*|$/, "?mode=" + brands.val());
+//                }
+//            });
+
         });
 
     };

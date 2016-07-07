@@ -100,24 +100,100 @@ var elasticSearchQuery = function () {
             var obj4 = {'filter': obj};
         }
 
-        if ($('#facetview_freetext').val() == "") {
-            obj4['query'] = {'match_all': {}};
-            qs['sort'] = [date];
+//        if ($('#facetview_freetext').val() == "") {
+//            obj4['query'] = {'match_all': {}};
+//            qs['sort'] = [date];
+//
+//        } else {
+        //obj4['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}};
+        var thenum;
+        var obj3 = {'bool': {'should': [],
+            'must': [],'must_not': []}};
+        var rule;
+        var field;
+        $('#facetview_searchbars').children('.clonedDiv').each(function (i) {
+            thenum = $(this).attr("id").match(/\d+/)[0] // "3"
+            if ($('#facetview_freetext' + thenum).val() != "") {
+                var obj6 = {'query_string': {}};
+                rule = $('#selected-bool-field' + thenum).text().trim();
+                field = $('#selected-tei-field' + thenum).text().trim();
+                if (field == "all")
+                    obj6['query_string'] = {'default_field': "_all",'query' :$('#facetview_freetext' + thenum).val()};
+                else if (field == "title")
+                    obj6['query_string'] = {'default_field': record_metadata.title,'query' :$('#facetview_freetext' + thenum).val()};
+                else if (field == "abstract")
+                    obj6['query_string'] = {'default_field':record_metadata.abstract, 'query':$('#facetview_freetext' + thenum).val()};
+                else if (field == "keyword")
+                    obj6['query_string'] = {'default_field':record_metadata.keywords, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                else if (field == "author")
+                    obj6['query_string'] = {'default_field':record_metadata.author_fullname, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                if (rule == "should") {
+                    obj3['bool']['should'].push(obj6);
+                } else if (
+                        rule = "must") {
+                    obj3['bool']['must'].push(obj6);
 
-        } else
-            obj4['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}};
+                } else if (rule = "must_not") {
+                    obj3['bool']['must_not'].push(obj6);
+                }
+                queried_fields.push(obj6['query_string']['default_field']);
+                //obj6['match'][ record_metadata.title ] = $('#facetview_freetext' + thenum).val();
+                //obj6['match'][ 'default_operator' ] = 'AND';
+                //
+            }
+        });
+obj4['query'] = obj3;
+        //}
         qs['query'] = {'filtered': obj4};
         //qs['query'] = {'bool': bool}
     } else {
-        if ($('#facetview_freetext').val() != "") {
-            qs['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}}
-        } else {
-            if (!filtered) {
-                qs['query'] = {'match_all': {}};
-            }
-            qs['sort'] = [date];
+        var thenum;
+        var obj3 = {'bool': {'should': [],
+            'must': [],'must_not': []}};
+        var rule;
+        var field;
+        $('#facetview_searchbars').children('.clonedDiv').each(function (i) {
+            thenum = $(this).attr("id").match(/\d+/)[0] // "3"
+            if ($('#facetview_freetext' + thenum).val() != "") {
+                var obj6 = {'query_string': {}};
+                rule = $('#selected-bool-field' + thenum).text().trim();
+                field = $('#selected-tei-field' + thenum).text().trim();
+                if (field == "all")
+                    obj6['query_string'] = {'default_field': "_all",'query' :$('#facetview_freetext' + thenum).val()};
+                else if (field == "title")
+                    obj6['query_string'] = {'default_field': record_metadata.title,'query' :$('#facetview_freetext' + thenum).val()};
+                else if (field == "abstract")
+                    obj6['query_string'] = {'default_field':record_metadata.abstract, 'query':$('#facetview_freetext' + thenum).val()};
+                else if (field == "keyword")
+                    obj6['query_string'] = {'default_field':record_metadata.keywords, 'query': $('#facetview_freetext' + thenum).val()};
+                else if (field == "author")
+                    obj6['query_string'] = {'default_field':record_metadata.author_fullname, 'query': $('#facetview_freetext' + thenum).val()};
+                if (rule == "should") {
+                    obj3['bool']['should'].push(obj6);
+                } else if (
+                        rule = "must") {
+                    obj3['bool']['must'].push(obj6);
 
-        }
+                } else if (rule = "must_not") {
+                    obj3['bool']['must_not'].push(obj6);
+                }
+                
+                queried_fields.push(obj6['query_string']['default_field']);
+                //obj6['match'][ record_metadata.title ] = $('#facetview_freetext' + thenum).val();
+                //obj6['match'][ 'default_operator' ] = 'AND';
+                //
+            }
+        });
+        qs['query'] = obj3;
+//        if ($('#facetview_freetext').val() != "") {
+//            qs['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}}
+//        } else {
+//            if (!filtered) {
+//                qs['query'] = {'match_all': {}};
+//            }
+//            qs['sort'] = [date];
+
+        //}
     }
 
     // set any paging
@@ -151,17 +227,17 @@ var elasticSearchQuery = function () {
         }
     }
     // set snippets/highlight
-    if (queried_fields.length === 0) {
-        queried_fields.push("_all");
-    }
+//    if (queried_fields.length === 0) {
+//        queried_fields.push("_all");
+//    }
     qs['highlight'] = {};
     qs['highlight']['fields'] = {};
     for (var fie in queried_fields) {
-        if (options['snippet_style'] == 'andlauer') {
-            qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 100};
-        } else {
+//        if (options['snippet_style'] == 'andlauer') {
+//            qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 100};
+//        } else {
             qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 3};
-        }
+        //}
     }
     qs['highlight']['order'] = 'score';
     qs['highlight']['pre_tags'] = ['<strong>'];
