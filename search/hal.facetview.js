@@ -1729,7 +1729,7 @@ should<span class="caret"></span>\
 <li><a href="#">must_not</a></li>\
 </ul>\
 </div>\
-<div style="min-width: 320px;" class="btn-group">\
+<div style="min-width: 300px;" class="btn-group">\
 <input type="text" class="form-control" id="facetview_freetext{{NUMBER}}" name="q" value="" aria-describedby="sizing-addon1" placeholder="search term" autofocus />\
 </div>\
 <div class="btn-group">\
