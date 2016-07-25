@@ -1748,7 +1748,7 @@ should<span class="caret"></span>\
 <li class="divider"></li>\
 <li><a id="facetview_howmany" href="#">results per page ({{HOW_MANY}})</a></li>\
 </ul>\
-<button type="button" id="disambiguate{{NUMBER}}" class="btn btn-default" disabled="true" data-toggle="button">Disamb./Expand</button>\
+<button type="button" id="disambiguate{{NUMBER}}" class="btn btn-default" disabled="true" data-toggle="button">Disambiguate</button>\
 </div>\
 <div class="btn-group" style="margin-left:10px"><a id="close-searchbar{{NUMBER}}" style="display:none" onclick=\'$("#facetview_searchbar{{NUMBER}}").remove()\'><span class="glyphicon glyphicon-remove"></span></a></div>\
 </div>';
