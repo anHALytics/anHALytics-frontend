@@ -32,7 +32,7 @@
                             "match": {
                                 _id: url_options.pubID
                             }
-                        },
+                        }
             }
 
         }).then(function (response) {
