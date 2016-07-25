@@ -1729,7 +1729,7 @@ should<span class="caret"></span>\
 <li><a href="#">must_not</a></li>\
 </ul>\
 </div>\
-<div style="min-width: 300px;" class="btn-group">\
+<div style="min-width: 320px;" class="btn-group">\
 <input type="text" class="form-control" id="facetview_freetext{{NUMBER}}" name="q" value="" aria-describedby="sizing-addon1" placeholder="search term" autofocus />\
 </div>\
 <div class="btn-group">\
@@ -1750,6 +1750,7 @@ should<span class="caret"></span>\
 </ul>\
 <button type="button" id="disambiguate{{NUMBER}}" class="btn btn-default" disabled="true" data-toggle="button">Disamb./Expand</button>\
 </div>\
+<div class="btn-group" style="margin-left:10px"><a id="close-searchbar{{NUMBER}}" style="display:none" onclick=\'$("#facetview_searchbar{{NUMBER}}").remove()\'><span class="glyphicon glyphicon-remove"></span></a></div>\
 </div>';
 
 
@@ -1816,6 +1817,8 @@ should<span class="caret"></span>\
             $("#facetview_fieldbuttons").on("click", function () {
                 var cloneIndex = $(".clonedDiv").length + 1;
                 $("#facetview_searchbars").append(searchbar.replace(/{{NUMBER}}/gi, cloneIndex));
+                $("#close-searchbar"+cloneIndex).css("display", "block");
+                
                 $(".tei-fields li a").click(function () {
                     var selText = $(this).text();
                     $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
