@@ -1696,13 +1696,13 @@
 
         $('#disambiguation_panel').hide();
 
-        var searchbar = '<div id="facetview_searchbar{{NUMBER}}" class="row input-group clonedDiv">\
+        var searchbar = '<div id="facetview_searchbar{{NUMBER}}" style="width:850px" class="row input-group clonedDiv">\
 <div class="btn-group">\
-<button id="selected-tei-field{{NUMBER}}" class=" btn btn-default dropdown-toggle" data-toggle="dropdown" >\
-all<span class="caret"></span>\
+<button id="selected-tei-field{{NUMBER}}" class=" btn btn-default dropdown-toggle" style="width:80px" data-toggle="dropdown" >\
+all fields<span class="caret"></span>\
 </button>\
 <ul class="dropdown-menu tei-fields">\
-<li><a href="#">all</a></li>\
+<li><a href="#">all fields</a></li>\
 <li><a href="#">author</a></li>\
 <li><a href="#">title</a></li>\
 <li><a href="#">abstract</a></li>\
@@ -1710,18 +1710,18 @@ all<span class="caret"></span>\
 </ul>\
 </div>\
 <div class="btn-group"> \
-<button id="selected-lang-field{{NUMBER}}" class=" selected-lang-field btn btn-default dropdown-toggle" data-toggle="dropdown">\
-all<span class="caret"></span>\
+<button id="selected-lang-field{{NUMBER}}" class=" selected-lang-field btn btn-default dropdown-toggle" style="width:70px" data-toggle="dropdown">\
+all lang<span class="caret"></span>\
 </button>\
 <ul class="dropdown-menu lang-fields">\
-<li><a href="#">all</a></li>\
+<li><a href="#">all lang</a></li>\
 <li><a href="#">en</a></li>\
 <li><a href="#">fr</a></li>\
 <li><a href="#">de</a></li>\
 </ul>\
 </div>  \
 <div class="btn-group"> \
-<button id="selected-bool-field{{NUMBER}}" class="selected-bool-field btn btn-default dropdown-toggle" data-toggle="dropdown">\
+<button id="selected-bool-field{{NUMBER}}" class="selected-bool-field btn btn-default dropdown-toggle" style="width:80px" data-toggle="dropdown">\
 should<span class="caret"></span>\
 </button>\
 <ul class="dropdown-menu bool-fields">\

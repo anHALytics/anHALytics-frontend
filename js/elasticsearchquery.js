@@ -68,6 +68,8 @@ var elasticSearchQuery = function () {
             filtered = true;
         }
     });
+    
+    
     for (var item in options.predefined_filters) {
         // predefined filters to apply to all search and defined in the options
         !bool ? bool = {'must': []} : "";
@@ -77,6 +79,7 @@ var elasticSearchQuery = function () {
         filtered = true;
     }
     if (bool) {
+        
         // $('#facetview_freetext').val() != ""
         //    ? bool['must'].push( {'query_string': { 'query': $('#facetview_freetext').val() } } )
         //    : "";
@@ -111,13 +114,14 @@ var elasticSearchQuery = function () {
             'must': [],'must_not': []}};
         var rule;
         var field;
+        
         $('#facetview_searchbars').children('.clonedDiv').each(function (i) {
             thenum = $(this).attr("id").match(/\d+/)[0] // "3"
             if ($('#facetview_freetext' + thenum).val() != "") {
                 var obj6 = {'query_string': {}};
                 rule = $('#selected-bool-field' + thenum).text().trim();
                 field = $('#selected-tei-field' + thenum).text().trim();
-                if (field == "all")
+                if (field == "all fields")
                     obj6['query_string'] = {'default_field': "_all",'query' :$('#facetview_freetext' + thenum).val()};
                 else if (field == "title")
                     obj6['query_string'] = {'default_field': record_metadata.title,'query' :$('#facetview_freetext' + thenum).val()};
@@ -158,7 +162,7 @@ obj4['query'] = obj3;
                 var obj6 = {'query_string': {}};
                 rule = $('#selected-bool-field' + thenum).text().trim();
                 field = $('#selected-tei-field' + thenum).text().trim();
-                if (field == "all")
+                if (field == "all fields")
                     obj6['query_string'] = {'default_field': "_all",'query' :$('#facetview_freetext' + thenum).val()};
                 else if (field == "title")
                     obj6['query_string'] = {'default_field': record_metadata.title,'query' :$('#facetview_freetext' + thenum).val()};
