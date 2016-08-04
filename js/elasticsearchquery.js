@@ -234,13 +234,17 @@ obj4['query'] = obj3;
 //    if (queried_fields.length === 0) {
 //        queried_fields.push("_all");
 //    }
+
     qs['highlight'] = {};
     qs['highlight']['fields'] = {};
+    
     for (var fie in queried_fields) {
 //        if (options['snippet_style'] == 'andlauer') {
 //            qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 100};
 //        } else {
+if(queried_fields[fie] == '_all' || queried_fields[fie] ==record_metadata.abstract){
             qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 3};
+        }
         //}
     }
     qs['highlight']['order'] = 'score';
