@@ -47,7 +47,7 @@
         <script type="text/javascript" src="js/disambiguation.js"></script>
         <script type="text/javascript">
             var options = $.extend(defaults, {
-                facets: [
+                aggs: [
                     {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub', 'display': 'publication_date', 'type': 'date', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halDomain_abbrev', 'display': 'subject-headers', 'size': 20, 'type': 'taxonomy', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.notAnalyzed', 'display': 'keywords', 'size': 10, 'type': 'tag', 'view': 'graphic'},
@@ -162,7 +162,7 @@
         </div>
 
         <footer>
-            <p>&copy; The contributors - 2016 </p>
+            <p class="small text-muted">&copy; The contributors - 2016 </p>
         </footer>
     </body>
 </html>

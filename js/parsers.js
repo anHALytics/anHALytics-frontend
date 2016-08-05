@@ -9,9 +9,7 @@ var parseresultsElasticSearch = function (dataobj) {
     resultobj["start"] = "";
     resultobj["found"] = "";
     resultobj["took"] = "";
-    resultobj["facets"] = new Object();
-    resultobj["facets2"] = new Object();
-    resultobj["facets3"] = new Object();
+    resultobj["aggregations3"] = new Object();
     resultobj["aggregations"] = new Object();
     for (var item in dataobj.hits.hits) {
         resultobj["records"].push(dataobj.hits.hits[item].fields);
@@ -22,26 +20,16 @@ var parseresultsElasticSearch = function (dataobj) {
         resultobj["found"] = dataobj.hits.total;
         resultobj["took"] = dataobj.took;
     }
-    for (var item in dataobj.facets) {
-        var facetsobj = new Object();
-        for (var thing in dataobj.facets[item]["terms"]) {
-            facetsobj[ dataobj.facets[item]["terms"][thing]["term"] ] =
-                    dataobj.facets[item]["terms"][thing]["count"];
+    for (var item in dataobj.aggregations) {
+        var aggregationsobj = new Object();
+        for (var thing in dataobj.aggregations[item]["buckets"]) {
+            aggregationsobj[ dataobj.aggregations[item]["buckets"][thing]["key"] ] =
+                    dataobj.aggregations[item]["buckets"][thing]["doc_count"];
         }
-        for (var thing in dataobj.facets[item]["entries"]) {
-            facetsobj[ dataobj.facets[item]["entries"][thing]["time"] ] =
-                    dataobj.facets[item]["entries"][thing]["count"];
-        }
-        resultobj["facets"][item] = facetsobj;
-    }
-    for (var item in dataobj.facets) {
-        resultobj["facets2"][item] = dataobj.facets[item]["terms"];
-    }
-    for (var item in dataobj.facets) {
-        resultobj["facets3"][item] = dataobj.facets[item]["entries"];
+        resultobj["aggregations"][item] = aggregationsobj;
     }
     for (var item in dataobj.aggregations) {
-        resultobj["aggregations"][item] = dataobj.aggregations[item]["buckets"];
+        resultobj["aggregations3"][item] = dataobj.aggregations[item]["buckets"];
     }
     return resultobj;
 };

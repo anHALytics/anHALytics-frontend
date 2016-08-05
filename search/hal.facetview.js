@@ -48,21 +48,21 @@
             console.log('sortfilters');
             var sortwhat = $(this).attr('href');
             var which = 0;
-            for (item in options.facets) {
-                if ('field' in options.facets[item]) {
-                    if (options.facets[item]['field'] === sortwhat) {
+            for (item in options.aggs) {
+                if ('field' in options.aggs[item]) {
+                    if (options.aggs[item]['field'] === sortwhat) {
                         which = item;
                     }
                 }
             }
             if ($(this).hasClass('facetview_count')) {
-                options.facets[which]['order'] = 'count';
+                options.aggs[which]['order'] = 'count';
             } else if ($(this).hasClass('facetview_term')) {
-                options.facets[which]['order'] = 'term';
+                options.aggs[which]['order'] = 'term';
             } else if ($(this).hasClass('facetview_rcount')) {
-                options.facets[which]['order'] = 'reverse_count';
+                options.aggs[which]['order'] = 'reverse_count';
             } else if ($(this).hasClass('facetview_rterm')) {
-                options.facets[which]['order'] = 'reverse_term';
+                options.aggs[which]['order'] = 'reverse_term';
             }
             dosearch();
             if (!$(this).parent().parent().siblings('.facetview_filtershow').hasClass('facetview_open')) {
@@ -151,8 +151,8 @@
             console.log('dofacetedit');
             var which = $(this).attr('rel');
 
-            for (truc in options.facets[which]) {
-                options.facets[which][truc] = $(this).parent().parent().find('#input_' + truc).val();
+            for (truc in options.aggs[which]) {
+                options.aggs[which][truc] = $(this).parent().parent().find('#input_' + truc).val();
             }
 
             $('#facetview_editmodal').modal('hide');
@@ -166,7 +166,7 @@
         var morefacetvals = function (event) {
             event.preventDefault();
             console.log('morefacetvals');
-            var morewhat = options.facets[ $(this).attr('rel') ]
+            var morewhat = options.aggs[ $(this).attr('rel') ]
             if ('size' in morewhat) {
                 var currentval = morewhat['size'];
             } else {
@@ -175,7 +175,7 @@
             var newmore = prompt('Currently showing ' + currentval +
                     '. How many would you like instead?');
             if (newmore) {
-                options.facets[ $(this).attr('rel') ]['size'] = parseInt(newmore);
+                options.aggs[ $(this).attr('rel') ]['size'] = parseInt(newmore);
                 $(this).html('show up to (' + newmore + ')');
                 dosearch();
                 if (!$(this).parent().parent().siblings('.facetview_filtershow').hasClass('facetview_open')) {
@@ -344,48 +344,48 @@
         // set the available filter values based on results
         var putvalsinfilters = function (data) {
             // for each filter setup, find the results for it and append them to the relevant filter
-            for (var each in options.facets) {
-                $('#facetview_' + options.facets[each]['display']).children('li').remove();
+            for (var each in options.aggs) {
+                $('#facetview_' + options.aggs[each]['display']).children('li').remove();
 
-                if (options.facets[each]['type'] == 'date') {
+                if (options.aggs[each]['type'] == 'date') {
                     //console.log(data["facets"][ options.facets[each]['display'] ]);
-                    var records = data["facets"][ options.facets[each]['display'] ];
+                    var records = data["aggregations"][ options.aggs[each]['display'] ];
                     for (var item in records) {
                         var itemint = parseInt(item, "10");
                         var theDate = new Date(itemint);
                         var years = theDate.getFullYear();
                         var append = '<li><a class="facetview_filterchoice' +
-                                '" rel="' + options.facets[each]['field'] +
-                                '" href="' + item + '" display="' + options.facets[each]['display'] + '">' + years +
+                                '" rel="' + options.aggs[each]['field'] +
+                                '" href="' + item + '" display="' + options.aggs[each]['display'] + '">' + years +
                                 ' (' + addCommas(records[item]) + ')</a></li>';
-                        $('#facetview_' + options.facets[each]['display']).append(append);
+                        $('#facetview_' + options.aggs[each]['display']).append(append);
                     }
                 } else {
-                    var records = data["facets"][ options.facets[each]['display'] ];
+                    var records = data["aggregations"][ options.aggs[each]['display'] ];
                     var numb = 0;
                     for (var item in records) {
-                        if (numb >= options.facets[each]['size']) {
+                        if (numb >= options.aggs[each]['size']) {
                             break;
                         }
 
                         var item2 = item;
-                        if (options.facets[each]['display'].indexOf('class') != -1)
+                        if (options.aggs[each]['display'].indexOf('class') != -1)
                             item2 = item.replace(/\s/g, '');
                         var append = '<li><a class="facetview_filterchoice' +
-                                '" rel="' + options.facets[each]['field'] + '" href="' + item + '" display="' + options.facets[each]['display'] + '">'
+                                '" rel="' + options.aggs[each]['field'] + '" href="' + item + '" display="' + options.aggs[each]['display'] + '">'
 
                                 + item2 +
                                 ' (' + addCommas(records[item]) + ')</a></li>';
-                        $('#facetview_' + options.facets[each]['display']).append(append);
+                        $('#facetview_' + options.aggs[each]['display']).append(append);
                         numb++;
                     }
                 }
-                if (!$('.facetview_filtershow[rel="' + options.facets[each]['display'] +
+                if (!$('.facetview_filtershow[rel="' + options.aggs[each]['display'] +
                         '"]').hasClass('facetview_open')) {
-                    $('#facetview_' + options.facets[each]['display']).children("li").hide();
+                    $('#facetview_' + options.aggs[each]['display']).children("li").hide();
                 }
-                if ($('#facetview_visualisation_' + options.facets[each]['display']).length > 0) {
-                    $('.facetview_visualise[href=' + options.facets[each]['display'] + ']').trigger('click');
+                if ($('#facetview_visualisation_' + options.aggs[each]['display']).length > 0) {
+                    $('.facetview_visualise[href=' + options.aggs[each]['display'] + ']').trigger('click');
                 }
             }
             $('.facetview_filterchoice').bind('click', clickfilterchoice);
@@ -395,7 +395,7 @@
             event.preventDefault();
 
             var truc = {'field': 'undefined', 'display': 'new_facet', 'size': 0, 'type': '', 'view': 'hidden'};
-            options.facets.push(truc);
+            options.aggs.push(truc);
             buildfilters();
             dosearch();
         };
@@ -460,10 +460,10 @@
             event.preventDefault();
             if ($(this).hasClass('facetview_filterexists')) {
                 $(this).removeClass('facetview_filterexists');
-                delete options.facets[$(this).attr('href')];
+                delete options.aggs[$(this).attr('href')];
             } else {
                 $(this).addClass('facetview_filterexists');
-                options.facets.push({'field': $(this).attr('title')});
+                options.aggs.push({'field': $(this).attr('title')});
             }
             buildfilters();
             dosearch();
@@ -475,9 +475,9 @@
         var addremovefacets = function () {
             $('#facetview_filters').append('<a id="facetview_showarf" href="">' +
                     'add or remove filters</a><div id="facetview_addremovefilters"></div>')
-            for (var idx in options.facets) {
-                if (options.addremovefacets.indexOf(options.facets[idx].field) == -1) {
-                    options.addremovefacets.push(options.facets[idx].field)
+            for (var idx in options.aggs) {
+                if (options.addremovefacets.indexOf(options.aggs[idx].field) == -1) {
+                    options.addremovefacets.push(options.aggs[idx].field)
                 }
             }
             for (var facet in options.addremovefacets) {
@@ -485,8 +485,8 @@
                 var filter = '<a class="btn '
                 var index = 0
                 var icon = '<i class="glyphicon glyphicon-plus"></i>'
-                for (var idx in options.facets) {
-                    if (options.facets[idx].field == thisfacet) {
+                for (var idx in options.aggs) {
+                    if (options.aggs[idx].field == thisfacet) {
                         filter += 'btn-info facetview_filterexists'
                         index = idx
                         icon = '<i class="glyphicon glyphicon-remove"></i> '
@@ -502,7 +502,7 @@
 
         // pass a list of filters to be displayed
         var buildfilters = function () {
-            var filters = options.facets;
+            var filters = options.aggs;
             //var thefilters = "<h3>Facets</h3>";
             var thefilters = "";
 
@@ -627,25 +627,25 @@
 
             var vis;
             var indx = null;
-            for (var idx in options.facets) {
-                if (options.facets[idx]['display'] == $(this).attr('href')) {
+            for (var idx in options.aggs) {
+                if (options.aggs[idx]['display'] == $(this).attr('href')) {
                     indx = idx;
                     break;
                 }
             }
 
             if (!update) {
-                if ((options.facets[idx]['type'] == 'class') || (options.facets[idx]['type'] == 'country')) {
+                if ((options.aggs[idx]['type'] == 'class') || (options.aggs[idx]['type'] == 'country')) {
                     vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;top:5px;"> \
 	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart"> \
 	                    </div> \
 	                    </div>';
-                } else if (options.facets[idx]['type'] == 'entity') {
+                } else if (options.aggs[idx]['type'] == 'entity') {
                     vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;"> \
 	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart"> \
 	                    </div> \
 	                    </div>';
-                } else if (options.facets[idx]['type'] == 'taxonomy') {
+                } else if (options.aggs[idx]['type'] == 'taxonomy') {
                     vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;top:5px;"> \
 	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart"> \
 	                    </div> \
@@ -661,17 +661,17 @@
             }
             var parentWidth = $('#facetview_filters').width();
 
-            if ((options.facets[idx]['type'] == 'class') || (options.facets[idx]['type'] == 'country')) {
+            if ((options.aggs[idx]['type'] == 'class') || (options.aggs[idx]['type'] == 'country')) {
                 donut2($(this).attr('rel'), $(this).attr('href'),
                         parentWidth * 0.8, 'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
-            } else if (options.facets[idx]['type'] == 'date') {
+            } else if (options.aggs[idx]['type'] == 'date') {
                 timeline($(this).attr('rel'), parentWidth * 0.75,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart");
                 $('#date-input').show();
-            } else if (options.facets[idx]['type'] == 'taxonomy') {
+            } else if (options.aggs[idx]['type'] == 'taxonomy') {
                 wheel($(this).attr('rel'), $(this).attr('href'), parentWidth * 0.8,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
-            } else if (options.facets[idx]['type'] == 'tag') {
+            } else if (options.aggs[idx]['type'] == 'tag') {
                 cloud($(this).attr('rel'), $(this).attr('href'), parentWidth * 0.8,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
             }
@@ -721,13 +721,13 @@
             //var fill = d3.scale.log(.1, 1).domain([0.005,0.1]).range(["#FF7700","#FCE6D4"]);
             var fill = d3.scale.log(.1, 1).domain([0.005, 0.1]).range(["#FCE6D4", "#FF7700"]);
 
-            var facetfield = options.facets[facetidx]['field'];
-            var records = options.data['facets'][facetkey];
+            var facetfield = options.aggs[facetidx]['field'];
+            var records = options.data['aggregations'][facetkey];
             var datas = [];
             var sum = 0;
             var numb = 0;
             for (var item in records) {
-                if (numb >= options.facets[facetidx]['size']) {
+                if (numb >= options.aggs[facetidx]['size']) {
                     break;
                 }
                 var item2 = item.replace(/\s/g, '');
@@ -1023,8 +1023,8 @@
         var donut2 = function (facetidx, facetkey, width, place, update) {
             var vis = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2");
 
-            var facetfield = options.facets[facetidx]['field'];
-            var records = options.data['facets'][facetkey];
+            var facetfield = options.aggs[facetidx]['field'];
+            var records = options.data['aggregations'][facetkey];
             if (records.length === 0) {
                 $('#' + place).hide();
                 return;
@@ -1046,7 +1046,7 @@
             for (var item in records) {
                 if (records[item] > 0) {
 
-                    if (numb >= options.facets[facetidx]['size']) {
+                    if (numb >= options.aggs[facetidx]['size']) {
                         break;
                     }
 
@@ -1251,22 +1251,21 @@
         };
 
         var timeline = function (facetidx, width, place) {
-            var facetkey = options.facets[facetidx]['display'];
-            var facetfield = options.facets[facetidx]['field'];
+            var facetkey = options.aggs[facetidx]['display'];
+            var facetfield = options.aggs[facetidx]['field'];
 
             // Set-up the data
-            var entries = options.data.facets3[facetkey];
+            var entries = options.data.aggregations3[facetkey];
             // Add the last "blank" entry for proper timeline ending
             if (entries.length > 0) {
                 //if (entries.length == 1) {	
-                entries.push({count: entries[entries.length - 1].count});
+                entries.push({doc_count: entries[entries.length - 1].doc_count});
             }
-
             // Set-up dimensions and scales for the chart
             var w = 250,
                     h = 80,
                     max = pv.max(entries, function (d) {
-                        return d.count;
+                        return d.doc_count;
                     }),
                     x = pv.Scale.linear(0, entries.length - 1).range(0, w),
                     y = pv.Scale.linear(0, max).range(0, h);
@@ -1284,7 +1283,7 @@
             vis.add(pv.Rule)
                     .data(entries)
                     .visible(function (d) {
-                        return d.time;
+                        return d.key;
                     })
                     .left(function () {
                         return x(this.index);
@@ -1295,7 +1294,7 @@
                     // Add the tick label
                     .anchor("right").add(pv.Label)
                     .text(function (d) {
-                        var date = new Date(parseInt(d.time));
+                        var date = new Date(parseInt(d.key));
                         var year = date.getYear();
                         if (year >= 100) {
                             year = year - 100;
@@ -1325,7 +1324,7 @@
                     })
                     // Compute y-axis based on scale
                     .height(function (d) {
-                        return y(d.count);
+                        return y(d.doc_count);
                     })
                     // Make the chart curve smooth
                     .interpolate('cardinal')
@@ -1336,7 +1335,7 @@
 
                     // On "mouse down", perform action, such as filtering the results...
                     .event("mousedown", function (d) {
-                        var time = entries[this.index].time;
+                        var time = entries[this.index].key;
                         var date = new Date(parseInt(time));
                         clickGraph(facetfield, facetkey, date.getFullYear(), time);
                     })
@@ -1354,9 +1353,9 @@
 
         var cloud = function (facetidx, facetkey, width, place, update) {
 
-            var facetkey = options.facets[facetidx]['display'];
-            var facetfield = options.facets[facetidx]['field'];
-            var facets = options.data['facets'][facetkey];
+            var facetkey = options.aggs[facetidx]['display'];
+            var facetfield = options.aggs[facetidx]['field'];
+            var aggs = options.data['aggregations'][facetkey];
             data = [];
             var vis = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2");
             if (update) {
@@ -1364,8 +1363,8 @@
             }
 
             var numb = 0;
-            for (var fct in facets) {
-                if (numb >= options.facets[facetidx]['size']) {
+            for (var fct in aggs) {
+                if (numb >= options.aggs[facetidx]['size']) {
                     break;
                 }
                 data.push(fct);
@@ -1598,15 +1597,15 @@
             putvalsinfilters(data);
 
             // for the first time we visualise the filters as defined in the facet options
-            for (var each in options.facets) {
-                if (options.facets[each]['view'] == 'graphic') {
+            for (var each in options.aggs) {
+                if (options.aggs[each]['view'] == 'graphic') {
                     //if ($('.facetview_filterselected[rel=' + options.facets[each]['field'] + "]" ).length == 0 )
-                    if ($('#facetview_visualisation_' + options.facets[each]['display'] + '_chart').length == 0)
-                        $('.facetview_visualise[href=' + options.facets[each]['display'] + ']').trigger('click');
-                } else if ((!$('.facetview_filtershow[rel=' + options.facets[each]['display'] +
+                    if ($('#facetview_visualisation_' + options.aggs[each]['display'] + '_chart').length == 0)
+                        $('.facetview_visualise[href=' + options.aggs[each]['display'] + ']').trigger('click');
+                } else if ((!$('.facetview_filtershow[rel=' + options.aggs[each]['display'] +
                         ']').hasClass('facetview_open'))
-                        && (options.facets[each]['view'] == 'textual')) {
-                    $('.facetview_filtershow[rel=' + options.facets[each]['display'] + ']').trigger('click');
+                        && (options.aggs[each]['view'] == 'textual')) {
+                    $('.facetview_filtershow[rel=' + options.aggs[each]['display'] + ']').trigger('click');
                 }
             }
 

@@ -27,7 +27,7 @@ var elasticSearchQuery = function () {
         // facet filter for a range of values
         !bool ? bool = {'must': []} : "";
         if ($(this).hasClass('facetview_facetrange')) {
-            var rel = options.facets[ $(this).attr('rel') ]['field'];
+            var rel = options.aggs[ $(this).attr('rel') ]['field'];
             //var from_ = (parseInt( $('.facetview_lowrangeval', this).html() ) - 1970)* 365*24*60*60*1000;
             //var to_ = (parseInt( $('.facetview_highrangeval', this).html() ) - 1970) * 365*24*60*60*1000 - 1;
             var range = $(this).attr('href');
@@ -205,30 +205,31 @@ obj4['query'] = obj3;
     options.paging.size != 10 ? qs['size'] = options.paging.size : "";
 
     // set any facets
-    qs['facets'] = {};
-    for (var item in options.facets) {
-        var obj = jQuery.extend(true, {}, options.facets[item]);
+    qs['aggs'] = {};
+    for (var item in options.aggs) {
+        var obj = jQuery.extend(true, {}, options.aggs[item]);
         var nameFacet = obj['display'];
         delete obj['display'];
 
-        if (options.facets[item]['type'] == 'date') {
+        if (options.aggs[item]['type'] == 'date') {
             obj['interval'] = "year";
             //obj['size'] = 5; 
-            qs['facets'][nameFacet] = {"date_histogram": obj};
+            qs['aggs'][nameFacet] = {"date_histogram": obj};
         } else {
-            obj['size'] = options.facets[item]['size'] + 50;
+            obj['size'] = options.aggs[item]['size'] + 50;
             // this 50 is a magic number due to the following ES bug:
             // https://github.com/elasticsearch/elasticsearch/issues/1305
             // hopefully to be fixed in a near future
-            if (options.facets[item]['order'])
-                obj['order'] = options.facets[item]['order'];
+            if (options.aggs[item]['order'])
+                obj['order'] = options.aggs[item]['order'];
             else
-                obj['order'] = 'count';
+                obj['order'] = { "_count" : "desc" };
             // we need to remove type and view fields since ES 1.2
-            delete obj['type'];
-            delete obj['view'];
-            qs['facets'][nameFacet] = {"terms": obj};
+            
+            qs['aggs'][nameFacet] = {"terms": obj};
         }
+        delete obj['type'];
+            delete obj['view'];
     }
     // set snippets/highlight
 //    if (queried_fields.length === 0) {
