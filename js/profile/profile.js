@@ -39,26 +39,30 @@
 
         }).then(function (response) {
             $scope.profile = response.hits.hits[0];
-            $scope.publications = [];
-            $scope.interests = [];
-            $scope.keywords = [];
-            $scope.coauthors = [];
-            var coauthors = [];
 
-            var terms = [];
+            $scope.terms = [];
             for (var i = 0; i < $scope.profile['_source']['publications'].length; i++) {
-                terms.push({"term": {"_id": $scope.profile['_source']['publications'][i].docID}});
+                $scope.terms.push({"term": {"_id": $scope.profile['_source']['publications'][i].docID}});
             }
+            $scope.loadPulicationsAndCoAuthors();
+            $scope.loadKeywordsAndInterests();
+
+        });
+
+        $scope.loadPulicationsAndCoAuthors = function () {
+
+            $scope.publications = [];
+            $scope.coauthors = [];
             client.search({
                 index: 'anhalytics_kb',
                 type: 'publications',
-                size:200,//could be tuned..
+                size: 200, //could be tuned..
                 body: {
                     "query": {
                         "filtered": {
                             "filter": {
                                 "bool": {
-                                    "should": terms
+                                    "should": $scope.terms
                                 }
                             }
                         }
@@ -79,8 +83,11 @@
                     }
                 }
             });
+        }
+        $scope.loadKeywordsAndInterests = function () {
 
-
+            $scope.interests = [];
+            $scope.keywords = [];
             client.search({
                 index: 'anhalytics_fulltextteis',
                 body: {
@@ -91,7 +98,7 @@
                         "filtered": {
                             "filter": {
                                 "bool": {
-                                    "should": terms
+                                    "should": $scope.terms
                                 }
                             }
                         }
@@ -105,20 +112,20 @@
                         var keywords = fields["$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term"];
                         var interests = fields["$teiCorpus.$standoff.$category.category"];
                         //nerd categories are more reliable
-if(interests){
-                        for (var i = 0; i < interests.length && $scope.interests.length < 6; i++) {
-                            $scope.interests.push(interests[i]);
+                        if (interests) {
+                            for (var i = 0; i < interests.length && $scope.interests.length < 6; i++) {
+                                $scope.interests.push(interests[i]);
+                            }
                         }
-                    }
-                    if(keywords){
-                        for (var i = 0; i < keywords.length && $scope.keywords.length < 6; i++) {
-                            $scope.keywords.push(keywords[i]);
+                        if (keywords) {
+                            for (var i = 0; i < keywords.length && $scope.keywords.length < 6; i++) {
+                                $scope.keywords.push(keywords[i]);
+                            }
                         }
-                    }
                     }
                 }
             });
 
-        });
+        }
     });
 })();
