@@ -14,6 +14,7 @@
         <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script> 
         <script type="text/javascript" src="bower_components/angular/angular.min.js"></script> 
         <script type="text/javascript" src="bower_components/elasticsearch/elasticsearch.angular.js"></script> 
+        <script data-require="angular-ui-bootstrap@0.3.0" data-semver="0.3.0" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.3.0.min.js"></script>
         <script type="text/javascript" src="js/institution/institution.js"></script>
         <script type="text/javascript" src="js/extension.js"></script>
     </head>
@@ -72,7 +73,7 @@
                             <div class="col-md-6" style="text-align: center;"> 
                                 <h3>
                                     <a href="institution/University_Name/department/School_of_Medicine/publications">
-                                        {{publications.length}}
+                                        {{organisation['_source']['publications'].length}}
                                     </a>
                                     Publications
                                 </h3>
@@ -211,6 +212,20 @@
                                 </p>  
                             </li>
                         </ul>
+                        
+                            <ul class="pagination">
+                                <li ng-class="{disabled: currentPage == 0}">
+                                    <a href ng-click="prevPage()">« Prev</a>
+                                </li>
+                                <li ng-repeat="n in range(pagedItems.length)"
+                                    ng-class="{active: n == currentPage}"
+                                ng-click="setPage()">
+                                    <a href ng-bind="n + 1">1</a>
+                                </li>
+                                <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                                    <a href ng-click="nextPage()">Next »</a>
+                                </li>
+                            </ul>
 
                     </div>
                 </div>
@@ -219,7 +234,7 @@
 
         </div>
         <footer>
-            <p>&copy; The contributors - 2016 </p>
+            <p class="small text-muted">&copy; The contributors - 2016 </p>
         </footer>
     </body>
 </html>

@@ -9,6 +9,9 @@
     });
 
     app.controller('InstitutionController', function ($scope, client) {
+        $scope.currentPage = 0;
+        $scope.numPerPage = 10;
+        $scope.pagedItems = [];
         var url_options = $.getUrlVars();
         var orgID = url_options.orgID;
         client.search({
@@ -25,35 +28,86 @@
 
         }).then(function (response) {
             $scope.organisation = response.hits.hits[0];
-            $scope.publications = [];
-            $scope.abstracts = {};
-            $scope.keywords = {};
-            var terms = [];
-            for (var i = 0; i < $scope.organisation['_source']['publications'].length; i++) {
-                terms.push({"term": {"_id": $scope.organisation['_source']['publications'][i].docID}});
+            $scope.terms = [];
+            for (i in $scope.organisation['_source']['publications']) {
+                $scope.terms.push({"term": {"_id": $scope.organisation['_source']['publications'][i].docID}});
             }
+            for (var i = 0; i < $scope.organisation['_source']['publications'].length; i++) {
+                if (i % $scope.numPerPage === 0) {
+                    $scope.pagedItems[Math.floor(i / $scope.numPerPage)] = [$scope.organisation['_source']['publications'][i]];
+                } else {
+                    $scope.pagedItems[Math.floor(i / $scope.numPerPage)].push($scope.organisation['_source']['publications'][i]);
+                }
+            }
+            $scope.loadPulications();
+        });
+
+        $scope.loadPulications = function () {
+            $scope.publications = [];
             client.search({
                 index: 'anhalytics_kb',
                 type: 'publications',
+                from: $scope.currentPage,
+                size: $scope.numPerPage,
                 body: {
                     "query": {
                         "filtered": {
                             "filter": {
                                 "bool": {
-                                    "should": terms
+                                    "should": $scope.terms
                                 }
                             }
                         }
                     }
+//                    ,"sort" : [
+//      {"date_electronic" : {"order" : "asc"}}
+//   ]
                 }
 
             }).then(function (response) {
+                $scope.terms1 = [];
                 for (hit in response.hits.hits) {
                     $scope.publications.push(response.hits.hits[hit]);
+                    $scope.terms1.push({"term": {"_id": response.hits.hits[hit]["_id"]}});
                 }
+                $scope.loadPulicationsAbstracts();
             });
+        };
 
 
+
+        $scope.prevPage = function () {
+            if ($scope.currentPage > 0) {
+                $scope.currentPage--;
+            }
+        };
+
+        $scope.nextPage = function () {
+            if ($scope.currentPage < $scope.pagedItems.length - 1) {
+                $scope.currentPage++;
+                $scope.loadPulications();
+            }
+        };
+
+        $scope.setPage = function () {
+            $scope.currentPage = this.n;
+            $scope.loadPulications();
+        };
+        $scope.range = function (start, end) {
+            var ret = [];
+            if (!end) {
+                end = start;
+                start = 0;
+            }
+            for (var i = start; i < end; i++) {
+                ret.push(i);
+            }
+            return ret;
+        };
+
+        $scope.loadPulicationsAbstracts = function () {
+            $scope.abstracts = {};
+            $scope.keywords = {};
             client.search({
                 index: 'anhalytics_fulltextteis',
                 body: {
@@ -67,11 +121,11 @@
                         "filtered": {
                             "filter": {
                                 "bool": {
-                                    "should": terms
+                                    "should": $scope.terms1
                                 }
                             }
                         }
-                    },
+                    }
                 }
 
 
@@ -159,14 +213,29 @@
                         if (keyword && (keyword.length > 0) && (keyword.trim().indexOf(" ") != -1)) {
                             keywordsPiece = keyword;
                         }
-
                         $scope.abstracts[id] = abstract;
                         $scope.keywords[id] = keywordsPiece;
                     }
                 }
             });
-        });
-
-
+        };
+//        
+//            // change sorting order
+//    $scope.sort_by = function(newSortingOrder) {
+//        if ($scope.sortingOrder == newSortingOrder)
+//            $scope.reverse = !$scope.reverse;
+//
+//        $scope.sortingOrder = newSortingOrder;
+//
+//        // icon setup
+//        $('th i').each(function(){
+//            // icon reset
+//            $(this).removeClass().addClass('icon-sort');
+//        });
+//        if ($scope.reverse)
+//            $('th.'+new_sorting_order+' i').removeClass().addClass('icon-chevron-up');
+//        else
+//            $('th.'+new_sorting_order+' i').removeClass().addClass('icon-chevron-down');
+//    };
     });
 })();
