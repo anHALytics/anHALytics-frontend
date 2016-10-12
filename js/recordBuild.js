@@ -230,23 +230,23 @@ var buildrecord = function (index, node) {
 
         if (date && (date.length > 1)) {
             var year = date.substring(1, 5);
-            var month = null;
-            if (date.length > 6)
-                month = date.substring(6, 8);
-            if ((month) && (month.length > 1) && (month[0] == "0")) {
-                month = month.substring(1, month.length)
-            }
-            var day = null;
-            if (date.length > 9)
-                day = date.substring(9, date.length - 1);
-            if ((day != undefined) && (day.length > 1) && (day[0] == "0")) {
-                day = day.substring(1, day.length)
-            }
+//            var month = null;
+//            if (date.length > 6)
+//                month = date.substring(6, 8);
+//            if ((month) && (month.length > 1) && (month[0] == "0")) {
+//                month = month.substring(1, month.length)
+//            }
+//            var day = null;
+//            if (date.length > 9)
+//                day = date.substring(9, date.length - 1);
+//            if ((day != undefined) && (day.length > 1) && (day[0] == "0")) {
+//                day = day.substring(1, day.length)
+//            }
             result += ' - <em>';
-            if ((day != undefined) && (day.length > 0))
-                result += day + '.';
-            if ((month != undefined) && (month.length > 0))
-                result += month + '.';
+//            if ((day != undefined) && (day.length > 0))
+//                result += day + '.';
+//            if ((month != undefined) && (month.length > 0))
+//                result += month + '.';
             if (year != undefined)
                 result += year + '</em>';
         }
