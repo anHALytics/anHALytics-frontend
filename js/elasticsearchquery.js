@@ -1,5 +1,5 @@
 // build the search query URL based on current params
-var elasticSearchQuery = function () {
+var elasticSearchSearchQuery = function () {
 
     var qs = {};
     var bool = false;
@@ -252,6 +252,87 @@ if(queried_fields[fie] == '_all' || queried_fields[fie] ==record_metadata.abstra
     qs['highlight']['pre_tags'] = ['<strong>'];
     qs['highlight']['post_tags'] = ['</strong>'];
     qs['highlight']['require_field_match'] = true;
+    var theUrl = JSON.stringify(qs);
+
+    //if (window.console != undefined) {
+    console.log(theUrl);
+    //}
+    return theUrl;
+};
+
+var elasticSearchAggQuery1 = function () {
+
+    var qs = {};
+
+    // set any facets
+    qs['size'] = 0; 
+    qs['aggs'] = {"publication_date":{"date_histogram":{"field":"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub", "interval":"year",
+                "format" : "yyyy-MM-dd"}}};
+    
+    var theUrl = JSON.stringify(qs);
+
+    //if (window.console != undefined) {
+    console.log(theUrl);
+    //}
+    return theUrl;
+};
+
+var elasticSearchAggQuery3 = function () {
+
+    var qs = {};
+
+    // set any facets
+    qs['size'] = 0; 
+    qs['aggs'] = {"country":{"terms":{"field":"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$desc.$address.key"}}};
+    
+    var theUrl = JSON.stringify(qs);
+
+    //if (window.console != undefined) {
+    console.log(theUrl);
+    //}
+    return theUrl;
+};
+
+
+var elasticSearchAggQuery2 = function () {
+
+    var qs = {};
+
+    // set any facets
+    qs['size'] = 0; 
+    qs['aggs'] = {"Organisation":{"terms":{"field":"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$idno.$type_orgAnhalyticsID"},
+   "aggs": {
+    "authors": {
+     "terms": {
+      "field": "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$idno.$type_authorAnhalyticsID"
+     }
+    }
+   }}};
+    
+    var theUrl = JSON.stringify(qs);
+
+    //if (window.console != undefined) {
+    console.log(theUrl);
+    //}
+    return theUrl;
+};
+
+
+var elasticSearchAggQuery4 = function () {
+
+    var qs = {};
+
+    // set any facets
+    qs['size'] = 0; 
+    qs['aggs'] = {"country":{"terms":{"field":"$teiCorpus.$standoff.$nerd.preferredTerm"},
+   "aggs": {
+    "typology": {
+     "terms": {
+      "field": "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$idno.$type_authorAnhalyticsID"
+     }
+    }
+   }}};
+    
     var theUrl = JSON.stringify(qs);
 
     //if (window.console != undefined) {

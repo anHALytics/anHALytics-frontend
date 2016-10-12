@@ -1624,7 +1624,7 @@
                 $.ajax({
                     type: "get",
                     url: options.search_url,
-                    data: {source: elasticSearchQuery()},
+                    data: {source: elasticSearchSearchQuery()},
                     // processData: false,
                     dataType: "jsonp",
                     success: function (data) {
