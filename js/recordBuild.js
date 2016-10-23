@@ -259,8 +259,7 @@ var buildrecord = function (index, node) {
         result += " - <a target='_blank' style='color: #0094DE;' href='http://dx.doi.org/" + doi + "'>" + doi + "</a>";
     }
     result += '</strong></div>';
-result += '<div class="row"><a target="_blank" href="publication.html?pubID=' + id + '" style="font-size:11px">(More details)</a></div>';
-    result += '<div class="row"><a id="button_abstract_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_keywords_' + index + '" style="color: #0094DE;"><span class="glyphicon glyphicon-chevron-down"></span style="font-size:11px">Abstract/Keywords</a></div>';
+    result += '<div class="row"><div class="col-md-6"><a id="button_abstract_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_keywords_' + index + '" style="color: #585858;"><span class="glyphicon glyphicon-chevron-down"></span style="font-size:11px">Abstract/Keywords</a></div><div class="col-md-6"><a target="_blank" href="publication.html?pubID=' + id + '" style="color: #585858;">More details...</a></div></div>';
 
     result += '</div>';
     result += '</div>';

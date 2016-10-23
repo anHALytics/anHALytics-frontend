@@ -179,7 +179,9 @@ var displayAnnotations = function (data, index, id, origin) {
         } else if (origin == "keyword") {
             $('#annot-key-' + index + '-' + m + '-' + id).hover(viewEntity);
         } else {
-            $('#annot-' + index + '-' + m).mouseout(function () {
+            $('#annot-' + index + '-' + m).click(function () {
+                if (!$("#abstract_keywords_" + index).is(":visible"))
+                    $('#button_abstract_keywords_collapse_' + index).click();
                 if ($("#abstract_keywords_" + index).is(":visible"))
                     $('#button_abstract_keywords_collapse_' + index).click();
             });
@@ -370,9 +372,6 @@ function viewEntity(event) {
 
 
         string += "</div></div>";
-        console.log('#button_abstract_keywords_collapse_' + resultIndex);
-        if (!$("#abstract_keywords_" + resultIndex).is(":visible"))
-            $('#button_abstract_keywords_collapse_' + resultIndex).click();
         $('#detailed_annot-' + resultIndex).html(string);
         $('#detailed_annot-' + resultIndex).show();
     }
