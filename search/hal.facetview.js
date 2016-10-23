@@ -1626,7 +1626,7 @@
                     url: options.search_url,
                     data: {source: elasticSearchSearchQuery()},
                     // processData: false,
-                    dataType: "jsonp",
+                    //dataType: "jsonp",
                     success: function (data) {
                         showresults(data);
                     }
@@ -1778,7 +1778,7 @@ should<span class="caret"></span>\
                     $.ajax({
                         type: "get",
                         url: options.config_file,
-                        dataType: "jsonp",
+                        //dataType: "jsonp",
                         success: function (data) {
                             options = $.extend(options, data);
                             whenready();

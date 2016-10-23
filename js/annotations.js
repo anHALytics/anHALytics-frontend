@@ -13,7 +13,7 @@ var displayTitleAnnotation = function (titleID) {
                 type: "get",
                 url: options.search_url_annotations,
                 contentType: 'application/json',
-                dataType: 'jsonp',
+                //dataType: 'jsonp',
                 data: {source: JSON.stringify(localQuery)},
                 success: function (data) {
                     displayAnnotations(data, index, titleID, 'title');
@@ -34,7 +34,7 @@ var displayAbstractAnnotation = function (abstractID) {
             type: "get",
             url: options.search_url_annotations,
             contentType: 'application/json',
-            dataType: 'jsonp',
+            //dataType: 'jsonp',
             data: {source: JSON.stringify(localQuery)},
             success: function (data) {
                 displayAnnotations(data, index, abstractID, 'abstract');
@@ -56,7 +56,7 @@ var displayKeywordAnnotation = function (keywordIDs) {
                 type: "get",
                 url: options.search_url_annotations,
                 contentType: 'application/json',
-                dataType: 'jsonp',
+                //dataType: 'jsonp',
                 data: {source: JSON.stringify(localQuery)},
                 success: function (data) {
                     displayAnnotations(data, index, keywordID, 'keyword');
@@ -179,6 +179,10 @@ var displayAnnotations = function (data, index, id, origin) {
         } else if (origin == "keyword") {
             $('#annot-key-' + index + '-' + m + '-' + id).hover(viewEntity);
         } else {
+            $('#annot-' + index + '-' + m).mouseout(function () {
+                if ($("#abstract_keywords_" + index).is(":visible"))
+                    $('#button_abstract_keywords_collapse_' + index).click();
+            });
             $('#annot-' + index + '-' + m).hover(viewEntity);
         }
     }
@@ -186,16 +190,17 @@ var displayAnnotations = function (data, index, id, origin) {
 
 
 
-
 /** 
  * View the full entity information in the infobox 
  */
 function viewEntity(event) {
+
     event.preventDefault();
     // currently entity can appear in the title, abstract or keywords
     // the origin is visible in the event origin id, as well as the "coordinates" of the entity 
 
     var localID = $(this).attr('id');
+
     console.log(localID);
 
     var resultIndex = -1;
@@ -354,17 +359,20 @@ function viewEntity(event) {
         if ((definitions != null) && (definitions.length > 0)) {
             string += "<p>" + definitions[0].definition + "</p>";
         }
-            
-            if (wikipedia != null) {
-                string += '<p>Reference: '
-                string += '<a href="http://en.wikipedia.org/wiki?curid=' +
-                        wikipedia +
-                        '" target="_blank"><img style="max-width:28px;max-height:22px;margin-top:5px;" src="data/images/wikipedia.png"/></a>';
-            }
-            string += '</p>';
-        
+
+        if (wikipedia != null) {
+            string += '<p>Reference: '
+            string += '<a href="http://en.wikipedia.org/wiki?curid=' +
+                    wikipedia +
+                    '" target="_blank"><img style="max-width:28px;max-height:22px;margin-top:5px;" src="data/images/wikipedia.png"/></a>';
+        }
+        string += '</p>';
+
 
         string += "</div></div>";
+        console.log('#button_abstract_keywords_collapse_' + resultIndex);
+        if (!$("#abstract_keywords_" + resultIndex).is(":visible"))
+            $('#button_abstract_keywords_collapse_' + resultIndex).click();
         $('#detailed_annot-' + resultIndex).html(string);
         $('#detailed_annot-' + resultIndex).show();
     }
