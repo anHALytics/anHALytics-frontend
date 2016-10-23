@@ -186,7 +186,7 @@ var buildrecord = function (index, node) {
                 name_ = names[aut];
             else
                 name_ = names[aut] + ', ';
-            result += '<a target="_blank" href="profile.html?authorID=' + id_ + '" >' + name_ + '</a>';
+            result += '<a target="_blank" style="color : #FF2B23" href="profile.html?authorID=' + id_ + '" >' + name_ + '</a>';
         }
     }
 
