@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AnHALytics Dashboard</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+        <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/keen-dashboards.css" />
+        <link rel="stylesheet" type="text/css" href="css/dashboards.css" />
+    </head>
+    <body class="application">
+
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <!--        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                              <span class="sr-only">Toggle navigation</span>
+                              <span class="icon-bar"></span>
+                              <span class="icon-bar"></span>
+                              <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="../">
+                              <span class="glyphicon glyphicon-chevron-left"></span>
+                            </a>-->
+                    <a id="about" class="navbar-brand" href="./">Organisation Name</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a>Team</a></li>
+                        <li><a>Keyword</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+
+
+            <div class="row">
+
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title" id="chart-01-title">
+                            Title
+                        </div>
+                        <div class="chart-stage">
+                            <div id="chart-01"></div>
+                        </div>
+                        <!--          <div class="chart-notes">
+                                    Notes go down here
+                                  </div>-->
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title" id="chart-02-title">
+                            Title
+                        </div>
+                        <div class="chart-stage">
+                            <div id="chart-02"></div>
+                        </div>
+                        <!--          <div class="chart-notes">
+                                    Notes go down here
+                                  </div>-->
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title" id="chart-03-title">
+                            Title
+                        </div>
+                        <div class="chart-stage">
+                            <div id="chart-03"></div>
+                        </div>
+                        <!--          <div class="chart-notes">
+                                    Notes go down here
+                                  </div>-->
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-sm-8">
+                    <div class="chart-wrapper">
+                        <div class="chart-title" id="chart-04-title">
+                            Title
+                        </div>
+                        <div class="chart-stage">
+                            <div id="chart-04" style="height:400px"></div>
+                        </div>
+                        <!--          <div class="chart-notes">
+                                    Notes go down here
+                                  </div>-->
+                    </div>
+                </div>
+
+
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title" id="chart-06-title">
+                            Title
+                        </div>
+                        <div class="chart-stage">
+                            <div id="chart-06"></div>
+                        </div>
+                        <!--          <div class="chart-notes">
+                                    Notes go down here
+                                  </div>-->
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+
+            <!--    <div class="row">
+                  <div class="col-sm-3">
+                    <div class="chart-wrapper">
+                      <img data-src="holder.js/100%x150/white">
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="chart-wrapper">
+                      <img data-src="holder.js/100%x150/white">
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="chart-wrapper">
+                      <img data-src="holder.js/100%x150/white">
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="chart-wrapper">
+                      <img data-src="holder.js/100%x150/white">
+                    </div>
+                  </div>
+                </div>-->
+
+            <div class="row" >
+
+                <div class="col-sm-8" >
+                    <div class="chart-wrapper">
+                        <div class="chart-title" id="chart-07-title">
+                            Title
+                        </div>
+                        <div class="chart-stage">
+                            <div id="chart-07" style="height:400px"></div>
+                        </div>
+                        <!--          <div class="chart-notes">
+                                    This is a sample text region to describe this chart.
+                                  </div>-->
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title" id="chart-08-title">
+                            Title
+                        </div>
+                        <div class="chart-stage">
+                            <div id="chart-08"></div>
+                        </div>
+                        <!--          <div class="chart-notes">
+                                    Notes go down here
+                                  </div>-->
+                    </div>
+                </div>
+
+            </div>
+
+
+            <hr>
+
+            <p class="small text-muted">Built with &#9829;</p>
+
+        </div>
+
+        <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="bower_components/holderjs/holder.js"></script>
+        <script>
+            Holder.add_theme("white", {background: "#fff", foreground: "#a7a7a7", size: 10});
+        </script>
+
+        <script type="text/javascript" src="bower_components/keen-js/dist/keen.min.js"></script>
+        <script type="text/javascript" src="js/meta.js"></script>
+        <!--  <script type="text/javascript" src="js/keen.dashboard.js"></script>-->
+        <script type="text/javascript" src="dashboard/org_esqueries.js"></script>
+        <script type="text/javascript" src="js/extension.js"></script>
+        <script type="text/javascript">
+            var url_options = $.getUrlVars();
+            var organisationID = url_options.orgID;
+
+            $.ajax({
+                type: "get",
+                url: "http://localhost:9200/anhalytics_kb/organisations/" + organisationID,
+                //processData: true,
+                success: function (data) {
+                    console.log(data);
+                    var names = data._source.names.map(function (a) {
+                        return a.name;
+                    });
+                    names = names.sort(function (a, b) {
+                        return b.length - a.length;
+                    });
+                    $("#about").text(names[1]);
+                    $("title").text(names[1]);
+                }});
+
+
+
+
+        </script>
+
+        <script type="text/javascript" src="bower_components/d3/d3.min.js "></script>
+        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+        <!--Declarative interactive protovis library-->
+        <script type="text/javascript" src="bower_components/protovis/protovis-r3.2.js"></script>
+        <!--MAPS-->
+        <script src="bower_components/topojson/topojson.min.js"></script>
+        <script src="bower_components/datamaps/dist/datamaps.all.js"></script>
+        <!--D3 libraries, extensions..-->
+        <script src="bower_components/plotly.js/dist/plotly.min.js"></script>
+        <script src="bower_components/dimple/dist/dimple.latest.min.js"></script>
+        <!--dashboard scripting-->
+        <script type="text/javascript" src="dashboard/organisation_dashboard.js"></script>
+
+    </body>
+</html>

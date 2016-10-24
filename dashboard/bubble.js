@@ -1,4 +1,6 @@
 (function () {
+    $("#chart-04-title").text("Co-authors");
+    $( "#chart-04-title" ).append( '<div id="view_selection" ><a href="#" id="all">All Co-authors</a><a href="#" id="topic">Co-authors By Topic</a></div>' );
     var BubbleChart, root,
             __bind = function (fn, me) {
                 return function () {
@@ -23,7 +25,7 @@
             this.data = data;
             this.width = 750;
             this.height = 400;
-            this.svgContainer = "#chart-06";
+            this.svgContainer = "#chart-04";
 
             this.tooltipWidth = 150;
             this.tooltipId = "gates_tooltip";
@@ -53,7 +55,7 @@
             this.force = null;
             this.circles = null;
             this.fill_color =
-                    d3.scaleOrdinal().domain(["low", "medium", "high"]).range(["#d84b2a", "#beccae", "#7aa25c"]);
+                    d3.scale.ordinal().domain(["low", "medium", "high"]).range(["#d84b2a", "#beccae", "#7aa25c"]);
             var maxs = [];
             for (var key in this.data) {
                 maxs.push(d3.max(this.data[key], function (c) {
@@ -63,7 +65,7 @@
             max_amount = d3.max(maxs, function (d) {
                 return parseInt(d);
             });
-            this.radius_scale = d3.scalePow().exponent(0.5).domain([0, max_amount]).range([1, 20]);
+            this.radius_scale = d3.scale.pow().exponent(0.5).domain([0, max_amount]).range([1, 20]);
             this.create_nodes();
             this.create_vis();
         }
@@ -95,6 +97,7 @@
         };
 
         BubbleChart.prototype.create_vis = function () {
+            
             var that;
             this.vis = d3.select(this.svgContainer).append("svg").attr("width", this.width).attr("height", this.height).attr("id", "svg_vis");
             this.circles = this.vis.selectAll("circle").data(this.nodes, function (d) {
@@ -130,21 +133,20 @@
         };
 
         BubbleChart.prototype.start = function () {
-            return this.force = d3.forceSimulation().nodes(this.nodes);
+            return this.force = d3.layout.force().nodes(this.nodes).size([this.width, this.height]);
         };
 
         BubbleChart.prototype.display_group_all = function () {
-            this.force.force("charge", d3.forceManyBody()).velocityDecay(0.9).on("tick", (function (_this) {
-                console.log(_this);
+            this.force.gravity(this.layout_gravity).charge(this.charge).friction(0.9).on("tick", (function (_this) {
                 return function (e) {
-                    return _this.circles.each(_this.move_towards_center()).attr("cx", function (d) {
+                    return _this.circles.each(_this.move_towards_center(e.alpha)).attr("cx", function (d) {
                         return d.x;
                     }).attr("cy", function (d) {
                         return d.y;
                     });
                 };
             })(this));
-            this.force.restart();
+            this.force.start();
             return this.hide_topics();
         };
 
@@ -281,10 +283,10 @@
         })(this);
         return $.ajax({
             type: "get",
-            url: "http://localhost:9200/anhalytics_fulltextteis_in/_search",
+            url: "http://localhost:9200/anhalytics_fulltextteis/_search",
             data: {source: elasticSearchAggQuery4()},
             //processData: true, 
-            dataType: "jsonp",
+            //dataType: "jsonp",
             success: function (data) {
                 var buckets = data.aggregations.country.buckets;
                 var dataset = {};
@@ -297,6 +299,8 @@
                     dataset[bucket.key] = array;
 
                 }
+                
+                
                 render_vis(dataset)
             }});
     });

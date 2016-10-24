@@ -68,8 +68,8 @@ var elasticSearchSearchQuery = function () {
             filtered = true;
         }
     });
-    
-    
+
+
     for (var item in options.predefined_filters) {
         // predefined filters to apply to all search and defined in the options
         !bool ? bool = {'must': []} : "";
@@ -79,7 +79,7 @@ var elasticSearchSearchQuery = function () {
         filtered = true;
     }
     if (bool) {
-        
+
         // $('#facetview_freetext').val() != ""
         //    ? bool['must'].push( {'query_string': { 'query': $('#facetview_freetext').val() } } )
         //    : "";
@@ -111,10 +111,10 @@ var elasticSearchSearchQuery = function () {
         //obj4['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}};
         var thenum;
         var obj3 = {'bool': {'should': [],
-            'must': [],'must_not': []}};
+                'must': [], 'must_not': []}};
         var rule;
         var field;
-        
+
         $('#facetview_searchbars').children('.clonedDiv').each(function (i) {
             thenum = $(this).attr("id").match(/\d+/)[0] // "3"
             if ($('#facetview_freetext' + thenum).val() != "") {
@@ -122,15 +122,15 @@ var elasticSearchSearchQuery = function () {
                 rule = $('#selected-bool-field' + thenum).text().trim();
                 field = $('#selected-tei-field' + thenum).text().trim();
                 if (field == "all fields")
-                    obj6['query_string'] = {'default_field': "_all",'query' :$('#facetview_freetext' + thenum).val()};
+                    obj6['query_string'] = {'default_field': "_all", 'query': $('#facetview_freetext' + thenum).val()};
                 else if (field == "title")
-                    obj6['query_string'] = {'default_field': record_metadata.title,'query' :$('#facetview_freetext' + thenum).val()};
+                    obj6['query_string'] = {'default_field': record_metadata.title, 'query': $('#facetview_freetext' + thenum).val()};
                 else if (field == "abstract")
-                    obj6['query_string'] = {'default_field':record_metadata.abstract, 'query':$('#facetview_freetext' + thenum).val()};
+                    obj6['query_string'] = {'default_field': record_metadata.abstract, 'query': $('#facetview_freetext' + thenum).val()};
                 else if (field == "keyword")
-                    obj6['query_string'] = {'default_field':record_metadata.keywords, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                    obj6['query_string'] = {'default_field': record_metadata.keywords, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 else if (field == "author")
-                    obj6['query_string'] = {'default_field':record_metadata.author_fullname, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                    obj6['query_string'] = {'default_field': record_metadata.author_fullname, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 if (rule == "should") {
                     obj3['bool']['should'].push(obj6);
                 } else if (
@@ -146,14 +146,14 @@ var elasticSearchSearchQuery = function () {
                 //
             }
         });
-obj4['query'] = obj3;
+        obj4['query'] = obj3;
         //}
         qs['query'] = {'filtered': obj4};
         //qs['query'] = {'bool': bool}
     } else {
         var thenum;
         var obj3 = {'bool': {'should': [],
-            'must': [],'must_not': []}};
+                'must': [], 'must_not': []}};
         var rule;
         var field;
         $('#facetview_searchbars').children('.clonedDiv').each(function (i) {
@@ -163,15 +163,15 @@ obj4['query'] = obj3;
                 rule = $('#selected-bool-field' + thenum).text().trim();
                 field = $('#selected-tei-field' + thenum).text().trim();
                 if (field == "all fields")
-                    obj6['query_string'] = {'default_field': "_all",'query' :$('#facetview_freetext' + thenum).val()};
+                    obj6['query_string'] = {'default_field': "_all", 'query': $('#facetview_freetext' + thenum).val()};
                 else if (field == "title")
-                    obj6['query_string'] = {'default_field': record_metadata.title,'query' :$('#facetview_freetext' + thenum).val()};
+                    obj6['query_string'] = {'default_field': record_metadata.title, 'query': $('#facetview_freetext' + thenum).val()};
                 else if (field == "abstract")
-                    obj6['query_string'] = {'default_field':record_metadata.abstract, 'query':$('#facetview_freetext' + thenum).val()};
+                    obj6['query_string'] = {'default_field': record_metadata.abstract, 'query': $('#facetview_freetext' + thenum).val()};
                 else if (field == "keyword")
-                    obj6['query_string'] = {'default_field':record_metadata.keywords, 'query': $('#facetview_freetext' + thenum).val()};
+                    obj6['query_string'] = {'default_field': record_metadata.keywords, 'query': $('#facetview_freetext' + thenum).val()};
                 else if (field == "author")
-                    obj6['query_string'] = {'default_field':record_metadata.author_fullname, 'query': $('#facetview_freetext' + thenum).val()};
+                    obj6['query_string'] = {'default_field': record_metadata.author_fullname, 'query': $('#facetview_freetext' + thenum).val()};
                 if (rule == "should") {
                     obj3['bool']['should'].push(obj6);
                 } else if (
@@ -181,7 +181,7 @@ obj4['query'] = obj3;
                 } else if (rule = "must_not") {
                     obj3['bool']['must_not'].push(obj6);
                 }
-                
+
                 queried_fields.push(obj6['query_string']['default_field']);
                 //obj6['match'][ record_metadata.title ] = $('#facetview_freetext' + thenum).val();
                 //obj6['match'][ 'default_operator' ] = 'AND';
@@ -223,13 +223,13 @@ obj4['query'] = obj3;
             if (options.aggs[item]['order'])
                 obj['order'] = options.aggs[item]['order'];
             else
-                obj['order'] = { "_count" : "desc" };
+                obj['order'] = {"_count": "desc"};
             // we need to remove type and view fields since ES 1.2
-            
+
             qs['aggs'][nameFacet] = {"terms": obj};
         }
         delete obj['type'];
-            delete obj['view'];
+        delete obj['view'];
     }
     // set snippets/highlight
 //    if (queried_fields.length === 0) {
@@ -238,12 +238,12 @@ obj4['query'] = obj3;
 
     qs['highlight'] = {};
     qs['highlight']['fields'] = {};
-    
+
     for (var fie in queried_fields) {
 //        if (options['snippet_style'] == 'andlauer') {
 //            qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 100};
 //        } else {
-if(queried_fields[fie] == '_all' || queried_fields[fie] ==record_metadata.abstract){
+        if (queried_fields[fie] == '_all' || queried_fields[fie] == record_metadata.abstract) {
             qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 3};
         }
         //}
@@ -252,87 +252,6 @@ if(queried_fields[fie] == '_all' || queried_fields[fie] ==record_metadata.abstra
     qs['highlight']['pre_tags'] = ['<strong>'];
     qs['highlight']['post_tags'] = ['</strong>'];
     qs['highlight']['require_field_match'] = true;
-    var theUrl = JSON.stringify(qs);
-
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
-    return theUrl;
-};
-
-var elasticSearchAggQuery1 = function () {
-
-    var qs = {};
-
-    // set any facets
-    qs['size'] = 0; 
-    qs['aggs'] = {"publication_date":{"date_histogram":{"field":"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub", "interval":"year",
-                "format" : "yyyy-MM-dd"}}};
-    
-    var theUrl = JSON.stringify(qs);
-
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
-    return theUrl;
-};
-
-var elasticSearchAggQuery3 = function () {
-
-    var qs = {};
-
-    // set any facets
-    qs['size'] = 0; 
-    qs['aggs'] = {"country":{"terms":{"field":"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$desc.$address.key"}}};
-    
-    var theUrl = JSON.stringify(qs);
-
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
-    return theUrl;
-};
-
-
-var elasticSearchAggQuery2 = function () {
-
-    var qs = {};
-
-    // set any facets
-    qs['size'] = 0; 
-    qs['aggs'] = {"Organisation":{"terms":{"field":"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$idno.$type_orgAnhalyticsID"},
-   "aggs": {
-    "authors": {
-     "terms": {
-      "field": "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$idno.$type_authorAnhalyticsID"
-     }
-    }
-   }}};
-    
-    var theUrl = JSON.stringify(qs);
-
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
-    return theUrl;
-};
-
-
-var elasticSearchAggQuery4 = function () {
-
-    var qs = {};
-
-    // set any facets
-    qs['size'] = 0; 
-    qs['aggs'] = {"country":{"terms":{"field":"$teiCorpus.$standoff.$nerd.preferredTerm"},
-   "aggs": {
-    "typology": {
-     "terms": {
-      "field": "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$idno.$type_authorAnhalyticsID"
-     }
-    }
-   }}};
-    
     var theUrl = JSON.stringify(qs);
 
     //if (window.console != undefined) {

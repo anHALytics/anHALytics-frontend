@@ -188,3 +188,22 @@ div.application .return-link:hover,
 .tooltip .name {
   font-weight:bold;
 }
+
+svg {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+}
+
+.area {
+  fill: lightsteelblue;
+}
