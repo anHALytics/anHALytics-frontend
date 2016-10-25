@@ -210,14 +210,14 @@
         <script type="text/javascript" src="bower_components/keen-js/dist/keen.min.js"></script>
         <script type="text/javascript" src="js/meta.js"></script>
 
-        
-        
+
+
         <!--  <script type="text/javascript" src="js/keen.dashboard.js"></script>-->
         <script type="text/javascript" src="dashboard/indiv_esqueries.js"></script>
         <script type="text/javascript" src="js/extension.js"></script>
 
-        
-        
+
+
         <script type="text/javascript">
             var url_options = $.getUrlVars();
             var authID = url_options.authID;
@@ -236,8 +236,8 @@
 
 
         </script>
-        
-        
+
+
         <script type="text/javascript">
             Array.prototype.getUnique = function (createArray) {
                 createArray = createArray === true ? true : false;
@@ -268,10 +268,20 @@
         <!--MAPS-->
         <script type="text/javascript" src="bower_components/topojson/topojson.min.js"></script>
         <script type="text/javascript" src="bower_components/datamaps/dist/datamaps.all.js"></script>
-<!--D3 libraries, extensions..-->
+        <!--D3 libraries, extensions..-->
         <script src="bower_components/plotly.js/dist/plotly.min.js"></script>
         <script src="bower_components/dimple/dist/dimple.latest.min.js"></script>
-        
+
+        <script type="text/javascript">
+            var api_urls = {
+                authors: "http://localhost:9200/anhalytics_kb/authors",
+                organisations: "http://localhost:9200/anhalytics_kb/organisations",
+                publications: "http://localhost:9200/anhalytics_kb/publications"
+            };
+
+
+        </script>
+
         <script type="text/javascript" src="dashboard/individual_dash.js"></script>
         <script type="text/javascript" src="dashboard/bubble.js"></script>
 

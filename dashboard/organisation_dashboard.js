@@ -4,7 +4,7 @@ function InitOrganisationPublicationsPerYear(organisationID) {
     $("#chart-02-title").text("Publications per year");
     $.ajax({
         type: "get",
-        url: "http://localhost:9200/anhalytics_kb/organisations/_search",
+        url: api_urls.organisations+"/_search",
         data: {source: elasticSearchAggQuery1(organisationID)},
         //processData: true,
         success: function (data) {
@@ -161,7 +161,7 @@ function getOrganisationRelations(organisationID) {
     $("#chart-01-title").text("Organisation relations");
     $.ajax({
         type: "get",
-        url: "http://localhost:9200/anhalytics_kb/organisations/_search",
+        url: api_urls.organisations+"/_search",
         data: {source: elasticSearchAggQuery5(organisationID)},
         //processData: true,
         success: function (data) {
@@ -196,7 +196,7 @@ function getTopicsByOrganisation(organisationID) {
     $("#chart-03-title").text("Organisation topics");
     $.ajax({
         type: "get",
-        url: "http://localhost:9200/anhalytics_kb/organisations/" + organisationID,
+        url: api_urls.organisations+"/" + organisationID,
         //processData: true,
         success: function (data) {
             var pubIds = data._source.documents.map(function (a) {
@@ -204,7 +204,7 @@ function getTopicsByOrganisation(organisationID) {
             });
             $.ajax({
                 type: "get",
-                url: "http://localhost:9200/anhalytics_kb/publications/_search",
+                url: api_urls.publications+"/_search",
                 data: {source: elasticSearchAggQuery6(pubIds)},
                 success: function (data) {
                     //console.log(data.aggregations.category.buckets)
@@ -236,7 +236,7 @@ function getKeywordsByOrganisationYear(organisationID) {
     $("#chart-04-title").text("Organisation keywords");
     $.ajax({
         type: "get",
-        url: "http://localhost:9200/anhalytics_kb/organisations/" + organisationID,
+        url: api_urls.organisations+"/" + organisationID,
         //processData: true,
         success: function (data) {
             var pubIds = data._source.documents.map(function (a) {
@@ -244,7 +244,7 @@ function getKeywordsByOrganisationYear(organisationID) {
             });
             $.ajax({
                 type: "get",
-                url: "http://localhost:9200/anhalytics_kb/publications/_search",
+                url: api_urls.publications+"/_search",
                 data: {source: elasticSearchAggQuery7(pubIds)},
                 success: function (data) {
                     var touchdown = data.aggregations.category.buckets;
@@ -331,7 +331,7 @@ function InitPublicationsPerCountry(organisationID) {
     $("#chart-08-title").text("International collaborations");
     $.ajax({
         type: "get",
-        url: "http://localhost:9200/anhalytics_kb/organisations/" + organisationID,
+        url: api_urls.organisations+"/" + organisationID,
         //processData: true,
         success: function (data) {
             var pubIds = data._source.documents.map(function (a) {
@@ -340,7 +340,7 @@ function InitPublicationsPerCountry(organisationID) {
 
             $.ajax({
                 type: "get",
-                url: "http://localhost:9200/anhalytics_kb/publications/_search",
+                url: api_urls.publications+"/_search",
                 data: {source: elasticSearchAggQuery3(pubIds)},
                 //processData: true, 
                 //dataType: "jsonp",
@@ -413,14 +413,14 @@ function getCollaboratorsByYear(organisationID) {
     $("#chart-06-title").text("Collaborators");
     $.ajax({
         type: "get",
-        url: "http://localhost:9200/anhalytics_kb/organisations/" + organisationID,
+        url: api_urls.organisations+"/" + organisationID,
         //processData: true,
         success: function (data) {
             var pubIds = data._source.documents.map(function (a) {
                 return a.docID;
             });
             $.ajax({type: "get",
-                url: "http://localhost:9200/anhalytics_kb/publications/_search",
+                url: api_urls.publications+"/_search",
                 data: {source: elasticSearchAggQuery8(pubIds)},
                 //processData: true, 
                 //dataType: "jsonp",
@@ -503,14 +503,14 @@ function getConferencesByYear(organisationID) {
     $("#chart-07-title").text("Major conferences");
     $.ajax({
         type: "get",
-        url: "http://localhost:9200/anhalytics_kb/organisations/" + organisationID,
+        url: api_urls.organisations+"/" + organisationID,
         //processData: true,
         success: function (data) {
             var pubIds = data._source.documents.map(function (a) {
                 return a.docID;
             });
             $.ajax({type: "get",
-                url: "http://localhost:9200/anhalytics_kb/publications/_search",
+                url: api_urls.publications+"/_search",
                 data: {source: elasticSearchAggQuery9(pubIds)},
                 //processData: true, 
                 //dataType: "jsonp",

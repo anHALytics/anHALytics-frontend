@@ -3,7 +3,7 @@ function InitPublicationsPerYear(authID) {
     $("#chart-01-title").text("Publications over time");
     $.ajax({
         type: "get",
-        url: "http://localhost:9200/anhalytics_kb/authors/_search",
+        url: api_urls.authors+"/_search",
         data: {source: elasticSearchAggQuery1(authID)},
         //processData: true, 
         //dataType: "jsonp",
@@ -110,7 +110,7 @@ function getTopicsByAuthor(authorID) {
     $("#chart-02-title").text("Authors topics");
     $.ajax({
         type: "get",
-        url: "http://localhost:9200/anhalytics_kb/authors/" + authorID,
+        url: api_urls.authors+"/" + authorID,
         //processData: true,
         success: function (data) {
             var pubIds = data._source.publications.map(function (a) {
@@ -118,7 +118,7 @@ function getTopicsByAuthor(authorID) {
             });
             $.ajax({
                 type: "get",
-                url: "http://localhost:9200/anhalytics_kb/publications/_search",
+                url: api_urls.publications+"/_search",
                 data: {source: elasticSearchAggQuery6(pubIds)},
                 success: function (data) {
                     var touchdowns = data.aggregations.category.buckets;
@@ -159,7 +159,7 @@ function InitPublicationsPerCountry(authID) {
     $("#chart-06-title").text("International collaborators");
     $.ajax({
         type: "get",
-        url: "http://localhost:9200/anhalytics_kb/authors/" + authID,
+        url: api_urls.authors+"/" + authID,
         //processData: true,
         success: function (data) {
             var pubIds = data._source.publications.map(function (a) {
@@ -168,7 +168,7 @@ function InitPublicationsPerCountry(authID) {
 
             $.ajax({
                 type: "get",
-                url: "http://localhost:9200/anhalytics_kb/publications/_search",
+                url: api_urls.publications+"/_search",
                 data: {source: elasticSearchAggQuery3(pubIds)},
                 //processData: true, 
                 //dataType: "jsonp",
@@ -528,7 +528,7 @@ function getCoAuthorsOverTime(authID) {
     $("#chart-07-title").text("Co-authors over time");
     $.ajax({
         type: "get",
-        url: "http://localhost:9200/anhalytics_kb/authors/" + authID,
+        url: api_urls.authors+"/" + authID,
         //processData: true,
         success: function (data) {
             var pubIds = data._source.publications.map(function (a) {
@@ -537,7 +537,7 @@ function getCoAuthorsOverTime(authID) {
 
             $.ajax({
                 type: "get",
-                url: "http://localhost:9200/anhalytics_kb/publications/_search",
+                url: api_urls.publications+"/_search",
                 data: {source: elasticSearchAggQuery5(pubIds)},
                 //processData: true, 
                 //dataType: "jsonp",
@@ -584,7 +584,7 @@ function getKeywordsByAuthorByYear(authID) {
     $("#chart-08-title").text("Keywords over time");
     $.ajax({
         type: "get",
-        url: "http://localhost:9200/anhalytics_kb/authors/" + authID,
+        url: api_urls.authors+"/" + authID,
         //processData: true,
         success: function (data) {
             var pubIds = data._source.publications.map(function (a) {
@@ -593,7 +593,7 @@ function getKeywordsByAuthorByYear(authID) {
 
             $.ajax({
                 type: "get",
-                url: "http://localhost:9200/anhalytics_kb/publications/_search",
+                url: api_urls.publications+"/_search",
                 data: {source: elasticSearchAggQuery7(pubIds)},
                 //processData: true, 
                 //dataType: "jsonp",
