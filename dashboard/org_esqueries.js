@@ -1,12 +1,12 @@
 
-var elasticSearchAggQuery1 = function (id) {
+var OrganisationPublicationsPerYearESQuery = function (params) {
 
     var qs = {};
     var idarr = [];
-    console.log(id);
+    console.log(params.organisationID);
     // set any facets
     qs['size'] = 0;
-    qs['query'] = {"match": {"_id": id}};
+    qs['query'] = {"match": {"_id": params.organisationID}};
 //    qs['aggs'] = {
 //        "publication_date": {"date_histogram": {"field": "documents.publication.date_printed", "interval": "year",
 //                        "format": "yyyy-MM-dd"}}};
@@ -21,33 +21,28 @@ var elasticSearchAggQuery1 = function (id) {
                         "format": "yyyy-MM-dd"}}
             }}};
     var theUrl = JSON.stringify(qs);
-    console.log(theUrl);
     return theUrl;
 };
 
-var elasticSearchAggQuery3 = function (id) {
+var PublicationsPerCountryESQuery = function (params) {
 
     var qs = {};
-    qs['query'] = {"terms": {"_id": id}};
+    qs['query'] = {"match":{"organisations.organisationId":params.organisationID}};
     // set any facets
     qs['size'] = 0;
     qs['aggs'] = {"country": {"terms": {"field": "organisations.address.country"}}};
 
     var theUrl = JSON.stringify(qs);
-
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
     return theUrl;
 };
 
 
-var elasticSearchAggQuery5 = function (id) {
+var OrganisationRelationsESQuery = function (params) {
 
     var qs = {};
     // set any facets
     qs['size'] = 10;
-    qs['query'] = {"term": {"relations.organisationId": id}};
+    qs['query'] = {"term": {"relations.organisationId": params.organisationID}};
     qs['sort'] = [
         {"docCount": {"order": "desc"}}
     ];
@@ -56,24 +51,47 @@ var elasticSearchAggQuery5 = function (id) {
     return theUrl;
 };
 
-var elasticSearchAggQuery6 = function (id) {
+var TopicsByOrganisationESQuery = function (params) {
 
     var qs = {};
     // set any facets
     qs['size'] = 10;
-    qs['query'] = {"terms": {"_id": id}};
+    
+    if(params.topic)
+    qs['query'] = {"filtered":{"filter":{"query":{"bool":{"must":[{"term":{"annotations.$standoff.$category.category":params.topic}
+}
+]
+}
+}
+},"query":{"match":{"organisations.organisationId":params.organisationID}
+}
+}
+}
+    else    
+    qs['query'] = {"match": {"organisations.organisationId":params.organisationID}};
+
     qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$category.category"}}};
     var theUrl = JSON.stringify(qs);
-    console.log(theUrl);
     return theUrl;
 };
 
-var elasticSearchAggQuery7 = function (id) {
+var KeywordsByOrganisationYearESQuery = function (params) {
 
     var qs = {};
     // set any facets
     qs['size'] = 10;
-    qs['query'] = {"terms": {"_id": id}};
+    if(params.topic)
+    qs['query'] = {"filtered":{"filter":{"query":{"bool":{"must":[{"term":{"annotations.$standoff.$category.category":params.topic}
+}
+]
+}
+}
+},"query":{"match":{"organisations.organisationId":params.organisationID}
+}
+}
+}
+    else    
+    qs['query'] = {"match":{"organisations.organisationId":params.organisationID}};
     qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$keyterm.keyterm"},
             "aggs": {
                 "publication_dates": {
@@ -86,14 +104,24 @@ var elasticSearchAggQuery7 = function (id) {
 
         }};
     var theUrl = JSON.stringify(qs);
-    console.log(theUrl);
     return theUrl;
 };
 
-var elasticSearchAggQuery8 = function (id) {
+var CollaboratorsByYearESQuery = function (params) {
 
     var qs = {};
-    qs['query'] = {"terms": {"_id": id}};
+    if(params.topic)
+    qs['query'] = {"filtered":{"filter":{"query":{"bool":{"must":[{"term":{"annotations.$standoff.$category.category":params.topic}
+}
+]
+}
+}
+},"query":{"match": {"organisations.organisationId":params.organisationID}
+}
+}
+}
+    else    
+    qs['query'] = {"match": {"organisations.organisationId":params.organisationID}};
     // set any facets
     qs['size'] = 0;
     qs['aggs'] = {"orgs": {"terms": {"field": "organisations.organisationId"},
@@ -110,17 +138,25 @@ var elasticSearchAggQuery8 = function (id) {
 
     var theUrl = JSON.stringify(qs);
 
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
     return theUrl;
 };
 
 
-var elasticSearchAggQuery9 = function (id) {
+var ConferencesByYearESQuery = function (params) {
 
     var qs = {};
-    qs['query'] = {"terms": {"_id": id}};
+    if(params.topic)
+    qs['query'] = {"filtered":{"filter":{"query":{"bool":{"must":[{"term":{"annotations.$standoff.$category.category":params.topic}
+}
+]
+}
+}
+},"query":{"match": {"organisations.organisationId":params.organisationID}
+}
+}
+}
+    else    
+    qs['query'] = {"match": {"organisations.organisationId":params.organisationID}};
     // set any facets
     qs['size'] = 0;
     qs['aggs'] = {"confs": {"terms": {"field": "publication.monograph.conference.title"},
@@ -132,13 +168,37 @@ var elasticSearchAggQuery9 = function (id) {
 
         }};
 
+    var theUrl = JSON.stringify(qs);
+
+    return theUrl;
+};
+
+var OrganisationIdByNameESQuery = function (params) {
+
+    var qs = {};
+    qs['query'] = {"match": {"names.name": params.orgName}};
+    // set any facets
+    qs['size'] = 1;
+
 
 
 
     var theUrl = JSON.stringify(qs);
 
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
+    return theUrl;
+};
+
+var elasticSearchAggQuery11 = function (params) {
+
+    var qs = {};
+    qs['query'] = {"match": {"names.name": params.orgName}};
+    // set any facets
+    qs['size'] = 1;
+
+
+
+
+    var theUrl = JSON.stringify(qs);
+
     return theUrl;
 };

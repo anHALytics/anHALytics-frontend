@@ -1,11 +1,12 @@
+var params = {"organisationID": organisationID};
 
-
-function InitOrganisationPublicationsPerYear(organisationID) {
+function InitOrganisationPublicationsPerYear(params) {
     $("#chart-02-title").text("Publications per year");
+    $("#chart-02").empty();
     $.ajax({
         type: "get",
-        url: api_urls.organisations+"/_search",
-        data: {source: elasticSearchAggQuery1(organisationID)},
+        url: api_urls.organisations + "/_search",
+        data: {source: OrganisationPublicationsPerYearESQuery(params)},
         //processData: true,
         success: function (data) {
             var margin = {top: 10, right: 10, bottom: 50, left: 30},
@@ -157,16 +158,15 @@ function InitOrganisationPublicationsPerYear(organisationID) {
     });
 }
 
-function getOrganisationRelations(organisationID) {
+function getOrganisationRelations(params) {
     $("#chart-01-title").text("Organisation relations");
+    $("#chart-01").empty();
     $.ajax({
         type: "get",
-        url: api_urls.organisations+"/_search",
-        data: {source: elasticSearchAggQuery5(organisationID)},
+        url: api_urls.organisations + "/_search",
+        data: {source: OrganisationRelationsESQuery(params)},
         //processData: true,
         success: function (data) {
-
-            //console.log(data.hits.hits);
             var x = [], y = [];
             for (var i = 0; i < data.hits.hits.length; i++) {
                 y.push(data.hits.hits[i]._source.names[0].name);
@@ -184,7 +184,9 @@ function getOrganisationRelations(organisationID) {
             var myPlot = document.getElementById('chart-01')
             myPlot.on('plotly_click', function (data) {
                 for (var i = 0; i < data.points.length; i++) {
-                    alert('Closest point clicked:\n\n' + data.points[i].y);
+                    console.log('Closest point clicked:\n\n' + data.points[i].y);
+                    params.orgName = data.points[i].y;
+                    getOrganisationIdByName(params);
                 }
             });
 
@@ -192,20 +194,45 @@ function getOrganisationRelations(organisationID) {
     });
 }
 
-function getTopicsByOrganisation(organisationID) {
-    $("#chart-03-title").text("Organisation topics");
+function getOrganisationIdByName(params) {
+    $("#sub-about").text(params.orgName);
     $.ajax({
         type: "get",
-        url: api_urls.organisations+"/" + organisationID,
+        url: api_urls.organisations + "/_search",
+        data: {source: OrganisationIdByNameESQuery(params)},
+        //processData: true,
+        success: function (data) {
+            var organisationID = data.hits.hits[0]._id;
+            params.organisationID = organisationID ;
+            InitOrganisationPublicationsPerYear(params);
+            getOrganisationRelations(params);
+            getTopicsByOrganisation(params);
+            getKeywordsByOrganisationYear(params);
+            InitPublicationsPerCountry(params);
+            getCollaboratorsByYear(params);
+            getConferencesByYear(params);
+        }
+    });
+
+
+}
+
+function getTopicsByOrganisation(params) {
+    $("#chart-03-title").text("Organisation topics");
+    $("#chart-03").empty();
+    $.ajax({
+        type: "get",
+        url: api_urls.organisations + "/" + params.organisationID,
         //processData: true,
         success: function (data) {
             var pubIds = data._source.documents.map(function (a) {
                 return a.docID;
             });
+            
             $.ajax({
                 type: "get",
-                url: api_urls.publications+"/_search",
-                data: {source: elasticSearchAggQuery6(pubIds)},
+                url: api_urls.publications + "/_search",
+                data: {source: TopicsByOrganisationESQuery(params)},
                 success: function (data) {
                     //console.log(data.aggregations.category.buckets)
                     var svg = dimple.newSvg("#chart-03", 490, 400);
@@ -218,7 +245,16 @@ function getTopicsByOrganisation(organisationID) {
 
                     d3.selectAll("path").on("click", function (d, i) {
 
-                        alert(d.key.replace(/_/g, ''))
+                        console.log(d.key.replace(/_/g, ''));
+                        params.topic = d.key.replace(/_/g, '');
+                        $("#sub-about1").text(params.topic);
+                        InitOrganisationPublicationsPerYear(params);
+            getOrganisationRelations(params);
+            getTopicsByOrganisation(params);
+            getKeywordsByOrganisationYear(params);
+            InitPublicationsPerCountry(params);
+            getCollaboratorsByYear(params);
+            getConferencesByYear(params);
 
                     });
 
@@ -232,20 +268,15 @@ function getTopicsByOrganisation(organisationID) {
 
 }
 
-function getKeywordsByOrganisationYear(organisationID) {
+function getKeywordsByOrganisationYear(params) {
     $("#chart-04-title").text("Organisation keywords");
-    $.ajax({
-        type: "get",
-        url: api_urls.organisations+"/" + organisationID,
-        //processData: true,
-        success: function (data) {
-            var pubIds = data._source.documents.map(function (a) {
-                return a.docID;
-            });
+    $("#chart-04").empty();
+    
+            
             $.ajax({
                 type: "get",
-                url: api_urls.publications+"/_search",
-                data: {source: elasticSearchAggQuery7(pubIds)},
+                url: api_urls.publications + "/_search",
+                data: {source: KeywordsByOrganisationYearESQuery(params)},
                 success: function (data) {
                     var touchdown = data.aggregations.category.buckets;
                     var parseDate = d3.time.format("%Y-%m-%d").parse;
@@ -317,9 +348,7 @@ function getKeywordsByOrganisationYear(organisationID) {
                         }}
 
                     Plotly.newPlot('chart-04', dataSet, layout);
-                }
-
-            });
+               
         }
     });
 
@@ -327,21 +356,13 @@ function getKeywordsByOrganisationYear(organisationID) {
 }
 
 var iso3 = {"BD": "BGD", "BE": "BEL", "BF": "BFA", "BG": "BGR", "BA": "BIH", "BB": "BRB", "WF": "WLF", "BL": "BLM", "BM": "BMU", "BN": "BRN", "BO": "BOL", "BH": "BHR", "BI": "BDI", "BJ": "BEN", "BT": "BTN", "JM": "JAM", "BV": "BVT", "BW": "BWA", "WS": "WSM", "BQ": "BES", "BR": "BRA", "BS": "BHS", "JE": "JEY", "BY": "BLR", "BZ": "BLZ", "RU": "RUS", "RW": "RWA", "RS": "SRB", "TL": "TLS", "RE": "REU", "TM": "TKM", "TJ": "TJK", "RO": "ROU", "TK": "TKL", "GW": "GNB", "GU": "GUM", "GT": "GTM", "GS": "SGS", "GR": "GRC", "GQ": "GNQ", "GP": "GLP", "JP": "JPN", "GY": "GUY", "GG": "GGY", "GF": "GUF", "GE": "GEO", "GD": "GRD", "GB": "GBR", "GA": "GAB", "SV": "SLV", "GN": "GIN", "GM": "GMB", "GL": "GRL", "GI": "GIB", "GH": "GHA", "OM": "OMN", "TN": "TUN", "JO": "JOR", "HR": "HRV", "HT": "HTI", "HU": "HUN", "HK": "HKG", "HN": "HND", "HM": "HMD", "VE": "VEN", "PR": "PRI", "PS": "PSE", "PW": "PLW", "PT": "PRT", "SJ": "SJM", "PY": "PRY", "IQ": "IRQ", "PA": "PAN", "PF": "PYF", "PG": "PNG", "PE": "PER", "PK": "PAK", "PH": "PHL", "PN": "PCN", "PL": "POL", "PM": "SPM", "ZM": "ZMB", "EH": "ESH", "EE": "EST", "EG": "EGY", "ZA": "ZAF", "EC": "ECU", "IT": "ITA", "VN": "VNM", "SB": "SLB", "ET": "ETH", "SO": "SOM", "ZW": "ZWE", "SA": "SAU", "ES": "ESP", "ER": "ERI", "ME": "MNE", "MD": "MDA", "MG": "MDG", "MF": "MAF", "MA": "MAR", "MC": "MCO", "UZ": "UZB", "MM": "MMR", "ML": "MLI", "MO": "MAC", "MN": "MNG", "MH": "MHL", "MK": "MKD", "MU": "MUS", "MT": "MLT", "MW": "MWI", "MV": "MDV", "MQ": "MTQ", "MP": "MNP", "MS": "MSR", "MR": "MRT", "IM": "IMN", "UG": "UGA", "TZ": "TZA", "MY": "MYS", "MX": "MEX", "IL": "ISR", "FR": "FRA", "IO": "IOT", "SH": "SHN", "FI": "FIN", "FJ": "FJI", "FK": "FLK", "FM": "FSM", "FO": "FRO", "NI": "NIC", "NL": "NLD", "NO": "NOR", "NA": "NAM", "VU": "VUT", "NC": "NCL", "NE": "NER", "NF": "NFK", "NG": "NGA", "NZ": "NZL", "NP": "NPL", "NR": "NRU", "NU": "NIU", "CK": "COK", "XK": "XKX", "CI": "CIV", "CH": "CHE", "CO": "COL", "CN": "CHN", "CM": "CMR", "CL": "CHL", "CC": "CCK", "CA": "CAN", "CG": "COG", "CF": "CAF", "CD": "COD", "CZ": "CZE", "CY": "CYP", "CX": "CXR", "CR": "CRI", "CW": "CUW", "CV": "CPV", "CU": "CUB", "SZ": "SWZ", "SY": "SYR", "SX": "SXM", "KG": "KGZ", "KE": "KEN", "SS": "SSD", "SR": "SUR", "KI": "KIR", "KH": "KHM", "KN": "KNA", "KM": "COM", "ST": "STP", "SK": "SVK", "KR": "KOR", "SI": "SVN", "KP": "PRK", "KW": "KWT", "SN": "SEN", "SM": "SMR", "SL": "SLE", "SC": "SYC", "KZ": "KAZ", "KY": "CYM", "SG": "SGP", "SE": "SWE", "SD": "SDN", "DO": "DOM", "DM": "DMA", "DJ": "DJI", "DK": "DNK", "VG": "VGB", "DE": "DEU", "YE": "YEM", "DZ": "DZA", "US": "USA", "UY": "URY", "YT": "MYT", "UM": "UMI", "LB": "LBN", "LC": "LCA", "LA": "LAO", "TV": "TUV", "TW": "TWN", "TT": "TTO", "TR": "TUR", "LK": "LKA", "LI": "LIE", "LV": "LVA", "TO": "TON", "LT": "LTU", "LU": "LUX", "LR": "LBR", "LS": "LSO", "TH": "THA", "TF": "ATF", "TG": "TGO", "TD": "TCD", "TC": "TCA", "LY": "LBY", "VA": "VAT", "VC": "VCT", "AE": "ARE", "AD": "AND", "AG": "ATG", "AF": "AFG", "AI": "AIA", "VI": "VIR", "IS": "ISL", "IR": "IRN", "AM": "ARM", "AL": "ALB", "AO": "AGO", "AQ": "ATA", "AS": "ASM", "AR": "ARG", "AU": "AUS", "AT": "AUT", "AW": "ABW", "IN": "IND", "AX": "ALA", "AZ": "AZE", "IE": "IRL", "ID": "IDN", "UA": "UKR", "QA": "QAT", "MZ": "MOZ"}
-function InitPublicationsPerCountry(organisationID) {
+function InitPublicationsPerCountry(params) {
     $("#chart-08-title").text("International collaborations");
-    $.ajax({
-        type: "get",
-        url: api_urls.organisations+"/" + organisationID,
-        //processData: true,
-        success: function (data) {
-            var pubIds = data._source.documents.map(function (a) {
-                return a.docID;
-            });
-
+    $("#chart-08").empty();
             $.ajax({
                 type: "get",
-                url: api_urls.publications+"/_search",
-                data: {source: elasticSearchAggQuery3(pubIds)},
+                url: api_urls.publications + "/_search",
+                data: {source: PublicationsPerCountryESQuery(params)},
                 //processData: true, 
                 //dataType: "jsonp",
                 success: function (data) {
@@ -369,6 +390,7 @@ function InitPublicationsPerCountry(organisationID) {
                     for (var i = 0; i < arrayLength; i++) {
                         dataset[iso3[touchdowns[i].key.toUpperCase()]] = {numberOfThings: touchdowns[i].doc_count, fillColor: paletteScale(touchdowns[i].doc_count)};
                     }
+
                     var map = new Datamap({
                         element: document.getElementById('chart-08'),
                         projection: 'mercator',
@@ -401,27 +423,18 @@ function InitPublicationsPerCountry(organisationID) {
                             }
                         }
                     })
-
-                }
-            });
         }
     });
 
 }
 
-function getCollaboratorsByYear(organisationID) {
+function getCollaboratorsByYear(params) {
     $("#chart-06-title").text("Collaborators");
-    $.ajax({
-        type: "get",
-        url: api_urls.organisations+"/" + organisationID,
-        //processData: true,
-        success: function (data) {
-            var pubIds = data._source.documents.map(function (a) {
-                return a.docID;
-            });
+    $("#chart-06").empty();
+   
             $.ajax({type: "get",
-                url: api_urls.publications+"/_search",
-                data: {source: elasticSearchAggQuery8(pubIds)},
+                url: api_urls.publications + "/_search",
+                data: {source: CollaboratorsByYearESQuery(params)},
                 //processData: true, 
                 //dataType: "jsonp",
                 success: function (data) {
@@ -430,7 +443,7 @@ function getCollaboratorsByYear(organisationID) {
                     var parseDate = d3.time.format("%Y-%m-%d").parse;
 
 
-                    //console.log(touchdown);
+                    console.log(touchdowns);
                     var xMin = new Date(d3.min(touchdowns, function (c) {
                         return d3.min(c.publication_dates.buckets, function (v) {
                             return v.key_as_string;
@@ -455,6 +468,7 @@ function getCollaboratorsByYear(organisationID) {
 
                     var dataSet = [];
                     for (var i = 0; i < touchdowns.length; i++) {
+                        if(touchdowns[i].key !== params.organisationID){
                         var entry = {}, y = [], x = [];
                         entry.type = 'bar';
                         entry.name = touchdowns[i].key;
@@ -471,6 +485,7 @@ function getCollaboratorsByYear(organisationID) {
                         entry.x = x;
                         entry.y = y;
                         dataSet.push(entry);
+                    }
                     }
                     var layout = {barmode: 'stack', xaxis: {anchor: "y", gridcolor: "rgba(255,255,255,1)", tickcolor: "rgba(51,51,51,1)", tickfont: {
                                 color: "rgba(77,77,77,1)",
@@ -491,27 +506,19 @@ function getCollaboratorsByYear(organisationID) {
 
                     Plotly.newPlot('chart-06', dataSet, layout);
 
-                }
-            });
+                
         }
     });
 
 }
 
 
-function getConferencesByYear(organisationID) {
+function getConferencesByYear(params) {
     $("#chart-07-title").text("Major conferences");
-    $.ajax({
-        type: "get",
-        url: api_urls.organisations+"/" + organisationID,
-        //processData: true,
-        success: function (data) {
-            var pubIds = data._source.documents.map(function (a) {
-                return a.docID;
-            });
+    $("#chart-07").empty();
             $.ajax({type: "get",
-                url: api_urls.publications+"/_search",
-                data: {source: elasticSearchAggQuery9(pubIds)},
+                url: api_urls.publications + "/_search",
+                data: {source: ConferencesByYearESQuery(params)},
                 //processData: true, 
                 //dataType: "jsonp",
                 success: function (data) {
@@ -582,23 +589,19 @@ function getConferencesByYear(organisationID) {
                         }
                     };
                     Plotly.newPlot('chart-07', dataSet, layout);
-
-
-                }
-            });
         }
     });
 
 }
 
 
-InitOrganisationPublicationsPerYear(organisationID);
-getOrganisationRelations(organisationID);
-getTopicsByOrganisation(organisationID);
-getKeywordsByOrganisationYear(organisationID);
-InitPublicationsPerCountry(organisationID);
-getCollaboratorsByYear(organisationID);
-getConferencesByYear(organisationID);
+InitOrganisationPublicationsPerYear(params);
+getOrganisationRelations(params);
+getTopicsByOrganisation(params);
+getKeywordsByOrganisationYear(params);
+InitPublicationsPerCountry(params);
+getCollaboratorsByYear(params);
+getConferencesByYear(params);
 
 
 
