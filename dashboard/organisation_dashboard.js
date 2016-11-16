@@ -468,7 +468,7 @@ function getCollaboratorsByYear(params) {
 
                     var dataSet = [];
                     for (var i = 0; i < touchdowns.length; i++) {
-                        if(touchdowns[i].key !== params.organisationID){
+                        if(touchdowns[i].key != params.organisationID){
                         var entry = {}, y = [], x = [];
                         entry.type = 'bar';
                         entry.name = touchdowns[i].key;
