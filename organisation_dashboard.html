@@ -24,9 +24,7 @@
                     <a id="about" class="navbar-brand" href="./">Organisation Name</a>
                 </div>
                 <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-left">
-                        <li><a id="sub-about">Team</a></li>
-                        <li><a id="sub-about1">Keyword</a></li>
+                    <ul class="nav navbar-nav navbar-left" id="selected_filters">
                     </ul>
                 </div>
             </div>
@@ -37,7 +35,7 @@
 
             <div class="row">
 
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="chart-wrapper">
                         <div class="chart-title" id="chart-01-title">
                             Title
@@ -51,27 +49,13 @@
                     </div>
                 </div>
 
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="chart-wrapper">
                         <div class="chart-title" id="chart-02-title">
                             Title
                         </div>
                         <div class="chart-stage">
                             <div id="chart-02"></div>
-                        </div>
-                        <!--          <div class="chart-notes">
-                                    Notes go down here
-                                  </div>-->
-                    </div>
-                </div>
-
-                <div class="col-sm-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title" id="chart-03-title">
-                            Title
-                        </div>
-                        <div class="chart-stage">
-                            <div id="chart-03"></div>
                         </div>
                         <!--          <div class="chart-notes">
                                     Notes go down here
@@ -145,7 +129,7 @@
 
             <div class="row" >
 
-                <div class="col-sm-8" >
+                <div class="col-sm-6" >
                     <div class="chart-wrapper">
                         <div class="chart-title" id="chart-07-title">
                             Title
@@ -159,7 +143,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="chart-wrapper">
                         <div class="chart-title" id="chart-08-title">
                             Title
@@ -169,6 +153,24 @@
                         </div>
                         <!--          <div class="chart-notes">
                                     Notes go down here
+                                  </div>-->
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="row" >
+
+                <div class="col-sm-12" >
+                    <div class="chart-wrapper">
+                        <div class="chart-title" id="chart-09-title">
+                            Title
+                        </div>
+                        <div class="chart-stage">
+                            <div id="chart-09" style="height:400px"></div>
+                        </div>
+                        <!--          <div class="chart-notes">
+                                    This is a sample text region to describe this chart.
                                   </div>-->
                     </div>
                 </div>
@@ -198,7 +200,7 @@
 
             $.ajax({
                 type: "get",
-                url: "http://localhost:9200/anhalytics_kb/organisations/" + organisationID,
+                url: "http://localhost:9200/anhalytics_kb_inria/organisations/" + organisationID,
                 //processData: true,
                 success: function (data) {
                     console.log(data);
@@ -220,9 +222,9 @@
         
         <script type="text/javascript">
             var api_urls = {
-                authors: "http://localhost:9200/anhalytics_kb/authors",
-                organisations: "http://localhost:9200/anhalytics_kb/organisations",
-                publications: "http://localhost:9200/anhalytics_kb/publications"
+                authors: "http://localhost:9200/anhalytics_kb_inria/authors",
+                organisations: "http://localhost:9200/anhalytics_kb_inria/organisations",
+                publications: "http://localhost:9200/anhalytics_kb_inria/publications"
             };
 
 
