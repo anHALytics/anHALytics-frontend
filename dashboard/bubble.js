@@ -1,6 +1,6 @@
 (function () {
     $("#chart-04-title").text("Co-authors");
-    $( "#chart-04-title" ).append( '<div id="view_selection" ><a href="#" id="all">All Co-authors</a><a href="#" id="topic">Co-authors By Topic</a></div>' );
+    $( "#chart-04-title" ).append( '<div id="view_selection" ><a href="#" id="all">All Co-authors</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" id="topic">Co-authors By Topic</a></div>' );
     var BubbleChart, root,
             __bind = function (fn, me) {
                 return function () {
@@ -23,7 +23,7 @@
             this.create_nodes = __bind(this.create_nodes, this);
             var max_amount;
             this.data = data;
-            this.width = 750;
+            this.width = 800;
             this.height = 400;
             this.svgContainer = "#chart-04";
 
@@ -45,7 +45,7 @@
             var i = 0;
             for (var key in this.data)
             {
-                this.year_centers[key] = {"x": (i + 1) * this.width / (this.keys.length + 1), "y": this.height / 2}
+                this.year_centers[key] = {"x": (i + 1) * this.width / (this.keys.length), "y": this.height / 2}
                 i++;
             }
             this.layout_gravity = -0.01;
@@ -55,7 +55,7 @@
             this.force = null;
             this.circles = null;
             this.fill_color =
-                    d3.scale.ordinal().domain(["low", "medium", "high"]).range(["#d84b2a", "#beccae", "#7aa25c"]);
+                    d3.scale.ordinal().range(["#d84b2a", "#beccae", "#7aa25c"]);
             var maxs = [];
             for (var key in this.data) {
                 maxs.push(d3.max(this.data[key], function (c) {
@@ -105,16 +105,16 @@
             });
             that = this;
             this.circles.enter().append("circle").attr("r", 0)
-//                    .attr("fill", (function (_this) {
-//                return function (d) {
-//                    return _this.fill_color(d.group);
-//                };
-//            })(this))
-//                    .attr("stroke-width", 2).attr("stroke", (function (_this) {
-//                return function (d) {
-//                    return d3.rgb(_this.fill_color(d.group)).darker();
-//                };
-//            })(this))
+                    .attr("fill", (function (_this) {
+                return function (d) {
+                    return _this.fill_color(d.group);
+                };
+            })(this))
+                    .attr("stroke-width", 2).attr("stroke", (function (_this) {
+                return function (d) {
+                    return d3.rgb(_this.fill_color(d.group)).darker();
+                };
+            })(this))
 
                     .attr("id", function (d) {
                         return "bubble_" + d.name;
@@ -212,7 +212,7 @@
         BubbleChart.prototype.show_details = function (data, i, element) {
             var content;
             d3.select(element).attr("stroke", "black");
-            content = "<span class=\"name\">Co-author:</span><span class=\"value\"> " + data.name.split("_")[1] + "</span><br/><br/>";
+            content = "<span class=\"name\">Co-author:</span><span class=\"value\"> " + data.name + "</span><br/><br/>";
             content += "<span class=\"value\">" + (addCommas(data.value)) + " publications</span><br/>";
             content += "<span class=\"name\">Topic:</span><span class=\"value\"> " + data.group + "</span><br/><br/>";
             //content += "<span class=\"name\">Year:</span><span class=\"value\"> " + data.year + "</span>";
@@ -283,25 +283,52 @@
         })(this);
         return $.ajax({
             type: "get",
-            url: "http://localhost:9200/anhalytics_fulltextteis/_search",
-            data: {source: elasticSearchAggQuery4()},
+            url: api_urls.publications+"/_search",
+            data: {source: IndivPublicationsPerTopicESQuery()},
             //processData: true, 
             //dataType: "jsonp",
             success: function (data) {
-                var buckets = data.aggregations.country.buckets;
+                var buckets = data.aggregations.topic.buckets;
+                //NESTED OR BUILD NEW AUTHORS MAP
+                    var authors = [];
+                    for (var i = 0; i < buckets.length; i++) {
+                        for (var j = 0; j < buckets[i].authors.buckets.length; j++) {
+                            if (authors.indexOf(buckets[i].authors.buckets[j].key) === -1) {
+                                authors.push(buckets[i].authors.buckets[j].key);
+                            }
+                        }
+                    }
+                    
+                    $.ajax({type: "get",
+                url: api_urls.authors + "/_search",
+                data: {source: PersonNamesByPersonId(authors)},
+                //processData: true, 
+                //dataType: "jsonp",
+                success: function (data1) {
+                    var names = {};
+                    for (var i = 0; i < data1.hits.hits.length; i++) {
+                        names[data1.hits.hits[i]["_id"]] = data1.hits.hits[i]["fields"]["names.fullname"][data1.hits.hits[i]["fields"]["names.fullname"].length - 1];
+                    }
                 var dataset = {};
                 for (var i = 0; i < buckets.length; i++) {
                     var bucket = buckets[i];
                     var array = [];
-                    for (var j = 0; j < bucket.typology.buckets.length; j++) {
-                        array.push(bucket.typology.buckets[j]);
+                    for (var j = 0; j < bucket.authors.buckets.length; j++) {
+                        if(bucket.authors.buckets[j].key != authID){
+                        bucket.authors.buckets[j].key = names[bucket.authors.buckets[j].key]
+                        array.push(bucket.authors.buckets[j]);
                     }
+                    }
+                    
+                    
                     dataset[bucket.key] = array;
 
                 }
                 
                 
                 render_vis(dataset)
+            }});
+            
             }});
     });
 
