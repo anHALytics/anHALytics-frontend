@@ -37,10 +37,17 @@
                         <a href="organisation_dashboard.html?orgID={{organisation['_id']}}" target="_blank" ><img class="" style="padding-left:5px;padding-top:20px;width:50px;" src="data/images/analytic-icon-14.png"></a>
                         
                         </h1> 
+                <div class="row "></div> 
                 <div class="row "> 
                     <div class="my-col-4 sidebar">
                         
                         <ul >
+                            <li ng-if="organisation['_source']['identifers']"> 
+                                <div ng-repeat="identifier in organisation['_source']['identifers']"> 
+                                    {{identifier.type}} :  {{identifier.id}}
+                                </div>   
+                            </li>
+                            
                             <li ng-if="organisation['_source']['address']"> 
                                 <div > 
                                     {{organisation['_source']['address']['addrLine']}}, {{organisation['_source']['address']['postCode']}}, {{organisation['_source']['address']['settlement']}}, {{organisation['_source']['address']['country']}}
