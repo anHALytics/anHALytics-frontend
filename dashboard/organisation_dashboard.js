@@ -512,7 +512,10 @@ function getCollaboratorsByYear(params) {
                             dataSet.push(entry);
                         }
                     }
-                    var layout = {barmode: 'stack', xaxis: {anchor: "y", gridcolor: "rgba(255,255,255,1)", tickcolor: "rgba(51,51,51,1)", tickfont: {
+                    var layout = {
+                        width: 700,
+  height: 400,
+                        barmode: 'stack', xaxis: {anchor: "y", gridcolor: "rgba(255,255,255,1)", tickcolor: "rgba(51,51,51,1)", tickfont: {
                                 color: "rgba(77,77,77,1)",
                                 family: "",
                                 size: 11.6894977169
@@ -527,10 +530,6 @@ function getCollaboratorsByYear(params) {
                                 family: "",
                                 size: 14.6118721461
                             },
-                        },
-                        legend: {
-                            x: 1,
-                            y: 1
                         }
                     }
 
