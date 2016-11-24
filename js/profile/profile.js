@@ -1,5 +1,15 @@
 (function () {
 
+function compare(a,b) {
+    var d1 = Date.parse(a.begin_date);
+var d2 = Date.parse(b.begin_date);
+  if ( d1 < d2)
+    return -1;
+  if (d1 > d2)
+    return 1;
+  return 0;
+}
+
     var coauthorExists = function (coauthor, coauthors)
     {
         var found = false;
@@ -25,7 +35,7 @@
         var url_options = $.getUrlVars();
         var authorID = url_options.authorID;
         client.search({
-            index: 'anhalytics_kb',
+            index: 'anhalytics_kb_inria',
             type: 'authors',
             size: 1,
             body: {
@@ -39,6 +49,9 @@
 
         }).then(function (response) {
             $scope.profile = response.hits.hits[0];
+
+//$scope.profile._source.affiliations.sort(compare);
+
 
             $scope.terms = [];
             for (var i = 0; i < $scope.profile['_source']['publications'].length; i++) {
@@ -54,7 +67,7 @@
             $scope.publications = [];
             $scope.coauthors = [];
             client.search({
-                index: 'anhalytics_kb',
+                index: 'anhalytics_kb_inria',
                 type: 'publications',
                 size: 200, //could be tuned..
                 body: {
@@ -78,6 +91,8 @@
                             if (!coauthorExists(coauthor, $scope.coauthors)) {
                                 coauthor['hits'] = 1;
                                 $scope.coauthors.push(coauthor);
+                                
+                                console.log(coauthor);
                             }
                         }
                     }
@@ -89,7 +104,7 @@
             $scope.interests = [];
             $scope.keywords = [];
             client.search({
-                index: 'anhalytics_fulltextteis',
+                index: 'anhalytics_fulltextteis_inria',
                 body: {
                     "fields": [
                         "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",

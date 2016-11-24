@@ -63,8 +63,8 @@
                         <div>  
                                 <div> 
                                             <i style="width: 20px;" class="fa fa-institution">
-                            </i><a href="institution.html?orgID={{profile['_source']['affiliations'][0]['organisationId']}}" title="{{profile['_source']['affiliations'][0]['names'][0].name}}" target="_blank"> 
-                                {{profile['_source']['affiliations'][0]['names'][0].name}}
+                            </i><a href="institution.html?orgID={{profile['_source']['affiliations'][profile['_source']['affiliations'].length -1]['organisationId']}}" title="{{profile['_source']['affiliations'][profile['_source']['affiliations'].length -1]['names'][0].name}}" target="_blank"> 
+                                {{profile['_source']['affiliations'][profile['_source']['affiliations'].length -1]['names'][0].name}}
                                     </a> 
                                 </div>   
                                 <div ng-if="profile['_source']['affiliations'][0]['address']"> 
