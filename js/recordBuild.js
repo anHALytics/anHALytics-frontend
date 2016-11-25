@@ -260,7 +260,11 @@ var buildrecord = function (index, node) {
     }
     result += '</strong></div>';
     result += '<br/>';
-    result += '<div class="row"><div class="col-md-6"><a id="button_abstract_keywords_collapse_' + index + '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_keywords_' + index + '" style="color: #585858;"><span class="glyphicon glyphicon-chevron-down"></span style="font-size:11px">Abstract/Keywords</a></div><div class="col-md-6"><a target="_blank" href="publication.html?pubID=' + id + '" style="color: #585858;">More details...</a></div></div>';
+    result += '<div class="row"><div class="col-md-6"><a id="button_abstract_keywords_collapse_' + index + 
+        '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_keywords_' + index + 
+        '" style="color: #585858;"><span class="glyphicon glyphicon-chevron-down"></span style="font-size:11px">Abstract/Keywords</a></div><div class="col-md-6"><a target="_blank" href="publication.html?pubID=' + id + 
+        //'" style="color: #585858;">More details...</a></div></div>';
+        '" style="color: #585858;"></a></div></div>';
 
     result += '</div>';
     result += '</div>';
@@ -529,11 +533,13 @@ var buildrecord = function (index, node) {
         ],
         "query": {"filtered": {"query": {"term": {"_id": id}}}}};
     $.ajax({
-        type: "get",
+        //type: "get",
+        type: "POST",
         url: options.search_url,
         contentType: 'application/json',
         dataType: 'json',
-        data: {source: JSON.stringify(localQuery)},
+        //data: {source: JSON.stringify(localQuery)},
+        data: JSON.stringify(localQuery),
         success: function (data) {
             displayAbstract(data, index);
         }

@@ -535,18 +535,18 @@
                     	';
                 if (filters[idx]['type'] == 'date') {
                     _filterTmpl +=
-                            '<div id="date-input" style="position:relative;margin-bottom:10px;"> \
-						   From : <input type="text" id="day_from" name="day_from" \
+                            '<div id="date-input" style="position:relative;margin-bottom:10px;margin-left:-10px"> \
+						   From : <input class="input-date" type="text" id="day_from" name="day_from" \
 						   size="2" maxlength="2" placeholder="DD"/> \
-						   <input type="text" id="month_from" name="month_from" size="2" maxlength="2"\
+						   <input class="input-date" type="text" id="month_from" name="month_from" size="2" maxlength="2"\
 						    placeholder="MM"/> \
-						   <input type="text" id="year_from" name="year_from" size="4" maxlength="4"\
+						   <input class="input-date" type="text" id="year_from" name="year_from" size="4" maxlength="4"\
 						     placeholder="YYYY"/>\
-						   To&nbsp;:&nbsp;<input type="text" id="day_to" name="day_to" size="2" maxlength="2" \
+						   To&nbsp;:&nbsp;<input class="input-date" type="text" id="day_to" name="day_to" size="2" maxlength="2" \
 						    placeholder="DD"" /> \
-						   <input type="text" id="month_to" name="month_to" size="2"  maxlength="2" \
+						   <input class="input-date" type="text" id="month_to" name="month_to" size="2"  maxlength="2" \
 						    placeholder="MM"/> \
-					   	   <input type="text" id="year_to" name="year_to" size="4" maxlength="4"\
+					   	   <input class="input-date" type="text" id="year_to" name="year_to" size="4" maxlength="4"\
 					         placeholder="YYYY"/> \
 					       <div id="validate-date-range" alt="set date range" title="set date range" rel="{{FACET_IDX}}" class="glyphicon glyphicon-ok" /></div>';
                 }
@@ -1622,9 +1622,11 @@
             // make the search query
             if (options.search_index == "elasticsearch") {
                 $.ajax({
-                    type: "get",
+                    //type: "get",
+                    type: "post",
                     url: options.search_url,
-                    data: {source: elasticSearchSearchQuery()},
+                    //data: {source: elasticSearchSearchQuery()},
+                    data: elasticSearchSearchQuery(),
                     // processData: false,
                     //dataType: "jsonp",
                     success: function (data) {

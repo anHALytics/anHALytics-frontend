@@ -1,14 +1,7 @@
-
-
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : Jan 4, 2016, 2:45:25 PM
-    Author     : achraf
-*/
+/** 
+ *   Created on : Jan 4, 2016, 2:45:25 PM
+ *   Author     : achraf
+ */
 
 
 body {
@@ -20,8 +13,18 @@ body {
     line-height: 1.5;
 }
 
+/* PL: correct sizing of input box for Firefox and Safari */
+.input-date {
+    /*box-sizing: border-box;*/
+    height: 24px; 
+    line-height: 24px;
+    border-radius: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: 1px solid gray;
+}
 
-#facetview_presentation h1{
+#facetview_presentation h1 {
     color: #696565;
     font-size: 22.4px;
     font-weight: 200;

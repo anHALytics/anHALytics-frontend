@@ -10,11 +10,11 @@ var displayTitleAnnotation = function (titleID) {
             var titleID = $(this).attr('rel');
             var localQuery = {"query": {"filtered": {"query": {"term": {"_id": titleID}}}}};
             $.ajax({
-                type: "get",
+                type: "post",
                 url: options.search_url_annotations,
                 contentType: 'application/json',
                 //dataType: 'jsonp',
-                data: {source: JSON.stringify(localQuery)},
+                data: JSON.stringify(localQuery),
                 success: function (data) {
                     displayAnnotations(data, index, titleID, 'title');
                 }
@@ -31,11 +31,12 @@ var displayAbstractAnnotation = function (abstractID) {
         var localQuery = {"query": {"filtered": {"query": {"term": {"_id": abstractID}}}}};
 
         $.ajax({
-            type: "get",
+            type: "post",
             url: options.search_url_annotations,
             contentType: 'application/json',
             //dataType: 'jsonp',
-            data: {source: JSON.stringify(localQuery)},
+            //data: {source: JSON.stringify(localQuery)},
+            data: JSON.stringify(localQuery),
             success: function (data) {
                 displayAnnotations(data, index, abstractID, 'abstract');
             }
@@ -53,11 +54,11 @@ var displayKeywordAnnotation = function (keywordIDs) {
             var localQuery = {"query": {"filtered": {"query": {"term": {"_id": keywordID}}}}};
 
             $.ajax({
-                type: "get",
+                type: "post",
                 url: options.search_url_annotations,
                 contentType: 'application/json',
                 //dataType: 'jsonp',
-                data: {source: JSON.stringify(localQuery)},
+                data: JSON.stringify(localQuery),
                 success: function (data) {
                     displayAnnotations(data, index, keywordID, 'keyword');
                 }
