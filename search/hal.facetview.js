@@ -32,11 +32,11 @@
             event.preventDefault();
             console.log('showfiltervals');
             if ($(this).hasClass('facetview_open')) {
-                $(this).children('i').replaceWith('<i class="pull-right glyphicon glyphicon-plus"></i>');
+                $(this).children('i').replaceWith('<i class="pull-right style="top:3px;" glyphicon glyphicon-plus"></i>');
                 $(this).removeClass('facetview_open');
                 $('#facetview_' + $(this).attr('rel')).children('li').hide();
             } else {
-                $(this).children('i').replaceWith('<i class="pull-right glyphicon glyphicon-minus"></i>');
+                $(this).children('i').replaceWith('<i class="pull-right style="top:3px;" glyphicon glyphicon-minus"></i>');
                 $(this).addClass('facetview_open');
                 $('#facetview_' + $(this).attr('rel')).children('li').show();
             }
@@ -511,7 +511,7 @@
                 _filterTmpl += ' \
                     <div style="min-width:100%;" id="facetview_filterbuttons" class="btn-group"> \
                         <button style="text-align:left; min-width:80%;" class="facetview_filtershow btn btn-default" rel="{{FILTER_NAME}}" type="button" >\
-                            <i class="pull-right glyphicon glyphicon-plus"></i>\
+                            <i class="pull-right glyphicon glyphicon-plus" style="top:3px;" ></i>\
                             {{FILTER_DISPLAY}}\
                         </button>\
                         <div class="btn-group" role="group">\
@@ -535,8 +535,8 @@
                     	';
                 if (filters[idx]['type'] == 'date') {
                     _filterTmpl +=
-                            '<div id="date-input" style="position:relative;margin-bottom:10px;margin-left:-10px"> \
-						   From : <input class="input-date" type="text" id="day_from" name="day_from" \
+                            '<div id="date-input" style="position:relative;margin-bottom:10px;margin-left:-10px;top:-15px;"> \
+						   <input class="input-date" type="text" id="day_from" name="day_from" \
 						   size="2" maxlength="2" placeholder="DD"/> \
 						   <input class="input-date" type="text" id="month_from" name="month_from" size="2" maxlength="2"\
 						    placeholder="MM"/> \
@@ -650,11 +650,17 @@
 	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart"> \
 	                    </div> \
 	                    </div>';
-                } else {
-                    vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;"> \
-	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart" style="position:relative;"> \
+                } else if (options.aggs[idx]['type'] == 'date') {
+                    vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;left:-10px;"> \
+	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + 
+                            '_chart" style="position:relative;"> \
 	                    </div> \
 	                    </div>';
+                } else {
+                    vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;"> \
+                        <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + '_chart" style="position:relative;"> \
+                        </div> \
+                        </div>';
                 }
                 vis = vis.replace(/{{VIS_TITLE}}/gi, $(this).attr('href'));
                 $('#facetview_' + $(this).attr('href')).prepend(vis);
@@ -1273,7 +1279,7 @@
             // Create the basis panel
             var vis = new pv.Panel()
                     .width(w)
-                    .height(h)
+                    .height(h+10)
                     .bottom(40)
                     .left(0)
                     .right(0)
@@ -1534,9 +1540,9 @@
             var metaTmpl = ' \
               <nav> \
                 <ul class="pager"> \
-                  <li class="previous"><a id="facetview_decrement" href="{{from}}">&laquo; back</a></li> \
-                  <li class="active"><a>{{from}} &ndash; {{to}} of {{total}}</a></li> \
-                  <li class="next"><a id="facetview_increment" href="{{to}}">next &raquo;</a></li> \
+                  <li class="previous"><a id="facetview_decrement" style="color:#d42c2c;" href="{{from}}">&laquo; back</a></li> \
+                  <li class="active"><a style="color:#d42c2c;">{{from}} &ndash; {{to}} of {{total}}</a></li> \
+                  <li class="next"><a id="facetview_increment" style="color:#d42c2c;" href="{{to}}">next &raquo;</a></li> \
                 </ul> \
               </nav> \
               ';
@@ -1700,7 +1706,7 @@
         var searchbar = '<div id="facetview_searchbar{{NUMBER}}" style="width:850px" class="row input-group clonedDiv">\
 <div class="btn-group">\
 <button id="selected-tei-field{{NUMBER}}" class=" btn btn-default dropdown-toggle" style="width:80px" data-toggle="dropdown" >\
-all fields<span class="caret"></span>\
+all fields <span class="caret"></span>\
 </button>\
 <ul class="dropdown-menu tei-fields">\
 <li><a href="#">all fields</a></li>\
@@ -1711,8 +1717,8 @@ all fields<span class="caret"></span>\
 </ul>\
 </div>\
 <div class="btn-group"> \
-<button id="selected-lang-field{{NUMBER}}" class=" selected-lang-field btn btn-default dropdown-toggle" style="width:70px" data-toggle="dropdown">\
-all lang<span class="caret"></span>\
+<button id="selected-lang-field{{NUMBER}}" class=" selected-lang-field btn btn-default dropdown-toggle" style="width:75px" data-toggle="dropdown">\
+all lang <span class="caret"></span>\
 </button>\
 <ul class="dropdown-menu lang-fields">\
 <li><a href="#">all lang</a></li>\
@@ -1720,10 +1726,10 @@ all lang<span class="caret"></span>\
 <li><a href="#">fr</a></li>\
 <li><a href="#">de</a></li>\
 </ul>\
-</div>  \
+</div>\
 <div class="btn-group"> \
 <button id="selected-bool-field{{NUMBER}}" class="selected-bool-field btn btn-default dropdown-toggle" style="width:80px" data-toggle="dropdown">\
-should<span class="caret"></span>\
+should <span class="caret"></span>\
 </button>\
 <ul class="dropdown-menu bool-fields">\
 <li><a href="#">should</a></li>\

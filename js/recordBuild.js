@@ -7,7 +7,7 @@ var buildrecord = function (index, node) {
     var result = '';
 
     var jsonObject = eval(record);
-    result += '<tr style="border-collapse:collapse;"><td>';
+    result += '<tr style="border:1px solid #ccc;"><td style="border-top:1px solid #ccc;">';
 
     result += '<div class="row">';
 
@@ -25,7 +25,7 @@ var buildrecord = function (index, node) {
         if (options.subcollection == "hal") {
 
             result += '<a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + repositoryDocId +
-                    '/document" target="_blank"><img class="img-thumbnail img-responsive" style="float:right; width: 70px" src="' +
+                    '/document" target="_blank" style="color:firebrick;"><img class="img-thumbnail img-responsive" style="float:right; width: 70px" src="' +
                     'https://hal.archives-ouvertes.fr/' + repositoryDocId + '/thumb' + '" /></a>';
         }
     }
@@ -139,7 +139,7 @@ var buildrecord = function (index, node) {
     }
 
 
-    result += '<div class="row" style="margin-bottom: 10px" ><strong style="font-size:11px">';
+    result += '<div class="row result" style="margin-bottom: 10px" ><strong style="font-size:11px">';
 //    var authorsLast = null;
 //    var authorsFirst = null;
 //
@@ -186,7 +186,7 @@ var buildrecord = function (index, node) {
                 name_ = names[aut];
             else
                 name_ = names[aut] + ', ';
-            result += '<a target="_blank" style="color : #FF2B23" href="profile.html?authorID=' + id_ + '" >' + name_ + '</a>';
+            result += '<a target="_blank" style="color:#D42C2C" href="profile.html?authorID=' + id_ + '" >' + name_ + '</a>';
         }
     }
 
@@ -274,22 +274,25 @@ var buildrecord = function (index, node) {
     {
         var piece = "";
         piece += '<div id="abstract_keywords_' + index +
-                '" class=" row collapse "';
-        if (index % 2) {
+                '" class="row result collapse "';
+        //if (index % 2) {
             piece += 'style="background-color:#f8f8f8;">';
-        } else {
+        /*} else {
             piece += 'style="background-color:#ffffff;">';
-        }
+        }*/
         piece += '<div class="col-md-8" style="margin-left:10px;">';
         if (options.subcollection == "hal") {
 
             piece += '<p><strong> <a href="https://hal.archives-ouvertes.fr/'
-                    + repositoryDocId + '" target="_blank" style="margin-right:10px; color: #0094DE;text-decoration:underline;" alt="see resource on HAL">' + repositoryDocId + '</a></strong>';
+                    + repositoryDocId + '" target="_blank" style="margin-right:10px; color:#D42C2C;" alt="see resource on HAL">' + repositoryDocId + '</a></strong>';
             // document type
             var type =
                     jsonObject[$.fn.facetview.record_metadata.typology];
             if (type) {
-                piece += '<a href="publication.html?pubID=' + id + '"><span class="label pubtype" style="white-space:normal;">' + type + '</span></a></p>';
+                // PL: pubtype click should add a filter of typology = pubtype
+                // in addition not displaying it as a label, because it is visually confusing with the annotations which are aslo labels
+                //piece += '<a href="publication.html?pubID=' + id + '"><span class="label pubtype" style="white-space:normal;">' + type + '</span></a></p>';
+                piece += '<span class="pubtype" style="white-space:normal;color:black;">' + type + '</span></p>';
                 //piece += '<p><strong>' + type + '</strong></p>';
             }
         }
@@ -514,6 +517,7 @@ var buildrecord = function (index, node) {
 
     result += '</div>';
     result += '</td></tr>';
+    result +=  '<tr><td style="background-color:#f2f2f2; border-top:#ccc;"/></tr>';
 
     node.append(result);
 
