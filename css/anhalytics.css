@@ -24,6 +24,13 @@ body {
     border: 1px solid gray;
 }
 
+/* avoid ugly blue focus on search bar */
+.form-control:focus{
+    border-color: #D42C2C;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
 #facetview_presentation h1 {
     color: #696565;
     font-size: 22.4px;
@@ -59,7 +66,7 @@ body {
 
 .header-container {
     background-color:#585858;
-    height: 80px;
+    height: 75px;
     width: 1200px;
     margin-right: auto;
     margin-left: auto;
@@ -98,6 +105,11 @@ ul, menu, dir {
     margin-left: -15px;
 }
 
+.row.result {
+    margin-right: -8px;
+    margin-left: -8px;
+}
+
 div {
     display: block;
 }
@@ -132,6 +144,19 @@ a:focus, a:hover, a:active {
     color: #3367d6;
     text-decoration: underline;
 }
+
+/* PL: tables */ 
+
+/* .table th{background-color:#FCF8E3;} 
+.table tr{background-color:#FCF8E3;}       */
+.table th{background-color:#FFFFFF;} 
+.table tr{background-color:#FFFFFF; border-collapse: separate; }
+.table tbody tr.highlight td { background-color: #F2DEDE; word-break:normal; }
+
+p {word-break:normal;font-size: 13px;}
+span {word-break:normal;}
+
+
 /* PUBLICATION  */
 
 .pdf-icon {
@@ -343,3 +368,94 @@ a:focus, a:hover, a:active {
     width: 20%;
 }
 
+
+/* PL: bellow, all the CSS for facet viewing */
+
+#facetview_freetext{
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+}
+#facetview_freeclass{
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+}
+#facetview_filters2 h3{
+    margin:40px 0 20px 0;
+}
+#facetview_filters h3{
+    margin:0px 0 0px 0;
+}
+#facetview_advanced{ 
+    float:left;
+    clear:left;
+    margin:10px;
+    padding:3px 5px 5px 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border:1px solid #a1a1a1;
+    color:#a1a1a1;
+    overflow:hidden;
+    width:165px;
+}
+#facetview_advanced select{
+    width:160px;
+    background:#fff;
+    border:1px solid #a1a1a1;
+    color:#a1a1a1;
+    font-size:11px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+}
+#facetview_visualisation{
+    border:1px solid #ccc;
+    margin:10px 0 10px 0;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+.node{
+    cursor:pointer;
+}
+.facetview_filterchoice{
+    text-decoration:none;
+    color:#373737;
+}
+.facetview_filterselected {
+    margin:5px;
+    border-color: firebrick;
+}
+.facetview_freetext_filterdiv{
+    float:left;
+    clear:both;
+    background:#eee;
+    padding:0;
+    color:green;
+    width:100%;
+}
+.facetview_advancedshow{
+    text-decoration:none;
+    color:#a1a1a1;
+}
+
+.facetview_resultactions a{
+    color:#353535;
+    font-weight:bold;
+    text-decoration:none;
+    margin:0 5px 0 5px;
+}
+
+
+/* for decent positioning of multiple glyphicons*/
+.btn .glyphicon {
+    margin-right: 4px;
+    vertical-align: middle;
+    text-align: center;
+} 
+
+.btn.btn-icon .glyphicon {
+    margin-right: 0;
+}
