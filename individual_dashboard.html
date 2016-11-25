@@ -53,7 +53,7 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-left">
-                        <li><a>Keyword</a></li>
+                        <li><a id="sub-about"></a></li>
                     </ul>
                 </div>
             </div>
@@ -168,7 +168,7 @@
                             Title
                         </div>
                         <div class="chart-stage">
-                            <div id="chart-07" style="height:400px"></div>
+                            <div id="chart-07" ></div>
                         </div>
                         <!--          <div class="chart-notes">
                                     This is a sample text region to describe this chart.
@@ -182,7 +182,7 @@
                             Title
                         </div>
                         <div class="chart-stage">
-                            <div id="chart-08"></div>
+                            <div id="chart-08" style="height:400px"></div>
                         </div>
                         <!--          <div class="chart-notes">
                                     Notes go down here
@@ -224,7 +224,7 @@
 
             $.ajax({
                 type: "get",
-                url: "http://localhost:9200/anhalytics_kb/authors/" + authID,
+                url: "http://localhost:9200/anhalytics_kb_inria/authors/" + authID,
                 //processData: true,
                 success: function (data) {
                     var names = data._source.names;
@@ -274,9 +274,9 @@
 
         <script type="text/javascript">
             var api_urls = {
-                authors: "http://localhost:9200/anhalytics_kb/authors",
-                organisations: "http://localhost:9200/anhalytics_kb/organisations",
-                publications: "http://localhost:9200/anhalytics_kb/publications"
+                authors: "http://localhost:9200/anhalytics_kb_inria/authors",
+                organisations: "http://localhost:9200/anhalytics_kb_inria/organisations",
+                publications: "http://localhost:9200/anhalytics_kb_inria/publications"
             };
 
 

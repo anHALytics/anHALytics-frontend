@@ -1,5 +1,5 @@
 
-var elasticSearchAggQuery1 = function (authorID) {
+var IndivPublicationsPerYearESQuery = function (authorID) {
 
     var qs = {};
 
@@ -20,10 +20,6 @@ var elasticSearchAggQuery1 = function (authorID) {
             };
     
     var theUrl = JSON.stringify(qs);
-
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
     return theUrl;
 };
 
@@ -34,19 +30,15 @@ var elasticSearchAggQuery2 = function (authorID) {
 
     // set any facets
     //qs['size'] = 0; 
-    console.log(authorID);
     qs['query'] = {"match": {"_id": authorID}};
     qs['aggs'] = {"publication_date": {"terms": {"field": "pauthors.publications.publication.date_printed"}}};
     var theUrl = JSON.stringify(qs);
 
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
     return theUrl;
 };
 
 
-var elasticSearchAggQuery6 = function (id) {
+var TopicsByAuthorESQuery = function (id) {
 
     var qs = {};
     // set any facets
@@ -54,28 +46,24 @@ var elasticSearchAggQuery6 = function (id) {
     qs['query'] = {"terms": {"_id": id}};
     qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$category.category"}}};
     var theUrl = JSON.stringify(qs);
-    console.log(theUrl);
     return theUrl;
 };
 
-var elasticSearchAggQuery3 = function (id) {
+var IndivPublicationsPerCountryESQuery = function () {
 
     var qs = {};
-    qs['query'] = {"terms": {"_id": id}};
+    qs['query'] = {"match": {"authors.personId": authID}};
     // set any facets
     qs['size'] = 0;
     qs['aggs'] = {"country": {"terms": {"field": "organisations.address.country"}}};
 
     var theUrl = JSON.stringify(qs);
 
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
     return theUrl;
 };
 
 
-var elasticSearchAggQuery2 = function () {
+var IndivPublicationsPerAffiliationESQuery = function () {
 
     var qs = {};
 
@@ -92,43 +80,62 @@ var elasticSearchAggQuery2 = function () {
     
     var theUrl = JSON.stringify(qs);
 
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
     return theUrl;
 };
 
 
-var elasticSearchAggQuery4 = function () {
+var IndivPublicationsPerTopicESQuery = function () {
 
     var qs = {};
 
     // set any facets
     qs['size'] = 0; 
-    qs['aggs'] = {"country":{"terms":{"field":"$teiCorpus.$standoff.$nerd.preferredTerm"},
+    
+    qs['query'] = {"match": {"authors.personId": authID}};
+    qs['aggs'] = {"topic":{"terms":{"field":"annotations.$standoff.$nerd.preferredTerm"},
    "aggs": {
-    "typology": {
+    "authors": {
      "terms": {
-      "field": "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$idno.$type_authorAnhalyticsID"
+      "field": "authors.personId"
      }
     }
    }}};
     
     var theUrl = JSON.stringify(qs);
 
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
     return theUrl;
 };
 
-var elasticSearchAggQuery5 = function (ids) {
+var PersonNamesByPersonId = function (ids){
+
+    var qs = {};
+    qs['size'] = 50;
+    qs['query'] = {"ids": {"values": ids}};
+    // set any facets
+    qs['fields'] = ["names.fullname"];
+    var theUrl = JSON.stringify(qs);
+
+    return theUrl;
+};
+
+var CoAuthorsOverTimeESQuery = function () {
 
     var qs = {};
 
     // set any facets
-    qs['size'] = 0; 
-    qs['query'] = {"terms": {"_id": ids}};
+    qs['size'] = 0;
+//    if (params.topic)
+//        qs['query'] = {"filtered": {"filter": {"query": {"bool": {"must": [{"term": {"annotations.$standoff.$category.category": params.topic}
+//                                }
+//                            ]
+//                        }
+//                    }
+//                }, "query": {"match": {"organisations.organisationId": params.organisationID}
+//                }
+//            }
+//        }
+//    else
+        qs['query'] = {"match": {"authors.personId": authID}};
     
     qs['aggs'] = {"publication_dates": {
                     "date_histogram": {
@@ -144,19 +151,16 @@ var elasticSearchAggQuery5 = function (ids) {
     
     var theUrl = JSON.stringify(qs);
 
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
     return theUrl;
 };
 
-var elasticSearchAggQuery7 = function (ids) {
+var IndivKeywordsByAuthorByYearESQuery = function () {
 
     var qs = {};
 
     // set any facets
     qs['size'] = 0; 
-    qs['query'] = {"terms": {"_id": ids}};
+    qs['query'] = {"match": {"authors.personId": authID}};
     
     qs['aggs'] = {"publication_dates": {
                     "date_histogram": {
@@ -171,9 +175,5 @@ var elasticSearchAggQuery7 = function (ids) {
         }};
     
     var theUrl = JSON.stringify(qs);
-
-    //if (window.console != undefined) {
-    console.log(theUrl);
-    //}
     return theUrl;
 };

@@ -34,11 +34,20 @@
                     <h1><a>
                                 {{organisation['_source']['names'][0].name}}
                             </a>
+                        <a href="organisation_dashboard.html?orgID={{organisation['_id']}}" target="_blank" ><img class="" style="padding-left:5px;padding-top:20px;width:50px;" src="data/images/analytic-icon-14.png"></a>
+                        
                         </h1> 
+                <div class="row "></div> 
                 <div class="row "> 
                     <div class="my-col-4 sidebar">
                         
                         <ul >
+                            <li ng-if="organisation['_source']['identifers']"> 
+                                <div ng-repeat="identifier in organisation['_source']['identifers']"> 
+                                    {{identifier.type}} :  {{identifier.id}}
+                                </div>   
+                            </li>
+                            
                             <li ng-if="organisation['_source']['address']"> 
                                 <div > 
                                     {{organisation['_source']['address']['addrLine']}}, {{organisation['_source']['address']['postCode']}}, {{organisation['_source']['address']['settlement']}}, {{organisation['_source']['address']['country']}}
@@ -73,7 +82,7 @@
                             <div class="col-md-6" style="text-align: center;"> 
                                 <h3>
                                     <a href="institution/University_Name/department/School_of_Medicine/publications">
-                                        {{organisation['_source']['publications'].length}}
+                                        {{publicationsCount}}
                                     </a>
                                     Publications
                                 </h3>
@@ -120,7 +129,7 @@
                                     <p>
                                         <img src="data/images/profile_default_s.jpg">
                                         <a href="profile.html?authorID={{author['personId']}}">{{author.names[0]['fullname']}}</a>
-                                        <a href="institution/University_Name" title="University of University_Name">University_Name</a>
+<!--                                        <a href="institution/University_Name" title="University of University_Name">University_Name</a>-->
                                     </p>
                                 </li>
                             </ul>

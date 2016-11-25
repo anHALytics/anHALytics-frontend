@@ -14,8 +14,9 @@
         $scope.pagedItems = [];
         var url_options = $.getUrlVars();
         var orgID = url_options.orgID;
+
         client.search({
-            index: 'anhalytics_kb',
+            index: 'anhalytics_kb_inria',
             type: 'organisations',
             body: {
                 "query":
@@ -24,55 +25,50 @@
                                 _id: url_options.orgID
                             }
                         }
+
             }
 
         }).then(function (response) {
             $scope.organisation = response.hits.hits[0];
-            $scope.terms = [];
-            for (i in $scope.organisation['_source']['publications']) {
-                $scope.terms.push({"term": {"_id": $scope.organisation['_source']['publications'][i].docID}});
-            }
-            for (var i = 0; i < $scope.organisation['_source']['publications'].length; i++) {
-                if (i % $scope.numPerPage === 0) {
-                    $scope.pagedItems[Math.floor(i / $scope.numPerPage)] = [$scope.organisation['_source']['publications'][i]];
-                } else {
-                    $scope.pagedItems[Math.floor(i / $scope.numPerPage)].push($scope.organisation['_source']['publications'][i]);
-                }
-            }
             $scope.loadPulications();
-        });
-
-        $scope.loadPulications = function () {
-            $scope.publications = [];
-            client.search({
-                index: 'anhalytics_kb',
-                type: 'publications',
+               });
+            
+        $scope.loadPulications = function () {client.search({
+            index: 'anhalytics_kb_inria',
+            type: 'publications',
+            
                 from: $scope.currentPage,
                 size: $scope.numPerPage,
-                body: {
-                    "query": {
-                        "filtered": {
-                            "filter": {
-                                "bool": {
-                                    "should": $scope.terms
-                                }
-                            }
+            body: {
+                "query":
+                        {"match": {"organisations.organisationId": url_options.orgID}
                         }
-                    }
-//                    ,"sort" : [
-//      {"date_electronic" : {"order" : "asc"}}
-//   ]
-                }
 
-            }).then(function (response) {
-                $scope.terms1 = [];
+            }
+
+        }).then(function (response) {
+            $scope.publications = [];
+            $scope.publicationsCount = response.hits.total;
+            for (var i = 0; i < $scope.organisation['_source']['documents'].length; i++) {
+                if (i % $scope.numPerPage === 0) {
+                    $scope.pagedItems[Math.floor(i / $scope.numPerPage)] = [response.hits.hits[i]];
+                } else {
+                    $scope.pagedItems[Math.floor(i / $scope.numPerPage)].push(response.hits.hits[i]);
+                }
+            }
+            
+            $scope.publicationsAbstracts = [];
+            $scope.terms1 = [];
                 for (hit in response.hits.hits) {
                     $scope.publications.push(response.hits.hits[hit]);
                     $scope.terms1.push({"term": {"_id": response.hits.hits[hit]["_id"]}});
                 }
                 $scope.loadPulicationsAbstracts();
-            });
-        };
+        });
+            
+     
+        }
+
 
 
 
@@ -109,7 +105,7 @@
             $scope.abstracts = {};
             $scope.keywords = {};
             client.search({
-                index: 'anhalytics_fulltextteis',
+                index: 'anhalytics_fulltextteis_inria',
                 body: {
                     "fields": [
                         "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",

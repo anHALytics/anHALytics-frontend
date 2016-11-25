@@ -32,7 +32,8 @@
             <div class="profile-content">
                 <h1>
                     <a href="profile/{{profile['_id']}}" >{{profile['_source'].names[0]['fullname']}}</a>
-
+                    
+                <a href="individual_dashboard.html?authID={{profile['_id']}}" target="_blank" ><img class="" style="padding-left:5px;padding-top:20px;width:50px;" src="data/images/analytic-icon-14.png"></a>
                 </h1>
                 <div class="row ">
                     <div class="my-col-4 sidebar">
@@ -63,8 +64,8 @@
                         <div>  
                                 <div> 
                                             <i style="width: 20px;" class="fa fa-institution">
-                            </i><a href="institution.html?orgID={{profile['_source']['affiliations'][0]['organisationId']}}" title="{{profile['_source']['affiliations'][0]['names'][0].name}}" target="_blank"> 
-                                {{profile['_source']['affiliations'][0]['names'][0].name}}
+                            </i><a href="institution.html?orgID={{profile['_source']['affiliations'][profile['_source']['affiliations'].length -1]['organisationId']}}" title="{{profile['_source']['affiliations'][profile['_source']['affiliations'].length -1]['names'][0].name}}" target="_blank"> 
+                                {{profile['_source']['affiliations'][profile['_source']['affiliations'].length -1]['names'][0].name}}
                                     </a> 
                                 </div>   
                                 <div ng-if="profile['_source']['affiliations'][0]['address']"> 

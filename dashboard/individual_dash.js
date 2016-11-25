@@ -3,8 +3,8 @@ function InitPublicationsPerYear(authID) {
     $("#chart-01-title").text("Publications over time");
     $.ajax({
         type: "get",
-        url: api_urls.authors+"/_search",
-        data: {source: elasticSearchAggQuery1(authID)},
+        url: api_urls.authors + "/_search",
+        data: {source: IndivPublicationsPerYearESQuery(authID)},
         //processData: true, 
         //dataType: "jsonp",
         success: function (data) {
@@ -107,10 +107,10 @@ function InitPublicationsPerYear(authID) {
 }
 
 function getTopicsByAuthor(authorID) {
-    $("#chart-02-title").text("Authors topics");
+    $("#chart-06-title").text("Authors topics");
     $.ajax({
         type: "get",
-        url: api_urls.authors+"/" + authorID,
+        url: api_urls.authors + "/" + authorID,
         //processData: true,
         success: function (data) {
             var pubIds = data._source.publications.map(function (a) {
@@ -118,8 +118,8 @@ function getTopicsByAuthor(authorID) {
             });
             $.ajax({
                 type: "get",
-                url: api_urls.publications+"/_search",
-                data: {source: elasticSearchAggQuery6(pubIds)},
+                url: api_urls.publications + "/_search",
+                data: {source: TopicsByAuthorESQuery(pubIds)},
                 success: function (data) {
                     var touchdowns = data.aggregations.category.buckets;
 
@@ -142,7 +142,7 @@ function getTopicsByAuthor(authorID) {
                         width: 700
                     };
 
-                    Plotly.newPlot('chart-02', data, layout);
+                    Plotly.newPlot('chart-06', data, layout);
                 }
 
 
@@ -156,20 +156,12 @@ function getTopicsByAuthor(authorID) {
 
 var iso3 = {"BD": "BGD", "BE": "BEL", "BF": "BFA", "BG": "BGR", "BA": "BIH", "BB": "BRB", "WF": "WLF", "BL": "BLM", "BM": "BMU", "BN": "BRN", "BO": "BOL", "BH": "BHR", "BI": "BDI", "BJ": "BEN", "BT": "BTN", "JM": "JAM", "BV": "BVT", "BW": "BWA", "WS": "WSM", "BQ": "BES", "BR": "BRA", "BS": "BHS", "JE": "JEY", "BY": "BLR", "BZ": "BLZ", "RU": "RUS", "RW": "RWA", "RS": "SRB", "TL": "TLS", "RE": "REU", "TM": "TKM", "TJ": "TJK", "RO": "ROU", "TK": "TKL", "GW": "GNB", "GU": "GUM", "GT": "GTM", "GS": "SGS", "GR": "GRC", "GQ": "GNQ", "GP": "GLP", "JP": "JPN", "GY": "GUY", "GG": "GGY", "GF": "GUF", "GE": "GEO", "GD": "GRD", "GB": "GBR", "GA": "GAB", "SV": "SLV", "GN": "GIN", "GM": "GMB", "GL": "GRL", "GI": "GIB", "GH": "GHA", "OM": "OMN", "TN": "TUN", "JO": "JOR", "HR": "HRV", "HT": "HTI", "HU": "HUN", "HK": "HKG", "HN": "HND", "HM": "HMD", "VE": "VEN", "PR": "PRI", "PS": "PSE", "PW": "PLW", "PT": "PRT", "SJ": "SJM", "PY": "PRY", "IQ": "IRQ", "PA": "PAN", "PF": "PYF", "PG": "PNG", "PE": "PER", "PK": "PAK", "PH": "PHL", "PN": "PCN", "PL": "POL", "PM": "SPM", "ZM": "ZMB", "EH": "ESH", "EE": "EST", "EG": "EGY", "ZA": "ZAF", "EC": "ECU", "IT": "ITA", "VN": "VNM", "SB": "SLB", "ET": "ETH", "SO": "SOM", "ZW": "ZWE", "SA": "SAU", "ES": "ESP", "ER": "ERI", "ME": "MNE", "MD": "MDA", "MG": "MDG", "MF": "MAF", "MA": "MAR", "MC": "MCO", "UZ": "UZB", "MM": "MMR", "ML": "MLI", "MO": "MAC", "MN": "MNG", "MH": "MHL", "MK": "MKD", "MU": "MUS", "MT": "MLT", "MW": "MWI", "MV": "MDV", "MQ": "MTQ", "MP": "MNP", "MS": "MSR", "MR": "MRT", "IM": "IMN", "UG": "UGA", "TZ": "TZA", "MY": "MYS", "MX": "MEX", "IL": "ISR", "FR": "FRA", "IO": "IOT", "SH": "SHN", "FI": "FIN", "FJ": "FJI", "FK": "FLK", "FM": "FSM", "FO": "FRO", "NI": "NIC", "NL": "NLD", "NO": "NOR", "NA": "NAM", "VU": "VUT", "NC": "NCL", "NE": "NER", "NF": "NFK", "NG": "NGA", "NZ": "NZL", "NP": "NPL", "NR": "NRU", "NU": "NIU", "CK": "COK", "XK": "XKX", "CI": "CIV", "CH": "CHE", "CO": "COL", "CN": "CHN", "CM": "CMR", "CL": "CHL", "CC": "CCK", "CA": "CAN", "CG": "COG", "CF": "CAF", "CD": "COD", "CZ": "CZE", "CY": "CYP", "CX": "CXR", "CR": "CRI", "CW": "CUW", "CV": "CPV", "CU": "CUB", "SZ": "SWZ", "SY": "SYR", "SX": "SXM", "KG": "KGZ", "KE": "KEN", "SS": "SSD", "SR": "SUR", "KI": "KIR", "KH": "KHM", "KN": "KNA", "KM": "COM", "ST": "STP", "SK": "SVK", "KR": "KOR", "SI": "SVN", "KP": "PRK", "KW": "KWT", "SN": "SEN", "SM": "SMR", "SL": "SLE", "SC": "SYC", "KZ": "KAZ", "KY": "CYM", "SG": "SGP", "SE": "SWE", "SD": "SDN", "DO": "DOM", "DM": "DMA", "DJ": "DJI", "DK": "DNK", "VG": "VGB", "DE": "DEU", "YE": "YEM", "DZ": "DZA", "US": "USA", "UY": "URY", "YT": "MYT", "UM": "UMI", "LB": "LBN", "LC": "LCA", "LA": "LAO", "TV": "TUV", "TW": "TWN", "TT": "TTO", "TR": "TUR", "LK": "LKA", "LI": "LIE", "LV": "LVA", "TO": "TON", "LT": "LTU", "LU": "LUX", "LR": "LBR", "LS": "LSO", "TH": "THA", "TF": "ATF", "TG": "TGO", "TD": "TCD", "TC": "TCA", "LY": "LBY", "VA": "VAT", "VC": "VCT", "AE": "ARE", "AD": "AND", "AG": "ATG", "AF": "AFG", "AI": "AIA", "VI": "VIR", "IS": "ISL", "IR": "IRN", "AM": "ARM", "AL": "ALB", "AO": "AGO", "AQ": "ATA", "AS": "ASM", "AR": "ARG", "AU": "AUS", "AT": "AUT", "AW": "ABW", "IN": "IND", "AX": "ALA", "AZ": "AZE", "IE": "IRL", "ID": "IDN", "UA": "UKR", "QA": "QAT", "MZ": "MOZ"}
 function InitPublicationsPerCountry(authID) {
-    $("#chart-06-title").text("International collaborators");
-    $.ajax({
-        type: "get",
-        url: api_urls.authors+"/" + authID,
-        //processData: true,
-        success: function (data) {
-            var pubIds = data._source.publications.map(function (a) {
-                return a.docID;
-            });
+    $("#chart-08-title").text("International collaborators");
 
             $.ajax({
                 type: "get",
-                url: api_urls.publications+"/_search",
-                data: {source: elasticSearchAggQuery3(pubIds)},
+                url: api_urls.publications + "/_search",
+                data: {source: IndivPublicationsPerCountryESQuery()},
                 //processData: true, 
                 //dataType: "jsonp",
                 success: function (data) {
@@ -203,7 +195,7 @@ function InitPublicationsPerCountry(authID) {
                     width = 370 - margin.left - margin.right,
                             height = 250 - margin.top - margin.bottom;
                     var map = new Datamap({
-                        element: document.getElementById('chart-06'),
+                        element: document.getElementById('chart-08'),
                         projection: 'mercator',
                         height: null,
                         width: null,
@@ -236,80 +228,115 @@ function InitPublicationsPerCountry(authID) {
                     })
 
                 }});
-//
-//                var projection = d3.geo.kavrayskiy7()
-//                .scale(150)
-//                .translate([width / 2, height / 2])
-//                .precision(.1);
-//                var path = d3.geo.path()
-//                .projection(projection);
-//                var graticule = d3.geo.graticule();
-//                var svg = d3.select("#chart-01").append("svg")
-//                .attr("width", width)
-//                .attr("height", height);
-//                svg.append("defs").append("path")
-//                .datum({type: "Sphere"})
-//                .attr("id", "sphere")
-//                .attr("d", path);
-//                svg.append("use")
-//                .attr("class", "stroke")
-//                .attr("xlink:href", "#sphere");
-//                svg.append("use")
-//                .attr("class", "fill")
-//                .attr("xlink:href", "#sphere");
-//                svg.append("path")
-//                .datum(graticule)
-//                .attr("class", "graticule")
-//                .attr("d", path);
-//                d3.json("data/world-50m.json", function(error, world) {
-//                if (error) throw error;
-//                        var countries = topojson.feature(world, world.objects.countries).features,
-//                        neighbors = topojson.neighbors(world.objects.countries.geometries);
-//                        svg.selectAll(".country")
-//                        .data(countries)
-//                        .enter().insert("path", ".graticule")
-//                        .attr("class", "country")
-//                        .attr("d", path)
-//                        .style("fill",
-//                                //function(d, i) { return color(d.color = d3.max(neighbors[i], function(n) { return countries[n].color; }) + 1 | 0); }
-//                                //
-//                                "#ABDDA4")
-//                            .on("click", function(d) {
-//			   		console.log(d);
-//			   })    
-//                    
-//                    ;
-//                        svg.insert("path", ".graticule")
-//                        .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
-//                        .attr("class", "boundary")
-//                        .attr("d", path);
-//                        });
-//                d3.select(self.frameElement).style("height", height + "px");
-
-//}
-//});
-        }
-    });
 }
 
+function getCoAuthorsOverTime(authID) {
+    $("#chart-02-title").text("Co-authors over time");
+            $.ajax({
+                type: "get",
+                url: api_urls.publications + "/_search",
+                data: {source: CoAuthorsOverTimeESQuery()},
+                //processData: true, 
+                //dataType: "jsonp",
+                success: function (data) {
+                    var svg = dimple.newSvg("#chart-02", 590, 400);
+                    var touchdowns = data.aggregations.publication_dates.buckets
+                    var dataSet = [];
 
-function arrayUnique(array) {
-    var a = array.concat();
-    for (var i = 0; i < a.length; ++i) {
-        for (var j = i + 1; j < a.length; ++j) {
-            if (a[i] === a[j])
-                a.splice(j--, 1);
-        }
-    }
+                    //NESTED OR BUILD NEW AUTHORS MAP
+                    var authors = [];
+                    for (var i = 0; i < touchdowns.length; i++) {
+                        for (var j = 0; j < touchdowns[i].author.buckets.length; j++) {
+                            if (authors.indexOf(touchdowns[i].author.buckets[j].key) === -1) {
+                                authors.push(touchdowns[i].author.buckets[j].key);
+                            }
+                        }
+                    }
+$.ajax({type: "get",
+                url: api_urls.authors + "/_search",
+                data: {source: PersonNamesByPersonId(authors)},
+                //processData: true, 
+                //dataType: "jsonp",
+                success: function (data) {
+                    var names = {};
+                    for (var i = 0; i < data.hits.hits.length; i++) {
+                        names[data.hits.hits[i]["_id"]] = data.hits.hits[i]["fields"]["names.fullname"][data.hits.hits[i]["fields"]["names.fullname"].length - 1];
+                    }
+                    
+                    for (var i = 0; i < touchdowns.length; i++) {
+                        var date = touchdowns[i].key_as_string;
+                        for (var j = 0; j < touchdowns[i].author.buckets.length; j++) {
+                            if(touchdowns[i].author.buckets[j].key != authID){
+                            var entry = {};
+                            entry.date = date;
+                            entry.author = names[touchdowns[i].author.buckets[j].key];
+                            entry.doc_count = touchdowns[i].author.buckets[j].doc_count;
+                            dataSet.push(entry);
+                        }
+                        }
+                    }
 
-    return a;
+                    var myChart = new dimple.chart(svg, dataSet);
+                    myChart.setBounds(65, 30, 505, 305)
+                    var x = myChart.addCategoryAxis("x", "date");
+                    x.addOrderRule("Date");
+                    myChart.addPctAxis("y", "doc_count");
+                    myChart.addSeries("author", dimple.plot.bar);
+                    myChart.addLegend(50, 10, 510, 20, "right");
+                    myChart.draw();
+                    }
+                
+                    });
+                }
+            });
+
 }
+
+function getKeywordsByAuthorByYear(authID) {
+    $("#chart-07-title").text("Keywords over time");
+            $.ajax({
+                type: "get",
+                url: api_urls.publications + "/_search",
+                data: {source: IndivKeywordsByAuthorByYearESQuery()},
+                //processData: true, 
+                //dataType: "jsonp",
+                success: function (data) {
+                    var svg = dimple.newSvg("#chart-07", 590, 400);
+                    var touchdowns = data.aggregations.publication_dates.buckets
+                    var dataSet = [];
+
+                    for (var i = 0; i < touchdowns.length; i++) {
+                        var date = touchdowns[i].key_as_string;
+                        for (var j = 0; j < touchdowns[i].keyterms.buckets.length; j++) {
+                            var entry = {};
+                            entry.date = date;
+                            entry.keyterm = touchdowns[i].keyterms.buckets[j].key;
+                            entry.doc_count = touchdowns[i].keyterms.buckets[j].doc_count;
+                            dataSet.push(entry);
+                        }
+                    }
+                    var myChart = new dimple.chart(svg, dataSet);
+                    myChart.setBounds(75, 30, 485, 330);
+                    myChart.addPctAxis("x", "doc_count");
+                    var y = myChart.addCategoryAxis("y", "date");
+                    y.addGroupOrderRule("Date");
+                    var s = myChart.addSeries("keyterm", dimple.plot.area);
+                    s.lineWeight = 1;
+                    s.barGap = 0.05;
+                    myChart.addLegend(60, 10, 500, 20, "right");
+                    myChart.draw();
+
+                }
+            });
+
+}
+
 
 function InitPublicationsPerAffiliation() {
     $.ajax({
         type: "get",
         url: "http://localhost:9200/anhalytics_fulltextteis/_search",
-        data: {source: elasticSearchAggQuery2()},
+        data: {source: IndivPublicationsPerAffiliationESQuery()},
         //processData: true, 
         //dataType: "jsonp",
         success: function (data) {
@@ -489,155 +516,22 @@ function InitPublicationsPerAffiliation() {
     });
 }
 
+function arrayUnique(array) {
+    var a = array.concat();
+    for (var i = 0; i < a.length; ++i) {
+        for (var j = i + 1; j < a.length; ++j) {
+            if (a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+
+    return a;
+}
+
 function type(d) {
     d.frequency = +d.frequency;
     return d;
 }
-
-function InitPublicationsPerTopic() {
-    $.ajax({
-        type: "get",
-        url: "http://localhost:9200/anhalytics_fulltextteis/_search",
-        data: {source: elasticSearchAggQuery4()},
-        //processData: true, 
-        //dataType: "jsonp",
-        success: function (data) {
-
-            var touchdowns = data.aggregations.country.buckets;
-            var margin = {top: 10, right: 10, bottom: 20, left: 30},
-            width = 370 - margin.left - margin.right,
-                    height = 250 - margin.top - margin.bottom;
-//                var bubbleChart = new d3.svg.BubbleChart({
-//                supportResponsive: true,
-//                        //container: => use @default
-//                        size: 600,
-//                        //viewBoxSize: => use @default
-//                        innerRadius: 600 / 3.5,
-//                        //outerRadius: => use @default
-//                        radiusMin: 50,
-//                        //radiusMax: use @default
-//                        //intersectDelta: use @default
-//                        //intersectInc: use @default
-//                        //circleColor: use @default
-//                        });
-
-        }});
-}
-
-function getCoAuthorsOverTime(authID) {
-    $("#chart-07-title").text("Co-authors over time");
-    $.ajax({
-        type: "get",
-        url: api_urls.authors+"/" + authID,
-        //processData: true,
-        success: function (data) {
-            var pubIds = data._source.publications.map(function (a) {
-                return a.docID;
-            });
-
-            $.ajax({
-                type: "get",
-                url: api_urls.publications+"/_search",
-                data: {source: elasticSearchAggQuery5(pubIds)},
-                //processData: true, 
-                //dataType: "jsonp",
-                success: function (data) {
-                    var svg = dimple.newSvg("#chart-07", 590, 400);
-                    var touchdowns = data.aggregations.publication_dates.buckets
-                    var dataSet = [];
-
-                    for (var i = 0; i < touchdowns.length; i++) {
-                        var date = touchdowns[i].key_as_string;
-                        for (var j = 0; j < touchdowns[i].author.buckets.length; j++) {
-                            var entry = {};
-                            entry.date = date;
-                            entry.author = touchdowns[i].author.buckets[j].key;
-                            entry.doc_count = touchdowns[i].author.buckets[j].doc_count;
-                            dataSet.push(entry);
-                        }
-                    }
-
-                    var myChart = new dimple.chart(svg, dataSet);
-                    myChart.setBounds(65, 30, 505, 305)
-                    var x = myChart.addCategoryAxis("x", "date");
-                    x.addOrderRule("Date");
-                    myChart.addPctAxis("y", "doc_count");
-                    myChart.addSeries("author", dimple.plot.bar);
-                    myChart.addLegend(60, 10, 510, 20, "right");
-                    myChart.draw();
-
-                }
-
-
-
-            });
-
-
-        }
-
-    });
-
-}
-
-
-function getKeywordsByAuthorByYear(authID) {
-    $("#chart-08-title").text("Keywords over time");
-    $.ajax({
-        type: "get",
-        url: api_urls.authors+"/" + authID,
-        //processData: true,
-        success: function (data) {
-            var pubIds = data._source.publications.map(function (a) {
-                return a.docID;
-            });
-
-            $.ajax({
-                type: "get",
-                url: api_urls.publications+"/_search",
-                data: {source: elasticSearchAggQuery7(pubIds)},
-                //processData: true, 
-                //dataType: "jsonp",
-                success: function (data) {
-                    var svg = dimple.newSvg("#chart-08", 590, 400);
-                    var touchdowns = data.aggregations.publication_dates.buckets
-                    var dataSet = [];
-
-                    for (var i = 0; i < touchdowns.length; i++) {
-                        var date = touchdowns[i].key_as_string;
-                        for (var j = 0; j < touchdowns[i].keyterms.buckets.length; j++) {
-                            var entry = {};
-                            entry.date = date;
-                            entry.keyterm = touchdowns[i].keyterms.buckets[j].key;
-                            entry.doc_count = touchdowns[i].keyterms.buckets[j].doc_count;
-                            dataSet.push(entry);
-                        }
-                    }
-var myChart = new dimple.chart(svg, dataSet);
-      myChart.setBounds(75, 30, 485, 330);
-      myChart.addPctAxis("x", "doc_count");
-      var y = myChart.addCategoryAxis("y", "date");
-      y.addGroupOrderRule("Date");
-      var s = myChart.addSeries("keyterm", dimple.plot.area);
-      s.lineWeight = 1;
-      s.barGap = 0.05;
-      myChart.addLegend(60, 10, 500, 20, "right");
-      myChart.draw();
-
-                }
-
-
-
-            });
-
-
-        }
-
-    });
-
-}
-
-
-
 getTopicsByAuthor(authID);
 InitPublicationsPerYear(authID);
 
