@@ -1,5 +1,14 @@
 var params = {"organisationID": organisationID};
 
+Array.prototype.contains = function(elem)
+{
+for (var i in this)
+{
+if (this[i] == elem) return true;
+}
+return false;
+}
+
 function InitOrganisationPublicationsPerYear(params) {
     $("#chart-01-title").text("Publications per year");
     $("#chart-01").empty();
@@ -10,7 +19,7 @@ function InitOrganisationPublicationsPerYear(params) {
         //processData: true,
         success: function (data) {
             var margin = {top: 10, right: 10, bottom: 50, left: 30},
-            width = 570 - margin.left - margin.right,
+                    width = 570 - margin.left - margin.right,
                     height = 350 - margin.top - margin.bottom;
 
             var touchdowns = data.aggregations.publication_date.buckets;
@@ -156,16 +165,15 @@ function InitOrganisationPublicationsPerYear(params) {
     });
 }
 
-function getOrganisationRelations(params) {
-    $("#chart-02-title").text("Relations");
+function getOrganisationSubOrganisations(params) {
+    $("#chart-02-title").text("Sub Structures");
     $("#chart-02").empty();
     $.ajax({
         type: "get",
         url: api_urls.organisations + "/_search",
-        data: {source: OrganisationRelationsESQuery(params)},
+        data: {source: OrganisationSubOrganisationsESQuery(params)},
         //processData: true,
         success: function (data) {
-            console.log(data)
             var x = [], y = [];
             for (var i = 0; i < data.hits.hits.length; i++) {
                 y.push(data.hits.hits[i]._source.names[0].name);
@@ -227,9 +235,9 @@ var clearfilter = function (obj) {
     if (type == "orgName") {
         delete params.orgName;
         params.organisationID = url_options.orgID;
-    }else if(type == "topic")
+    } else if (type == "topic")
         delete params.topic;
-        
+
     obj.remove();
     InitOrganisationPublicationsPerYear(params);
     getOrganisationRelations(params);
@@ -245,32 +253,33 @@ function getTopicsByOrganisation(params) {
     $("#chart-06").empty();
 
 
-            $.ajax({
-                type: "get",
-                url: api_urls.publications + "/_search",
-                data: {source: TopicsByOrganisationESQuery(params)},
-                success: function (data) {
-                    var svg = dimple.newSvg("#chart-06", 490, 400);
-                    var myChart = new dimple.chart(svg, data.aggregations.category.buckets);
-                    myChart.setBounds(20, 20, 320, 220)
-                    myChart.addMeasureAxis("p", "doc_count");
-                    var mySeries = myChart.addSeries("key", dimple.plot.pie);
-                    myChart.addLegend(300, 20, 20, 200, "left");
-                    myChart.draw();
+    $.ajax({
+        type: "get",
+        url: api_urls.publications + "/_search",
+        data: {source: TopicsByOrganisationESQuery(params)},
+        success: function (data) {
+            console.log(data);
+            var svg = dimple.newSvg("#chart-06", 490, 400);
+            var myChart = new dimple.chart(svg, data.aggregations.category.buckets);
+            myChart.setBounds(20, 20, 320, 220)
+            myChart.addMeasureAxis("p", "doc_count");
+            var mySeries = myChart.addSeries("key", dimple.plot.pie);
+            myChart.addLegend(300, 20, 20, 200, "left");
+            myChart.draw();
 
-                    d3.selectAll("path").on("click", function (d, i) {
+            d3.selectAll("path").on("click", function (d, i) {
 
-                        params.topic = d.key.replace(/_/g, '');
-                        $("#selected_filters").append('<li><a class="btn btn-info" title = "' + params.topic + '" rel="topic" onclick="clearfilter(this)">' + params.topic + '<i class="glyphicon glyphicon-remove"></a></li>');
-                        InitOrganisationPublicationsPerYear(params);
-                        getOrganisationRelations(params);
-                        getTopicsByOrganisation(params);
-                        getKeywordsByOrganisationYear(params);
-                        InitPublicationsPerCountry(params);
-                        getCollaboratorsByYear(params);
-                        getConferencesByYear(params);
+                params.topic = d.key.replace(/_/g, '');
+                $("#selected_filters").append('<li><a class="btn btn-info" title = "' + params.topic + '" rel="topic" onclick="clearfilter(this)">' + params.topic + '<i class="glyphicon glyphicon-remove"></a></li>');
+                InitOrganisationPublicationsPerYear(params);
+                getOrganisationRelations(params);
+                getTopicsByOrganisation(params);
+                getKeywordsByOrganisationYear(params);
+                InitPublicationsPerCountry(params);
+                getCollaboratorsByYear(params);
+                getConferencesByYear(params);
 
-                    });
+            });
 
         }
     });
@@ -292,7 +301,7 @@ function getKeywordsByOrganisationYear(params) {
             var parseDate = d3.time.format("%Y-%m-%d").parse;
 
 
-            //console.log(touchdown);
+            console.log(touchdown);
             var xMin = new Date(d3.min(touchdown, function (c) {
                 return d3.min(c.publication_dates.buckets, function (v) {
                     return v.key_as_string;
@@ -438,109 +447,119 @@ function InitPublicationsPerCountry(params) {
 
 }
 
-function getCollaboratorsByYear(params) {
-    $("#chart-08-title").text("Collaborators");
+function getCollaborationsByYear(params) {
+    $("#chart-08-title").text("Collaborations");
     $("#chart-08").empty();
 
-    $.ajax({type: "get",
-        url: api_urls.publications + "/_search",
-        data: {source: CollaboratorsByYearESQuery(params)},
-        //processData: true, 
-        //dataType: "jsonp",
-        success: function (data) {
+    $.ajax({
+        type: "get",
+        url: api_urls.organisations + "/" + organisationID,
+        //processData: true,
+        success: function (data1) {
 
-            var touchdowns = data.aggregations.orgs.buckets;
-            var parseDate = d3.time.format("%Y-%m-%d").parse;
-
-            var result = touchdowns.map(function (a) {
-                return a.key;
+            var allsubstructures = data1["_source"].allrelations.map(function (a) {
+                return a.organisationId;
             });
 
+                            console.log(allsubstructures);
             $.ajax({type: "get",
-                url: api_urls.organisations + "/_search",
-                data: {source: OrgNamesByOrgId(result)},
+                url: api_urls.publications + "/_search",
+                data: {source: CollaboratorsByYearESQuery(params)},
                 //processData: true, 
                 //dataType: "jsonp",
                 success: function (data) {
 
-                    var names = {};
-                    for (var i = 0; i < data.hits.hits.length; i++) {
-                        names[data.hits.hits[i]["_id"]] = data.hits.hits[i]["fields"]["names.name"].sort(function (a, b) {
-                            return b.length - a.length;
-                        })[data.hits.hits[i]["fields"]["names.name"].length - 1];
-                    }
-                    var xMin = new Date(d3.min(touchdowns, function (c) {
-                        return d3.min(c.publication_dates.buckets, function (v) {
-                            return v.key_as_string;
-                        });
-                    }));
-                    var xMax = new Date(d3.max(touchdowns, function (c) {
-                        return d3.max(c.publication_dates.buckets, function (v) {
-                            return v.key_as_string;
-                        });
-                    }));
+                    var touchdowns = data.aggregations.orgs.buckets;
+                    var parseDate = d3.time.format("%Y-%m-%d").parse;
+                    var result = touchdowns.map(function (a) {
+                        return a.key;
+                    });
 
-                    var years = xMax.getFullYear() - xMin.getFullYear();
-                    var minYear = xMin.getFullYear();
-                    var dataEntry = [];
-                    for (var i = minYear; i <= minYear + years; i++) {
-                        var zero = {"doc_count": 0, "key_as_string": ""};
-                        xMin.setFullYear(i);
-                        zero.key_as_string = xMin.toISOString().slice(0, 10);
-                        zero.key = xMin.getTime();
-                        dataEntry.push(zero);
-                    }
+                    $.ajax({type: "get",
+                        url: api_urls.organisations + "/_search",
+                        data: {source: OrgNamesByOrgId(result)},
+                        //processData: true, 
+                        //dataType: "jsonp",
+                        success: function (data) {
 
-                    var dataSet = [];
-                    for (var i = 0; i < touchdowns.length; i++) {
-                        if (touchdowns[i].key != params.organisationID) {
-                            var entry = {}, y = [], x = [];
-                            entry.type = 'bar';
-                            entry.name = names[touchdowns[i].key];
-                            for (var j = 0; j < dataEntry.length; j++) {
-                                var temp = touchdowns[i].publication_dates.buckets.filter(function (e) {
-                                    return new Date(dataEntry[j].key_as_string).getTime() == e.key;
-                                });
-                                if (temp[0])
-                                    y.push(temp[0].doc_count)
-                                else
-                                    y.push(0);
-                                x.push(dataEntry[j].key_as_string);
+                            var names = {};
+                            for (var i = 0; i < data.hits.hits.length; i++) {
+                                names[data.hits.hits[i]["_id"]] = data.hits.hits[i]["fields"]["names.name"].sort(function (a, b) {
+                                    return b.length - a.length;
+                                })[data.hits.hits[i]["fields"]["names.name"].length - 1];
                             }
-                            entry.x = x;
-                            entry.y = y;
-                            dataSet.push(entry);
-                        }
-                    }
-                    var layout = {
-                        width: 700,
-  height: 400,
-                        barmode: 'stack', xaxis: {anchor: "y", gridcolor: "rgba(255,255,255,1)", tickcolor: "rgba(51,51,51,1)", tickfont: {
-                                color: "rgba(77,77,77,1)",
-                                family: "",
-                                size: 11.6894977169
-                            }, title: "years", titlefont: {
-                                color: "rgba(0,0,0,1)",
-                                family: "",
-                                size: 14.6118721461
-                            }},
-                        yaxis: {
-                            anchor: "x", title: "Collab_count", titlefont: {
-                                color: "rgba(0,0,0,1)",
-                                family: "",
-                                size: 14.6118721461
-                            },
-                        }
-                    }
+                            var xMin = new Date(d3.min(touchdowns, function (c) {
+                                return d3.min(c.publication_dates.buckets, function (v) {
+                                    return v.key_as_string;
+                                });
+                            }));
+                            var xMax = new Date(d3.max(touchdowns, function (c) {
+                                return d3.max(c.publication_dates.buckets, function (v) {
+                                    return v.key_as_string;
+                                });
+                            }));
 
-                    Plotly.newPlot('chart-08', dataSet, layout);
+                            var years = xMax.getFullYear() - xMin.getFullYear();
+                            var minYear = xMin.getFullYear();
+                            var dataEntry = [];
+                            for (var i = minYear; i <= minYear + years; i++) {
+                                var zero = {"doc_count": 0, "key_as_string": ""};
+                                xMin.setFullYear(i);
+                                zero.key_as_string = xMin.toISOString().slice(0, 10);
+                                zero.key = xMin.getTime();
+                                dataEntry.push(zero);
+                            }
+
+                            var dataSet = [];
+                            for (var i = 0; i < touchdowns.length; i++) {
+                                if (touchdowns[i].key != params.organisationID && !(allsubstructures.contains(touchdowns[i].key))) {
+                                    var entry = {}, y = [], x = [];
+                                    entry.type = 'bar';
+                                    entry.name = names[touchdowns[i].key];
+                                    for (var j = 0; j < dataEntry.length; j++) {
+                                        var temp = touchdowns[i].publication_dates.buckets.filter(function (e) {
+                                            return new Date(dataEntry[j].key_as_string).getTime() == e.key;
+                                        });
+                                        if (temp[0])
+                                            y.push(temp[0].doc_count)
+                                        else
+                                            y.push(0);
+                                        x.push(dataEntry[j].key_as_string);
+                                    }
+                                    entry.x = x;
+                                    entry.y = y;
+                                    dataSet.push(entry);
+                                }
+                            }
+                            var layout = {
+                                width: 700,
+                                height: 400,
+                                barmode: 'stack', xaxis: {anchor: "y", gridcolor: "rgba(255,255,255,1)", tickcolor: "rgba(51,51,51,1)", tickfont: {
+                                        color: "rgba(77,77,77,1)",
+                                        family: "",
+                                        size: 11.6894977169
+                                    }, title: "years", titlefont: {
+                                        color: "rgba(0,0,0,1)",
+                                        family: "",
+                                        size: 14.6118721461
+                                    }},
+                                yaxis: {
+                                    anchor: "x", title: "Collab_count", titlefont: {
+                                        color: "rgba(0,0,0,1)",
+                                        family: "",
+                                        size: 14.6118721461
+                                    },
+                                }
+                            }
+
+                            Plotly.newPlot('chart-08', dataSet, layout);
+                        }
+
+                    });
+
                 }
-
             });
-
-        }
-    });
-
+        }});
 }
 
 function getConferencesByYear(params) {
@@ -626,11 +645,11 @@ function getConferencesByYear(params) {
 
 
 InitOrganisationPublicationsPerYear(params);
-getOrganisationRelations(params);
+getOrganisationSubOrganisations(params);
 getTopicsByOrganisation(params);
 getKeywordsByOrganisationYear(params);
 InitPublicationsPerCountry(params);
-getCollaboratorsByYear(params);
+getCollaborationsByYear(params);
 getConferencesByYear(params);
 
 
