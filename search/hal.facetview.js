@@ -1729,7 +1729,7 @@ all lang <span class="caret"></span>\
 </div>\
 <div class="btn-group"> \
 <button id="selected-bool-field{{NUMBER}}" class="selected-bool-field btn btn-default dropdown-toggle" style="width:80px" data-toggle="dropdown">\
-should <span class="caret"></span>\
+must<span class="caret"></span>\
 </button>\
 <ul class="dropdown-menu bool-fields">\
 <li><a href="#">should</a></li>\
