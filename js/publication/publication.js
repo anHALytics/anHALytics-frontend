@@ -14,7 +14,7 @@
 
     app.service('client', function (esFactory) {
         return esFactory({
-            host: 'http://localhost:9200'
+            host: defaults.es_host
         });
     });
 
@@ -23,8 +23,8 @@
         var pubID = url_options.pubID;
 // search for documents
         client.search({
-            index: 'anhalytics_kb',
-            type: 'publications',
+            index: defaults.kb_index,
+            type: defaults.publications_type,
             size: 1,
             body: {
                 "query":
@@ -37,11 +37,10 @@
 
         }).then(function (response) {
             $scope.publication = response.hits.hits[0];
-            console.log($scope.publication);
         });
 
         client.search({
-            index: 'anhalytics_fulltextteis',
+            index: defaults.fulltext_index,
             body: {
                 "fields": [
                     "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",

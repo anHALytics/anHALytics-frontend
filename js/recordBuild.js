@@ -535,7 +535,7 @@ var buildrecord = function (index, node) {
     $.ajax({
         //type: "get",
         type: "POST",
-        url: options.search_url,
+        url: options.es_host+"/"+options.fulltext_index+"/_search?",
         contentType: 'application/json',
         dataType: 'json',
         //data: {source: JSON.stringify(localQuery)},

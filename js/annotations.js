@@ -11,7 +11,7 @@ var displayTitleAnnotation = function (titleID) {
             var localQuery = {"query": {"filtered": {"query": {"term": {"_id": titleID}}}}};
             $.ajax({
                 type: "post",
-                url: options.search_url_annotations,
+                url: options.es_host+"/"+options.nerd_annotation_index+"/_search?",
                 contentType: 'application/json',
                 //dataType: 'jsonp',
                 data: JSON.stringify(localQuery),
@@ -32,7 +32,7 @@ var displayAbstractAnnotation = function (abstractID) {
 
         $.ajax({
             type: "post",
-            url: options.search_url_annotations,
+            url: options.es_host+"/"+options.nerd_annotation_index+"/_search?",
             contentType: 'application/json',
             //dataType: 'jsonp',
             //data: {source: JSON.stringify(localQuery)},
@@ -55,7 +55,7 @@ var displayKeywordAnnotation = function (keywordIDs) {
 
             $.ajax({
                 type: "post",
-                url: options.search_url_annotations,
+                url: options.es_host+"/"+options.nerd_annotation_index+"/_search?",
                 contentType: 'application/json',
                 //dataType: 'jsonp',
                 data: JSON.stringify(localQuery),

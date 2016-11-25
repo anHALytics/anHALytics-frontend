@@ -190,7 +190,7 @@
         <script>
             Holder.add_theme("white", {background: "#fff", foreground: "#a7a7a7", size: 10});
         </script>
-
+<script src="js/resource/config.js"></script>
         <!--  <script type="text/javascript" src="js/keen.dashboard.js"></script>-->
         <script type="text/javascript" src="dashboard/org_esqueries.js"></script>
         <script type="text/javascript" src="js/extension.js"></script>
@@ -200,7 +200,7 @@
 
             $.ajax({
                 type: "get",
-                url: "http://localhost:9200/anhalytics_kb_inria/organisations/" + organisationID,
+                url: defaults.es_host +"/"+defaults.kb_index+"/"+defaults.organisations_type+"/" + organisationID,
                 //processData: true,
                 success: function (data) {
                     console.log(data);
@@ -220,11 +220,12 @@
 
         </script>
         
+                
         <script type="text/javascript">
             var api_urls = {
-                authors: "http://localhost:9200/anhalytics_kb_inria/authors",
-                organisations: "http://localhost:9200/anhalytics_kb_inria/organisations",
-                publications: "http://localhost:9200/anhalytics_kb_inria/publications"
+                authors: defaults.es_host +"/"+defaults.kb_index+"/"+defaults.authors_type,
+                organisations: defaults.es_host +"/"+defaults.kb_index+"/"+defaults.organisations_type,
+                publications: defaults.es_host +"/"+defaults.kb_index+"/"+defaults.publications_type
             };
 
 
@@ -240,6 +241,7 @@
         <!--D3 libraries, extensions..-->
         <script src="bower_components/plotly.js/dist/plotly.min.js"></script>
         <script src="bower_components/dimple/dist/dimple.latest.min.js"></script>
+        
         <!--dashboard scripting-->
         <script type="text/javascript" src="dashboard/organisation_dashboard.js"></script>
 

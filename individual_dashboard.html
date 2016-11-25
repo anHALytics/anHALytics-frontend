@@ -210,7 +210,7 @@
         <script type="text/javascript" src="bower_components/keen-js/dist/keen.min.js"></script>
         <script type="text/javascript" src="js/meta.js"></script>
 
-
+<script src="js/resource/config.js"></script>
 
         <!--  <script type="text/javascript" src="js/keen.dashboard.js"></script>-->
         <script type="text/javascript" src="dashboard/indiv_esqueries.js"></script>
@@ -224,7 +224,7 @@
 
             $.ajax({
                 type: "get",
-                url: "http://localhost:9200/anhalytics_kb_inria/authors/" + authID,
+                url: defaults.es_host +"/"+defaults.kb_index+"/"+defaults.authors_type+"/" + authID,
                 //processData: true,
                 success: function (data) {
                     var names = data._source.names;
@@ -274,13 +274,14 @@
 
         <script type="text/javascript">
             var api_urls = {
-                authors: "http://localhost:9200/anhalytics_kb_inria/authors",
-                organisations: "http://localhost:9200/anhalytics_kb_inria/organisations",
-                publications: "http://localhost:9200/anhalytics_kb_inria/publications"
+                authors: defaults.es_host +"/"+defaults.kb_index+"/"+defaults.authors_type,
+                organisations: defaults.es_host +"/"+defaults.kb_index+"/"+defaults.organisations_type,
+                publications: defaults.es_host +"/"+defaults.kb_index+"/"+defaults.publications_type
             };
 
 
         </script>
+        
 
         <script type="text/javascript" src="dashboard/individual_dash.js"></script>
         <script type="text/javascript" src="dashboard/bubble.js"></script>

@@ -1624,7 +1624,7 @@
                 $.ajax({
                     //type: "get",
                     type: "post",
-                    url: options.search_url,
+                    url: options.es_host+"/"+options.fulltext_index+"/_search?",
                     //data: {source: elasticSearchSearchQuery()},
                     data: elasticSearchSearchQuery(),
                     // processData: false,
