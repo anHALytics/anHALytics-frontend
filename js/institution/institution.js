@@ -4,7 +4,7 @@
 
     app.service('client', function (esFactory) {
         return esFactory({
-            host: 'http://localhost:9200'
+            host: defaults.es_host
         });
     });
 
@@ -16,8 +16,8 @@
         var orgID = url_options.orgID;
 
         client.search({
-            index: 'anhalytics_kb_inria',
-            type: 'organisations',
+            index: defaults.kb_index,
+            type: defaults.organisations_type,
             body: {
                 "query":
                         {
@@ -34,8 +34,8 @@
                });
             
         $scope.loadPulications = function () {client.search({
-            index: 'anhalytics_kb_inria',
-            type: 'publications',
+            index: defaults.kb_index,
+            type: defaults.publications_type,
             
                 from: $scope.currentPage,
                 size: $scope.numPerPage,
@@ -105,7 +105,7 @@
             $scope.abstracts = {};
             $scope.keywords = {};
             client.search({
-                index: 'anhalytics_fulltextteis_inria',
+                index: defaults.fulltext_index,
                 body: {
                     "fields": [
                         "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",

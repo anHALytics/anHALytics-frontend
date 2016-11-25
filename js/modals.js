@@ -74,10 +74,10 @@ var getEditFilterModal = function (which) {
 					          </div>';
         }
         else {
-            editFilterModal += '<div class="control-group"> \
+            editFilterModal += '<div class="form-group"> \
 						<label class="control-label" for="input"><b>' + truc + '</b></label> \
 				 		<div class="controls"> \
-						<input type="text" class="input-xxlarge" id="input_' + truc + '" value="'
+						<input type="text" class="form-control" id="input_' + truc + '" value="'
                     + options.aggs[which][truc] + '"/> \
 						</div></div>';
         }

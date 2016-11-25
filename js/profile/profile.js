@@ -27,7 +27,7 @@ var d2 = Date.parse(b.begin_date);
 
     app.service('client', function (esFactory) {
         return esFactory({
-            host: 'http://localhost:9200'
+            host: defaults.es_host
         });
     });
 
@@ -35,8 +35,8 @@ var d2 = Date.parse(b.begin_date);
         var url_options = $.getUrlVars();
         var authorID = url_options.authorID;
         client.search({
-            index: 'anhalytics_kb_inria',
-            type: 'authors',
+            index: defaults.kb_index,
+            type: defaults.authors_type,
             size: 1,
             body: {
                 "query":
@@ -67,8 +67,8 @@ var d2 = Date.parse(b.begin_date);
             $scope.publications = [];
             $scope.coauthors = [];
             client.search({
-                index: 'anhalytics_kb_inria',
-                type: 'publications',
+                index: defaults.kb_index,
+                type: defaults.publications_type,
                 size: 200, //could be tuned..
                 body: {
                     "query": {
@@ -104,7 +104,7 @@ var d2 = Date.parse(b.begin_date);
             $scope.interests = [];
             $scope.keywords = [];
             client.search({
-                index: 'anhalytics_fulltextteis_inria',
+                index: defaults.fulltext_index,
                 body: {
                     "fields": [
                         "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",

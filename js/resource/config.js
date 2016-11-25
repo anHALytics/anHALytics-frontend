@@ -4,8 +4,13 @@ var defaults = {
     port_nerd: "",
     service: "local", // access to service can be local or proxy, depending on security requirements
     proxy_host: "http://localhost:8080/proxy/",
-    search_url: 'http://localhost:9200/anhalytics_fulltextteis/_search?', // the URL against which to submit searches
-    search_url_annotations: 'http://localhost:9200/annotations_nerd/_search?',
+    es_host : 'http://localhost:9200',
+    fulltext_index: 'anhalytics_fulltextteis', // the URL against which to submit searches
+    nerd_annotation_index: 'annotations_nerd',
+    kb_index: 'anhalytics_kb',
+    authors_type: 'authors',
+    publications_type: 'publications',
+    organisations_type: 'organisations',
     search_index: 'elasticsearch',
     query_parameter: "q", // the query parameter if required for setting to the search URL
     collection: 'npl',
