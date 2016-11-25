@@ -9,35 +9,34 @@ var getEditFilterModal = function (which) {
                 </div> \
                 <div class="modal-body"> \
 				<form class="well">';
-
-    for (truc in options.facets[which]) {
+    for (truc in options.aggs[which]) {
         if (truc == 'type') {
             editFilterModal += '<div class="control-group"> \
 					            <label class="control-label" for="select"><b>type</b></label> \
 					            <div class="controls"> \
 					              <select id="input_type"> \
 					                <option';
-            if (options.facets[which]['type'] == 'date') {
+            if (options.aggs[which]['type'] == 'date') {
                 editFilterModal += ' selected ';
             }
             editFilterModal += '>date</option> \
 					                <option';
-            if (options.facets[which]['type'] == 'class') {
+            if (options.aggs[which]['type'] == 'class') {
                 editFilterModal += ' selected ';
             }
             editFilterModal += '>class</option> \
 					                <option';
-            if (options.facets[which]['type'] == 'entity') {
+            if (options.aggs[which]['type'] == 'entity') {
                 editFilterModal += ' selected ';
             }
             editFilterModal += '>entity</option> \
 					                <option';
-            if (options.facets[which]['type'] == 'taxonomy') {
+            if (options.aggs[which]['type'] == 'taxonomy') {
                 editFilterModal += ' selected ';
             }
             editFilterModal += '>taxonomy</option> \
 					                <option';
-            if (options.facets[which]['type'] == 'country') {
+            if (options.aggs[which]['type'] == 'country') {
                 editFilterModal += ' selected ';
             }
             editFilterModal += '>country</option> \
@@ -51,22 +50,22 @@ var getEditFilterModal = function (which) {
 					            <div class="controls"> \
 					              <select id="input_type"> \
 					                <option';
-            if (options.facets[which]['view'] == 'hidden') {
+            if (options.aggs[which]['view'] == 'hidden') {
                 editFilterModal += ' selected ';
             }
             editFilterModal += '>hidden</option> \
 					                <option';
-            if (options.facets[which]['view'] == 'graphic') {
+            if (options.aggs[which]['view'] == 'graphic') {
                 editFilterModal += ' selected ';
             }
             editFilterModal += '>graphic</option> \
 					                <option';
-            if (options.facets[which]['view'] == 'textual') {
+            if (options.aggs[which]['view'] == 'textual') {
                 editFilterModal += ' selected ';
             }
             editFilterModal += '>textual</option> \
 					                <option';
-            if (options.facets[which]['view'] == 'all') {
+            if (options.aggs[which]['view'] == 'all') {
                 editFilterModal += ' selected ';
             }
             editFilterModal += '>all</option> \
@@ -79,7 +78,7 @@ var getEditFilterModal = function (which) {
 						<label class="control-label" for="input"><b>' + truc + '</b></label> \
 				 		<div class="controls"> \
 						<input type="text" class="input-xxlarge" id="input_' + truc + '" value="'
-                    + options.facets[which][truc] + '"/> \
+                    + options.aggs[which][truc] + '"/> \
 						</div></div>';
         }
     }
