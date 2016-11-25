@@ -149,6 +149,11 @@ a:focus, a:hover, a:active {
 
 /* .table th{background-color:#FCF8E3;} 
 .table tr{background-color:#FCF8E3;}       */
+.table { 
+    border-radius:25px; 
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+}
 .table th{background-color:#FFFFFF;} 
 .table tr{background-color:#FFFFFF; border-collapse: separate; }
 .table tbody tr.highlight td { background-color: #F2DEDE; word-break:normal; }

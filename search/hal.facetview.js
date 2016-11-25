@@ -1285,6 +1285,9 @@
                     .right(0)
                     .top(3);
 
+            // no more than 10 textual elements (so years) on the X axis
+            var rate = Math.floor(entries.length/8);
+            var rank = -1;
             // Add the X-ticks
             vis.add(pv.Rule)
                     .data(entries)
@@ -1294,14 +1297,19 @@
                     .left(function () {
                         return x(this.index);
                     })
-                    .bottom(-15)
+                    .bottom(-20)
                     .height(15)
-                    .strokeStyle("#33A3E1")
+                    .strokeStyle("#ccc")
                     // Add the tick label
-                    .anchor("right").add(pv.Label)
+                    .anchor("right")
+                    .add(pv.Label)
                     .text(function (d) {
+                        if ((rank != -1) && (rank != rate)) {
+                            rank++;
+                            return "";
+                        }
                         var date = new Date(parseInt(d.key));
-                        var year = date.getYear();
+                        var year = date.getYear() + 2000;
                         if (year >= 100) {
                             year = year - 100;
                         }
@@ -1310,6 +1318,7 @@
                         } else if (year < 10) {
                             year = '0' + year;
                         }
+                        rank = 0;
                         return year;
                     })
                     .textStyle("#333333")

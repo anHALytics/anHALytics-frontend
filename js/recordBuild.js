@@ -15,7 +15,7 @@ var buildrecord = function (index, node) {
     var id = options.data['ids'][index];
 
 
-    result += '<div class="col-md-2">';
+    result += '<div class="col-md-2" style="padding-right:0px;">';
     // add image where available
     var repositoryDocId;
     repositoryDocId = jsonObject[$.fn.facetview.record_metadata.repositoryDocId];
@@ -31,7 +31,7 @@ var buildrecord = function (index, node) {
     }
     result += '</div>';
 
-    result += '<div class="col-md-10" class="height:100%;" id="myCollapsible_' + index + '" style="white-space:normal;">';
+    result += '<div class="col-md-10" class="height:100%;" id="myCollapsible_' + index + '" style="white-space:normal;left:-10px;">';
 
 
     // date
@@ -139,7 +139,7 @@ var buildrecord = function (index, node) {
     }
 
 
-    result += '<div class="row result" style="margin-bottom: 10px" ><strong style="font-size:11px">';
+    result += '<div class="row " style="margin-bottom: 10px" ><strong style="font-size:11px">';
 //    var authorsLast = null;
 //    var authorsFirst = null;
 //
@@ -259,12 +259,13 @@ var buildrecord = function (index, node) {
         result += " - <a target='_blank' style='color: #0094DE;' href='http://dx.doi.org/" + doi + "'>" + doi + "</a>";
     }
     result += '</strong></div>';
-    result += '<br/>';
-    result += '<div class="row"><div class="col-md-6"><a id="button_abstract_keywords_collapse_' + index + 
+    //result += '<br/>';
+    //result += '<div class="row"><div class="col-md-6"><a id="button_abstract_keywords_collapse_' + index + 
+    result += '<div class="row"><a id="button_abstract_keywords_collapse_' + index + 
         '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_keywords_' + index + 
-        '" style="color: #585858;"><span class="glyphicon glyphicon-chevron-down"></span style="font-size:11px">Abstract/Keywords</a></div><div class="col-md-6"><a target="_blank" href="publication.html?pubID=' + id + 
+        '" style="color: #585858;"> Abstract/Keywords <span class="glyphicon glyphicon-chevron-down" style="font-size:11px"/></a></div><div class="col-md-6"><a target="_blank" href="publication.html?pubID=' + id + 
         //'" style="color: #585858;">More details...</a></div></div>';
-        '" style="color: #585858;"></a></div></div>';
+        '" style="color: #585858;"></a></div>';
 
     result += '</div>';
     result += '</div>';
