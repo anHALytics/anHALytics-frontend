@@ -44,7 +44,7 @@ var TopicsByAuthorESQuery = function (id) {
     // set any facets
     qs['size'] = 10;
     qs['query'] = {"terms": {"_id": id}};
-    qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$category.category"}}};
+    qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$category.category", "size": 20}}};
     var theUrl = JSON.stringify(qs);
     return theUrl;
 };
@@ -55,7 +55,7 @@ var IndivPublicationsPerCountryESQuery = function () {
     qs['query'] = {"match": {"authors.personId": authID}};
     // set any facets
     qs['size'] = 0;
-    qs['aggs'] = {"country": {"terms": {"field": "organisations.address.country"}}};
+    qs['aggs'] = {"country": {"terms": {"field": "organisations.address.country", "size": 20}}};
 
     var theUrl = JSON.stringify(qs);
 
@@ -96,7 +96,7 @@ var IndivPublicationsPerTopicESQuery = function () {
    "aggs": {
     "authors": {
      "terms": {
-      "field": "authors.personId"
+      "field": "authors.personId", "size": 20
      }
     }
    }}};
@@ -140,10 +140,10 @@ var CoAuthorsOverTimeESQuery = function () {
     qs['aggs'] = {"publication_dates": {
                     "date_histogram": {
                         "field": "publication.date_printed", "interval": "year",
-                        "format": "yyyy-MM-dd"
+                        "format": "yyyy-MM-dd", "size": 20
                     },
             "aggs": {
-                "author": {"terms": {"field": "authors.personId"}
+                "author": {"terms": {"field": "authors.personId", "size": 20}
                 }
             }
 
@@ -165,10 +165,10 @@ var IndivKeywordsByAuthorByYearESQuery = function () {
     qs['aggs'] = {"publication_dates": {
                     "date_histogram": {
                         "field": "publication.date_printed", "interval": "year",
-                        "format": "yyyy-MM-dd"
+                        "format": "yyyy-MM-dd", "size": 20
                     },
             "aggs": {
-                "keyterms": {"terms": {"field": "annotations.$standoff.$keyterm.keyterm"}
+                "keyterms": {"terms": {"field": "annotations.$standoff.$keyterm.keyterm", "size": 20}
                 }
             }
 

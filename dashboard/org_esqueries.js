@@ -46,14 +46,14 @@ var PublicationsPerCountryESQuery = function (params) {
         qs['query'] = {"match": {"organisations.organisationId": params.organisationID}};
     // set any facets
     qs['size'] = 0;
-    qs['aggs'] = {"country": {"terms": {"field": "organisations.address.country"}}};
+    qs['aggs'] = {"country": {"terms": {"field": "organisations.address.country", "size": 20}}};
 
     var theUrl = JSON.stringify(qs);
     return theUrl;
 };
 
 
-var OrganisationRelationsESQuery = function (params) {
+var OrganisationSubOrganisationsESQuery = function (params) {
 
     var qs = {};
     // set any facets
@@ -85,7 +85,7 @@ var TopicsByOrganisationESQuery = function (params) {
     else
         qs['query'] = {"match": {"organisations.organisationId": params.organisationID}};
 
-    qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$category.category"}}};
+    qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$category.category", "size": 50}}};
     var theUrl = JSON.stringify(qs);
     console.log(theUrl);
     return theUrl;
@@ -108,7 +108,7 @@ var KeywordsByOrganisationYearESQuery = function (params) {
         }
     else
         qs['query'] = {"match": {"organisations.organisationId": params.organisationID}};
-    qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$keyterm.keyterm"},
+    qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$keyterm.keyterm", "size": 50},
             "aggs": {
                 "publication_dates": {
                     "date_histogram": {
@@ -142,7 +142,7 @@ var CollaboratorsByYearESQuery = function (params) {
         qs['query'] = {"match": {"organisations.organisationId": params.organisationID}};
     // set any facets
     qs['size'] = 0;
-    qs['aggs'] = {"orgs": {"terms": {"field": "organisations.organisationId"},
+    qs['aggs'] = {"orgs": {"terms": {"field": "organisations.organisationId", "size": 20},
             "aggs": {"publication_dates": {
                     "date_histogram": {
                         "field": "publication.date_printed", "interval": "year",
@@ -226,6 +226,7 @@ var elasticSearchAggQuery11 = function (params) {
 var OrgNamesByOrgId = function (ids) {
 
     var qs = {};
+    qs['size'] = 20;
     qs['query'] = {"ids": {"values": ids}};
     // set any facets
     qs['fields'] = ["names.name"];
