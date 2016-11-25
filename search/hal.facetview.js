@@ -1729,7 +1729,7 @@ all lang <span class="caret"></span>\
 </div>\
 <div class="btn-group"> \
 <button id="selected-bool-field{{NUMBER}}" class="selected-bool-field btn btn-default dropdown-toggle" style="width:80px" data-toggle="dropdown">\
-should <span class="caret"></span>\
+must <span class="caret"></span>\
 </button>\
 <ul class="dropdown-menu bool-fields">\
 <li><a href="#">should</a></li>\
@@ -1758,7 +1758,7 @@ should <span class="caret"></span>\
 </ul>\
 <button type="button" id="disambiguate{{NUMBER}}" class="btn btn-default" disabled="true" data-toggle="button">Disambiguate</button>\
 </div>\
-<div class="btn-group" style="margin-left:10px"><a id="close-searchbar{{NUMBER}}" style="display:none" onclick=\'$("#facetview_searchbar{{NUMBER}}").remove()\'><span class="glyphicon glyphicon-remove"></span></a></div>\
+<div class="btn-group" style="margin-left:10px;"><a id="close-searchbar{{NUMBER}}" style="display:none; color:black;" onclick=\'$("#facetview_searchbar{{NUMBER}}").remove()\'><span class="glyphicon glyphicon-remove"></span></a></div>\
 </div>';
 
 

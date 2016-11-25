@@ -86,7 +86,7 @@ var getEditFilterModal = function (which) {
     editFilterModal += '</form> \
 			    </div> \
                 <div class="modal-footer"> \
-                <a id="facetview_dofacetedit" href="#" class="btn btn-primary" rel="' + which + '">Apply</a> \
+                <a id="facetview_dofacetedit" href="#" class="btn btn-primary btn-danger" rel="' + which + '">Apply</a> \
                 <a class="facetview_removeedit btn close">Cancel</a> \
                 </div> \
                 </div> \
