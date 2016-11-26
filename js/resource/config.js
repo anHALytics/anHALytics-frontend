@@ -17,7 +17,7 @@ var defaults = {
     subcollection: 'hal',
     snippet_style: 'andlauer',
     freetext_submit_delay: "400", // delay for auto-update of search results in ms
-    use_delay: true, // if true, searches are triggered by keyup events with the above delay
+    use_delay: false, // if true, searches are triggered by keyup events with the above delay
                      // otherwise search is triggered by pressing enter
     display_images: true, // whether or not to display images found in links in search results    
     config_file: false, // a remote config file URL

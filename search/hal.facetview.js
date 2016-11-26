@@ -1674,7 +1674,7 @@
             //$("#facetview_presentation").remove();
             // append the facetview object to this object
             
-            var facetview_howmany = $("#facetview_howmany").text();
+            /*var facetview_howmany = $("#facetview_howmany").text();
             facetview_howmany = facetview_howmany.replace(/{{HOW_MANY}}/gi, options.paging.size);
             $("#facetview_howmany").text(facetview_howmany);
             //$(obj).append(thefacetview);
@@ -1684,7 +1684,7 @@
             $('#facetview_fuzzy_match').bind('click', fixmatch);
             $('#facetview_match_any').bind('click', fixmatch);
             $('#facetview_match_all').bind('click', fixmatch);
-            $('#facetview_howmany').bind('click', howmany);
+            $('#facetview_howmany').bind('click', howmany);*/
 
 
             // resize the searchbar
@@ -1712,7 +1712,7 @@
             }
 
             // trigger the search once on load, to get all results
-            if (options.use_delay)
+            //if (options.use_delay)
                 dosearch();
         };
 
@@ -1824,6 +1824,9 @@ must <span class="caret"></span>\
                     });
                 } else {*/
                     //whenready();
+                if ($('#facetview_filters').children().length == 0)
+                    whenready();
+                else
                     dosearch();
                 //}
             }
@@ -1880,6 +1883,18 @@ must <span class="caret"></span>\
             });
 
 
+            var facetview_howmany = $("#facetview_howmany").text();
+            facetview_howmany = facetview_howmany.replace(/{{HOW_MANY}}/gi, options.paging.size);
+            $("#facetview_howmany").text(facetview_howmany);
+            //$(obj).append(thefacetview);
+            // setup search option triggers
+            $('#facetview_partial_match').bind('click', fixmatch);
+            $('#facetview_exact_match').bind('click', fixmatch);
+            $('#facetview_fuzzy_match').bind('click', fixmatch);
+            $('#facetview_match_any').bind('click', fixmatch);
+            $('#facetview_match_all').bind('click', fixmatch);
+            $('#facetview_howmany').bind('click', howmany);
+
 //            var url_options = $.getUrlVars();
 //            // update the options with the latest q value
 //            options.q = url_options.q;
@@ -1892,7 +1907,7 @@ must <span class="caret"></span>\
 //                }
 //            });
 
-            //if (options.use_delay)
+            if (options.use_delay)
                 whenready();
 
         });
