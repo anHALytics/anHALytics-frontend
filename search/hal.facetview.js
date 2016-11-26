@@ -443,10 +443,10 @@
             $('#facetview_freetext' + nb_fields).css('width', (thewidth / 2) - 30 + 'px');
 
             // bind the new input field with the query callback
-            if (options.use_delay)
+            if (options.use_delay) {
                 $('#facetview_freetext' + nb_fields).bindWithDelay('keyup', dosearch, options.freetext_submit_delay);
-            //else
-            //    $('#facetview_freetext' + nb_fields).bind('keyup', dosearch);
+                $('#facetview_freetext' + nb_fields).bind('keyup', checkDisambButton);
+            }
         };
 
         var set_field = function (event) {
@@ -1637,7 +1637,7 @@
 
         // execute a search
         var dosearch = function () {
-console.log("dosearch");
+
             // make the search query
             if (options.search_index == "elasticsearch") {
                 $.ajax({
@@ -1706,11 +1706,10 @@ console.log("dosearch");
             buildfilters();
 
             //obj = $(this);
-            if (options.use_delay)
+            if (options.use_delay) {
                 $('#facetview_freetext1').bindWithDelay('keyup', dosearch, options.freetext_submit_delay);
-            //else
-            //    $('#facetview_freetext1').bind('keyup', dosearch);
-            //$('#facetview_freetext1', obj).bind('keyup', activateHarvestButton);
+                $('#facetview_freetext1').bind('keyup', checkDisambButton);
+            }
 
             // trigger the search once on load, to get all results
             if (options.use_delay)
@@ -1783,7 +1782,7 @@ must <span class="caret"></span>\
             // get this object
             obj = $(this);
             options.q = $(this).val();
-            var thenum = $(this).attr("id").match(/\d+/)[0] // "3"
+            var thenum = $(this).attr("id").match(/\d+/)[0]; // "3"
             if (options.q)
                 activateDisambButton(thenum);
             else

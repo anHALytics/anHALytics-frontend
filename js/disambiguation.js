@@ -154,16 +154,19 @@ var getPieceShowexpandNERD = function (jsonObject) {
 };
 
 var activateDisambButton = function (num) {
-    //console.log($('#facetview_freetext').val());
-    //if ($('#facetview_freetext').val()) {
     $('#disambiguate' + num).attr("disabled", false);
-//    }
-//    else {
-//        $('#disambiguate').attr("disabled", true);
-//    }
+};
+
+var checkDisambButton = function () {
+    var num = $(this).attr("id").match(/\d+/)[0]
+    if ($('#facetview_freetext'+num).val()) {
+        $('#disambiguate' + num).attr("disabled", false);
+    }
+    else {
+        $('#disambiguate' + num).attr("disabled", true);
+    }
 };
 
 var deactivateDisambButton = function (num) {
-
     $('#disambiguate' + num).attr("disabled", true);
 };
