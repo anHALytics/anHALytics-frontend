@@ -18,9 +18,7 @@
         var options = $.fn.facetview.options;
 
         var mode = "";
-        //var fillDefaultColor = '#FF8000';
         var fillDefaultColor = '#BC0E0E';
-        //var fillDefaultColor = '#FF9900';
         var fillDefaultColorLight = '#FE9A2E';
 
         // ===============================================
@@ -95,7 +93,7 @@
                     dosearch();
                 } else {
                     var newobj = '<a class="facetview_filterselected facetview_clear ' +
-                            'btn btn-info" rel="' + $(this).attr("rel") +
+                            'btn btn-warning" rel="' + $(this).attr("rel") +
                             '" alt="remove" title="remove"' +
                             ' href="' + $(this).attr("href") + '">';
                     newobj += $(this).attr("display") + ":";
@@ -112,7 +110,7 @@
                 }
             } else {
                 var newobj = '<a class="facetview_filterselected facetview_clear ' +
-                        'btn btn-info" rel="' + $(this).attr("rel") +
+                        'btn btn-warning" rel="' + $(this).attr("rel") +
                         '" alt="remove" title="remove"' +
                         ' href="' + $(this).attr("href") + '">';
                 newobj += $(this).attr("display") + ":";
@@ -192,7 +190,7 @@
             var rel = $('#facetview_rangerel').html();
             var range = $('#facetview_rangechoices').html();
             var newobj = '<a class="facetview_filterselected facetview_facetrange facetview_clear ' +
-                    'btn btn-info" rel="' + rel +
+                    'btn btn-warning" rel="' + rel +
                     '" alt="remove" title="remove"' +
                     ' href="' + $(this).attr("href") + '">' +
                     range + ' <i class="glyphicon glyphicon-remove"></i></a>';
@@ -306,8 +304,8 @@
                 year_from = parseInt($('input[name=\"year_from\"]').val());
             }
 
-            var day_to = 1;
-            var month_to = 0;
+            var day_to = 31;
+            var month_to = 11;
             var year_to = values[values.length - 1];
 
             if ($('input[name=\"day_to\"]').val()) {
@@ -320,6 +318,10 @@
                 year_to = parseInt($('input[name=\"year_to\"]').val());
             }
 
+            // TBD: we should adjust here the default last day of the month
+            // based on the number of days in the month (e.g. 30 days for 11, 
+            // 31 days for 10, etc.)
+
             range += (day_from) + '-' + (month_from + 1) + '-' + year_from;
             range += " to ";
             range += (day_to) + '-' + (month_to + 1) + '-' + year_to;
@@ -330,7 +332,7 @@
 
             var rel = $(this).attr('rel');
             var newobj = '<a class="facetview_filterselected facetview_facetrange facetview_clear ' +
-                    'btn btn-info" rel="' + rel +
+                    'btn btn-warning" rel="' + rel +
                     '" alt="remove" title="remove"' +
                     ' href="' + date_from.getTime() + '_' + date_to.getTime() + '">' +
                     range + ' <i class="glyphicon glyphicon-remove"></i></a>';
@@ -490,7 +492,7 @@
                 var icon = '<i class="glyphicon glyphicon-plus"></i>'
                 for (var idx in options.aggs) {
                     if (options.aggs[idx].field == thisfacet) {
-                        filter += 'btn-info facetview_filterexists'
+                        filter += 'btn-warning facetview_filterexists'
                         index = idx
                         icon = '<i class="glyphicon glyphicon-remove"></i> '
                     }
@@ -1433,7 +1435,7 @@
         // normal click on a graphical facet
         var clickGraph = function (facetfield, facetKey, facetValueDisplay, facetValue) {
             var newobj = '<a class="facetview_filterselected facetview_clear ' +
-                    'btn btn-info" rel="' + facetfield +
+                    'btn btn-warning" rel="' + facetfield +
                     '" alt="remove" title="remove"' +
                     ' href="' + facetValue + '">' +
                     facetKey + ":" + facetValueDisplay + ' <i class="glyphicon glyphicon-remove"></i></a>';

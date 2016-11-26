@@ -23,9 +23,9 @@ var buildrecord = function (index, node) {
     if (options.display_images) {
 
         if (options.subcollection == "hal") {
-
+            // avoid resizing - useless in this case, and fix height to avoid all records moving while images are downloaded
             result += '<a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + repositoryDocId +
-                    '/document" target="_blank" style="color:firebrick;"><img class="img-thumbnail img-responsive" style="float:right; width: 70px" src="' +
+                    '/document" target="_blank" style="color:firebrick;"><img class="img-thumbnail img-responsive" style="float:right; height:100px;" src="' +
                     'https://hal.archives-ouvertes.fr/' + repositoryDocId + '/thumb' + '" /></a>';
         }
     }
@@ -341,7 +341,8 @@ var buildrecord = function (index, node) {
 
     result += '<div class="row">';
     result += '<div class="col-md-12">';
-// snippets 
+    
+    // snippets 
     // Dominique Andlauer's strategy (sort of Google's one), at least one snippet per matched term, then 
     // per relevance, first we check the number of different matched terms
     if (options.snippet_style == "andlauer") {
