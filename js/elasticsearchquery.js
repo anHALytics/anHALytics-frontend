@@ -1,3 +1,21 @@
+var record_metadata = {
+    id: "_id",
+    repositoryDocId: "repositoryDocId",
+    title: "$teiCorpus.$teiHeader.$fileDesc.$titleStmt.$title.$title-first",
+    abstract: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
+    titleid: "$teiCorpus.$teiHeader.$fileDesc.$titleStmt.xml:id",
+    datepub: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub",
+    monogr_title: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
+    author_surname: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$surname",
+    author_forename: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$forename",
+    author_fullname: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$fullName.analyzed",
+    doi: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$idno.$type_doi",
+    anhalyticsid: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$idno.$type_anhalyticsID",
+    typology: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology",
+    keywordsid: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id",
+    keywords: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.analyzed",
+};
+
 // build the search query URL based on current params
 var elasticSearchSearchQuery = function () {
 
@@ -7,15 +25,15 @@ var elasticSearchSearchQuery = function () {
     var filtered = false; // true if a filter at least applies to the query
     var queried_fields = []; // list of queried fields for highlights   
     //sorting field
-    var datepub = $.fn.facetview.record_metadata.datepub;
+    var datepub = record_metadata.datepub;
     var date = {};
     date[datepub] = {"order": "desc"};
 
     // fields to be returned
     var textFieldsNPLReturned = new Array();
 
-    for (var key in $.fn.facetview.record_metadata) {
-        textFieldsNPLReturned.push($.fn.facetview.record_metadata[key]);
+    for (var key in record_metadata) {
+        textFieldsNPLReturned.push(record_metadata[key]);
     }
 
     qs['fields'] = textFieldsNPLReturned;

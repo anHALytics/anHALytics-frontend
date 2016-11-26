@@ -8,7 +8,7 @@
     $.fn.facetview = function (options, record_metadata) {
 
 
-        $.fn.facetview.record_metadata = record_metadata;
+        //$.fn.facetview.record_metadata = record_metadata;
         // and add in any overrides from the call
         // these options are also overridable by URL parameters
         // facetview options are declared as a function so they are available externally

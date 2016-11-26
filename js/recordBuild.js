@@ -18,14 +18,15 @@ var buildrecord = function (index, node) {
     result += '<div class="col-md-2" style="padding-right:0px;">';
     // add image where available
     var repositoryDocId;
-    repositoryDocId = jsonObject[$.fn.facetview.record_metadata.repositoryDocId];
+    repositoryDocId = jsonObject[record_metadata.repositoryDocId];
 
     if (options.display_images) {
 
         if (options.subcollection == "hal") {
-            // avoid resizing - useless in this case, and fix height to avoid all records moving while images are downloaded
+            // try to avoid resizing when possible - useless in this case, and fix height 
+            // to avoid all records moving while images are downloaded
             result += '<a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + repositoryDocId +
-                    '/document" target="_blank" style="color:firebrick;"><img class="img-thumbnail img-responsive" style="float:right; height:100px;" src="' +
+                    '/document" target="_blank" style="color:firebrick;"><img class="img-thumbnail img-responsive" style="float:right; height:100px; max-width:100px;" src="' +
                     'https://hal.archives-ouvertes.fr/' + repositoryDocId + '/thumb' + '" /></a>';
         }
     }
@@ -37,7 +38,7 @@ var buildrecord = function (index, node) {
     // date
     var date;
     var dates = null;
-    dates = jsonObject[$.fn.facetview.record_metadata.datepub];
+    dates = jsonObject[record_metadata.datepub];
 
     var title;
     var titles = null;
@@ -46,8 +47,8 @@ var buildrecord = function (index, node) {
     var titleAnnotated = null;
 
     // NPL
-    titles = jsonObject[$.fn.facetview.record_metadata.title];
-    titleIDs = jsonObject[$.fn.facetview.record_metadata.titleid];
+    titles = jsonObject[record_metadata.title];
+    titleIDs = jsonObject[record_metadata.titleid];
 
     if (typeof titles == 'string') {
         title = titles;
@@ -72,7 +73,7 @@ var buildrecord = function (index, node) {
     /*
      if (!title || (title.length === 0)) {
      
-     titles = jsonObject[$.fn.facetview.record_metadata.titleen];
+     titles = jsonObject[record_metadata.titleen];
      
      if (typeof titles == 'string') {
      title = titles;
@@ -89,7 +90,7 @@ var buildrecord = function (index, node) {
      
      if (!title || (title.length === 0)) {
      
-     titles = jsonObject[$.fn.facetview.record_metadata.titlefr];
+     titles = jsonObject[record_metadata.titlefr];
      
      if (typeof titles == 'string') {
      title = titles;
@@ -106,7 +107,7 @@ var buildrecord = function (index, node) {
      
      if (!title || (title.length === 0)) {
      
-     titles = jsonObject[$.fn.facetview.record_metadata.titlede];
+     titles = jsonObject[record_metadata.titlede];
      
      if (typeof titles == 'string') {
      title = titles;
@@ -143,10 +144,10 @@ var buildrecord = function (index, node) {
 //    var authorsLast = null;
 //    var authorsFirst = null;
 //
-//    authorsLast = jsonObject[$.fn.facetview.record_metadata.author_surname];
+//    authorsLast = jsonObject[record_metadata.author_surname];
 //    var tempStr = "" + authorsLast;
 //    authorsLast = tempStr.split(",");
-//    authorsFirst = jsonObject[$.fn.facetview.record_metadata.author_forename];
+//    authorsFirst = jsonObject[record_metadata.author_forename];
 //    tempStr = "" + authorsFirst;
 //    authorsFirst = tempStr.split(",");
 //
@@ -175,9 +176,9 @@ var buildrecord = function (index, node) {
 //    }
 
     var names =
-            jsonObject[$.fn.facetview.record_metadata.author_fullname];
+            jsonObject[record_metadata.author_fullname];
     if (names) {
-        var ids = jsonObject[$.fn.facetview.record_metadata.anhalyticsid];
+        var ids = jsonObject[record_metadata.anhalyticsid];
         for (var aut in names) {
             if (ids)
                 var id_ = ids[aut];
@@ -194,7 +195,7 @@ var buildrecord = function (index, node) {
     var titleBook = null;
     var titlesBook = null;
     //if (options['collection'] == 'npl') {
-    titlesBook = jsonObject[$.fn.facetview.record_metadata.monogr_title];
+    titlesBook = jsonObject[record_metadata.monogr_title];
     var titleBookTmp = null;
     if (typeof titlesBook == 'string') {
         titleBook = titlesBook;
@@ -253,7 +254,7 @@ var buildrecord = function (index, node) {
     }
 
     var doi = null;
-    doi = jsonObject[$.fn.facetview.record_metadata.doi];
+    doi = jsonObject[record_metadata.doi];
     if (doi) {
         doi = doi[0];
         result += " - <a target='_blank' style='color: #0094DE;' href='http://dx.doi.org/" + doi + "'>" + doi + "</a>";
@@ -288,7 +289,7 @@ var buildrecord = function (index, node) {
                     + repositoryDocId + '" target="_blank" style="margin-right:10px; color:#D42C2C;" alt="see resource on HAL">' + repositoryDocId + '</a></strong>';
             // document type
             var type =
-                    jsonObject[$.fn.facetview.record_metadata.typology];
+                    jsonObject[record_metadata.typology];
             if (type) {
                 // PL: pubtype click should add a filter of typology = pubtype
                 // in addition not displaying it as a label, because it is visually confusing with the annotations which are aslo labels
@@ -301,10 +302,10 @@ var buildrecord = function (index, node) {
 // keywords
         var keyword = null;
         var keywordIDs =
-                jsonObject[$.fn.facetview.record_metadata.keywordsid];
+                jsonObject[record_metadata.keywordsid];
         // we have a list of keyword IDs, each one corresponding to an independent annotation set
         var keywords =
-                jsonObject[$.fn.facetview.record_metadata.keywords];
+                jsonObject[record_metadata.keywords];
 
         if (typeof keywords == 'string') {
             keyword = keywords;
