@@ -443,7 +443,10 @@
             $('#facetview_freetext' + nb_fields).css('width', (thewidth / 2) - 30 + 'px');
 
             // bind the new input field with the query callback
-            $('#facetview_freetext' + nb_fields, obj).bindWithDelay('keyup', dosearch, options.freetext_submit_delay);
+            if (options.use_delay)
+                $('#facetview_freetext' + nb_fields).bindWithDelay('keyup', dosearch, options.freetext_submit_delay);
+            //else
+            //    $('#facetview_freetext' + nb_fields).bind('keyup', dosearch);
         };
 
         var set_field = function (event) {
@@ -1634,6 +1637,7 @@
 
         // execute a search
         var dosearch = function () {
+console.log("dosearch");
             // make the search query
             if (options.search_index == "elasticsearch") {
                 $.ajax({
@@ -1667,9 +1671,9 @@
 
         // what to do when ready to go
         var whenready = function () {
-            $("#facetview_presentation").remove();
+            //$("#facetview_presentation").remove();
             // append the facetview object to this object
-
+            
             var facetview_howmany = $("#facetview_howmany").text();
             facetview_howmany = facetview_howmany.replace(/{{HOW_MANY}}/gi, options.paging.size);
             $("#facetview_howmany").text(facetview_howmany);
@@ -1701,13 +1705,16 @@
             // append the filters to the facetview object
             buildfilters();
 
-            //$('#facetview_freetext', obj).bindWithDelay('keyup', dosearch, options.freetext_submit_delay);
-            //$('#facetview_freetext', obj).bind('keyup', activateHarvestButton);
-
+            //obj = $(this);
+            if (options.use_delay)
+                $('#facetview_freetext1').bindWithDelay('keyup', dosearch, options.freetext_submit_delay);
+            //else
+            //    $('#facetview_freetext1').bind('keyup', dosearch);
+            //$('#facetview_freetext1', obj).bind('keyup', activateHarvestButton);
 
             // trigger the search once on load, to get all results
-            dosearch();
-
+            if (options.use_delay)
+                dosearch();
         };
 
         $('#disambiguation_panel').hide();
@@ -1781,7 +1788,9 @@ must <span class="caret"></span>\
                 activateDisambButton(thenum);
             else
                 deactivateDisambButton(thenum);
-            if (e.keyCode == 13 && (options.q || $("#facetview_selectedfilters").children().length > 0)) {
+            //if (e.keyCode == 13 && (options.q || $("#facetview_selectedfilters").children().length > 0)) {
+            if (e.keyCode == 13) 
+            {
 //                    if (url_options.mode)
 //                        window.location.href = window.location.href.replace(/[\&#].*|$/, "&q=" + options.q);
 //                    else
@@ -1791,7 +1800,7 @@ must <span class="caret"></span>\
 //                    activateDisambButton();
 //                    $("#facetview_freetext").text(options.q);
                 // check for remote config options, then do first search
-                if (options.config_file) {
+                /*if (options.config_file) {
                     $.ajax({
                         type: "get",
                         url: options.config_file,
@@ -1814,21 +1823,23 @@ must <span class="caret"></span>\
                             });
                         }
                     });
-                } else {
-                    whenready();
-                }
+                } else {*/
+                    //whenready();
+                    dosearch();
+                //}
             }
         }
+
+
 
 
         // ===============================================
         // now create the plugin on the page
         return $(document).ready(function (e) {
 
-
-
             $("#facetview_searchbars").append(searchbar.replace(/{{NUMBER}}/gi, "1"));
-            $("#facetview_freetext1").keyup(keyPress);
+            if (!options.use_delay)
+                $("#facetview_freetext1").keyup(keyPress);
             $('#disambiguate1').click(disambiguateNERD);
             
             $("#facetview_fieldbuttons").on("click", function () {
@@ -1848,7 +1859,9 @@ must <span class="caret"></span>\
                     var selText = $(this).text();
                     $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
                 });
-                $("#facetview_freetext" + cloneIndex).keyup(keyPress);
+
+                if (!options.use_delay)
+                    $("#facetview_freetext" + cloneIndex).keyup(keyPress);
 
                 $('#disambiguate' + cloneIndex).click(disambiguateNERD);
                 cloneIndex++;
@@ -1879,6 +1892,9 @@ must <span class="caret"></span>\
 //                    //window.location.href = window.location.href.replace(/[\?#].*|$/, "?mode=" + brands.val());
 //                }
 //            });
+
+            //if (options.use_delay)
+                whenready();
 
         });
 
