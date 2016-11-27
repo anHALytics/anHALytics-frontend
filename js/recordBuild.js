@@ -636,7 +636,7 @@ var displayAbstractPanel = function (data, index) {
 
         if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
             piece += '<p style="align:justify;text-align:justify; text-justify:inter-word; width:100%;">';
-            piece += '<strong>Abstract: </strong><span id="abstractNaked" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</span></p>';
+            piece += '<strong>Abstract: </strong><span id="abstractNaked'+abstractID+'" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</span></p>';
         }
 
         // keywords

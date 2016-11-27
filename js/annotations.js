@@ -24,7 +24,7 @@ var displayTitleAnnotation = function (titleID) {
 }
 
 var displayAbstractAnnotation = function (abstractID) {
-    $('#abstractNaked[rel="' + abstractID + '"]').each(function () {
+    $('#abstractNaked' + abstractID).each(function () {
         // annotations for the abstract
         var index = $(this).attr('pos');
         var titleID = $(this).attr('rel');
@@ -41,6 +41,8 @@ var displayAbstractAnnotation = function (abstractID) {
                 displayAnnotations(data, index, abstractID, 'abstract');
             }
         });
+        // trigger MathJax on the abstract content
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub, 'abstractNaked'+abstractID]);
     });
 }
 
