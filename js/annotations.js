@@ -366,7 +366,9 @@ function viewEntity(event) {
 //            urlImage += '?maxwidth=150';
 //            urlImage += '&maxheight=150';
 //            urlImage += '&key=' + options.api_key;
-            string += '<span style="align:right;" id="img-' + wikipedia + '"><script type="text/javascript">lookupWikiMediaImage("'+wikipedia+'", "'+lang+'", false)</script></span>';
+            string += 
+            '<span style="align:right;" id="img-' + wikipedia + '-'+resultIndex+'"><script type="text/javascript">lookupWikiMediaImage("'+
+                wikipedia+'", "'+lang+'", "img-'+wikipedia+'-'+resultIndex+'")</script></span>';
         }
 
         string += "</td></tr></table>";
@@ -398,20 +400,15 @@ function viewEntity(event) {
 
 
 
-window.lookupWikiMediaImage = function (wikipedia, lang, disamb) {
+window.lookupWikiMediaImage = function (wikipedia, lang, id) {
     // first look in the local cache
     if (lang + wikipedia in options.imgCache) {
         var imgUrl = options.imgCache[lang + wikipedia];
         var document = (window.content) ? window.content.document : window.document;
-        var spanNode = null;
-        if (disamb)
-            spanNode = document.getElementById("img-disamb-" + wikipedia);
-        else      
-            spanNode = document.getElementById("img-" + wikipedia);
-        spanNode.innerHTML = '<img style="float:right; " src="' + imgUrl + '"/>';
-//console.log(wikipedia + " " + lang + " true");
+        var spanNode = document.getElementById(id);
+        if (spanNode != null)
+            spanNode.innerHTML = '<img style="float:right;" src="' + imgUrl + '"/>';
     } else {
-//console.log(wikipedia + " " + lang + " false");
         // otherwise call the wikipedia API
         var theUrl = null;
         if (lang == 'fr')
@@ -428,12 +425,14 @@ window.lookupWikiMediaImage = function (wikipedia, lang, disamb) {
             xhrFields: {withCredentials: true},
             success: function (response) {
                 var document = (window.content) ? window.content.document : window.document;
-                var spanNode = document.getElementById("img-" + wikipedia);
+                //var spanNode = document.getElementById("img-" + wikipedia);
+                var spanNode = document.getElementById(id);
                 if (response.query && spanNode) {
                     if (response.query.pages[wikipedia]) {
                         if (response.query.pages[wikipedia].thumbnail) {
                             var imgUrl = response.query.pages[wikipedia].thumbnail.source;
-                            spanNode.innerHTML = '<img src="' + imgUrl + '"/>';
+                            if (spanNode != null)
+                                spanNode.innerHTML = '<img style="float:right;" src="' + imgUrl + '"/>';
                             // add to local cache for next time
                             options.imgCache[lang + wikipedia] = imgUrl;
                         }
@@ -513,7 +512,9 @@ var getPieceShowexpandNERD = function (jsonObject) {
             }
 
             piece += '<td width="25%">';
-            piece += '<span id="img-disamb-' + wikipedia + '"><script type="text/javascript">lookupWikiMediaImage("'+wikipedia+'", "'+lang+'", true)</script></span>';
+            piece += 
+            '<span id="img-disamb-' + wikipedia + '-' + sens+'"><script type="text/javascript">lookupWikiMediaImage("'+
+                wikipedia+'", "'+lang+'", "img-disamb-' + wikipedia + '-' + sens+'")</script></span>';
             piece += '</td><td>';
             piece += '<table><tr><td>';
 
