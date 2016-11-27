@@ -1,3 +1,14 @@
+var abstract_metadata = {
+    the_id: "$teiCorpus.$teiHeader.$profileDesc.xml:id",
+    repositoryDocId: "repositoryDocId",
+    abstract_en: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
+    abstract_fr: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr",
+    abstract_de: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de",
+    typology: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology", // should be call in background
+    keywordsid: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id", // should be call in background
+    keywords: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.analyzed" // should be call in background
+};
+
 // given a result record, build how it should look on the page
 var buildrecord = function (index, node) {
     var record = options.data['records'][index];
@@ -17,8 +28,7 @@ var buildrecord = function (index, node) {
 
     result += '<div class="col-md-2" style="padding-right:0px;">';
     // add image where available
-    var repositoryDocId;
-    repositoryDocId = jsonObject[record_metadata.repositoryDocId];
+    var repositoryDocId = jsonObject[record_metadata.repositoryDocId];
 
     if (options.display_images) {
 
@@ -262,6 +272,7 @@ var buildrecord = function (index, node) {
     result += '</strong></div>';
     //result += '<br/>';
     //result += '<div class="row"><div class="col-md-6"><a id="button_abstract_keywords_collapse_' + index + 
+
     result += '<div class="row"><a id="button_abstract_keywords_collapse_' + index + 
         '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_keywords_' + index + 
         '" style="color: #585858;"> Abstract/Keywords <span class="glyphicon glyphicon-chevron-down" style="font-size:11px"/></a></div><div class="col-md-6"><a target="_blank" href="publication.html?pubID=' + id + 
@@ -282,54 +293,10 @@ var buildrecord = function (index, node) {
         /*} else {
             piece += 'style="background-color:#ffffff;">';
         }*/
-        piece += '<div class="col-md-7" style="margin-left:10px;">';
-        if (options.subcollection == "hal") {
-
-            piece += '<p><strong> <a href="https://hal.archives-ouvertes.fr/'
-                    + repositoryDocId + '" target="_blank" style="margin-right:10px; color:#D42C2C;" alt="see resource on HAL">' + repositoryDocId + '</a></strong>';
-            // document type
-            var type =
-                    jsonObject[record_metadata.typology];
-            if (type) {
-                // PL: pubtype click should add a filter of typology = pubtype
-                // in addition not displaying it as a label, because it is visually confusing with the annotations which are aslo labels
-                //piece += '<a href="publication.html?pubID=' + id + '"><span class="label pubtype" style="white-space:normal;">' + type + '</span></a></p>';
-                piece += '<span class="pubtype" style="white-space:normal;color:black;">' + type + '</span></p>';
-                //piece += '<p><strong>' + type + '</strong></p>';
-            }
-        }
-        piece += '<p class="innen_abstract" style="align:justify;text-align:justify; text-justify:inter-word; width:100%;" pos="' + index + '" rel="' + id + '"></p>';
-// keywords
-        var keyword = null;
-        var keywordIDs =
-                jsonObject[record_metadata.keywordsid];
-        // we have a list of keyword IDs, each one corresponding to an independent annotation set
-        var keywords =
-                jsonObject[record_metadata.keywords];
-
-        if (typeof keywords == 'string') {
-            keyword = keywords;
-        } else {
-            var keyArray = keywords;
-            if (keyArray && keywordIDs) {
-                for (var p in keyArray) {
-                    var keywordID = keywordIDs[p];
-                    if (p == 0) {
-                        keyword = '<span id="keywordsNaked"  pos="' + index + '" rel="' + keywordID + '">'
-                                + keyArray[p] + '</span>';
-                    } else {
-                        keyword += ', ' + '<span id="keywordsNaked"  pos="' + index + '" rel="' + keywordID + '">' +
-                                keyArray[p] + '</span>';
-                    }
-                }
-            }
-        }
-
-        if (keyword && (keyword.length > 0) && (keyword.trim().indexOf(" ") != -1)) {
-            piece += ' <p ><strong>Keywords: </strong> ' + keyword + '</p>';
-        }
+        piece += '<div class="col-md-7" id="innen_abstract_'+id+'" style="margin-left:10px;">';
 
         piece += '</div>';
+
         // info box for the entities
         piece += '<div class="col-md-5" style="margin-right:-10px;">';
         piece += '<span  id="detailed_annot-' + index + '" />';
@@ -527,16 +494,14 @@ var buildrecord = function (index, node) {
     // load biblio and abstract info. 
     // pos attribute gives the result index, rel attribute gives the document ID 
     // abstract and further informations
-    var localQuery = {"fields": ["$teiCorpus.$teiHeader.$profileDesc.xml:id",
-            "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
-            "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr",
-            "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de"
-                    //"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
-                    //"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$idno.$type_doi",
-                    //"$teiCorpus.$teiHeader.$sourceDesc.$biblStruct.$author.$persName.$fullName",
-                    //'$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology',
-                    //"$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term",
-                    //'$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id'
+    var localQuery = {"fields": [abstract_metadata.the_id, 
+            abstract_metadata.repositoryDocId,
+            abstract_metadata.abstract_en, 
+            abstract_metadata.abstract_fr, 
+            abstract_metadata.abstract_de, 
+            abstract_metadata.typology,
+            abstract_metadata.keywordsid,
+            abstract_metadata.keywords
         ],
         "query": {"filtered": {"query": {"term": {"_id": id}}}}};
     $.ajax({
@@ -548,14 +513,14 @@ var buildrecord = function (index, node) {
         //data: {source: JSON.stringify(localQuery)},
         data: JSON.stringify(localQuery),
         success: function (data) {
-            displayAbstract(data, index);
+            displayAbstractPanel(data, index);
         }
     });
     displayTitleAnnotation(titleID);
-    displayKeywordAnnotation(keywordIDs);
+    
 };
 
-var displayAbstract = function (data, index) {
+var displayAbstractPanel = function (data, index) {
     var jsonObject = null;
     if (!data) {
         return;
@@ -572,11 +537,30 @@ var displayAbstract = function (data, index) {
     if (options.collection == "npl") {
         var docid = jsonObject._id;
         var piece = "";
-// abstract, if any
+
         jsonObject = jsonObject.fields;
         if (!jsonObject) {
             return;
         }
+
+        var repositoryDocId = jsonObject[abstract_metadata.repositoryDocId];
+
+        if (options.subcollection == "hal") {
+
+            piece += '<p><strong> <a href="https://hal.archives-ouvertes.fr/'
+                    + repositoryDocId + '" target="_blank" style="margin-right:10px; color:#D42C2C;" alt="see resource on HAL">' + repositoryDocId + '</a></strong>';
+            // document type
+            var type = jsonObject[abstract_metadata.typology];
+            if (type) {
+                // PL: pubtype click should add a filter of typology = pubtype
+                // in addition not displaying it as a label, because it is visually confusing with the annotations which are aslo labels
+                //piece += '<a href="publication.html?pubID=' + id + '"><span class="label pubtype" style="white-space:normal;">' + type + '</span></a></p>';
+                piece += '<span class="pubtype" style="white-space:normal;color:black;">' + type + '</span></p>';
+                //piece += '<p><strong>' + type + '</strong></p>';
+            }
+        }
+        piece += '<p style="align:justify;text-align:justify; text-justify:inter-word; width:100%;"></p>';
+
         var abstract = null;
 
         var abstractID = null;
@@ -650,11 +634,43 @@ var displayAbstract = function (data, index) {
         }
 
         if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
-            piece += '<strong>Abstract: </strong><span id="abstractNaked" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</span>';
+            piece += '<p style="align:justify;text-align:justify; text-justify:inter-word; width:100%;">';
+            piece += '<strong>Abstract: </strong><span id="abstractNaked" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</span></p>';
         }
 
-        $('.innen_abstract[rel="' + docid + '"]').append(piece);
+        // keywords
+        var keyword = null;
+        var keywordIDs =
+                jsonObject[abstract_metadata.keywordsid];
+        // we have a list of keyword IDs, each one corresponding to an independent annotation set
+        var keywords =
+                jsonObject[abstract_metadata.keywords];
+
+        if (typeof keywords == 'string') {
+            keyword = keywords;
+        } else {
+            var keyArray = keywords;
+            if (keyArray && keywordIDs) {
+                for (var p in keyArray) {
+                    var keywordID = keywordIDs[p];
+                    if (p == 0) {
+                        keyword = '<span id="keywordsNaked"  pos="' + index + '" rel="' + keywordID + '">'
+                                + keyArray[p] + '</span>';
+                    } else {
+                        keyword += ', ' + '<span id="keywordsNaked"  pos="' + index + '" rel="' + keywordID + '">' +
+                                keyArray[p] + '</span>';
+                    }
+                }
+            }
+        }
+
+        if (keyword && (keyword.length > 0) && (keyword.trim().indexOf(" ") != -1)) {
+            piece += ' <p ><strong>Keywords: </strong> ' + keyword + '</p>';
+        }
+
+        $('#innen_abstract_' + docid).append(piece);
 
         displayAbstractAnnotation(abstractID);
+        displayKeywordAnnotation(keywordIDs);
     }
 };

@@ -2,18 +2,12 @@ var record_metadata = {
     id: "_id",
     repositoryDocId: "repositoryDocId",
     title: "$teiCorpus.$teiHeader.$fileDesc.$titleStmt.$title.$title-first",
-    abstract: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
     titleid: "$teiCorpus.$teiHeader.$fileDesc.$titleStmt.xml:id",
     datepub: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub",
     monogr_title: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$title.$title-first",
-    author_surname: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$surname",
-    author_forename: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$forename",
     author_fullname: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$fullName.analyzed",
     doi: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$idno.$type_doi",
     anhalyticsid: "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$idno.$type_anhalyticsID",
-    typology: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology",
-    keywordsid: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id",
-    keywords: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.analyzed",
 };
 
 // build the search query URL based on current params
@@ -37,8 +31,6 @@ var elasticSearchSearchQuery = function () {
     }
 
     qs['fields'] = textFieldsNPLReturned;
-
-
 
     // simple query mode	
     $('.facetview_filterselected', obj).each(function () {
@@ -143,9 +135,9 @@ var elasticSearchSearchQuery = function () {
                     else if (field == "title")
                         obj6['query_string'] = {'default_field': record_metadata.title, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND' };
                     else if (field == "abstract")
-                        obj6['query_string'] = {'default_field': record_metadata.abstract, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                        obj6['query_string'] = {'default_field': abstract_metadata.abstract_en, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                     else if (field == "keyword")
-                        obj6['query_string'] = {'default_field': record_metadata.keywords, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                        obj6['query_string'] = {'default_field': abstract_metadata.keywords, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                     else if (field == "author")
                         obj6['query_string'] = {'default_field': record_metadata.author_fullname, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                     if (rule == "should") {
@@ -186,9 +178,9 @@ var elasticSearchSearchQuery = function () {
                 else if (field == "title")
                     obj6['query_string'] = {'default_field': record_metadata.title, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 else if (field == "abstract")
-                    obj6['query_string'] = {'default_field': record_metadata.abstract, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                    obj6['query_string'] = {'default_field': abstract_metadata.abstract_en, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 else if (field == "keyword")
-                    obj6['query_string'] = {'default_field': record_metadata.keywords, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                    obj6['query_string'] = {'default_field': abstract_metadata.keywords, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 else if (field == "author")
                     obj6['query_string'] = {'default_field': record_metadata.author_fullname, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 if (rule == "should") {
