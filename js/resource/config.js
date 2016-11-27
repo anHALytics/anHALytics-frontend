@@ -1,6 +1,6 @@
 var defaults = {
     // disambiguation
-    host_nerd: "traces1.saclay.inria.fr",
+    host_nerd: "cloud.science-miner.com",
     port_nerd: "",
 
     // proxy

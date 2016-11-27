@@ -1,7 +1,3 @@
-const wikimediaURL_EN = 'https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=200&pageids=';
-const wikimediaURL_FR = 'https://fr.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=200&pageids=';
-const wikimediaURL_DE = 'https://de.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=200&pageids=';
-
 var displayTitleAnnotation = function (titleID) {
 
     //we load now in background the additional record information requiring a user interaction for
@@ -215,7 +211,7 @@ function viewEntity(event) {
 
     var localID = $(this).attr('id');
 
-    console.log(localID);
+//console.log(localID);
 
     var resultIndex = -1;
     var abstractSentenceNumber = -1;
@@ -368,7 +364,7 @@ function viewEntity(event) {
 //            urlImage += '?maxwidth=150';
 //            urlImage += '&maxheight=150';
 //            urlImage += '&key=' + options.api_key;
-            string += '<span style="align:right;" id="img-' + wikipedia + '"><script type="text/javascript">lookupWikiMediaImage("'+wikipedia+'", "'+lang+'")</script></span>';
+            string += '<span style="align:right;" id="img-' + wikipedia + '"><script type="text/javascript">lookupWikiMediaImage("'+wikipedia+'", "'+lang+'", false)</script></span>';
         }
 
         string += "</td></tr></table>";
@@ -398,15 +394,22 @@ function viewEntity(event) {
     }
 }
 
-window.lookupWikiMediaImage = function (wikipedia, lang) {
 
+
+window.lookupWikiMediaImage = function (wikipedia, lang, disamb) {
     // first look in the local cache
     if (lang + wikipedia in options.imgCache) {
         var imgUrl = options.imgCache[lang + wikipedia];
         var document = (window.content) ? window.content.document : window.document;
-        var spanNode = document.getElementById("img-" + wikipedia);
+        var spanNode = null;
+        if (disamb)
+            spanNode = document.getElementById("img-disamb-" + wikipedia);
+        else      
+            spanNode = document.getElementById("img-" + wikipedia);
         spanNode.innerHTML = '<img style="float:right; " src="' + imgUrl + '"/>';
+//console.log(wikipedia + " " + lang + " true");
     } else {
+//console.log(wikipedia + " " + lang + " false");
         // otherwise call the wikipedia API
         var theUrl = null;
         if (lang == 'fr')
@@ -438,3 +441,115 @@ window.lookupWikiMediaImage = function (wikipedia, lang) {
         });
     }
 }
+
+var parseDisambNERD = function (sdata) {
+    var jsonObject = JSON.parse(sdata);
+    return jsonObject;
+};
+
+var getPieceShowexpandNERD = function (jsonObject) {
+    var lang = 'en'; //default
+    var language = jsonObject.language;
+    if (language)
+        lang = language.lang;
+    var piece = '<div class="well col-md-11" style="background-color:#F7EDDC;">';
+    if (jsonObject['entities']) {
+        piece += '<table class="table" style="border:1px solid white;">';
+        for (var sens in jsonObject['entities']) {
+            var entity = jsonObject['entities'][sens];
+            var domains = entity.domains;
+            if (domains && domains.length > 0) {
+                domain = domains[0].toLowerCase();
+            }
+            var type = entity.type;
+
+            var colorLabel = null;
+            if (type)
+                colorLabel = type;
+            else if (domains && domains.length > 0) {
+                colorLabel = domain;
+            } else
+                colorLabel = entity.rawName;
+
+            var start = parseInt(entity.offsetStart, 10);
+            var end = parseInt(entity.offsetEnd, 10);
+
+            var subType = entity.subtype;
+            var conf = entity.nerd_score;
+            if (conf && conf.length > 4)
+                conf = conf.substring(0, 4);
+            var definitions = entity.definitions;
+            var wikipedia = entity.wikipediaExternalRef;
+            var content = entity.rawName; //$(this).text();
+            var preferredTerm = entity.preferredTerm;
+
+            piece += '<tr id="selectLine' + sens + '" href="'
+                    + wikipedia + '" rel="$teiCorpus.$standoff.$nerd.wikipediaExternalRef"><td id="selectArea' + sens + '" href="'
+                    + wikipedia + '" rel="$teiCorpus.$standoff.$nerd.wikipediaExternalRef">';
+            piece += '<div class="checkbox checkbox-inline checkbox-danger" id="selectEntityBlock' +
+                    sens + '" href="' + wikipedia + '" rel="$teiCorpus.$standoff.$nerd.wikipediaExternalRef">';
+            piece += '<input type="checkbox" id="selectEntity' + sens
+                    + '" name="selectEntity' + sens + '" value="0" href="'
+                    + preferredTerm + '" rel="$teiCorpus.$standoff.$nerd.preferredTerm" display="concepts">';
+            piece += '<label for="selectEntity' + sens + '" id="label' + sens + '"> <strong>' + entity.rawName + '&nbsp;</strong> </label></div></td>';
+            
+            //if (conf)
+            //     piece += '<p><b>Conf</b>: ' + conf + '</p>';
+
+            var localHtml = "";
+            if (definitions && definitions.length > 0)
+                localHtml = wiki2html(definitions[0]['definition'], lang);
+
+            /*if ( preferredTerm && (entity.rawName.toLowerCase() != preferredTerm.toLowerCase()) ) {   
+                piece += '<td><b>' + preferredTerm + ': </b>' +
+                        localHtml
+                        + '</td><td>';
+            } else */{
+                piece += '<td>' +
+                        localHtml
+                        + '</td><td>';
+            }
+
+            piece += '<td width="25%">';
+            piece += '<span id="img-disamb-' + wikipedia + '"><script type="text/javascript">lookupWikiMediaImage("'+wikipedia+'", "'+lang+'", true)</script></span>';
+            piece += '</td><td>';
+            piece += '<table><tr><td>';
+
+            if (wikipedia) {
+                piece += '<a href="http://en.wikipedia.org/wiki?curid=' +
+                        wikipedia +
+                        '" target="_blank"><img style="max-width:28px;max-height:22px;" src="data/images/wikipedia.png"/></a>';
+            }
+            piece += '</td></tr><tr><td>';
+
+            piece += '</td></tr></table>';
+
+            piece += '</td></tr>';
+        }
+        piece += '</table>';
+    }
+
+    piece += '</div>';
+    piece += '<div class="col-md-1"><a id="close-disambiguate-panel" onclick=\'$("#disambiguation_panel").hide()\'>'+
+        '<span class="glyphicon glyphicon-remove" style="color:black;"></span></a></div>';
+
+    return piece;
+};
+
+var activateDisambButton = function (num) {
+    $('#disambiguate' + num).attr("disabled", false);
+};
+
+var checkDisambButton = function () {
+    var num = $(this).attr("id").match(/\d+/)[0]
+    if ($('#facetview_freetext'+num).val()) {
+        $('#disambiguate' + num).attr("disabled", false);
+    }
+    else {
+        $('#disambiguate' + num).attr("disabled", true);
+    }
+};
+
+var deactivateDisambButton = function (num) {
+    $('#disambiguate' + num).attr("disabled", true);
+};

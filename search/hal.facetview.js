@@ -83,15 +83,17 @@
             event.preventDefault();
             console.log('clickfilterchoice');
             if ($(this).html().trim().length === 0) {
-                console.log('checkbox');
+console.log('checkbox');
+
                 if (!$(this).is(':checked')) {
-                    console.log('checked');
+                    // a checkbox is unchecked -> we remove the filter
+console.log('checked');
                     $('.facetview_filterselected[href="' + $(this).attr("href") + '"]').each(function () {
                         $(this).remove();
                     });
                     options.paging.from = 0;
-                    dosearch();
                 } else {
+                    // a checkbox is checked -> we add a filter
                     var newobj = '<a class="facetview_filterselected facetview_clear ' +
                             'btn btn-warning" rel="' + $(this).attr("rel") +
                             '" alt="remove" title="remove"' +
@@ -106,8 +108,8 @@
                     $('.facetview_filterselected').unbind('click', clearfilter);
                     $('.facetview_filterselected').bind('click', clearfilter);
                     options.paging.from = 0;
-                    dosearch();
                 }
+                dosearch();
             } else {
                 var newobj = '<a class="facetview_filterselected facetview_clear ' +
                         'btn btn-warning" rel="' + $(this).attr("rel") +
@@ -130,7 +132,14 @@
         // clear a filter when clear button is pressed, and re-do the search
         var clearfilter = function (event) {
             event.preventDefault();
-            console.log('clearfilter');
+//console.log('clearfilter');
+            // we need to uncheck a checkbox in case the filter has been triggered by checking a checkbox
+            // href attribute is similar and can be used to select the checkbox
+            var hrefValue = $(this).attr("href");
+            var checkBoxElement = $('input[type="checkbox"][href="'+hrefValue+'"]');
+            if (checkBoxElement) {
+                checkBoxElement.removeAttr("checked");
+            }
             $(this).remove();
             options.paging.from = 0;
             dosearch();
@@ -1447,72 +1456,6 @@
             //$('#facetview_visualisation'+"_"+facetkey).remove();
         };
 
-
-        // ===============================================
-        // disambiguation
-        // ===============================================
-
-        var disambiguateNERD = function () {
-            var thenum = $(this).attr("id").match(/\d+/)[0] // "3"
-            var queryText = $('#facetview_freetext' + thenum).val();
-            console.log($('#disambiguation_panel').children().length > 0);
-            if ($('#disambiguation_panel').children().length > 0)
-                $('#disambiguation_panel').empty();
-            else
-                doexpandNERD(queryText);
-        };
-
-        // call the NERD service and propose senses to the user for his query
-        var doexpandNERD = function (queryText) {
-            //var queryString = '{ "text" : "' + encodeURIComponent(queryText) +'", "shortText" : true }';
-            var queryString = '{ "text" : "' + queryText + '", "shortText" : true, "language": {"lang": "en"} }';
-
-            var urlNERD = "http://" + options.host_nerd;
-            if ((!options.port_nerd) || (options.port_nerd.length == 0))
-                urlNERD += options.port_nerd + "/nerd/processERDSearchQuery";
-            else
-                urlNERD += ":" + options.port_nerd + "/nerd/processERDSearchQuery";
-            $.ajax({
-                type: "POST",
-                url: urlNERD,
-//				contentType: 'application/json',
-//				contentType: 'charset=UTF-8',
-//				dataType: 'jsonp',
-                dataType: "text",
-//				data: { text : encodeURIComponent(queryText) },
-                data: queryString,
-//				data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
-                success: showexpandNERD
-            });
-        };
-
-        var showexpandNERD = function (sdata) {
-            if (!sdata) {
-                return;
-            }
-
-            var jsonObject = parseDisambNERD(sdata);
-
-            //$('#disambiguation_panel').empty();
-
-            /*for (var surf in jsonObject['paraphrases']) {
-             piece += '<p>' + jsonObject['paraphrases'][surf] + '</p>';
-             }*/
-
-            piece = getPieceShowexpandNERD(jsonObject);
-            $('#disambiguation_panel').append(piece);
-//            $('#close-disambiguate-panel').bind('click', function () {
-//                $('#disambiguation_panel').hide();
-//            })
-
-            // we need to bind the checkbox...
-            for (var sens in jsonObject['entities']) {
-                $('input#selectEntity' + sens).bind('change', clickfilterchoice);
-            }
-
-            $('#disambiguation_panel').show();
-        };
-
         // ===============================================
         // building results
         // ===============================================
@@ -1633,9 +1576,69 @@
 
         };
 
+        // ===============================================
+        // disambiguation
+        // ===============================================
 
+        var disambiguateNERD = function () {
+            var thenum = $(this).attr("id").match(/\d+/)[0] // "3"
+            var queryText = $('#facetview_freetext' + thenum).val();
+//console.log($('#disambiguation_panel').children().length > 0);
+            // note: the action bellow prevents the user to refine his search and disambigation
+            /*if ($('#disambiguation_panel').children().length > 0)
+                $('#disambiguation_panel').empty();
+            else*/
+            doexpandNERD(queryText);
+            // take out focus after button release
+            $('#disambiguate'+(thenum)).blur();
+        };
 
+        // call the NERD service and propose senses to the user for his query
+        var doexpandNERD = function (queryText) {
+            //var queryString = '{ "text" : "' + encodeURIComponent(queryText) +'", "shortText" : true }';
+            var queryString = '{ "text" : "' + queryText + '", "shortText" : true, "language": {"lang": "en"} }';
 
+            var urlNERD = "http://" + options.host_nerd;
+            if (urlNERD.endsWith("/"))
+                urlNERD = urlNERD.substring(0,urlNERD.length()-1);
+            if ((!options.port_nerd) || (options.port_nerd.length == 0))
+                urlNERD += options.port_nerd + "/nerd/processERDSearchQuery";
+            else
+                urlNERD += ":" + options.port_nerd + "/nerd/processERDSearchQuery";
+            $.ajax({
+                type: "POST",
+                url: urlNERD,
+        //              contentType: 'application/json',
+        //              contentType: 'charset=UTF-8',
+        //              dataType: 'jsonp',
+                dataType: "text",
+        //              data: { text : encodeURIComponent(queryText) },
+                data: queryString,
+        //              data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
+                success: showexpandNERD
+            });
+        };
+
+        var showexpandNERD = function (sdata) {
+            if (!sdata) {
+                return;
+            }
+
+            var jsonObject = parseDisambNERD(sdata);
+
+            piece = getPieceShowexpandNERD(jsonObject);
+            $('#disambiguation_panel').html(piece);
+        //            $('#close-disambiguate-panel').bind('click', function () {
+        //                $('#disambiguation_panel').hide();
+        //            })
+
+            // we need to bind the checkbox...
+            for (var sens in jsonObject['entities']) {
+                $('input#selectEntity' + sens).bind('change', $.fn.facetview,clickfilterchoice);
+            }
+
+            $('#disambiguation_panel').show();
+        };
 
         // execute a search
         var dosearch = function () {
@@ -1773,7 +1776,7 @@ must <span class="caret"></span>\
 <li class="divider"></li>\
 <li><a id="facetview_howmany" href="#">results per page ({{HOW_MANY}})</a></li>\
 </ul>\
-<button type="button" id="disambiguate{{NUMBER}}" class="btn btn-default" disabled="true" data-toggle="button">Disambiguate</button>\
+<button type="button" id="disambiguate{{NUMBER}}" class="btn btn-default" disabled="true">Disambiguate</button>\
 </div>\
 <div class="btn-group" style="margin-left:10px;"><a id="close-searchbar{{NUMBER}}" style="display:none; color:black;" onclick=\'$("#facetview_searchbar{{NUMBER}}").remove()\'><span class="glyphicon glyphicon-remove"></span></a></div>\
 </div>';
