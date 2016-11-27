@@ -140,10 +140,15 @@ h3 {
     line-height: 1.43;
 }
 
-a:focus, a:hover, a:active {
+/*a:focus, a:hover, a:active {
     color: #3367d6;
     text-decoration: underline;
-}
+}*/
+
+a:focus{outline:thin dotted #BC0E0E;outline:5px auto -webkit-focus-ring-color;outline-offset:-2px;}
+a:hover,a:active{outline:0;color:#BC0E0E;}
+a{color:#B20D0D;text-decoration:none;}                
+a:hover{color:#BC0E0E;text-decoration:underline;}
 
 /* PL: tables */ 
 

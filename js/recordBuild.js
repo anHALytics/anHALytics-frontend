@@ -282,7 +282,7 @@ var buildrecord = function (index, node) {
         /*} else {
             piece += 'style="background-color:#ffffff;">';
         }*/
-        piece += '<div class="col-md-8" style="margin-left:10px;">';
+        piece += '<div class="col-md-7" style="margin-left:10px;">';
         if (options.subcollection == "hal") {
 
             piece += '<p><strong> <a href="https://hal.archives-ouvertes.fr/'
@@ -298,7 +298,7 @@ var buildrecord = function (index, node) {
                 //piece += '<p><strong>' + type + '</strong></p>';
             }
         }
-        piece += '<p class="innen_abstract" pos="' + index + '" rel="' + id + '"></p>';
+        piece += '<p class="innen_abstract" style="align:justify;text-align:justify; text-justify:inter-word; width:100%;" pos="' + index + '" rel="' + id + '"></p>';
 // keywords
         var keyword = null;
         var keywordIDs =
@@ -331,7 +331,7 @@ var buildrecord = function (index, node) {
 
         piece += '</div>';
         // info box for the entities
-        piece += '<div class="col-md-4" style="margin-right:-10px;">';
+        piece += '<div class="col-md-5" style="margin-right:-10px;">';
         piece += '<span  id="detailed_annot-' + index + '" />';
         piece += "</div>";
         piece += '</div>';

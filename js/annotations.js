@@ -1,3 +1,7 @@
+const wikimediaURL_EN = 'https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=200&pageids=';
+const wikimediaURL_FR = 'https://fr.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=200&pageids=';
+const wikimediaURL_DE = 'https://de.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=200&pageids=';
+
 var displayTitleAnnotation = function (titleID) {
 
     //we load now in background the additional record information requiring a user interaction for
@@ -99,12 +103,19 @@ var displayAnnotations = function (data, index, id, origin) {
     //var text = jsonObject['_source']['annotation']['nerd']['text'];		
     var text = $('[rel="' + id + '"]').text();
     var entities = jsonObject['_source']['annotation']['nerd']['entities'];
+    
+    var lang = 'en'; //default
+    var language = jsonObject['_source']['annotation']['nerd']['language'];
+    if (language)
+        lang = language.lang;
+
     var m = 0;
     var lastMaxIndex = text.length;
     //for(var m in entities) {
     for (var m = entities.length - 1; m >= 0; m--) {
         //var entity = entities[entities.length - m - 1];
         var entity = entities[m];
+        entity['lang'] = lang;
         var chunk = entity.rawName;
         var domains = entity.domains;
         var domain = null;
@@ -288,6 +299,9 @@ function viewEntity(event) {
 
     var string = "";
     if (entity != null) {
+        var lang = 'en'; //default
+        lang = entity['lang'];
+
         //console.log(entity);
         var domains = entity.domains;
         if (domains && domains.length > 0) {
@@ -305,6 +319,7 @@ function viewEntity(event) {
 
         var start = parseInt(entity.offsetStart, 10);
         var end = parseInt(entity.offsetEnd, 10);
+
         var subType = entity.subtype;
         var conf = entity.nerd_score;
         if (conf && conf.length > 4)
@@ -319,10 +334,14 @@ function viewEntity(event) {
             sense = entity.sense.fineSense;
 
         string += "<div class='info-sense-box " + colorLabel +
-                "' ><h3 style='color:#FFF;padding-left:10px;'>" + content.toUpperCase() +
+                "' ><h3 style='color:#FFF;padding-left:10px; font-weight:bold; font-size:16;'>" + content.toUpperCase() +
                 "</h3>";
-        string += "<div class='container-fluid' style='background-color:#F9F9F9;color:#70695C;'>" +
-                "<table style='background-color:#fff;'><tr style='background-color:#fff;border:0px;'><td style='background-color:#fff;border:0px;'>";
+        string += "<div class='container-fluid' style='background-color:#F9F9F9;color:#70695C;border:padding:5px;'>" +
+                "<table style='width:100%;background-color:#fff;border:0px;'><tr style='background-color:#fff;border:0px;'><td style='background-color:#fff;border:0px;'>";
+
+        if (preferredTerm) {
+            string += "<p>Normalized: <b>" + preferredTerm + "</b></p>";
+        }
 
         if (type)
             string += "<p>Type: <b>" + type + "</b></p>";
@@ -340,34 +359,35 @@ function viewEntity(event) {
             string += "</b></p>";
         }
 
-        if (preferredTerm) {
-            string += "<p>Preferred: <b>" + preferredTerm + "</b></p>";
-        }
-
         string += "<p>conf: <i>" + conf + "</i></p>";
 
-        string += "</td><td style='align:right;background-color:#fff'>";
+        string += "</td><td style='align:right;background-color:#fff' width='50%''>";
 
         if (wikipedia != null) {
             //var file = wikipediaHTMLResult(wikipedia, resultIndex);
 //            urlImage += '?maxwidth=150';
 //            urlImage += '&maxheight=150';
 //            urlImage += '&key=' + options.api_key;
-            string += '<span id="img-' + wikipedia + '"><script type="text/javascript">lookupWikiMediaImage("' + wikipedia + '")</script></span>';
-
+            string += '<span style="align:right;" id="img-' + wikipedia + '"><script type="text/javascript">lookupWikiMediaImage("'+wikipedia+'", "'+lang+'")</script></span>';
         }
 
         string += "</td></tr></table>";
 
         if ((definitions != null) && (definitions.length > 0)) {
-            string += "<p>" + definitions[0].definition + "</p>";
+            var localHtml = wiki2html(definitions[0]['definition'], lang);
+            //string += "<p style='align:justify;text-align:justify; text-justify:inter-word; width:100%;'>" + localHtml + "</p>";
+            string += "<p><div class='wiky_preview_area2' style='align:justify;text-align:justify; text-justify:inter-word; width:100%;'>"+localHtml+"</div></p>";
         }
 
         if (wikipedia != null) {
             string += '<p>Reference: '
+            //string += '<a href="http://en.wikipedia.org/wiki?curid=' +
+            //        wikipedia +
+            //        '" target="_blank"><img style="max-width:28px;max-height:22px;margin-top:5px;" src="data/images/wikipedia.png"/></a>';
+
             string += '<a href="http://en.wikipedia.org/wiki?curid=' +
-                    wikipedia +
-                    '" target="_blank"><img style="max-width:28px;max-height:22px;margin-top:5px;" src="data/images/wikipedia.png"/></a>';
+                            wikipedia +
+                    '" target="_blank"><img style="max-width:28px;max-height:22px;" src="data/images/wikipedia.png"/></a>';        
         }
         string += '</p>';
 
@@ -385,7 +405,7 @@ window.lookupWikiMediaImage = function (wikipedia, lang) {
         var imgUrl = options.imgCache[lang + wikipedia];
         var document = (window.content) ? window.content.document : window.document;
         var spanNode = document.getElementById("img-" + wikipedia);
-        spanNode.innerHTML = '<img src="' + imgUrl + '"/>';
+        spanNode.innerHTML = '<img style="float:right; " src="' + imgUrl + '"/>';
     } else {
         // otherwise call the wikipedia API
         var theUrl = null;
