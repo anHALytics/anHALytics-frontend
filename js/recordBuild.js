@@ -1,6 +1,7 @@
 var abstract_metadata = {
     the_id: "$teiCorpus.$teiHeader.$profileDesc.xml:id",
     repositoryDocId: "repositoryDocId",
+    abstract: "$teiCorpus.$teiHeader.$profileDesc.$abstract.*",
     abstract_en: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
     abstract_fr: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr",
     abstract_de: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de",

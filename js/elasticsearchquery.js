@@ -2,6 +2,7 @@ var record_metadata = {
     id: "_id",
     repositoryDocId: "repositoryDocId",
     title: "$teiCorpus.$teiHeader.$fileDesc.$titleStmt.$title.$title-first",
+    titleall: "$teiCorpus.$teiHeader.$fileDesc.$titleStmt.$title.*",
     titleen: "$teiCorpus.$teiHeader.$fileDesc.$titleStmt.$title.$lang_en",
     titlefr: "$teiCorpus.$teiHeader.$fileDesc.$titleStmt.$title.$lang_fr",
     titlede: "$teiCorpus.$teiHeader.$fileDesc.$titleStmt.$title.$lang_de",
@@ -183,8 +184,7 @@ var elasticSearchSearchQuery = function () {
                     obj6['query_string'] = {'default_field': "_all", 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 else if (field == "title"){
                     if (lang == "all lang"){
-                        obj6['query_string'] = {'default_field': record_metadata.title, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
-                    obj6['query_string'] = {'default_field': record_metadata.titlefr, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                        obj6['query_string'] = {'fields': [record_metadata.titleall], 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 }else if (lang == "en")
                         obj6['query_string'] = {'default_field': record_metadata.titleen, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                     else if (lang == "fr")
@@ -194,7 +194,7 @@ var elasticSearchSearchQuery = function () {
 
                 } else if (field == "abstract"){
                         if (lang == "all lang")
-                        obj6['query_string'] = {'fields': [abstract_metadata.abstract_en, abstract_metadata.abstract_fr, abstract_metadata.abstract_de], 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                        obj6['query_string'] = {'fields': [abstract_metadata.abstract], 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 else if (lang == "en")
                         obj6['query_string'] = {'default_field': abstract_metadata.abstract_en, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                     else if (lang == "fr")
