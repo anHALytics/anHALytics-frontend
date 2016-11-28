@@ -36,6 +36,11 @@ var getEditFilterModal = function (which) {
             }
             editFilterModal += '>taxonomy</option> \
 					                <option';
+            if (options.aggs[which]['type'] == 'cloud') {
+                editFilterModal += ' selected ';
+            }
+            editFilterModal += '>cloud</option> \
+                                    <option';
             if (options.aggs[which]['type'] == 'country') {
                 editFilterModal += ' selected ';
             }

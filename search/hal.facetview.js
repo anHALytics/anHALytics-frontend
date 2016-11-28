@@ -251,40 +251,6 @@ console.log('checked');
             $('#facetview_rangechoices .facetview_highrangeval').html(values[ values.length - 1]);
         };
 
-        /*var setScope = function () {
-         if ($('input[name=\"scientific\"]').attr('checked') && (options.scope != 'scientific')) {
-         options.scope = 'scientific';
-         options.paging.from = 0;
-         dosearch();
-         }
-         else if (!($('input[name=\"scientific\"]').attr('checked')) && (options.scope == 'scientific')) {
-         options.scope = null;
-         options.paging.from = 0;
-         dosearch();
-         }
-         if (($('input[name=\"fulltext\"]').attr('checked')) && (!options['fulltext'])) {
-         options['fulltext'] = true;
-         options.paging.from = 0;
-         dosearch();
-         }
-         else if (!($('input[name=\"fulltext\"]').attr('checked')) && (options['fulltext'])) {
-         options['fulltext'] = false;
-         options.paging.from = 0;
-         dosearch();
-         }
-         if (($('input[name=\"scholarly\"]').attr('checked')) && (!options['scholarly'])) {
-         options['scholarly'] = true;
-         options.paging.from = 0;
-         dosearch();
-         }
-         else if (!($('input[name=\"scholarly\"]').attr('checked')) && (options['scholarly'])) {
-         options['scholarly'] = false;
-         options.paging.from = 0;
-         dosearch();
-         }
-         };
-         */
-
         var setDateRange = function () {
             var day_from = 1;
             var month_from = 0;
@@ -691,7 +657,7 @@ console.log('checked');
             } else if (options.aggs[idx]['type'] == 'taxonomy') {
                 wheel($(this).attr('rel'), $(this).attr('href'), parentWidth * 0.8,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
-            } else if (options.aggs[idx]['type'] == 'tag') {
+            } else if (options.aggs[idx]['type'] == 'cloud') {
                 cloud($(this).attr('rel'), $(this).attr('href'), parentWidth * 0.8,
                         'facetview_visualisation' + '_' + $(this).attr('href') + "_chart", update);
             }
@@ -1385,44 +1351,76 @@ console.log('checked');
             var facetkey = options.aggs[facetidx]['display'];
             var facetfield = options.aggs[facetidx]['field'];
             var aggs = options.data['aggregations'][facetkey];
-            data = [];
+            var wordset = [];
             var vis = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2");
             if (update) {
                 vis.selectAll("svg").remove();
             }
 
             var numb = 0;
+            var max_count = 0;
             for (var fct in aggs) {
                 if (numb >= options.aggs[facetidx]['size']) {
                     break;
                 }
-                data.push(fct);
+                if (aggs[fct] > max_count)
+                    max_count = aggs[fct];
                 numb++;
             }
-            $('#' + place).show();
+
+            numb = 0;
+            for (var fct in aggs) {
+                if (numb >= options.aggs[facetidx]['size']) {
+                    break;
+                }
+                wordset.push({'text':fct, 'size':aggs[fct]});
+                numb++;
+            }
+            //$('#' + place).show();
             var fill = d3.scale.category20();
-            var r = width;
-            var cloude = d3.layout.cloud().size([r, r])
-                    .words(data.map(function (d) {
-                        return {text: d, size: 17};
-                    }))
-                    .rotate(function () {
-                        return 0;
-                    })
-                    .fontSize(function (d) {
-                        return d.size;
-                    })
-                    .on("end", draw)
-                    .start();
-            function draw(words) {
-                d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2").append("svg")
-                        .attr("width", r)
-                        .attr("height", r)
+            var w = width;
+            var h = w;
+            var svg = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2").append("svg")
+                        .attr("width", w*1.2)
+                        .attr("height", h)
                         .append("g")
-                        .attr("transform", "translate(100,100)")
-                        .selectAll("text")
-                        .data(words)
-                        .enter().append("text")
+                        .attr("transform", "translate("+w/2+","+h/2+")");
+            update(31);
+            function update(maxRange) {
+                var minRange = 10;
+                if (maxRange <= minRange)
+                    minRange = maxRange-1;
+                if (minRange == 0)
+                    minRange = 1;
+                var theScale = d3.scale.linear().domain([0,max_count]).range([minRange, maxRange]);            
+                d3.layout.cloud().size([w*1.3, h*1.3])
+                    .words(wordset.map(function(d) {
+                        return {text: d.text, size: Math.floor(theScale(d.size))};
+                    }))
+                    //.padding(5)
+                    .rotate(function () { return 0; })
+                    //.rotate(function() { return ~~(Math.random() * 2) * 90; })
+                    .fontSize(function (d) { return d.size; })
+                    //.on("end", draw)
+                    .on("end", function(output) {
+                        if (wordset.length !== output.length) { 
+                            console.log("Recurse!"); 
+                            update(maxRange-5); 
+                            return undefined;  
+                        } else { 
+                            draw(output); 
+                        }
+                    })
+                    .start();
+            }
+
+            function draw(words) {
+                //console.log(words); 
+
+                var cloud = svg.selectAll("g text")
+                        .data(words, function(d) { return d.text; });
+
+                cloud.enter().append("text")
                         .style("font-size", function (d) {
                             return d.size + "px";
                         })
@@ -1441,6 +1439,7 @@ console.log('checked');
             }
 
         };
+        
         // normal click on a graphical facet
         var clickGraph = function (facetfield, facetKey, facetValueDisplay, facetValue) {
             var newobj = '<a class="facetview_filterselected facetview_clear ' +

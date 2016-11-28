@@ -53,17 +53,13 @@
                 aggs: [
                     {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub', 'display': 'publication_date', 'type': 'date', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halDomain_abbrev', 'display': 'subject-headers', 'size': 20, 'type': 'taxonomy', 'view': 'graphic'},
-                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.notAnalyzed', 'display': 'keywords', 'size': 10, 'type': 'tag', 'view': 'graphic'},
-                    {'field':
-                                '$teiCorpus.$teiHeader.$profileDesc.$langUsage.$language', 'display': 'language', 'size': 6, 'type': 'country', 'view': 'graphic'},
-                    {'field':
-                                '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$desc.$address.key', 'display': 'country', 'size': 6, 'type': 'country', 'view': 'graphic'},
+                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.notAnalyzed', 'display': 'keywords', 'size': 10, 'type': 'cloud', 'view': 'graphic'},
+                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$langUsage.$language', 'display': 'language', 'size': 6, 'type': 'country', 'view': 'graphic'},
+                    {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$desc.$address.key', 'display': 'country', 'size': 6, 'type': 'country', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$orgName', 'display': 'Organisation', 'size': 6, 'type': 'entity', 'view': 'textual'},
                     {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$fullName.notAnalyzed', 'display': 'Author', 'size': 10, 'type': 'entity', 'view': 'textual'},
-                    {'field':
-                                '$teiCorpus.$standoff.$nerd.preferredTerm', 'display': 'concepts', 'size': 10, 'type': 'entity', 'view': 'textual'},
-                    {'field':
-                                '$teiCorpus.$standoff.$keyterm.preferredTerm', 'display': 'keyterms', 'size': 10, 'type': 'entity', 'view': 'textual'},
+                    {'field': '$teiCorpus.$standoff.$nerd.preferredTerm', 'display': 'concepts', 'size': 10, 'type': 'entity', 'view': 'textual'},
+                    {'field': '$teiCorpus.$standoff.$keyterm.preferredTerm', 'display': 'keyterms', 'size': 10, 'type': 'entity', 'view': 'textual'},
                     {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology_abbrev', 'display': 'typology', 'size': 20, 'type': 'class', 'view': 'graphic'},
                 ]
             });
