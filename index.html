@@ -60,9 +60,11 @@
                     {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$fullName.notAnalyzed', 'display': 'Author', 'size': 10, 'type': 'entity', 'view': 'textual'},
                     {'field': '$teiCorpus.$standoff.$nerd.preferredTerm', 'display': 'concepts', 'size': 10, 'type': 'entity', 'view': 'textual'},
                     {'field': '$teiCorpus.$standoff.$keyterm.preferredTerm', 'display': 'keyterms', 'size': 10, 'type': 'entity', 'view': 'textual'},
-                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology_abbrev', 'display': 'typology', 'size': 20, 'type': 'class', 'view': 'graphic'},
+                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology_abbrev', 'display': 'document_types', 'size': 20, 'type': 'class', 'view': 'graphic'},
                 ]
             });
+            
+            var doc_types = {"COMM": "Conference papers", "ART": "Journal articles", "POSTER": "Poster communications", "OUV": "Books", "COUV": "Book section", "DOUV": "Directions of work or proceedings", "REPORT": "Reports", "THESE":"Theses","HDR":"Accreditation to supervise research","LECTURE":"Lectures", "UNDEFINED":"Preprints, Working Papers", "OTHER":"Other publications"};
         </script>
 
         <script type="text/javascript" src="search/hal.facetview.js"></script>

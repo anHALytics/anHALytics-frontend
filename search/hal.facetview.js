@@ -344,8 +344,11 @@ console.log('checked');
                         if (numb >= options.aggs[each]['size']) {
                             break;
                         }
-
-                        var item2 = item;
+                        var item2;
+                        if (options.aggs[each]['display'] == "document_types")
+                            item2 = doc_types[item];
+                        else
+                            item2 = item;
                         if (options.aggs[each]['display'].indexOf('class') != -1)
                             item2 = item.replace(/\s/g, '');
                         var append = '<li><a class="facetview_filterchoice' +
@@ -1039,6 +1042,10 @@ console.log('checked');
                     var item2 = item.replace(/\s/g, '');
                     var count = records[item];
                     sum += count;
+                    
+                    if(facetkey == "document_types")
+                    data2.push({'term': doc_types[item2], 'count': records[item], 'source': doc_types[item], 'relCount': 0});
+                else 
                     data2.push({'term': item2, 'count': records[item], 'source': item, 'relCount': 0});
                     numb++;
                 }
