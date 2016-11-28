@@ -81,7 +81,8 @@ function InitOrganisationPublicationsPerYear(params) {
                     .left(40)
                     .right(0)
                     .top(3);
-
+            var rate = Math.floor(dataSet.length / 10);
+            var rank = -1;
             // Add the X-ticks
             vis.add(pv.Rule)
                     .data(dataSet)
@@ -97,8 +98,14 @@ function InitOrganisationPublicationsPerYear(params) {
                     // Add the tick label
                     .anchor("right").add(pv.Label)
                     .text(function (d) {
+
+                        if ((rank != -1) && (rank != rate)) {
+                            rank++;
+                            return "";
+                        }
+
                         var date = new Date(parseInt(d.key));
-                        var year = date.getYear();
+                        var year = date.getYear() + 2000;
                         if (year >= 100) {
                             year = year - 100;
                         }
@@ -107,6 +114,7 @@ function InitOrganisationPublicationsPerYear(params) {
                         } else if (year < 10) {
                             year = '0' + year;
                         }
+                        rank = 0;
                         return year;
                     })
                     .textStyle("#333333")
