@@ -1,12 +1,13 @@
 var params = {"organisationID": organisationID};
 
-Array.prototype.contains = function(elem)
+Array.prototype.contains = function (elem)
 {
-for (var i in this)
-{
-if (this[i] == elem) return true;
-}
-return false;
+    for (var i in this)
+    {
+        if (this[i] == elem)
+            return true;
+    }
+    return false;
 }
 
 function InitOrganisationPublicationsPerYear(params) {
@@ -175,37 +176,41 @@ function getOrganisationSubOrganisations(params) {
         //processData: true,
         success: function (data) {
             var x = [], y = [];
-            for (var i = 0; i < data.hits.hits.length; i++) {
-                y.push(data.hits.hits[i]._source.names[0].name);
-                x.push(data.hits.hits[i].sort[0]);
+            if (data.hits.hits.length > 0) {
+                for (var i = 0; i < data.hits.hits.length; i++) {
+                    y.push(data.hits.hits[i]._source.names[0].name);
+                    x.push(data.hits.hits[i].sort[0]);
+                }
+                var data = [{
+                        type: 'bar',
+                        x: x,
+                        y: y,
+                        orientation: 'h'
+                    }];
+                var layout = {
+                    margin: {
+                        l: 200
+                    }
+                };
+                Plotly.newPlot('chart-02', data, layout);
+                var myPlot = document.getElementById('chart-02')
+                myPlot.on('plotly_click', function (data) {
+                    for (var i = 0; i < data.points.length; i++) {
+                        //console.log('Closest point clicked:\n\n' + data.points[i].y);
+                        params.orgName = data.points[i].y;
+                        getOrganisationIdByName(params);
+                    }
+                });
+            } else {
+                //$("#chart-02-title").text("Authors");
+                $("#chart-02").append('<div class="keen-error" style="border-radius: 4px; color: rgb(204, 204, 204); display: block; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 21px; text-align: center; height: 300px; padding-top: 135px; width: 600px;"><span>No results to visualize</span></div>');
             }
-            var data = [{
-                    type: 'bar',
-                    x: x,
-                    y: y,
-                    orientation: 'h'
-                }];
-            var layout = {
-                margin: {
-                    l: 200
-                }
-            };
-            Plotly.newPlot('chart-02', data, layout);
-            var myPlot = document.getElementById('chart-02')
-            myPlot.on('plotly_click', function (data) {
-                for (var i = 0; i < data.points.length; i++) {
-                    //console.log('Closest point clicked:\n\n' + data.points[i].y);
-                    params.orgName = data.points[i].y;
-                    getOrganisationIdByName(params);
-                }
-            });
 
         }
     });
 }
 
 function getOrganisationIdByName(params) {
-    $("#selected_filters").append('<li><a class="btn btn-info" title = "' + params.orgName + '" rel="orgName" onclick="clearfilter(this)">' + params.orgName + '<i class="glyphicon glyphicon-remove"></i></a></li>');
     $.ajax({
         type: "get",
         url: api_urls.organisations + "/_search",
@@ -213,14 +218,9 @@ function getOrganisationIdByName(params) {
         //processData: true,
         success: function (data) {
             var organisationID = data.hits.hits[0]._id;
-            params.organisationID = organisationID;
-            InitOrganisationPublicationsPerYear(params);
-            getOrganisationRelations(params);
-            getTopicsByOrganisation(params);
-            getKeywordsByOrganisationYear(params);
-            InitPublicationsPerCountry(params);
-            getCollaboratorsByYear(params);
-            getConferencesByYear(params);
+            var url = window.location.href.substring(0, window.location.href.indexOf('?'));
+            url += '?orgID=' + organisationID;
+            window.location.href = url;
         }
     });
 
@@ -232,15 +232,12 @@ var clearfilter = function (obj) {
     var type = obj.getAttribute("rel");
     var value = obj.getAttribute("title");
 
-    if (type == "orgName") {
-        delete params.orgName;
-        params.organisationID = url_options.orgID;
-    } else if (type == "topic")
+    if (type == "topic")
         delete params.topic;
 
     obj.remove();
     InitOrganisationPublicationsPerYear(params);
-    getOrganisationRelations(params);
+    getOrganisationSubOrganisations(params);
     getTopicsByOrganisation(params);
     getKeywordsByOrganisationYear(params);
     InitPublicationsPerCountry(params);
@@ -272,7 +269,7 @@ function getTopicsByOrganisation(params) {
                 params.topic = d.key.replace(/_/g, '');
                 $("#selected_filters").append('<li><a class="btn btn-info" title = "' + params.topic + '" rel="topic" onclick="clearfilter(this)">' + params.topic + '<i class="glyphicon glyphicon-remove"></a></li>');
                 InitOrganisationPublicationsPerYear(params);
-                getOrganisationRelations(params);
+                getOrganisationSubOrganisations(params);
                 getTopicsByOrganisation(params);
                 getKeywordsByOrganisationYear(params);
                 InitPublicationsPerCountry(params);
@@ -461,7 +458,7 @@ function getCollaborationsByYear(params) {
                 return a.organisationId;
             });
 
-                            console.log(allsubstructures);
+            console.log(allsubstructures);
             $.ajax({type: "get",
                 url: api_urls.publications + "/_search",
                 data: {source: CollaboratorsByYearESQuery(params)},
