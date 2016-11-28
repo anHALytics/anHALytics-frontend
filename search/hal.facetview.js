@@ -1783,8 +1783,8 @@ must <span class="caret"></span>\
 <li><a id="facetview_howmany" href="#">results per page ({{HOW_MANY}})</a></li>\
 </ul>\
 <button type="button" id="disambiguate{{NUMBER}}" class="btn btn-default" disabled="true">Disambiguate</button>\
+<button class="btn btn-default" id="close-searchbar{{NUMBER}}" href="" type="button" onclick=\'$("#facetview_searchbar{{NUMBER}}").remove()\'><i class="glyphicon glyphicon-minus"></i></button>\
 </div>\
-<div class="btn-group" style="margin-left:10px;"><a id="close-searchbar{{NUMBER}}" style="display:none; color:black;" onclick=\'$("#facetview_searchbar{{NUMBER}}").remove()\'><span class="glyphicon glyphicon-remove"></span></a></div>\
 </div>';
 
 
@@ -1850,7 +1850,6 @@ must <span class="caret"></span>\
         // now create the plugin on the page
         return $(document).ready(function (e) {
 
-            $("#facetview_searchbars").append(searchbar.replace(/{{NUMBER}}/gi, "1"));
             if (!options.use_delay)
                 $("#facetview_freetext1").keyup(keyPress);
             $('#disambiguate1').click(disambiguateNERD);
