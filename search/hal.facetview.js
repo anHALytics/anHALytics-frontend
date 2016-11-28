@@ -1729,7 +1729,7 @@ console.log('checked');
 
         $('#disambiguation_panel').hide();
 
-        var searchbar = '<div id="facetview_searchbar{{NUMBER}}" style="width:850px" class="row input-group clonedDiv">\
+        var searchbar = '<div id="facetview_searchbar{{NUMBER}}" style="width:100%;padding-right:0px;" class="row input-group clonedDiv">\
 <div class="btn-group">\
 <button id="selected-tei-field{{NUMBER}}" class=" btn btn-default dropdown-toggle" style="width:80px" data-toggle="dropdown" >\
 all fields <span class="caret"></span>\
@@ -1742,7 +1742,7 @@ all fields <span class="caret"></span>\
 <li><a href="#">keyword</a></li>\
 </ul>\
 </div>\
-<div class="btn-group"> \
+<div class="btn-group">\
 <button id="selected-lang-field{{NUMBER}}" class=" selected-lang-field btn btn-default dropdown-toggle" style="width:75px" data-toggle="dropdown">\
 all lang <span class="caret"></span>\
 </button>\
@@ -1753,7 +1753,7 @@ all lang <span class="caret"></span>\
 <li><a href="#">de</a></li>\
 </ul>\
 </div>\
-<div class="btn-group"> \
+<div class="btn-group">\
 <button id="selected-bool-field{{NUMBER}}" class="selected-bool-field btn btn-default dropdown-toggle" style="width:80px" data-toggle="dropdown">\
 must <span class="caret"></span>\
 </button>\
@@ -1783,7 +1783,13 @@ must <span class="caret"></span>\
 <li><a id="facetview_howmany" href="#">results per page ({{HOW_MANY}})</a></li>\
 </ul>\
 <button type="button" id="disambiguate{{NUMBER}}" class="btn btn-default" disabled="true">Disambiguate</button>\
-<button class="btn btn-default" id="close-searchbar{{NUMBER}}" href="" type="button" onclick=\'$("#facetview_searchbar{{NUMBER}}").remove()\'><i class="glyphicon glyphicon-minus"></i></button>\
+</div>\
+<div class="btn-group" style="margin-left:20px;">\
+<button class="btn btn-default text-center" id="facetview_fieldbuttons{{NUMBER}}" href="" type="button"><i class="glyphicon glyphicon-plus" style="vertical-align:middle;"></i></button>\
+</div>\
+<div class="btn-group">\
+<button class="btn btn-default text-center" id="close-searchbar{{NUMBER}}" href="" type="button" onclick=\'$("#facetview_searchbar{{NUMBER}}").remove();\'>\
+<i class="glyphicon glyphicon-minus" tyle="vertical-align:middle;"></i></button>\
 </div>\
 </div>';
 
@@ -1850,13 +1856,16 @@ must <span class="caret"></span>\
         // now create the plugin on the page
         return $(document).ready(function (e) {
 
+            $("#facetview_searchbars").append(searchbar.replace(/{{NUMBER}}/gi, "1"));
+            $('#close-searchbar1').hide();
             if (!options.use_delay)
                 $("#facetview_freetext1").keyup(keyPress);
             $('#disambiguate1').click(disambiguateNERD);
             
-            $("#facetview_fieldbuttons").on("click", function () {
+            $("#facetview_fieldbuttons1").on("click", function () {
                 var cloneIndex = $(".clonedDiv").length + 1;
                 $("#facetview_searchbars").append(searchbar.replace(/{{NUMBER}}/gi, cloneIndex));
+                $('#facetview_fieldbuttons'+cloneIndex).hide();
                 $("#close-searchbar"+cloneIndex).css("display", "block");
                 
                 $(".tei-fields li a").click(function () {
