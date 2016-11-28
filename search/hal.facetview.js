@@ -1785,11 +1785,10 @@ must <span class="caret"></span>\
 <button type="button" id="disambiguate{{NUMBER}}" class="btn btn-default" disabled="true">Disambiguate</button>\
 </div>\
 <div class="btn-group" style="margin-left:20px;">\
-<button class="btn btn-default text-center" id="facetview_fieldbuttons{{NUMBER}}" href="" type="button"><i class="glyphicon glyphicon-plus" style="vertical-align:middle;"></i></button>\
+<button class="btn btn-default" id="facetview_fieldbuttons{{NUMBER}}" href="" type="button"><i class="glyphicon glyphicon-plus" style="vertical-align:middle;margin-right:0px;margin-bottom:2px;"></i></button>\
 </div>\
 <div class="btn-group">\
-<button class="btn btn-default text-center" id="close-searchbar{{NUMBER}}" href="" type="button" onclick=\'$("#facetview_searchbar{{NUMBER}}").remove();\'>\
-<i class="glyphicon glyphicon-minus" tyle="vertical-align:middle;"></i></button>\
+<button class="btn btn-default" id="close-searchbar{{NUMBER}}" href="" type="button"><i class="glyphicon glyphicon-minus" style="vertical-align:middle;margin-right:0px;margin-bottom:4px;"></i></button>\
 </div>\
 </div>';
 
@@ -1850,8 +1849,6 @@ must <span class="caret"></span>\
         }
 
 
-
-
         // ===============================================
         // now create the plugin on the page
         return $(document).ready(function (e) {
@@ -1885,8 +1882,19 @@ must <span class="caret"></span>\
                     $("#facetview_freetext" + cloneIndex).keyup(keyPress);
 
                 $('#disambiguate' + cloneIndex).click(disambiguateNERD);
+
+                $('#close-searchbar'+cloneIndex).click(function () {
+                    // grab the index number 
+                    var theIndex = $(this).attr("id").match(/\d+/)[0];
+                    // remove searchbar
+                    $('#facetview_searchbar'+theIndex).remove();
+                    // trigger a new search if the corresponding free field is not empty and whenready has instanciated the filter facetviews
+                    if (($('#facetview_freetext'+theIndex).val() != "")  && ($('#facetview_filters').children().length > 0))
+                        dosearch();
+                });
                 cloneIndex++;
             });
+            
 
             $(".tei-fields li a").click(function () {
                 var selText = $(this).text();
