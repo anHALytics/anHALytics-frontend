@@ -46,7 +46,7 @@ var PublicationsPerCountryESQuery = function (params) {
         qs['query'] = {"match": {"organisations.organisationId": params.organisationID}};
     // set any facets
     qs['size'] = 0;
-    qs['aggs'] = {"country": {"terms": {"field": "organisations.address.country", "size": 20}}};
+    qs['aggs'] = {"country": {"terms": {"field": "organisations.address.country", "size": 100}}};
 
     var theUrl = JSON.stringify(qs);
     return theUrl;

@@ -55,7 +55,7 @@ var IndivPublicationsPerCountryESQuery = function () {
     var qs = {};
     qs['query'] = {"match": {"authors.personId": authID}};
     // set any facets
-    qs['aggs'] = {"country": {"terms": {"field": "organisations.address.country", "size": 20}}};
+    qs['aggs'] = {"country": {"terms": {"field": "organisations.address.country", "size": 50}}};
 
     var theUrl = JSON.stringify(qs);
 
