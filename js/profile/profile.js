@@ -49,8 +49,7 @@ var d2 = Date.parse(b.begin_date);
 
         }).then(function (response) {
             $scope.profile = response.hits.hits[0];
-
-//$scope.profile._source.affiliations.sort(compare);
+            $scope.profile._source.affiliations.sort(compare);
 
 
             $scope.terms = [];
