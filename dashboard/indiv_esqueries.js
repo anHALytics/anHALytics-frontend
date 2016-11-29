@@ -38,14 +38,15 @@ var elasticSearchAggQuery2 = function (authorID) {
 };
 
 
-var TopicsByAuthorESQuery = function (id) {
+var TopicsByAuthorESQuery = function () {
 
     var qs = {};
     // set any facets
     qs['size'] = 10;
-    qs['query'] = {"terms": {"_id": id}};
+    qs['query'] = {"match": {"authors.personId": authID}};
     qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$category.category", "size": 20}}};
     var theUrl = JSON.stringify(qs);
+    console.log(theUrl);
     return theUrl;
 };
 
@@ -54,7 +55,6 @@ var IndivPublicationsPerCountryESQuery = function () {
     var qs = {};
     qs['query'] = {"match": {"authors.personId": authID}};
     // set any facets
-    qs['size'] = 0;
     qs['aggs'] = {"country": {"terms": {"field": "organisations.address.country", "size": 20}}};
 
     var theUrl = JSON.stringify(qs);
@@ -165,7 +165,7 @@ var IndivKeywordsByAuthorByYearESQuery = function () {
     qs['aggs'] = {"publication_dates": {
                     "date_histogram": {
                         "field": "publication.date_printed", "interval": "year",
-                        "format": "yyyy-MM-dd", "size": 20
+                        "format": "yyyy-MM-dd"
                     },
             "aggs": {
                 "keyterms": {"terms": {"field": "annotations.$standoff.$keyterm.keyterm", "size": 20}

@@ -108,18 +108,10 @@ function InitPublicationsPerYear(authID) {
 
 function getTopicsByAuthor(authorID) {
     $("#chart-06-title").text("Authors topics");
-    $.ajax({
-        type: "get",
-        url: api_urls.authors + "/" + authorID,
-        //processData: true,
-        success: function (data) {
-            var pubIds = data._source.publications.map(function (a) {
-                return a.docID;
-            });
             $.ajax({
                 type: "get",
                 url: api_urls.publications + "/_search",
-                data: {source: TopicsByAuthorESQuery(pubIds)},
+                data: {source: TopicsByAuthorESQuery()},
                 success: function (data) {
                     var touchdowns = data.aggregations.category.buckets;
 
@@ -153,9 +145,6 @@ function getTopicsByAuthor(authorID) {
 
             });
 
-        }
-
-    });
 
 }
 
@@ -170,7 +159,6 @@ function InitPublicationsPerCountry(authID) {
                 //processData: true, 
                 //dataType: "jsonp",
                 success: function (data) {
-
                     var touchdowns = data.aggregations.country.buckets;
                     var margin = {top: 10, right: 20, bottom: 10, left: 20},
                     width = 800 - margin.left - margin.right,
@@ -312,7 +300,7 @@ function getKeywordsByAuthorByYear(authID) {
                     var dataSet = [];
 
                     for (var i = 0; i < touchdowns.length; i++) {
-                        var date = touchdowns[i].key_as_string;
+                        var date = touchdowns[i].key_as_string.split("-")[0];
                         for (var j = 0; j < touchdowns[i].keyterms.buckets.length; j++) {
                             var entry = {};
                             entry.date = date;
@@ -329,7 +317,7 @@ function getKeywordsByAuthorByYear(authID) {
                     var s = myChart.addSeries("keyterm", dimple.plot.area);
                     s.lineWeight = 1;
                     s.barGap = 0.05;
-                    myChart.addLegend(60, 10, 500, 20, "right");
+                    myChart.addLegend(60, 10, 500, 200, "right");
                     myChart.draw();
 
                 }
