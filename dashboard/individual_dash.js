@@ -134,12 +134,17 @@ function getTopicsByAuthor(authorID) {
                     var data = [{
                             values: values,
                             labels: labels,
-                            type: 'pie'
+                            type: 'pie',
+                            textinfo: 'none',
+                            font: {
+        size: 8
+      }
                         }];
 
                     var layout = {
-                        height: 400,
-                        width: 700
+                        showlegend:false,
+                        height: 500,
+                        width: 400
                     };
 
                     Plotly.newPlot('chart-06', data, layout);
@@ -243,6 +248,7 @@ function getCoAuthorsOverTime(authID) {
                     var touchdowns = data.aggregations.publication_dates.buckets
                     var dataSet = [];
 
+
                     //NESTED OR BUILD NEW AUTHORS MAP
                     var authors = [];
                     for (var i = 0; i < touchdowns.length; i++) {
@@ -262,9 +268,9 @@ $.ajax({type: "get",
                     for (var i = 0; i < data.hits.hits.length; i++) {
                         names[data.hits.hits[i]["_id"]] = data.hits.hits[i]["fields"]["names.fullname"][data.hits.hits[i]["fields"]["names.fullname"].length - 1];
                     }
-                    
+
                     for (var i = 0; i < touchdowns.length; i++) {
-                        var date = touchdowns[i].key_as_string;
+                        var date = touchdowns[i].key_as_string.split("-")[0];
                         for (var j = 0; j < touchdowns[i].author.buckets.length; j++) {
                             if(touchdowns[i].author.buckets[j].key != authID){
                             var entry = {};
@@ -277,12 +283,12 @@ $.ajax({type: "get",
                     }
 
                     var myChart = new dimple.chart(svg, dataSet);
-                    myChart.setBounds(65, 30, 505, 305)
+                    myChart.setBounds(60, 30, 420, 330)
                     var x = myChart.addCategoryAxis("x", "date");
                     x.addOrderRule("Date");
                     myChart.addPctAxis("y", "doc_count");
                     myChart.addSeries("author", dimple.plot.bar);
-                    myChart.addLegend(50, 10, 510, 20, "right");
+                    myChart.addLegend(600, 20, 60, 500, "Right");
                     myChart.draw();
                     }
                 

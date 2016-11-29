@@ -92,11 +92,11 @@ var IndivPublicationsPerTopicESQuery = function () {
     qs['size'] = 0; 
     
     qs['query'] = {"match": {"authors.personId": authID}};
-    qs['aggs'] = {"topic":{"terms":{"field":"annotations.$standoff.$nerd.preferredTerm"},
+    qs['aggs'] = {"topic":{"terms":{"field":"annotations.$standoff.$nerd.preferredTerm", "size": 6},
    "aggs": {
     "authors": {
      "terms": {
-      "field": "authors.personId", "size": 20
+      "field": "authors.personId"
      }
     }
    }}};
@@ -109,7 +109,7 @@ var IndivPublicationsPerTopicESQuery = function () {
 var PersonNamesByPersonId = function (ids){
 
     var qs = {};
-    qs['size'] = 50;
+    qs['size'] = 250;
     qs['query'] = {"ids": {"values": ids}};
     // set any facets
     qs['fields'] = ["names.fullname"];
@@ -140,7 +140,7 @@ var CoAuthorsOverTimeESQuery = function () {
     qs['aggs'] = {"publication_dates": {
                     "date_histogram": {
                         "field": "publication.date_printed", "interval": "year",
-                        "format": "yyyy-MM-dd", "size": 20
+                        "format": "yyyy-MM-dd"
                     },
             "aggs": {
                 "author": {"terms": {"field": "authors.personId", "size": 20}

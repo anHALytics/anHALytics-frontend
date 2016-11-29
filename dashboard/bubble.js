@@ -45,7 +45,7 @@
             var i = 0;
             for (var key in this.data)
             {
-                this.year_centers[key] = {"x": (i + 1) * this.width / (this.keys.length), "y": this.height / 2}
+                this.year_centers[key] = {"x": ((i + 0.41) * this.width / (this.keys.length)), "y": this.height / 2}
                 i++;
             }
             this.layout_gravity = -0.01;
@@ -65,7 +65,7 @@
             max_amount = d3.max(maxs, function (d) {
                 return parseInt(d);
             });
-            this.radius_scale = d3.scale.pow().exponent(0.5).domain([0, max_amount]).range([1, 20]);
+            this.radius_scale = d3.scale.pow().exponent(0.5).domain([0, max_amount]).range([1, 10]);
             this.create_nodes();
             this.create_vis();
         }
@@ -189,7 +189,7 @@
             var i = 0;
             for (var key in this.data)
             {
-                years_x[key] = (i + 1) * this.width / (this.keys.length + 1);
+                years_x[key] = (i + 0.5) * this.width / (this.keys.length);
                 i++;
             }
             years_data = d3.keys(years_x);
@@ -211,14 +211,14 @@
 
         BubbleChart.prototype.show_details = function (data, i, element) {
             var content;
-            d3.select(element).attr("stroke", "black");
+            //d3.select(element).attr("stroke", "black");
             content = "<span class=\"name\">Co-author:</span><span class=\"value\"> " + data.name + "</span><br/><br/>";
             content += "<span class=\"value\">" + (addCommas(data.value)) + " publications</span><br/>";
             content += "<span class=\"name\">Topic:</span><span class=\"value\"> " + data.group + "</span><br/><br/>";
             //content += "<span class=\"name\">Year:</span><span class=\"value\"> " + data.year + "</span>";
             $("#" + this.tooltipId).html(content);
             $("#" + this.tooltipId).show();
-            var xOffset = -10;
+            var xOffset = -70;
             var yOffset = 10;
 
             var ttw = $("#" + this.tooltipId).width();
