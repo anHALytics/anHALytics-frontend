@@ -18,7 +18,7 @@ function InitPublicationsPerYear(authID) {
 
             touchdowns.forEach(function (datum, i) {
 
-                x.push(new Date(datum["key_as_string"]));
+                x.push(datum["key_as_string"].split("-")[0]);
                 y.push(datum["doc_count"]);
             });
 
@@ -34,6 +34,7 @@ function InitPublicationsPerYear(authID) {
                     rangeslider: {}
                 },
                 yaxis: {
+                    title : "Number of documents",
                     fixedrange: true
                 }
             };
@@ -107,7 +108,7 @@ function InitPublicationsPerYear(authID) {
 }
 
 function getTopicsByAuthor(authorID) {
-    $("#chart-06-title").text("Authors topics");
+    $("#chart-06-title").text("Domains");
             $.ajax({
                 type: "get",
                 url: api_urls.publications + "/_search",
@@ -264,7 +265,7 @@ $.ajax({type: "get",
                             var entry = {};
                             entry.date = date;
                             entry.author = names[touchdowns[i].author.buckets[j].key];
-                            entry.doc_count = touchdowns[i].author.buckets[j].doc_count;
+                            entry.coauthoring_percentage = touchdowns[i].author.buckets[j].doc_count;
                             dataSet.push(entry);
                         }
                         }
@@ -274,10 +275,11 @@ $.ajax({type: "get",
                     myChart.setBounds(60, 30, 420, 330)
                     var x = myChart.addCategoryAxis("x", "date");
                     x.addOrderRule("Date");
-                    myChart.addPctAxis("y", "doc_count");
+                    myChart.addPctAxis("y", "coauthoring_percentage");
                     myChart.addSeries("author", dimple.plot.bar);
                     myChart.addLegend(600, 20, 60, 500, "Right");
                     myChart.draw();
+                    
                     }
                 
                     });
