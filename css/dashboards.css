@@ -159,8 +159,8 @@ div.application .return-link:hover,
 
 .line {
   fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+  stroke: white;
+  stroke-width: 1px;
 }
 
 .tooltip {

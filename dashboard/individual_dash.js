@@ -108,7 +108,7 @@ function InitPublicationsPerYear(authID) {
 }
 
 function getTopicsByAuthor(authorID) {
-    $("#chart-06-title").text("Domains");
+    $("#chart-06-title").text("Wikipidea categories");
             $.ajax({
                 type: "get",
                 url: api_urls.publications + "/_search",
@@ -130,6 +130,7 @@ function getTopicsByAuthor(authorID) {
                             type: 'pie',
                             textinfo: 'none',
                             font: {
+                                color:'rgb(0, 0, 0)',
         size: 8
       }
                         }];
@@ -312,14 +313,15 @@ function getKeywordsByAuthorByYear(authID) {
                         }
                     }
                     var myChart = new dimple.chart(svg, dataSet);
-                    myChart.setBounds(75, 30, 485, 330);
-                    myChart.addPctAxis("x", "doc_count");
-                    var y = myChart.addCategoryAxis("y", "date");
-                    y.addGroupOrderRule("Date");
+                    myChart.setBounds(75, 30, 400, 330);
+                    var x = myChart.addCategoryAxis("x", "date");
+                    
+                    x.addGroupOrderRule("Date");
+                    var y = myChart.addPctAxis("y", "doc_count");
                     var s = myChart.addSeries("keyterm", dimple.plot.area);
                     s.lineWeight = 1;
                     s.barGap = 0.05;
-                    myChart.addLegend(60, 10, 500, 200, "right");
+                    myChart.addLegend(500, 10, 300, 200, "right");
                     myChart.draw();
 
                 }

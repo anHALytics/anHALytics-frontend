@@ -11,7 +11,7 @@ Array.prototype.contains = function (elem)
 }
 
 function InitOrganisationPublicationsPerYear(params) {
-    $("#chart-01-title").text("Publications per year");
+    $("#chart-01-title").text("Documents per year");
     $("#chart-01").empty();
     $.ajax({
         type: "get",
@@ -81,6 +81,7 @@ function InitOrganisationPublicationsPerYear(params) {
                     .left(40)
                     .right(0)
                     .top(3);
+            //.event("mouseover", pv.Behavior.tipsy({gravity: "w", fade: true}));;
             var rate = Math.floor(dataSet.length / 10);
             var rank = -1;
             // Add the X-ticks
@@ -266,10 +267,10 @@ function getTopicsByOrganisation(params) {
         success: function (data) {
             var svg = dimple.newSvg("#chart-06", 500, 400);
             var myChart = new dimple.chart(svg, data.aggregations.category.buckets);
-            myChart.setBounds(2, 10, 400, 300)
+            myChart.setBounds(20, 10, 200, 200)
             myChart.addMeasureAxis("p", "doc_count");
             var mySeries = myChart.addSeries("key", dimple.plot.pie);
-            myChart.addLegend(0, 20, 20, 200, "left");
+            myChart.addLegend(250, 10, 20, 200, "left");
             myChart.draw();
 
             d3.selectAll("path").on("click", function (d, i) {
@@ -458,7 +459,7 @@ function InitPublicationsPerCountry(params) {
 }
 
 function getCollaborationsByYear(params) {
-    $("#chart-07-title").text("Collaborations");
+    $("#chart-07-title").text("CoPublications");
     $("#chart-07").empty();
 
     $.ajax({
