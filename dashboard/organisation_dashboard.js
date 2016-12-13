@@ -644,12 +644,12 @@ function getConferencesByYear(params) {
                 title: 'Conferences',
                 showlegend: false,
                 height: 400,
-                width: 750,
+                width: 1220,
                 margin: {
                     r: 7.30593607306,
                     t: 44.7756468798,
                     b: 50,
-                    l: 250
+                    l: 600
                 }
             };
             Plotly.newPlot('chart-09', dataSet, layout);
