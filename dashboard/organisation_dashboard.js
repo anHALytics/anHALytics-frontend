@@ -410,7 +410,7 @@ function InitPublicationsPerCountry(params) {
             // color can be whatever you wish
             var paletteScale = d3.scale.linear()
                     .domain([minValue, maxValue])
-                    .range(["#EFEFFF", "#02386F"]); // blue color
+                    .range(["#CCCCFF", "#02386F"]); // blue color
 
 
             var arrayLength = touchdowns.length;
