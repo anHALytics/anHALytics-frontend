@@ -3,7 +3,7 @@ function InitPublicationsByYear() {
     $("#chart-01-title").text("Publications over time");
     $.ajax({
         type: "get",
-        url: api_urls.authors + "/_search",
+        url: api_urls.publications + "/_search",
         data: {source: PublicationsByYearESQuery()},
         //processData: true, 
         //dataType: "jsonp",
@@ -11,8 +11,7 @@ function InitPublicationsByYear() {
             var margin = {top: 10, right: 10, bottom: 50, left: 30},
                     width = 370 - margin.left - margin.right,
                     height = 250 - margin.top - margin.bottom;
-            var touchdowns = data.aggregations.publication_date.publication_dates.buckets;
-
+            var touchdowns = data.aggregations.publication_date.buckets;
             var x = [];
             var y = [];
 
@@ -284,7 +283,7 @@ function InitKeytermsByYear() {
       size: 9,
       color: '#000'
     }},
-                width: 500,
+                width: 600,
                                 height: 400,xaxis: {anchor: "y", gridcolor: "rgba(255,255,255,1)", tickcolor: "rgba(51,51,51,1)", tickfont: {
                         color: "rgba(77,77,77,1)",
                         family: "",

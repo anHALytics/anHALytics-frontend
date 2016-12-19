@@ -4,17 +4,11 @@ var PublicationsByYearESQuery = function () {
 
     // set any facets
     qs['size'] = 0;
-    qs['query'] = {"match": {"_id": authID}};
+    qs['query'] = {"match": {"authors.personId": authID}};
     qs['aggs'] = {
         "publication_date": {
-            "nested": {
-                "path": "publications"
-            },
-            "aggs": {"publication_dates": {
-                    "date_histogram": {"field": "publications.publication.date_printed", "interval": "year",
+                    "date_histogram": {"field": "publication.date_printed", "interval": "year",
                         "format": "yyyy-MM-dd"}
-                }
-            }
         }
     };
 
