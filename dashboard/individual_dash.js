@@ -298,7 +298,7 @@ function getKeywordsByAuthorByYear(authID) {
                 //processData: true, 
                 //dataType: "jsonp",
                 success: function (data) {
-                    var svg = dimple.newSvg("#chart-07", 590, 400);
+                    var svg = dimple.newSvg("#chart-07", 590, 380);
                     var touchdowns = data.aggregations.publication_dates.buckets
                     var dataSet = [];
 
@@ -321,7 +321,7 @@ function getKeywordsByAuthorByYear(authID) {
                     var s = myChart.addSeries("keyterm", dimple.plot.area);
                     s.lineWeight = 1;
                     s.barGap = 0.05;
-                    myChart.addLegend(500, 10, 300, 200, "right");
+                    myChart.addLegend(390, 10, 300, 200, "right");
                     myChart.draw();
 
                 }
