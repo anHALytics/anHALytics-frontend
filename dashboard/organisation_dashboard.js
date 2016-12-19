@@ -305,7 +305,7 @@ function getKeywordsByOrganisationYear(params) {
         success: function (data) {
             var touchdown = data.aggregations.category.buckets;
             var parseDate = d3.time.format("%Y-%m-%d").parse;
-
+console.log(touchdown);
             var xMin = new Date(d3.min(touchdown, function (c) {
                 return d3.min(c.publication_dates.buckets, function (v) {
                     return v.key_as_string;
@@ -406,10 +406,11 @@ function InitPublicationsPerCountry(params) {
             });
             var minValue = Math.min.apply(null, onlyValues),
                     maxValue = Math.max.apply(null, onlyValues);
+            var m = (maxValue - minValue) / 2;
             // create color palette function
             // color can be whatever you wish
             var paletteScale = d3.scale.linear()
-                    .domain([minValue, maxValue])
+                    .domain([minValue/m, maxValue/m])
                     .range(["#CCCCFF", "#02386F"]); // blue color
 
 
@@ -418,7 +419,7 @@ function InitPublicationsPerCountry(params) {
             var dataset = {};
             var entry = {};
             for (var i = 0; i < arrayLength; i++) {
-                dataset[iso3[touchdowns[i].key.toUpperCase()]] = {numberOfThings: touchdowns[i].doc_count, fillColor: paletteScale(touchdowns[i].doc_count)};
+                dataset[iso3[touchdowns[i].key.toUpperCase()]] = {numberOfThings: touchdowns[i].doc_count, fillColor: paletteScale(touchdowns[i].doc_count/m)};
             }
 
             var map = new Datamap({
@@ -430,7 +431,7 @@ function InitPublicationsPerCountry(params) {
                 data: dataset,
                 geographyConfig: {
                     borderColor: '#DEDEDE',
-                    highlightBorderWidth: 2,
+                    highlightBorderWidth: 1,
                     // don't change color on mouse hover
                     highlightFillColor: function (geo) {
                         return geo['fillColor'] || '#F5F5F5';

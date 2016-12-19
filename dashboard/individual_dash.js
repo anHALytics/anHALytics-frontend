@@ -9,7 +9,7 @@ function InitPublicationsPerYear(authID) {
         //dataType: "jsonp",
         success: function (data) {
             var margin = {top: 10, right: 10, bottom: 50, left: 30},
-            width = 370 - margin.left - margin.right,
+                    width = 370 - margin.left - margin.right,
                     height = 250 - margin.top - margin.bottom;
             var touchdowns = data.aggregations.publication_date.publication_dates.buckets;
 
@@ -34,7 +34,7 @@ function InitPublicationsPerYear(authID) {
                     rangeslider: {}
                 },
                 yaxis: {
-                    title : "Number of documents",
+                    title: "Number of documents",
                     fixedrange: true
                 }
             };
@@ -109,43 +109,43 @@ function InitPublicationsPerYear(authID) {
 
 function getTopicsByAuthor(authorID) {
     $("#chart-06-title").text("Wikipidea categories");
-            $.ajax({
-                type: "get",
-                url: api_urls.publications + "/_search",
-                data: {source: TopicsByAuthorESQuery()},
-                success: function (data) {
-                    var touchdowns = data.aggregations.category.buckets;
+    $.ajax({
+        type: "get",
+        url: api_urls.publications + "/_search",
+        data: {source: TopicsByAuthorESQuery()},
+        success: function (data) {
+            var touchdowns = data.aggregations.category.buckets;
 
-                    var labels = [];
-                    var values = [];
+            var labels = [];
+            var values = [];
 
-                    touchdowns.forEach(function (datum, i) {
+            touchdowns.forEach(function (datum, i) {
 
-                        labels.push(datum["key"]);
-                        values.push(datum["doc_count"]);
-                    });
-                    var data = [{
-                            values: values,
-                            labels: labels,
-                            type: 'pie',
-                            textinfo: 'none',
-                            font: {
-                                color:'rgb(0, 0, 0)',
-        size: 8
-      }
-                        }];
-
-                    var layout = {
-                        showlegend:false,
-                        height: 500,
-                        width: 400
-                    };
-
-                    Plotly.newPlot('chart-06', data, layout);
-                }
-
-
+                labels.push(datum["key"]);
+                values.push(datum["doc_count"]);
             });
+            var data = [{
+                    values: values,
+                    labels: labels,
+                    type: 'pie',
+                    textinfo: 'none',
+                    font: {
+                        color: 'rgb(0, 0, 0)',
+                        size: 8
+                    }
+                }];
+
+            var layout = {
+                showlegend: false,
+                height: 500,
+                width: 400
+            };
+
+            Plotly.newPlot('chart-06', data, layout);
+        }
+
+
+    });
 
 
 }
@@ -154,101 +154,101 @@ var iso3 = {"BD": "BGD", "BE": "BEL", "BF": "BFA", "BG": "BGR", "BA": "BIH", "BB
 function InitPublicationsPerCountry(authID) {
     $("#chart-08-title").text("International collaborators");
 
-            $.ajax({
-                type: "get",
-                url: api_urls.publications + "/_search",
-                data: {source: IndivPublicationsPerCountryESQuery()},
-                //processData: true, 
-                //dataType: "jsonp",
-                success: function (data) {
-                    var touchdowns = data.aggregations.country.buckets;
-                    var margin = {top: 10, right: 20, bottom: 10, left: 20},
+    $.ajax({
+        type: "get",
+        url: api_urls.publications + "/_search",
+        data: {source: IndivPublicationsPerCountryESQuery()},
+        //processData: true, 
+        //dataType: "jsonp",
+        success: function (data) {
+            var touchdowns = data.aggregations.country.buckets;
+            var margin = {top: 10, right: 20, bottom: 10, left: 20},
                     width = 800 - margin.left - margin.right,
-                            height = 400 - margin.top - margin.bottom;
-                    // We need to colorize every country based on "numberOfWhatever"
-                    // colors should be uniq for every value.
-                    // For this purpose we create palette(using min/max series-value)
-                    var onlyValues = touchdowns.map(function (obj) {
-                        return obj.doc_count;
-                    });
-                    var minValue = Math.min.apply(null, onlyValues),
-                            maxValue = Math.max.apply(null, onlyValues);
-                    // create color palette function
-                    // color can be whatever you wish
-                    var paletteScale = d3.scale.linear()
-                            .domain([minValue, maxValue])
-                            .range(["#EFEFFF", "#02386F"]); // blue color
+                    height = 400 - margin.top - margin.bottom;
+            // We need to colorize every country based on "numberOfWhatever"
+            // colors should be uniq for every value.
+            // For this purpose we create palette(using min/max series-value)
+            var onlyValues = touchdowns.map(function (obj) {
+                return obj.doc_count;
+            });
+            var minValue = Math.min.apply(null, onlyValues),
+                    maxValue = Math.max.apply(null, onlyValues);
+            // create color palette function
+            // color can be whatever you wish
+            var paletteScale = d3.scale.linear()
+                    .domain([minValue, maxValue])
+                    .range(["#EFEFFF", "#02386F"]); // blue color
 
 
-                    var arrayLength = touchdowns.length;
-                    var dataset = {};
-                    var entry = {};
-                    for (var i = 0; i < arrayLength; i++) {
-                        dataset[iso3[touchdowns[i].key.toUpperCase()]] = {numberOfThings: touchdowns[i].doc_count, fillColor: paletteScale(touchdowns[i].doc_count)};
-                    }
-                    var margin = {top: 10, right: 10, bottom: 20, left: 30},
+            var arrayLength = touchdowns.length;
+            var dataset = {};
+            var entry = {};
+            for (var i = 0; i < arrayLength; i++) {
+                dataset[iso3[touchdowns[i].key.toUpperCase()]] = {numberOfThings: touchdowns[i].doc_count, fillColor: paletteScale(touchdowns[i].doc_count)};
+            }
+            var margin = {top: 10, right: 10, bottom: 20, left: 30},
                     width = 370 - margin.left - margin.right,
-                            height = 250 - margin.top - margin.bottom;
-                    var map = new Datamap({
-                        element: document.getElementById('chart-08'),
-                        projection: 'mercator',
-                        height: null,
-                        width: null,
-                        fills: {defaultFill: '#F5F5F5'},
-                        data: dataset,
-                        geographyConfig: {
-                            borderColor: '#DEDEDE',
-                            highlightBorderWidth: 2,
-                            // don't change color on mouse hover
-                            highlightFillColor: function (geo) {
-                                return geo['fillColor'] || '#F5F5F5';
-                            },
-                            // only change border
-                            highlightBorderColor: '#B7B7B7',
-                            // show desired information in tooltip
-                            popupTemplate: function (geo, data) {
-                                // don't show tooltip if country don't present in dataset
-                                if (!data) {
-                                    return ['<div class="hoverinfo">',
-                                        '<strong>', geo.properties.name, '</strong>',
-                                        '</div>'].join('');
-                                }
-                                // tooltip content
-                                return ['<div class="hoverinfo">',
-                                    '<strong>', geo.properties.name, '</strong>',
-                                    '<br>Count: <strong>', data.numberOfThings, '</strong>',
-                                    '</div>'].join('');
-                            }
+                    height = 250 - margin.top - margin.bottom;
+            var map = new Datamap({
+                element: document.getElementById('chart-08'),
+                projection: 'mercator',
+                height: null,
+                width: null,
+                fills: {defaultFill: '#F5F5F5'},
+                data: dataset,
+                geographyConfig: {
+                    borderColor: '#DEDEDE',
+                    highlightBorderWidth: 2,
+                    // don't change color on mouse hover
+                    highlightFillColor: function (geo) {
+                        return geo['fillColor'] || '#F5F5F5';
+                    },
+                    // only change border
+                    highlightBorderColor: '#B7B7B7',
+                    // show desired information in tooltip
+                    popupTemplate: function (geo, data) {
+                        // don't show tooltip if country don't present in dataset
+                        if (!data) {
+                            return ['<div class="hoverinfo">',
+                                '<strong>', geo.properties.name, '</strong>',
+                                '</div>'].join('');
                         }
-                    })
+                        // tooltip content
+                        return ['<div class="hoverinfo">',
+                            '<strong>', geo.properties.name, '</strong>',
+                            '<br>Count: <strong>', data.numberOfThings, '</strong>',
+                            '</div>'].join('');
+                    }
+                }
+            })
 
-                }});
+        }});
 }
 
 function getCoAuthorsOverTime(authID) {
     $("#chart-02-title").text("Co-authors over time");
-            $.ajax({
-                type: "get",
-                url: api_urls.publications + "/_search",
-                data: {source: CoAuthorsOverTimeESQuery()},
-                //processData: true, 
-                //dataType: "jsonp",
-                success: function (data) {
-                    var svg = dimple.newSvg("#chart-02", 590, 400);
-                    var touchdowns = data.aggregations.publication_dates.buckets
-                    var dataSet = [];
+    $.ajax({
+        type: "get",
+        url: api_urls.publications + "/_search",
+        data: {source: CoAuthorsOverTimeESQuery()},
+        //processData: true, 
+        //dataType: "jsonp",
+        success: function (data) {
+            var svg = dimple.newSvg("#chart-02", 590, 400);
+            var touchdowns = data.aggregations.publication_dates.buckets
+            var dataSet = [];
 
 
-                    //NESTED OR BUILD NEW AUTHORS MAP
-                    var authors = [];
-                    for (var i = 0; i < touchdowns.length; i++) {
-                        for (var j = 0; j < touchdowns[i].author.buckets.length; j++) {
-                            if (authors.indexOf(touchdowns[i].author.buckets[j].key) === -1) {
-                                authors.push(touchdowns[i].author.buckets[j].key);
-                            }
-                        }
+            //NESTED OR BUILD NEW AUTHORS MAP
+            var authors = [];
+            for (var i = 0; i < touchdowns.length; i++) {
+                for (var j = 0; j < touchdowns[i].author.buckets.length; j++) {
+                    if (authors.indexOf(touchdowns[i].author.buckets[j].key) === -1) {
+                        authors.push(touchdowns[i].author.buckets[j].key);
                     }
-$.ajax({type: "get",
+                }
+            }
+            $.ajax({type: "get",
                 url: api_urls.authors + "/_search",
                 data: {source: PersonNamesByPersonId(authors)},
                 //processData: true, 
@@ -262,13 +262,13 @@ $.ajax({type: "get",
                     for (var i = 0; i < touchdowns.length; i++) {
                         var date = touchdowns[i].key_as_string.split("-")[0];
                         for (var j = 0; j < touchdowns[i].author.buckets.length; j++) {
-                            if(touchdowns[i].author.buckets[j].key != authID){
-                            var entry = {};
-                            entry.date = date;
-                            entry.author = names[touchdowns[i].author.buckets[j].key];
-                            entry.coauthoring_percentage = touchdowns[i].author.buckets[j].doc_count;
-                            dataSet.push(entry);
-                        }
+                            if (touchdowns[i].author.buckets[j].key != authID) {
+                                var entry = {};
+                                entry.date = date;
+                                entry.author = names[touchdowns[i].author.buckets[j].key];
+                                entry.coauthoring_percentage = touchdowns[i].author.buckets[j].doc_count;
+                                dataSet.push(entry);
+                            }
                         }
                     }
 
@@ -280,52 +280,106 @@ $.ajax({type: "get",
                     myChart.addSeries("author", dimple.plot.bar);
                     myChart.addLegend(600, 20, 60, 500, "Right");
                     myChart.draw();
-                    
-                    }
-                
-                    });
+                    // Add a method to draw the chart on resize of the window
+                    window.onresize = function () {
+                        // As of 1.1.0 the second parameter here allows you to draw
+                        // without reprocessing data.  This saves a lot on performance
+                        // when you know the data won't have changed.
+                        myChart.draw(0, true);
+                    };
                 }
+
             });
+        }
+    });
 
 }
 
 function getKeywordsByAuthorByYear(authID) {
     $("#chart-07-title").text("Keywords over time");
-            $.ajax({
-                type: "get",
-                url: api_urls.publications + "/_search",
-                data: {source: IndivKeywordsByAuthorByYearESQuery()},
-                //processData: true, 
-                //dataType: "jsonp",
-                success: function (data) {
-                    var svg = dimple.newSvg("#chart-07", 590, 380);
-                    var touchdowns = data.aggregations.publication_dates.buckets
-                    var dataSet = [];
+    $.ajax({
+        type: "get",
+        url: api_urls.publications + "/_search",
+        data: {source: IndivKeywordsByAuthorByYearESQuery()},
+        //processData: true, 
+        //dataType: "jsonp",
+        success: function (data) {
+            var touchdown = data.aggregations.keyterms.buckets;
+            var xMin = new Date(d3.min(touchdown, function (c) {
+                return d3.min(c.publication_dates.buckets, function (v) {
+                    return v.key_as_string;
+                });
+            }));
+            var xMax = new Date(d3.max(touchdown, function (c) {
+                return d3.max(c.publication_dates.buckets, function (v) {
+                    return v.key_as_string;
+                });
+            }));
+            var years = xMax.getFullYear() - xMin.getFullYear();
+            var minYear = xMin.getFullYear();
+            var dataEntry = [];
+            for (var i = minYear; i <= minYear + years; i++) {
+                var zero = {"doc_count": 0, "key_as_string": ""};
+                xMin.setFullYear(i);
+                zero.key_as_string = xMin.toISOString().slice(0, 10);
+                zero.key = xMin.getTime();
+                dataEntry.push(zero);
+            }
 
-                    for (var i = 0; i < touchdowns.length; i++) {
-                        var date = touchdowns[i].key_as_string.split("-")[0];
-                        for (var j = 0; j < touchdowns[i].keyterms.buckets.length; j++) {
-                            var entry = {};
-                            entry.date = date;
-                            entry.keyterm = touchdowns[i].keyterms.buckets[j].key;
-                            entry.doc_count = touchdowns[i].keyterms.buckets[j].doc_count;
-                            dataSet.push(entry);
-                        }
-                    }
-                    var myChart = new dimple.chart(svg, dataSet);
-                    myChart.setBounds(75, 30, 400, 330);
-                    var x = myChart.addCategoryAxis("x", "date");
-                    
-                    x.addGroupOrderRule("Date");
-                    var y = myChart.addPctAxis("y", "doc_count");
-                    var s = myChart.addSeries("keyterm", dimple.plot.area);
-                    s.lineWeight = 1;
-                    s.barGap = 0.05;
-                    myChart.addLegend(390, 10, 300, 200, "right");
-                    myChart.draw();
+            var dataSet = [];
+            for (var i = 0; i < touchdown.length; i++) {
+                var entry = {}, y = [], x = [];
+                entry.type = 'scatter';
 
+                for (var j = 0; j < dataEntry.length; j++)
+                {
+                    var temp = touchdown[i].publication_dates.buckets.filter(function (e) {
+                        return new Date(dataEntry[j].key_as_string).getTime() == e.key;
+                    })
+                    if (temp[0])
+                        y.push(temp[0].doc_count)
+                    else
+                        y.push(0);
+                    x.push(dataEntry[j].key_as_string);
                 }
-            });
+                entry.x = x
+                entry.y = y;
+                entry.fill = 'tonexty';
+                entry.xaxis = "x";
+                entry.legendgroup = touchdown[i].key;
+                entry.name = touchdown[i].key;
+                entry.yaxis = "y";
+                dataSet.push(entry);
+            }
+
+            var layout = {
+                legend: {font: {
+      family: 'sans-serif',
+      size: 9,
+      color: '#000'
+    }},
+                width: 500,
+                                height: 400,xaxis: {anchor: "y", gridcolor: "rgba(255,255,255,1)", tickcolor: "rgba(51,51,51,1)", tickfont: {
+                        color: "rgba(77,77,77,1)",
+                        family: "",
+                        size: 11.6894977169
+                    }, title: "years", titlefont: {
+                        color: "rgba(0,0,0,1)",
+                        family: "",
+                        size: 14.6118721461
+                    }},
+                yaxis: {
+                    anchor: "x", title: "doc_count", titlefont: {
+                        color: "rgba(0,0,0,1)",
+                        family: "",
+                        size: 14.6118721461
+                    },
+                }}
+
+            Plotly.newPlot('chart-07', dataSet, layout);
+
+        }
+    });
 
 }
 
@@ -399,7 +453,7 @@ function InitPublicationsPerAffiliation() {
 //console.log(dataset);
 
             var margin = {top: 10, right: 10, bottom: 20, left: 30},
-            w = 500 - margin.left - margin.right,
+                    w = 500 - margin.left - margin.right,
                     h = 800 - margin.top - margin.bottom,
                     svg = d3.select("#chart-09").append("svg")
                     .attr("width", w + margin.left + margin.right)

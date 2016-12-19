@@ -4,7 +4,7 @@ var IndivPublicationsPerYearESQuery = function (authorID) {
     var qs = {};
 
     // set any facets
-    qs['size'] = 0; 
+    qs['size'] = 0;
     qs['query'] = {"match": {"_id": authorID}};
     qs['aggs'] = {
         "publication_date": {
@@ -14,11 +14,11 @@ var IndivPublicationsPerYearESQuery = function (authorID) {
             "aggs": {"publication_dates": {
                     "date_histogram": {"field": "publications.publication.date_printed", "interval": "year",
                         "format": "yyyy-MM-dd"}
-                        }
-                        }
+                }
             }
-            };
-    
+        }
+    };
+
     var theUrl = JSON.stringify(qs);
     return theUrl;
 };
@@ -68,16 +68,16 @@ var IndivPublicationsPerAffiliationESQuery = function () {
     var qs = {};
 
     // set any facets
-    qs['size'] = 0; 
-    qs['aggs'] = {"Organisation":{"terms":{"field":"$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$idno.$type_orgAnhalyticsID"},
-   "aggs": {
-    "authors": {
-     "terms": {
-      "field": "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$idno.$type_authorAnhalyticsID"
-     }
-    }
-   }}};
-    
+    qs['size'] = 0;
+    qs['aggs'] = {"Organisation": {"terms": {"field": "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$idno.$type_orgAnhalyticsID"},
+            "aggs": {
+                "authors": {
+                    "terms": {
+                        "field": "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$idno.$type_authorAnhalyticsID"
+                    }
+                }
+            }}};
+
     var theUrl = JSON.stringify(qs);
 
     return theUrl;
@@ -89,24 +89,24 @@ var IndivPublicationsPerTopicESQuery = function () {
     var qs = {};
 
     // set any facets
-    qs['size'] = 0; 
-    
+    qs['size'] = 0;
+
     qs['query'] = {"match": {"authors.personId": authID}};
-    qs['aggs'] = {"topic":{"terms":{"field":"annotations.$standoff.$nerd.preferredTerm", "size": 6},
-   "aggs": {
-    "authors": {
-     "terms": {
-      "field": "authors.personId"
-     }
-    }
-   }}};
-    
+    qs['aggs'] = {"topic": {"terms": {"field": "annotations.$standoff.$nerd.preferredTerm", "size": 6},
+            "aggs": {
+                "authors": {
+                    "terms": {
+                        "field": "authors.personId"
+                    }
+                }
+            }}};
+
     var theUrl = JSON.stringify(qs);
 
     return theUrl;
 };
 
-var PersonNamesByPersonId = function (ids){
+var PersonNamesByPersonId = function (ids) {
 
     var qs = {};
     qs['size'] = 250;
@@ -135,20 +135,20 @@ var CoAuthorsOverTimeESQuery = function () {
 //            }
 //        }
 //    else
-        qs['query'] = {"match": {"authors.personId": authID}};
-    
+    qs['query'] = {"match": {"authors.personId": authID}};
+
     qs['aggs'] = {"publication_dates": {
-                    "date_histogram": {
-                        "field": "publication.date_printed", "interval": "year",
-                        "format": "yyyy-MM-dd"
-                    },
+            "date_histogram": {
+                "field": "publication.date_printed", "interval": "year",
+                "format": "yyyy-MM-dd"
+            },
             "aggs": {
                 "author": {"terms": {"field": "authors.personId", "size": 20}
                 }
             }
 
         }};
-    
+
     var theUrl = JSON.stringify(qs);
 
     return theUrl;
@@ -159,21 +159,23 @@ var IndivKeywordsByAuthorByYearESQuery = function () {
     var qs = {};
 
     // set any facets
-    qs['size'] = 0; 
+    qs['size'] = 0;
     qs['query'] = {"match": {"authors.personId": authID}};
-    
-    qs['aggs'] = {"publication_dates": {
+
+    qs['aggs'] = {
+        "keyterms": {"terms": {"field": "annotations.$standoff.$keyterm.preferredTerm", "size": 20}
+            ,
+
+            "aggs": {
+                "publication_dates": {
                     "date_histogram": {
                         "field": "publication.date_printed", "interval": "year",
                         "format": "yyyy-MM-dd"
-                    },
-            "aggs": {
-                "keyterms": {"terms": {"field": "annotations.$standoff.$keyterm.preferredTerm", "size": 20}
-                }
+                    }}
             }
 
         }};
-    
+
     var theUrl = JSON.stringify(qs);
     return theUrl;
 };
