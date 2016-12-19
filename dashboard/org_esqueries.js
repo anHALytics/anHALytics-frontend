@@ -108,7 +108,7 @@ var KeywordsByOrganisationYearESQuery = function (params) {
         }
     else
         qs['query'] = {"match": {"organisations.organisationId": params.organisationID}};
-    qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$keyterm.keyterm", "size": 50},
+    qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$keyterm.preferredTerm", "size": 50},
             "aggs": {
                 "publication_dates": {
                     "date_histogram": {

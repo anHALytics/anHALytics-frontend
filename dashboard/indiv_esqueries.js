@@ -168,7 +168,7 @@ var IndivKeywordsByAuthorByYearESQuery = function () {
                         "format": "yyyy-MM-dd"
                     },
             "aggs": {
-                "keyterms": {"terms": {"field": "annotations.$standoff.$keyterm.keyterm", "size": 20}
+                "keyterms": {"terms": {"field": "annotations.$standoff.$keyterm.preferredTerm", "size": 20}
                 }
             }
 
