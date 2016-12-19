@@ -1,11 +1,10 @@
-
-var IndivPublicationsPerYearESQuery = function (authorID) {
+var PublicationsByYearESQuery = function () {
 
     var qs = {};
 
     // set any facets
     qs['size'] = 0;
-    qs['query'] = {"match": {"_id": authorID}};
+    qs['query'] = {"match": {"_id": authID}};
     qs['aggs'] = {
         "publication_date": {
             "nested": {
@@ -23,22 +22,7 @@ var IndivPublicationsPerYearESQuery = function (authorID) {
     return theUrl;
 };
 
-
-var elasticSearchAggQuery2 = function (authorID) {
-
-    var qs = {};
-
-    // set any facets
-    //qs['size'] = 0; 
-    qs['query'] = {"match": {"_id": authorID}};
-    qs['aggs'] = {"publication_date": {"terms": {"field": "pauthors.publications.publication.date_printed"}}};
-    var theUrl = JSON.stringify(qs);
-
-    return theUrl;
-};
-
-
-var TopicsByAuthorESQuery = function () {
+var WikipediaCategoriesESQuery = function () {
 
     var qs = {};
     // set any facets
@@ -46,11 +30,10 @@ var TopicsByAuthorESQuery = function () {
     qs['query'] = {"match": {"authors.personId": authID}};
     qs['aggs'] = {"category": {"terms": {"field": "annotations.$standoff.$category.category", "size": 20}}};
     var theUrl = JSON.stringify(qs);
-    console.log(theUrl);
     return theUrl;
 };
 
-var IndivPublicationsPerCountryESQuery = function () {
+var CoPublicationsByCountryESQuery = function () {
 
     var qs = {};
     qs['query'] = {"match": {"authors.personId": authID}};
@@ -62,63 +45,7 @@ var IndivPublicationsPerCountryESQuery = function () {
     return theUrl;
 };
 
-
-var IndivPublicationsPerAffiliationESQuery = function () {
-
-    var qs = {};
-
-    // set any facets
-    qs['size'] = 0;
-    qs['aggs'] = {"Organisation": {"terms": {"field": "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$idno.$type_orgAnhalyticsID"},
-            "aggs": {
-                "authors": {
-                    "terms": {
-                        "field": "$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$idno.$type_authorAnhalyticsID"
-                    }
-                }
-            }}};
-
-    var theUrl = JSON.stringify(qs);
-
-    return theUrl;
-};
-
-
-var IndivPublicationsPerTopicESQuery = function () {
-
-    var qs = {};
-
-    // set any facets
-    qs['size'] = 0;
-
-    qs['query'] = {"match": {"authors.personId": authID}};
-    qs['aggs'] = {"topic": {"terms": {"field": "annotations.$standoff.$nerd.preferredTerm", "size": 6},
-            "aggs": {
-                "authors": {
-                    "terms": {
-                        "field": "authors.personId"
-                    }
-                }
-            }}};
-
-    var theUrl = JSON.stringify(qs);
-
-    return theUrl;
-};
-
-var PersonNamesByPersonId = function (ids) {
-
-    var qs = {};
-    qs['size'] = 250;
-    qs['query'] = {"ids": {"values": ids}};
-    // set any facets
-    qs['fields'] = ["names.fullname"];
-    var theUrl = JSON.stringify(qs);
-
-    return theUrl;
-};
-
-var CoAuthorsOverTimeESQuery = function () {
+var CoAuthorsByYearESQuery = function () {
 
     var qs = {};
 
@@ -154,7 +81,19 @@ var CoAuthorsOverTimeESQuery = function () {
     return theUrl;
 };
 
-var IndivKeywordsByAuthorByYearESQuery = function () {
+var PersonNamesByPersonId = function (ids) {
+
+    var qs = {};
+    qs['size'] = 250;
+    qs['query'] = {"ids": {"values": ids}};
+    // set any facets
+    qs['fields'] = ["names.fullname"];
+    var theUrl = JSON.stringify(qs);
+
+    return theUrl;
+};
+
+var KeytermsByYearESQuery = function () {
 
     var qs = {};
 
@@ -177,5 +116,27 @@ var IndivKeywordsByAuthorByYearESQuery = function () {
         }};
 
     var theUrl = JSON.stringify(qs);
+    return theUrl;
+};
+
+var PublicationsByTopicESQuery = function () {
+
+    var qs = {};
+
+    // set any facets
+    qs['size'] = 0; 
+    
+    qs['query'] = {"match": {"authors.personId": authID}};
+    qs['aggs'] = {"topic":{"terms":{"field":"annotations.$standoff.$nerd.preferredTerm", "size": 6},
+   "aggs": {
+    "authors": {
+     "terms": {
+      "field": "authors.personId"
+     }
+    }
+   }}};
+    
+    var theUrl = JSON.stringify(qs);
+
     return theUrl;
 };

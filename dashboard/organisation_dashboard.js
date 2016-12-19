@@ -10,13 +10,13 @@ Array.prototype.contains = function (elem)
     return false;
 }
 
-function InitOrganisationPublicationsPerYear(params) {
-    $("#chart-01-title").text("Documents per year");
+function InitPublicationsByYear(params) {
+    $("#chart-01-title").text("Documents by year");
     $("#chart-01").empty();
     $.ajax({
         type: "get",
         url: api_urls.publications + "/_search",
-        data: {source: OrganisationPublicationsPerYearESQuery(params)},
+        data: {source: PublicationsByYearESQuery(params)},
         //processData: true,
         success: function (data) {
             var margin = {top: 10, right: 10, bottom: 50, left: 30},
@@ -49,23 +49,16 @@ function InitOrganisationPublicationsPerYear(params) {
                     dataSet.push(temp[0]);
 
             }
-//            dataSet.forEach(function (d) {
-//                d.key_as_string = parseDate(d.key_as_string);
-//                d.doc_count = +d.doc_count;
-//            });
-
-
-            //console.log(dataSet);
 
 //Mouseover tip
-            var tip = d3.tip()
-                    .attr('class', 'd3-tip')
-                    .offset([0, 0])
-                    .html(function (d) {
-                        return "<strong>" + d.doc_count +
-                                " Publication</strong><br>" +
-                                d.key_as_string.getFullYear() + "<br>";
-                    });
+//            var tip = d3.tip()
+//                    .attr('class', 'd3-tip')
+//                    .offset([0, 0])
+//                    .html(function (d) {
+//                        return "<strong>" + d.doc_count +
+//                                " Publication</strong><br>" +
+//                                d.key_as_string.getFullYear() + "<br>";
+//                    });
 
             var max = pv.max(dataSet, function (d) {
                 return d.doc_count;
@@ -175,13 +168,13 @@ function InitOrganisationPublicationsPerYear(params) {
     });
 }
 
-function getOrganisationSubOrganisations(params) {
+function InitSubStructures(params) {
     $("#chart-02-title").text("Sub Structures");
     $("#chart-02").empty();
     $.ajax({
         type: "get",
         url: api_urls.organisations + "/_search",
-        data: {source: OrganisationSubOrganisationsESQuery(params)},
+        data: {source: SubSructuresESQuery(params)},
         //processData: true,
         success: function (data) {
             var x = [], y = [];
@@ -246,16 +239,16 @@ var clearfilter = function (obj) {
         delete params.topic;
 
     obj.remove();
-    InitOrganisationPublicationsPerYear(params);
-    getOrganisationSubOrganisations(params);
-    getTopicsByOrganisation(params);
-    getKeywordsByOrganisationYear(params);
-    InitPublicationsPerCountry(params);
-    getCollaboratorsByYear(params);
-    getConferencesByYear(params);
+    InitPublicationsPerYear(params);
+    InitSubStructures(params);
+    InitWikipediaCategories(params);
+    InitKeywordsOverTime(params);
+    InitInternationalCoPublications(params);
+    InitCollaborationsByYear(params);
+    InitConferencesByYear(params);
 }
 
-function getTopicsByOrganisation(params) {
+function InitWikipediaCategories(params) {
     $("#chart-06-title").text("Wikipedia Categories");
     $("#chart-06").empty();
 
@@ -263,7 +256,7 @@ function getTopicsByOrganisation(params) {
     $.ajax({
         type: "get",
         url: api_urls.publications + "/_search",
-        data: {source: TopicsByOrganisationESQuery(params)},
+        data: {source: WikipideaCategoriesESQuery(params)},
         success: function (data) {
             var svg = dimple.newSvg("#chart-06", 500, 400);
             var myChart = new dimple.chart(svg, data.aggregations.category.buckets);
@@ -277,13 +270,13 @@ function getTopicsByOrganisation(params) {
 
                 params.topic = d.key.replace(/_/g, '');
                 $("#selected_filters").append('<li><a class="btn btn-info" title = "' + params.topic + '" rel="topic" onclick="clearfilter(this)">' + params.topic + '<i class="glyphicon glyphicon-remove"></a></li>');
-                InitOrganisationPublicationsPerYear(params);
-                getOrganisationSubOrganisations(params);
-                getTopicsByOrganisation(params);
-                getKeywordsByOrganisationYear(params);
-                InitPublicationsPerCountry(params);
-                getCollaboratorsByYear(params);
-                getConferencesByYear(params);
+                InitPublicationsByYear(params);
+                InitSubStructures(params);
+                InitWikipediaCategories(params);
+                InitKeytermsByYear(params);
+                InitInternationalCoPublications(params);
+                InitCollaborationsByYear(params);
+                InitConferencesByYear(params);
 
             });
 
@@ -293,7 +286,7 @@ function getTopicsByOrganisation(params) {
 
 }
 
-function getKeywordsByOrganisationYear(params) {
+function InitKeytermsByYear(params) {
     $("#chart-04-title").text("Keywords");
     $("#chart-04").empty();
 
@@ -301,11 +294,10 @@ function getKeywordsByOrganisationYear(params) {
     $.ajax({
         type: "get",
         url: api_urls.publications + "/_search",
-        data: {source: KeywordsByOrganisationYearESQuery(params)},
+        data: {source: KeytermsByYearESQuery(params)},
         success: function (data) {
-            var touchdown = data.aggregations.category.buckets;
+            var touchdown = data.aggregations.keyterm.buckets;
             var parseDate = d3.time.format("%Y-%m-%d").parse;
-console.log(touchdown);
             var xMin = new Date(d3.min(touchdown, function (c) {
                 return d3.min(c.publication_dates.buckets, function (v) {
                     return v.key_as_string;
@@ -386,13 +378,13 @@ console.log(touchdown);
 }
 
 var iso3 = {"BD": "BGD", "BE": "BEL", "BF": "BFA", "BG": "BGR", "BA": "BIH", "BB": "BRB", "WF": "WLF", "BL": "BLM", "BM": "BMU", "BN": "BRN", "BO": "BOL", "BH": "BHR", "BI": "BDI", "BJ": "BEN", "BT": "BTN", "JM": "JAM", "BV": "BVT", "BW": "BWA", "WS": "WSM", "BQ": "BES", "BR": "BRA", "BS": "BHS", "JE": "JEY", "BY": "BLR", "BZ": "BLZ", "RU": "RUS", "RW": "RWA", "RS": "SRB", "TL": "TLS", "RE": "REU", "TM": "TKM", "TJ": "TJK", "RO": "ROU", "TK": "TKL", "GW": "GNB", "GU": "GUM", "GT": "GTM", "GS": "SGS", "GR": "GRC", "GQ": "GNQ", "GP": "GLP", "JP": "JPN", "GY": "GUY", "GG": "GGY", "GF": "GUF", "GE": "GEO", "GD": "GRD", "GB": "GBR", "GA": "GAB", "SV": "SLV", "GN": "GIN", "GM": "GMB", "GL": "GRL", "GI": "GIB", "GH": "GHA", "OM": "OMN", "TN": "TUN", "JO": "JOR", "HR": "HRV", "HT": "HTI", "HU": "HUN", "HK": "HKG", "HN": "HND", "HM": "HMD", "VE": "VEN", "PR": "PRI", "PS": "PSE", "PW": "PLW", "PT": "PRT", "SJ": "SJM", "PY": "PRY", "IQ": "IRQ", "PA": "PAN", "PF": "PYF", "PG": "PNG", "PE": "PER", "PK": "PAK", "PH": "PHL", "PN": "PCN", "PL": "POL", "PM": "SPM", "ZM": "ZMB", "EH": "ESH", "EE": "EST", "EG": "EGY", "ZA": "ZAF", "EC": "ECU", "IT": "ITA", "VN": "VNM", "SB": "SLB", "ET": "ETH", "SO": "SOM", "ZW": "ZWE", "SA": "SAU", "ES": "ESP", "ER": "ERI", "ME": "MNE", "MD": "MDA", "MG": "MDG", "MF": "MAF", "MA": "MAR", "MC": "MCO", "UZ": "UZB", "MM": "MMR", "ML": "MLI", "MO": "MAC", "MN": "MNG", "MH": "MHL", "MK": "MKD", "MU": "MUS", "MT": "MLT", "MW": "MWI", "MV": "MDV", "MQ": "MTQ", "MP": "MNP", "MS": "MSR", "MR": "MRT", "IM": "IMN", "UG": "UGA", "TZ": "TZA", "MY": "MYS", "MX": "MEX", "IL": "ISR", "FR": "FRA", "IO": "IOT", "SH": "SHN", "FI": "FIN", "FJ": "FJI", "FK": "FLK", "FM": "FSM", "FO": "FRO", "NI": "NIC", "NL": "NLD", "NO": "NOR", "NA": "NAM", "VU": "VUT", "NC": "NCL", "NE": "NER", "NF": "NFK", "NG": "NGA", "NZ": "NZL", "NP": "NPL", "NR": "NRU", "NU": "NIU", "CK": "COK", "XK": "XKX", "CI": "CIV", "CH": "CHE", "CO": "COL", "CN": "CHN", "CM": "CMR", "CL": "CHL", "CC": "CCK", "CA": "CAN", "CG": "COG", "CF": "CAF", "CD": "COD", "CZ": "CZE", "CY": "CYP", "CX": "CXR", "CR": "CRI", "CW": "CUW", "CV": "CPV", "CU": "CUB", "SZ": "SWZ", "SY": "SYR", "SX": "SXM", "KG": "KGZ", "KE": "KEN", "SS": "SSD", "SR": "SUR", "KI": "KIR", "KH": "KHM", "KN": "KNA", "KM": "COM", "ST": "STP", "SK": "SVK", "KR": "KOR", "SI": "SVN", "KP": "PRK", "KW": "KWT", "SN": "SEN", "SM": "SMR", "SL": "SLE", "SC": "SYC", "KZ": "KAZ", "KY": "CYM", "SG": "SGP", "SE": "SWE", "SD": "SDN", "DO": "DOM", "DM": "DMA", "DJ": "DJI", "DK": "DNK", "VG": "VGB", "DE": "DEU", "YE": "YEM", "DZ": "DZA", "US": "USA", "UY": "URY", "YT": "MYT", "UM": "UMI", "LB": "LBN", "LC": "LCA", "LA": "LAO", "TV": "TUV", "TW": "TWN", "TT": "TTO", "TR": "TUR", "LK": "LKA", "LI": "LIE", "LV": "LVA", "TO": "TON", "LT": "LTU", "LU": "LUX", "LR": "LBR", "LS": "LSO", "TH": "THA", "TF": "ATF", "TG": "TGO", "TD": "TCD", "TC": "TCA", "LY": "LBY", "VA": "VAT", "VC": "VCT", "AE": "ARE", "AD": "AND", "AG": "ATG", "AF": "AFG", "AI": "AIA", "VI": "VIR", "IS": "ISL", "IR": "IRN", "AM": "ARM", "AL": "ALB", "AO": "AGO", "AQ": "ATA", "AS": "ASM", "AR": "ARG", "AU": "AUS", "AT": "AUT", "AW": "ABW", "IN": "IND", "AX": "ALA", "AZ": "AZE", "IE": "IRL", "ID": "IDN", "UA": "UKR", "QA": "QAT", "MZ": "MOZ"}
-function InitPublicationsPerCountry(params) {
-    $("#chart-08-title").text("International collaborations");
+function InitInternationalCoPublications(params) {
+    $("#chart-08-title").text("International co-publications");
     $("#chart-08").empty();
     $.ajax({
         type: "get",
         url: api_urls.publications + "/_search",
-        data: {source: PublicationsPerCountryESQuery(params)},
+        data: {source: CoPublicationsByCountryESQuery(params)},
         //processData: true, 
         //dataType: "jsonp",
         success: function (data) {
@@ -459,8 +451,8 @@ function InitPublicationsPerCountry(params) {
 
 }
 
-function getCollaborationsByYear(params) {
-    $("#chart-07-title").text("CoPublications");
+function InitCollaborationsByYear(params) {
+    $("#chart-07-title").text("Co-publications");
     $("#chart-07").empty();
 
     $.ajax({
@@ -474,7 +466,7 @@ function getCollaborationsByYear(params) {
             });
             $.ajax({type: "get",
                 url: api_urls.publications + "/_search",
-                data: {source: CollaboratorsByYearESQuery(params)},
+                data: {source: CollaborationsByYearESQuery(params)},
                 //processData: true, 
                 //dataType: "jsonp",
                 success: function (data) {
@@ -487,7 +479,7 @@ function getCollaborationsByYear(params) {
 
                     $.ajax({type: "get",
                         url: api_urls.organisations + "/_search",
-                        data: {source: OrgNamesByOrgId(result)},
+                        data: {source: OrgNamesByOrgIdESQuery(result)},
                         //processData: true, 
                         //dataType: "jsonp",
                         success: function (data) {
@@ -578,7 +570,7 @@ function getCollaborationsByYear(params) {
         }});
 }
 
-function getConferencesByYear(params) {
+function InitConferencesByYear(params) {
     $("#chart-09-title").text("Main conferences");
     $("#chart-09").empty();
     $.ajax({type: "get",
@@ -660,13 +652,13 @@ function getConferencesByYear(params) {
 }
 
 
-InitOrganisationPublicationsPerYear(params);
-getOrganisationSubOrganisations(params);
-getTopicsByOrganisation(params);
-getKeywordsByOrganisationYear(params);
-InitPublicationsPerCountry(params);
-getCollaborationsByYear(params);
-getConferencesByYear(params);
+InitPublicationsByYear(params);
+InitSubStructures(params);
+InitWikipediaCategories(params);
+InitKeytermsByYear(params);
+InitInternationalCoPublications(params);
+InitCollaborationsByYear(params);
+InitConferencesByYear(params);
 
 
 

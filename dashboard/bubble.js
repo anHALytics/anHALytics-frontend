@@ -284,7 +284,7 @@
         return $.ajax({
             type: "get",
             url: api_urls.publications+"/_search",
-            data: {source: IndivPublicationsPerTopicESQuery()},
+            data: {source: PublicationsByTopicESQuery()},
             //processData: true, 
             //dataType: "jsonp",
             success: function (data) {
