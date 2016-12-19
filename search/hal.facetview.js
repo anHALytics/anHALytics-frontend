@@ -1395,7 +1395,7 @@ console.log('checked');
             update(31);
             function update(maxRange) {
                 var minRange = 10;
-                if (maxRange <= minRange)
+                if (maxRange < minRange)
                     minRange = maxRange-1;
                 if (minRange == 0)
                     minRange = 1;
@@ -1410,8 +1410,8 @@ console.log('checked');
                     .fontSize(function (d) { return d.size; })
                     //.on("end", draw)
                     .on("end", function(output) {
-                        if (wordset.length !== output.length) { 
-                            console.log("Recurse!"); 
+                        if ( (wordset.length !== output.length) && (maxRange > 14) ) { 
+                            //console.log("Recurse! " + maxRange); 
                             update(maxRange-5); 
                             return undefined;  
                         } else { 
