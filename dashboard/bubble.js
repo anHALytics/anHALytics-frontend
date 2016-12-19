@@ -1,6 +1,6 @@
 (function () {
     $("#chart-04-title").text("Co-authors");
-    $( "#chart-04-title" ).append( '<div id="view_selection" ><a href="#" id="all">All Co-authors</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" id="topic">Co-authors By Topic</a></div>' );
+    $( "#chart-04-title" ).append( '<div id="view_selection" ><a href="#" id="all">All Co-authors</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" id="topic">Co-authors By Concept</a></div>' );
     var BubbleChart, root,
             __bind = function (fn, me) {
                 return function () {

@@ -287,7 +287,7 @@ function InitWikipediaCategories(params) {
 }
 
 function InitKeytermsByYear(params) {
-    $("#chart-04-title").text("Keywords");
+    $("#chart-04-title").text("Keyterms");
     $("#chart-04").empty();
 
 
