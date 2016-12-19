@@ -203,7 +203,6 @@
                 url: defaults.es_host +"/"+defaults.kb_index+"/"+defaults.organisations_type+"/" + organisationID,
                 //processData: true,
                 success: function (data) {
-                    console.log(data);
                     var names = data._source.names.map(function (a) {
                         return a.name;
                     });
