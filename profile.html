@@ -31,47 +31,35 @@
         </header>
         <div class="container ">
             <div class="profile-content">
-                <h1>
-                    <a href="profile/{{profile['_id']}}" >{{profile['_source'].names[0]['fullname']}}</a>
-                    
-                <a href="individual_dashboard.html?authID={{profile['_id']}}" target="_blank" ><img class="" style="padding-left:5px;padding-top:20px;width:50px;" src="data/images/analytic-icon-14.png"></a>
-                </h1>
+                <div class="row ">
+                           <div class="my-col-8">
+                               <i class="glyphicon glyphicon-user" style="font-size: 5.2em; color:#333;"></i>
+                          
+                               <a href="profile/{{profile['_id']}}" style="font-size: 28px;font-weight: 600;margin: 0 0 10px;">{{profile['_source'].names[0]['fullname']}}</a>
+     
+                           &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info" href="individual_dashboard.html?authID={{profile['_id']}}" target="_blank" ><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Dashboard</button>
+                               </div>
+                <div class="my-col-4"> 
+                                                      
+    
+                </div>
+                </div>
                 <div class="row ">
                     <div class="my-col-4 sidebar">
                         <div class="profile-unit">
-                            <img class="" ng-if="!profile['_source']['photo']" src="data/images/default.jpg">
-                            <img class="" ng-if="profile['_source']['photo']" src="http://{{profile['_source']['photo']}}">
-
-<!--                            <ul class="ra-list no-marker">
-                                <li>Research Area(s)
-                                </li>
-                                <li ng-repeat="interest in interests track by $index">
-                                    <a href="https://en.wikipedia.org/wiki/{{interest}}" target="_blank">{{interest}}</a>
-                                </li>
-                                
-                            </ul>-->
-                        </div>
-<!--                        <div>
-                            <a href="profile/personname/citations" >
-                                <div >0 Citations</div>
-                            </a> 
-                        </div>-->
-                    </div>
-
-
-                    <div class="my-col-8 mainbar">
 
 
                         <div>  
                                 <div> 
-                                            <i style="width: 20px;" class="fa fa-institution">
-                            </i><a href="institution.html?orgID={{profile['_source']['affiliations'][profile['_source']['affiliations'].length -1]['organisationId']}}" title="{{profile['_source']['affiliations'][profile['_source']['affiliations'].length -1]['names'][0].name}}" target="_blank"> 
+                               <i style="width: 20px;" class="fa fa-institution">
+                            </i>
+                                    <a href="institution.html?orgID={{profile['_source']['affiliations'][profile['_source']['affiliations'].length -1]['organisationId']}}" title="{{profile['_source']['affiliations'][profile['_source']['affiliations'].length -1]['names'][0].name}}" target="_blank"> 
                                 {{profile['_source']['affiliations'][profile['_source']['affiliations'].length -1]['names'][0].name}}
-                                    </a> 
+                                    <span ng-if="profile['_source']['affiliations'][0]['address']"> 
+                                    - {{profile['_source']['affiliations'][0]['address']['settlement']}} - {{profile['_source']['affiliations'][0]['address']['country']}}
+                                </span></a> 
                                 </div>   
-                                <div ng-if="profile['_source']['affiliations'][0]['address']"> 
-                                    {{profile['_source']['affiliations'][0]['address']['settlement']}} - {{profile['_source']['affiliations'][0]['address']['country']}}
-                                </div>  
+                                 
                         </div>
                         <div ng-if="profile['_source']['phone']">  
                             <i style="width: 20px;" class="fa fa-phone"></i>
@@ -85,11 +73,9 @@
                             <span >{{profile['_source']['email']}} </span>
                         </div>
                         
-                        <div ng-if="profile['_source']['identifers']">  
-                            <i style="width: 20px;" class="fa fa-info">
-
-                            </i><!--span.txt-color-darken {{ profile.contact.email }}-->
-                            <span ng-repeat="identifier in profile['_source']['identifers']"><strong>{{identifier.type}}</strong> : {{identifier.id}}, </span>
+                        <div ng-if="profile['_source']['identifers']">
+                            <div ng-repeat="identifier in profile['_source']['identifers']">
+                                <span ng-if="identifier.type!=='halAuthorId'"><strong>{{identifier.type}}</strong> : {{identifier.id}}</span></div>
                         </div>
 
                         <div ng-if="profile['_source']['url']"> 
@@ -98,10 +84,15 @@
                                 </i>
                                 <a href="{{profile['_source']['url']}}" >{{profile['_source']['url']}}</a>
                         </div>
+                        </div>
+                    </div>
+
+
+                    <div class="my-col-4 mainbar">
 
                         <div class="profile-research-interests">
-                            <h2 >Domains
-                            </h2>
+                            <h4>Wikipedia Categories
+                            </h4>
 
                             <ul>  
                                 <li ng-repeat="interest in interests track by $index">
@@ -112,16 +103,16 @@
                                 </li>
                             </ul>
                         </div>
-
+                        </div>
+<div class="my-col-4 mainbar">
                         <div class="profile-keywords">
-                            <h2 >Keywords
-                            </h2>
+                            <h4>Keywords
+                            </h4>
 
                             <ul  >  
                                 <li ng-repeat="keyword in keywords track by $index">
                                     <div > 
-                                        <a href="" > {{keyword}} 
-                                        </a> 
+                                        {{keyword}} 
                                     </div>                                                      
                                 </li>
                             </ul>
@@ -133,7 +124,7 @@
                 <div class="row ">
                     <div class="my-col-4 sidebar">
                         <h2> Co-authors
-                            <a href="">View all</a> 
+<!--                            <a href="">View all</a> -->
                         </h2>
                         <div>
                             <ul>
@@ -141,7 +132,6 @@
 
                                     <div > 
                                         <a href="profile.html?authorID={{coauthor['personId']}}"> 
-                                            <img  src="data/images/profile_default_s.jpg" /> 
                                         </a>   
                                         <a href="profile.html?authorID={{coauthor['personId']}}">{{coauthor.names[0]['fullname']}}</a>
                                     </div>    
@@ -156,9 +146,9 @@
                         <div class="profile-publications">
                             <h2>Publications
 
-                                <a href="profile/personname/publications"> {{profile['_source']['publications'].length}} </a>
+                                ({{profile['_source']['publications'].length}})
 
-                                <a href="">View all</a> 
+<!--                                <a href="">View all</a> -->
                             </h2>
 
                             <ul class="pub-list">

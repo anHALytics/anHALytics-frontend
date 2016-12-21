@@ -268,7 +268,8 @@ span {word-break:normal;}
     margin-top: 30px;
     margin: auto;
     width: 1170px;
-    font-family: Roboto,Helvetica,Arial,sans-serif;
+    color: #2e414f;
+    font-family: helvetica neue,helvetica,arial,sans-serif;
     background-color: white;
 }
 
@@ -322,10 +323,6 @@ span {word-break:normal;}
 .profile-research-interests{
     border-top: 1px solid #ddd;
 }*/
-
-.profile-keywords{
-    border-top: 1px solid #ddd;
-}
 
 .co-author {
     float: left;

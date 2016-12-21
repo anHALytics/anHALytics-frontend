@@ -160,7 +160,7 @@ div.application .return-link:hover,
 .line {
   fill: none;
   stroke: white;
-  stroke-width: 1px;
+  stroke-width: 0.8px;
 }
 
 .tooltip {
