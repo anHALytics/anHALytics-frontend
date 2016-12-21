@@ -535,13 +535,13 @@ function InitCollaborationsByYear(params) {
                                 }
                             }
                             var layout = {showlegend: true,
-                                legend: {font: {
+                                legend: {"orientation": "h",font: {
       family: 'sans-serif',
-      size: 9,
+      size: 10,
       color: '#000'
     }},
                                 width: 800,
-                                height: 400,
+                                height: 600,
                                 barmode: 'stack', xaxis: {anchor: "y", gridcolor: "rgba(255,255,255,1)", tickcolor: "rgba(51,51,51,1)", tickfont: {
                                         color: "rgba(77,77,77,1)",
                                         family: "",
