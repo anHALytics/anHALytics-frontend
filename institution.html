@@ -31,27 +31,29 @@
 
         <div class="container">
             <div class="institution-content">
-                    
-                    <h1><a>
-                                {{organisation['_source']['names'][0].name}}
+                     <div class="row ">
+                         <div class="my-col-8">
+                             <a style="font-size: 28px;font-weight: 600;margin: 0 0 10px;">
+                                {{organisation['_source']['names'][organisation['_source']['names'].length - 1].name}}
                             </a>
-                        <a href="organisation_dashboard.html?orgID={{organisation['_id']}}" target="_blank" ><img class="" style="padding-left:5px;padding-top:20px;width:50px;" src="data/images/analytic-icon-14.png"></a>
+                        &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info"  href="organisation_dashboard.html?orgID={{organisation['_id']}}" target="_blank"  ><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Dashboard</button>
                         
-                        </h1> 
+                        </div>
+                    </div>
                 <div class="row "></div> 
                 <div class="row "> 
                     <div class="my-col-4 sidebar">
                         
                         <ul >
-                            <li ng-if="organisation['_source']['identifers']"> 
+<!--                            <li ng-if="organisation['_source']['identifers']"> 
                                 <div ng-repeat="identifier in organisation['_source']['identifers']"> 
                                     {{identifier.type}} :  {{identifier.id}}
                                 </div>   
-                            </li>
+                            </li>-->
                             
                             <li ng-if="organisation['_source']['address']"> 
                                 <div > 
-                                    {{organisation['_source']['address']['addrLine']}}, {{organisation['_source']['address']['postCode']}}, {{organisation['_source']['address']['settlement']}}, {{organisation['_source']['address']['country']}}
+                                    <span ng-if="organisation['_source']['address']['addrLine']">{{organisation['_source']['address']['addrLine']}}</span><span ng-if="organisation['_source']['address']['postCode']">, {{organisation['_source']['address']['postCode']}}</span> <span ng-if="organisation['_source']['address']['settlement']"> ,{{organisation['_source']['address']['settlement']}}, </span> <span ng-if="organisation['_source']['address']['country']"> {{organisation['_source']['address']['country']}}</span>
                                 </div>   
                             </li>
 
@@ -82,7 +84,7 @@
                         <div class="row "> 
                             <div class="col-md-6" style="text-align: center;"> 
                                 <h3>
-                                    <a href="institution/University_Name/department/School_of_Medicine/publications">
+                                    <a href="">
                                         {{publicationsCount}}
                                     </a>
                                     Publications
@@ -91,7 +93,7 @@
 
                             <div class="col-md-6" style="text-align: center;"> 
                                 <h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                                    {{organisation['_source']['authors'].length}}  Authors
+                                    {{authorsCount}}  Authors
                                 </h3>
                             </div>
                         </div>
@@ -100,16 +102,17 @@
                 <div class="row ">
 
                     <div class="my-col-4 sidebar">
-                        <h2>Departments <small> 
+                        <h2>Related organisations 
+<!--                            <small> 
                                 <a href="institution/{{organisation['_source']['organisationId']}}/departments">View all</a> 
-                            </small> 
+                            </small> -->
                         </h2>
 
-                        <div  ng-repeat="relation in organisation['_source']['relations']"> 
+                        <div  ng-repeat="relation in organisation['_source']['allrelations']"> 
                             <div > 
                                 <div > 
                                     <a href="institution.html?orgID={{relation['organisationId']}}">
-                                        {{relation['names'][0].name}} - {{organisation['_source']['authors'].length}} Members
+                                        {{relation['names'][0].name}}
                                         </a> 
                                 </div>
                             </div> 
@@ -139,7 +142,8 @@
                 </div>
 
                 <div class="row ">
-                    <div class="my-col-4 sidebar"><div class="institution-top-collaborations">
+                    <div class="my-col-4 sidebar">
+<!--                        <div class="institution-top-collaborations">
                             <h4 style="text-transform: uppercase;">
                                 <strong>Top Collaborating Institutions
                                 </strong>
@@ -161,7 +165,8 @@
                                 have collaborated with. 
                             </div>
 
-                        </div></div>
+                        </div>-->
+                    </div>
 
                     <div class="my-col-8 mainbar">
 

@@ -1,4 +1,16 @@
 (function () {
+    
+    function compare(a,b) {
+    var d1 = Date.parse(a.date);
+var d2 = Date.parse(b.date);
+  if ( d1 < d2)
+    return -1;
+  if (d1 > d2)
+    return 1;
+  return 0;
+}
+
+
     var app = angular.module('institution', ['elasticsearch']);
 
 
@@ -30,9 +42,26 @@
 
         }).then(function (response) {
             $scope.organisation = response.hits.hits[0];
+            $scope.organisation._source.names.sort(compare)
             $scope.loadPulications();
+            $scope.loadAuthors();
                });
             
+        $scope.loadAuthors = function () {client.search({
+            index: defaults.kb_index,
+            type: defaults.authors,
+            body: {
+                "query":
+                        {"match": {"affiliations.organisationId": url_options.orgID}
+                        }
+
+            }
+
+        }).then(function (response) {
+           $scope.authorsCount = response.hits.total;
+        });
+        }
+        
         $scope.loadPulications = function () {client.search({
             index: defaults.kb_index,
             type: defaults.publications_type,
@@ -49,7 +78,7 @@
         }).then(function (response) {
             $scope.publications = [];
             $scope.publicationsCount = response.hits.total;
-            for (var i = 0; i < $scope.organisation['_source']['documents'].length; i++) {
+            for (var i = 0; i < response.hits.total; i++) {
                 if (i % $scope.numPerPage === 0) {
                     $scope.pagedItems[Math.floor(i / $scope.numPerPage)] = [response.hits.hits[i]];
                 } else {
@@ -65,8 +94,6 @@
                 }
                 $scope.loadPulicationsAbstracts();
         });
-            
-     
         }
 
 
@@ -79,8 +106,10 @@
         };
 
         $scope.nextPage = function () {
+            console.log($scope.pagedItems.length);
             if ($scope.currentPage < $scope.pagedItems.length - 1) {
                 $scope.currentPage++;
+                console.log($scope.currentPage);
                 $scope.loadPulications();
             }
         };
