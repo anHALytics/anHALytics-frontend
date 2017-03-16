@@ -8,7 +8,7 @@ var displayTitleAnnotation = function (titleID) {
             // annotations for the title
             var index = $(this).attr('pos');
             var titleID = $(this).attr('rel');
-            var localQuery = {"query": {"filtered": {"query": {"term": {"_id": titleID}}}}};
+            var localQuery = {"query": {"bool": {"must": {"term": {"_id": titleID}}}}};
             $.ajax({
                 type: "post",
                 url: options.es_host+"/"+options.nerd_annotation_index+"/_search?",
@@ -28,7 +28,7 @@ var displayAbstractAnnotation = function (abstractID) {
         // annotations for the abstract
         var index = $(this).attr('pos');
         var titleID = $(this).attr('rel');
-        var localQuery = {"query": {"filtered": {"query": {"term": {"_id": abstractID}}}}};
+        var localQuery = {"query": {"bool": {"must": {"term": {"_id": abstractID}}}}};
 
         $.ajax({
             type: "post",
@@ -53,7 +53,7 @@ var displayKeywordAnnotation = function (keywordIDs) {
             // annotations for the keywords
             var index = $(this).attr('pos');
             var keywordID = $(this).attr('rel');
-            var localQuery = {"query": {"filtered": {"query": {"term": {"_id": keywordID}}}}};
+            var localQuery = {"query": {"bool": {"must": {"term": {"_id": keywordID}}}}};
 
             $.ajax({
                 type: "post",

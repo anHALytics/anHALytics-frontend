@@ -495,7 +495,7 @@ var buildrecord = function (index, node) {
     // load biblio and abstract info. 
     // pos attribute gives the result index, rel attribute gives the document ID 
     // abstract and further informations
-    var localQuery = {"fields": [abstract_metadata.the_id, 
+    var localQuery = {"stored_fields": [abstract_metadata.the_id, 
             abstract_metadata.repositoryDocId,
             abstract_metadata.abstract_en, 
             abstract_metadata.abstract_fr, 
@@ -504,7 +504,8 @@ var buildrecord = function (index, node) {
             abstract_metadata.keywordsid,
             abstract_metadata.keywords
         ],
-        "query": {"filtered": {"query": {"term": {"_id": id}}}}};
+        //"query": {"filtered": {"query": {"term": {"_id": id}}}}};
+        "query": {"bool": {"must": {"term": {"_id": id}}}}};
     $.ajax({
         //type: "get",
         type: "POST",

@@ -1646,6 +1646,11 @@ console.log('checked');
             $('#disambiguation_panel').show();
         };
 
+
+        // ===============================================
+        // main search methods
+        // ===============================================
+
         // execute a search
         var dosearch = function () {
 
@@ -1784,14 +1789,14 @@ must <span class="caret"></span>\
 </ul>\
 <button type="button" id="disambiguate{{NUMBER}}" class="btn btn-default" disabled="true">Disambiguate</button>\
 </div>\
-<div class="btn-group" style="margin-left:20px;">\
+<div class="btn-group" style="margin-left:15px;">\
 <button class="btn btn-default" id="facetview_fieldbuttons{{NUMBER}}" href="" type="button"><i class="glyphicon glyphicon-plus" style="vertical-align:middle;margin-right:0px;margin-bottom:2px;"></i></button>\
 </div>\
 <div class="btn-group">\
 <button class="btn btn-default" id="close-searchbar{{NUMBER}}" href="" type="button"><i class="glyphicon glyphicon-minus" style="vertical-align:middle;margin-right:0px;margin-bottom:4px;"></i></button>\
 </div>\
+<button type="button" id="quantities{{NUMBER}}" class="btn btn-default" style="margin-left:15px;">Quantities</button>\
 </div>';
-
 
         var keyPress = function (e) {
 
@@ -1858,6 +1863,7 @@ must <span class="caret"></span>\
             if (!options.use_delay)
                 $("#facetview_freetext1").keyup(keyPress);
             $('#disambiguate1').click(disambiguateNERD);
+            $('#quantities1').click(quantitiesPanel);
             
             $("#facetview_fieldbuttons1").on("click", function () {
                 var cloneIndex = $(".clonedDiv").length + 1;
@@ -1882,6 +1888,7 @@ must <span class="caret"></span>\
                     $("#facetview_freetext" + cloneIndex).keyup(keyPress);
 
                 $('#disambiguate' + cloneIndex).click(disambiguateNERD);
+                $('#quantities' + cloneIndex).hide();
 
                 $('#close-searchbar'+cloneIndex).click(function () {
                     // grab the index number 

@@ -34,7 +34,7 @@ var elasticSearchSearchQuery = function () {
         textFieldsNPLReturned.push(record_metadata[key]);
     }
 
-    qs['fields'] = textFieldsNPLReturned;
+    qs['stored_fields'] = textFieldsNPLReturned;
 
     // simple query mode	
     $('.facetview_filterselected', obj).each(function () {
@@ -94,37 +94,22 @@ var elasticSearchSearchQuery = function () {
     }
 
     if (bool) {
-        // $('#facetview_freetext').val() != ""
-        //    ? bool['must'].push( {'query_string': { 'query': $('#facetview_freetext').val() } } )
-        //    : "";
-        var obj = {'query': {}};
+        //var obj = {'query': {}};
         var obj2 = {'bool': bool};
 
-        /*if (nested) {
-         // case nested documents are queried 
-         obj['query'] = obj2;
-         // when nested documents are for the classes
-         obj['path'] = '$teiCorpus.$teiCorpus.$teiHeader.$profileDesc.$textClass';
-         // other cases in the future here...
-         
-         var obj3 = {'nested': obj};
-         var obj4 = {'filter': obj3};
-         }
-         else*/
-        //{
         // case no nested documents are queried
-        obj['query'] = obj2;
-        var obj4 = {'filter': obj};
+        //obj['query'] = obj2;
+        var obj4 = {'filter': obj2};
         //}
 
         if ($('#facetview_freetext1').val() == "") {
-            obj4['query'] = {'match_all': {}};
+            obj4['must'] = {'match_all': {}};
             qs['sort'] = [date];
         } else {
             //obj4['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}};
             var thenum;
-            var obj3 = {'bool': {'should': [],
-                    'must': [], 'must_not': []}};
+            /*var obj3 = {'bool': {'should': [],
+                    'must': [], 'must_not': []}};*/
             var rule;
             var field;
 
@@ -144,14 +129,21 @@ var elasticSearchSearchQuery = function () {
                         obj6['query_string'] = {'default_field': abstract_metadata.keywords, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                     else if (field == "author")
                         obj6['query_string'] = {'default_field': record_metadata.author_fullname, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
-                    if (rule == "should") {
-                        obj3['bool']['should'].push(obj6);
-                    } else if (
-                            rule = "must") {
-                        obj3['bool']['must'].push(obj6);
-
-                    } else if (rule = "must_not") {
-                        obj3['bool']['must_not'].push(obj6);
+                    if (rule === "should") {
+                        //obj3['bool']['should'].push(obj6);
+                        if (!obj4['should'])
+                            obj4['should'] = [];
+                        obj4['should'].push(obj6);
+                    } else if (rule === "must") {
+                        if (!obj4['must'])
+                            obj4['must'] = [];
+                        //obj3['bool']['must'].push(obj6);
+                        obj4['must'].push(obj6);
+                    } else if (rule === "must_not") {
+                        if (!obj4['must_not'])
+                            obj4['must_not'] = [];
+                        //obj3['bool']['must_not'].push(obj6);
+                        obj4['must_not'].push(obj6);
                     }
                     queried_fields.push(obj6['query_string']['default_field']);
                     
@@ -160,10 +152,9 @@ var elasticSearchSearchQuery = function () {
                     //
                 }
             });
-            obj4['query'] = obj3;
+            //obj4['query'] = obj3;
         }
-        qs['query'] = {'filtered': obj4};
-        //qs['query'] = {'bool': bool}
+        qs['query'] = {'bool': obj4};
     } else {
         var thenum;
         var obj3 = {'bool': {'should': [],
@@ -207,19 +198,19 @@ var elasticSearchSearchQuery = function () {
                         obj6['query_string'] = {'default_field': record_metadata.author_fullname, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 if (rule == "should") {
                     obj3['bool']['should'].push(obj6);
-                } else if (
-                        rule = "must") {
+                } else if (rule == "must") {
                     obj3['bool']['must'].push(obj6);
 
-                } else if (rule = "must_not") {
+                } else if (rule == "must_not") {
                     obj3['bool']['must_not'].push(obj6);
                 }
 
                 if(obj6['query_string']['default_field'])
-                queried_fields.push(obj6['query_string']['default_field']);
-            else if(obj6['query_string']['fields'])
-                for (var item in obj6['query_string']['fields']) {
-                    queried_fields.push(obj6['query_string']['fields'][item]);
+                    queried_fields.push(obj6['query_string']['default_field']);
+                else if(obj6['query_string']['fields']) {
+                    for (var item in obj6['query_string']['fields']) {
+                        queried_fields.push(obj6['query_string']['fields'][item]);
+                    }
                 }
                 //obj6['match'][ record_metadata.title ] = $('#facetview_freetext' + thenum).val();
                 //obj6['match'][ 'default_operator' ] = 'AND';

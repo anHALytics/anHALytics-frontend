@@ -3,13 +3,19 @@ var defaults = {
     host_nerd: "cloud.science-miner.com",
     port_nerd: "",
 
+     // grobid-quantities
+    host_quantities: "localhost",
+    port_quantities: "8060",
+
     // proxy
     service: "local", // access to service can be local or proxy, depending on security requirements
     proxy_host: "",
     
     // elasticsearch
     es_host : 'http://localhost:9200',
+//    es_host : 'http://traces2.saclay.inria.fr',
     fulltext_index: 'anhalytics_fulltextteis', // the URL against which to submit searches
+//    fulltext_index: 'quantities', // the URL against which to submit searches
     nerd_annotation_index: 'annotations_nerd',
     kb_index: 'anhalytics_kb',
     authors_type: 'authors',

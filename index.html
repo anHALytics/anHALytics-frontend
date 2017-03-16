@@ -50,6 +50,8 @@
         <script type="text/javascript" src="js/recordBuild.js"></script>
         <script type="text/javascript" src="js/extension.js"></script>
         <script type="text/javascript" src="js/modals.js"></script>
+        <script type="text/javascript" src="js/quantities.js"></script>
+        <script type="text/javascript" src="data/units.json"></script>
         <!--script type="text/javascript" src="js/disambiguation.js"></script-->
         <script type="text/javascript">
             var options = $.extend(defaults, {
@@ -101,6 +103,7 @@
                 <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a href="index.html?mode_query=simple"><img src="data/images/LogoAnhalitycs.png" style="padding-left:5px;padding-top:17px;width:1000px;"></a></div>
                 <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a href="https://www.inria.fr" target="_blank"><img src="data/images/logo_INRIA_fr.png"  style="padding-left:40px;padding-top:10px;width:190px;"></a></div>
                 <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a href="https://hal.archives-ouvertes.fr/" target="_blank"><img src="data/images/hal.logo.png"  style="padding-left:40px;padding-top:12px;width:135px;"></a></div>
+                <div class="col-md-2 col-sm-3 col-xs-3 no-padding"><a href="http://www.istex.fr/" target="_blank"><img src="data/images/logo-istex.png"  style="padding-left:0px;padding-top:22px;width:120px;"/></a></div>
                 <div class="col-lg-4 col-md-5 col-sm-5 col-xs-4 no-padding"></div>
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-4 pull-right no-padding">
                     <small><span style="padding-left:40px;color:#AE0C0C;position:relative; float:right;">
@@ -146,6 +149,7 @@
                             <div style="clear:both;margin-left:-20px;" id="facetview_selectedfilters"></div>
                             <div class="row" id="results_summary"></div>
                             <div class="row" id="disambiguation_panel"></div>
+                            <div class="row" id="quantities_panel"></div>
                             <table class="row table" style="margin-bottom:0px; border-radius:25px;-moz-border-radius:25px;" id="facetview_results"></table>
                             <div class="row table" id="facetview_metadata"></div>
                         </div>
@@ -157,7 +161,7 @@
         </div>
 
         <footer>
-            <p class="small text-muted">&copy; The contributors - 2016 </p>
+            <p class="small text-muted">&copy; The contributors - 2017 </p>
         </footer>
     </body>
 </html>
