@@ -158,9 +158,13 @@ var parseQuantities = function(ind) {
 	else if (mode == 'form') {
 		// case type and unit are specified with the form
 
+		queryString = '{ "from" : "' + $('#quantities_freetext_from'+ind).val() + 
+					'", "to" : "' + $('#quantities_freetext_to'+ind).val() + 
+					'", "type" : "'+ $('#selected-measurement-type'+ind).text() +
+					'", "unit": "' + $('#selected-unit'+ind).text()+ '" }';
+
 		// case unit unspecified with the form
 
-		//queryString = '{ "from" : "' +  + '" }';
 
 		service = 'parseMeasure';
 	}
@@ -177,14 +181,14 @@ var parseQuantities = function(ind) {
         url: urlQuantities,
 //              contentType: 'application/json',
 //              contentType: 'charset=UTF-8',
-        dataType: 'jsonp',
+        dataType: 'json',
 //        dataType: "text",
 //              data: { text : encodeURIComponent(queryText) },
         data: queryString,
 //              data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
         success: showexpandQuantities
     });
-}	
+}
 
 var showexpandQuantities = function(sdata) {
 	if (!sdata) {
