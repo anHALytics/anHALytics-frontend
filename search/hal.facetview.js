@@ -1583,6 +1583,210 @@ console.log('checked');
         };
 
         // ===============================================
+        // quantities
+        // ===============================================
+
+        // the quantity search object built from the user input
+        var quantitySearch = {};
+
+        var modeQuantity = 'form'; // one of form, free or text
+
+        var quantitiesPanel = function () {
+            initUnitMap();
+            var piece = '<div class="well col-md-11" style="background-color:#F7EDDC;">';
+            piece += '<div style="width:50%;margin-top:-5px;margin-bottom:10px;"><b>Quantity search</b> - <a style="font-weight:bold;" id="quantities-form" href="#">form</a> - ' + 
+                '<a id="quantities-free" href="#">free query</a> - <a id="quantities-text" href="#">text</a></div>'
+            piece += '<div id="bar1"/>';
+            piece += '<div id="parse-result1"/>';
+            piece += '</div>';
+            piece += '<div class="col-md-1"><a id="close-quantities-panel" onclick=\'$("#quantities_panel").hide()\'>'+
+                '<span class="glyphicon glyphicon-remove" style="color:black;"></span></a></div>';
+            $('#quantities_panel').html(piece);
+            initFormDisplay(1);
+            $('#quantities_panel').show();
+            $('#close-quantitiesbar1').hide();
+
+            // bind form, free and text input selection
+            $('#quantities-form').on('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                initFormDisplay(1);
+                $('#close-quantitiesbar1').hide();
+                $('#quantities-form').css("font-weight", "bold");
+                $('#quantities-free').css("font-weight", "normal");
+                $('#quantities-text').css("font-weight", "normal");
+                modeQuantity = 'form';
+                return false;
+            });
+            $('#quantities-free').on('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                initFreeFieldDisplay(1);
+                $('#close-freebar1').hide();
+                $('#quantities-form').css("font-weight", "normal");
+                $('#quantities-free').css("font-weight", "bold");
+                $('#quantities-text').css("font-weight", "normal");
+                modeQuantity = 'free';
+                return false;
+            });
+            $('#quantities-text').on('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                $('#bar1').html(quantitiesSearchFreeText);
+                $('#quantities-form').css("font-weight", "normal");
+                $('#quantities-free').css("font-weight", "normal");
+                $('#quantities-text').css("font-weight", "bold");
+                modeQuantity = 'text';
+                return false;
+            });
+        }
+
+        var initFormDisplay = function(ind) {
+            $('#bar'+ind).html(quantitiesSearchForm.replace(/{{NUMBER}}/gi, ind));
+            //$('#close-quantitiesbar'+ind).hide();
+            $('#quantities_fieldbuttons'+ind).click(addQuantitiesSearchBar);
+
+            // inject multi-choice selector information
+            Object.keys(quantitiesTypesUnits).forEach(function(key) {
+                $('.measurement-fields'+ind).append('<li><a href="#" id="measurement-fields'+ind+'-'+key+'">'+key.toLowerCase().replace(/_/g," ")+'</a></li>');
+                $('#measurement-fields'+ind+'-'+key).on("click", function(e) {
+                    //console.log($(this).text());
+                    $('#selected-measurement-type'+ind).html($(this).text()+' <span class="caret"></span>');
+                    var units = quantitiesTypesUnits[$(this).text().toUpperCase().replace(/ /g,"_")];
+                    $('.unit-fields'+ind).empty();
+                    for(var i in units) {
+                        $('.unit-fields'+ind).append('<li><a href="#" id="unit-fields'+ind+'-'+i+'">'+units[i].replace(/_/g," ")+'</a></li>');
+                        $('.unit-fields'+ind+' li > a').on("click", function(e) {
+                            $('#selected-unit'+ind).html($(this).text()+' <span class="caret"></span>');
+                            return false;
+                        });
+                    }
+                    return false;
+                });
+            });
+
+            $('#parse'+ind).on('click', function() { 
+                var num = $(this).attr("id").match(/\d+/)[0];
+                parseQuantities(num);
+            });
+            $('#quantities_freetext_from'+ind).bind('keyup', checkParseButton);
+            $('#quantities_freetext_to'+ind).bind('keyup', checkParseButton);
+
+            // bind disambiguate button for substance
+            $('disambiguate_substance'+ind).click(disambiguateSubstance);
+            $('#quantities_freetext_substance'+ind).bind('keyup', checkDisambiguateSubstanceButton);
+            return false;
+        }
+
+
+        // call grobid quantities to parse currently inputed quantity query
+        var parseQuantities = function(ind) {
+            // create structure to be sent to grobid-quantities
+            var queryString;
+            var service = {};
+            if (modeQuantity == 'text') {
+                queryString = '{ "text" : "' + $('#quantities_text').val() + '" }';
+                service = 'processQuantityText';
+            }
+            else if (modeQuantity == 'free') {
+                queryString = { 'text' : $('#quantities_freetext'+ind).val() };
+                service = 'processQuantityText';
+            }
+            else if (modeQuantity == 'form') {
+                // case type and unit are specified with the form
+
+                queryString = '{ "from" : "' + $('#quantities_freetext_from'+ind).val().trim() + 
+                            '", "to" : "' + $('#quantities_freetext_to'+ind).val().trim() + 
+                            '", "type" : "'+ $('#selected-measurement-type'+ind).text().trim() +
+                            '", "unit": "' + $('#selected-unit'+ind).text().trim() + '" }';
+
+                // case unit unspecified with the form
+
+                service = 'parseMeasure';
+            }
+
+            var urlQuantities = "http://" + options.host_quantities;
+            if (urlQuantities.endsWith("/"))
+                urlQuantities = urlQuantities.substring(0,urlQuantities.length()-1);
+            if ((!options.port_quantities) || (options.port_quantities.length == 0))
+                urlQuantities += options.port_quantities + "/" + service;
+            else
+                urlQuantities += ":" + options.port_quantities + "/" + service;
+            $.ajax({
+                type: "POST",
+                url: urlQuantities,
+        //              contentType: 'application/json',
+        //              contentType: 'charset=UTF-8',
+                dataType: 'json',
+        //        dataType: "text",
+        //              data: { text : encodeURIComponent(queryText) },
+                data: queryString,
+        //              data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
+                success: showexpandQuantities
+            });
+        }
+
+        var showexpandQuantities = function(sdata) {
+            if (!sdata) {
+                return;
+            }
+            console.log(sdata);
+
+            // we create a filter corresponding to the parsed measurement
+            console.log('do quantity filter');
+            //var rel = $('#facetview_rangerel').html();
+            //var range = $('#facetview_rangechoices').html();
+
+            var type; // mesure type, e.g. length, mass
+            var range; // atomicvalue or inteval range
+            var normalizedUnit; // unit in which the range is expressed 
+            var from_, to_, value_; // the values to be propagated to the query
+            if (sdata.measurements) {
+                if (sdata.measurements[0].quantityLeast) {
+                    type = sdata.measurements[0].quantityLeast.type;
+                    range = sdata.measurements[0].quantityLeast.normalizedQuantity;
+                    normalizedUnit = sdata.measurements[0].quantityLeast.normalizedUnit.name;
+                    from_ = sdata.measurements[0].quantityLeast.normalizedQuantity;
+                }  
+                if (sdata.measurements[0].quantityMost) {
+                    type = sdata.measurements[0].quantityMost.type;
+                    if (range.length == 0)
+                        range = sdata.measurements[0].quantityMost.normalizedQuantity; 
+                    else
+                        range += '-' + sdata.measurements[0].quantityMost.normalizedQuantity;
+                    normalizedUnit = sdata.measurements[0].quantityMost.normalizedUnit.name;
+                    to_ = sdata.measurements[0].quantityMost.normalizedQuantity;
+                } 
+                if (sdata.measurements[0].quantity) {
+                    type = sdata.measurements[0].quantity.type;
+                    range = sdata.measurements[0].quantity.normalizedQuantity; 
+                    normalizedUnit = sdata.measurements[0].quantity.normalizedUnit.name;
+                    value_ = sdata.measurements[0].quantity.normalizedQuantity; 
+                }
+            }
+            
+            var newobj = '<a class="facetview_filterselected quantitiesrange facetview_clear ' +
+                    'btn btn-warning" rel="' + type +
+                    '" alt="remove" title="remove"' +
+                    '" href="#';
+            if (from_)
+                newobj += '" from="' + from_;
+            if (to_)
+                newobj += '" to="' + to_;
+            if (value_)
+                newobj += '" value="s' + value_;
+            newobj += '">' + type + ': ' + 
+                range + ' ' + normalizedUnit + ' <i class="glyphicon glyphicon-remove"></i></a>';
+            $('#facetview_selectedfilters').append(newobj);
+            $('.facetview_filterselected').unbind('click', clearfilter);
+            $('.facetview_filterselected').bind('click', clearfilter);
+            //$('#facetview_rangemodal').modal('hide');
+            //$('#facetview_rangemodal').remove();
+            options.paging.from = 0;
+            dosearch();
+        }
+
+        // ===============================================
         // disambiguation
         // ===============================================
 

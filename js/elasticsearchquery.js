@@ -35,12 +35,28 @@ var elasticSearchSearchQuery = function () {
     }
 
     qs['stored_fields'] = textFieldsNPLReturned;
+    var quantitiesClauses = [];
 
     // simple query mode	
     $('.facetview_filterselected', obj).each(function () {
         // facet filter for a range of values
         !bool ? bool = {'must': []} : "";
-        if ($(this).hasClass('facetview_facetrange')) {
+        if ($(this).hasClass('quantitiesrange')) { 
+            // prepare the quantity query
+            var rel = $(this).attr('rel');
+            var from_ = $(this).attr('from');
+            var to_ = $(this).attr('to');
+            var rngs = {
+                'gte': "" + from_,
+                'lte': "" + to_,
+                'relation': 'intersects'
+            };
+            var objj = {};
+            objj['$teiCorpus.$standoff.$quantities.' + rel] = rngs;
+            var obj2 = {};
+            obj2['range'] = objj;
+            quantitiesClauses.push(obj2);
+        } else if ($(this).hasClass('facetview_facetrange')) {
             var rel = options.aggs[ $(this).attr('rel') ]['field'];
             //var from_ = (parseInt( $('.facetview_lowrangeval', this).html() ) - 1970)* 365*24*60*60*1000;
             //var to_ = (parseInt( $('.facetview_highrangeval', this).html() ) - 1970) * 365*24*60*60*1000 - 1;
@@ -81,8 +97,10 @@ var elasticSearchSearchQuery = function () {
             bool['must'].push(obj);
             filtered = true;
         }
+        
     });
 
+console.log(quantitiesClauses);
 
     for (var item in options.predefined_filters) {
         // predefined filters to apply to all search and defined in the options
@@ -103,7 +121,14 @@ var elasticSearchSearchQuery = function () {
         //}
 
         if ($('#facetview_freetext1').val() == "") {
-            obj4['must'] = {'match_all': {}};
+            if (quantitiesClauses.length == 0)
+                obj4['must'] = {'match_all': {}};
+            else {
+                obj4['must']= [];
+                for(var i in quantitiesClauses) {
+                    obj4['must'].push(quantitiesClauses[i]);
+                }
+            } 
             qs['sort'] = [date];
         } else {
             //obj4['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}};
@@ -153,6 +178,11 @@ var elasticSearchSearchQuery = function () {
                 }
             });
             //obj4['query'] = obj3;
+            if (quantitiesClauses.length > 0) {
+                for(var i in quantitiesClauses) {
+                    obj4['must'].push(quantitiesClauses[i]);
+                }
+            }
         }
         qs['query'] = {'bool': obj4};
     } else {
@@ -200,7 +230,6 @@ var elasticSearchSearchQuery = function () {
                     obj3['bool']['should'].push(obj6);
                 } else if (rule == "must") {
                     obj3['bool']['must'].push(obj6);
-
                 } else if (rule == "must_not") {
                     obj3['bool']['must_not'].push(obj6);
                 }
