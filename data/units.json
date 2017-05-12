@@ -21,7 +21,8 @@ var allUnits = [
             "meters"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -60,7 +61,8 @@ var allUnits = [
             "cubic metres"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -75,7 +77,8 @@ var allUnits = [
         {
           "lemma": "thou"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -92,7 +95,8 @@ var allUnits = [
             "inches"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -109,7 +113,8 @@ var allUnits = [
             "feet"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -126,7 +131,8 @@ var allUnits = [
             "yards"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -143,7 +149,8 @@ var allUnits = [
             "chains"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -160,7 +167,8 @@ var allUnits = [
             "furlongs"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -177,7 +185,8 @@ var allUnits = [
             "miles"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -194,7 +203,8 @@ var allUnits = [
             "leagues"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -211,7 +221,8 @@ var allUnits = [
             "fathoms"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -229,7 +240,8 @@ var allUnits = [
             "grams"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -252,7 +264,8 @@ var allUnits = [
             "tonnes"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -269,7 +282,8 @@ var allUnits = [
             "grains"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -292,7 +306,8 @@ var allUnits = [
             "drachms"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -309,7 +324,8 @@ var allUnits = [
             "ounces"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -326,7 +342,8 @@ var allUnits = [
             "pounds"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -343,7 +360,8 @@ var allUnits = [
             "stones"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -360,7 +378,8 @@ var allUnits = [
             "quarters"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -377,7 +396,8 @@ var allUnits = [
             "hundredweights"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -394,7 +414,8 @@ var allUnits = [
             "amperes"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -412,7 +433,8 @@ var allUnits = [
             "seconds"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -429,7 +451,8 @@ var allUnits = [
             "minutes"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -446,7 +469,8 @@ var allUnits = [
             "hours"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "type": "TIME",
@@ -458,7 +482,8 @@ var allUnits = [
             "days"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "type": "TIME",
@@ -470,7 +495,8 @@ var allUnits = [
             "weeks"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "type": "TIME",
@@ -482,7 +508,8 @@ var allUnits = [
             "months"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "type": "TIME",
@@ -494,7 +521,8 @@ var allUnits = [
             "years"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "type": "TIME",
@@ -506,7 +534,8 @@ var allUnits = [
             "fortnights"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -523,7 +552,8 @@ var allUnits = [
             "kelvins"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -544,7 +574,8 @@ var allUnits = [
         {
           "lemma": "celcius"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -559,7 +590,8 @@ var allUnits = [
         {
           "lemma": "fahrenheit"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -577,7 +609,8 @@ var allUnits = [
             "candelas"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -601,7 +634,8 @@ var allUnits = [
             "mols"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -657,7 +691,8 @@ var allUnits = [
         {
           "lemma": "substance concentration"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -680,7 +715,8 @@ var allUnits = [
         {
           "lemma": "weight/weight percent"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -697,7 +733,8 @@ var allUnits = [
         {
           "lemma": "part per millions"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -714,7 +751,8 @@ var allUnits = [
         {
           "lemma": "part per billions"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -737,7 +775,8 @@ var allUnits = [
             "liters"
           ]
         }
-      ]
+      ],
+      "support_uom": false  
     },
     {
       "notations": [
@@ -763,7 +802,8 @@ var allUnits = [
             "fluid ounces"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -789,7 +829,8 @@ var allUnits = [
             "fluid ounces"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -806,7 +847,8 @@ var allUnits = [
             "gills"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -823,7 +865,8 @@ var allUnits = [
             "cups"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -840,7 +883,8 @@ var allUnits = [
             "pints"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -857,7 +901,8 @@ var allUnits = [
             "quarts"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -874,7 +919,8 @@ var allUnits = [
             "gallons"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -891,7 +937,8 @@ var allUnits = [
             "cubic inches"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -908,7 +955,8 @@ var allUnits = [
             "volts"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -925,7 +973,8 @@ var allUnits = [
             "farads"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -942,7 +991,8 @@ var allUnits = [
             "ohms"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -957,7 +1007,8 @@ var allUnits = [
         {
           "lemma": "siemens"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -974,7 +1025,8 @@ var allUnits = [
             "joules"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -991,7 +1043,8 @@ var allUnits = [
             "coulombs"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -1011,7 +1064,8 @@ var allUnits = [
         {
           "lemma": "henry"
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -1028,7 +1082,8 @@ var allUnits = [
             "watts"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -1045,7 +1100,8 @@ var allUnits = [
             "volt-amperes"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1062,7 +1118,8 @@ var allUnits = [
             "teslas"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -1079,7 +1136,8 @@ var allUnits = [
             "webers"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -1096,7 +1154,8 @@ var allUnits = [
             "decibels"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1128,7 +1187,8 @@ var allUnits = [
             "volts per meter"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1160,7 +1220,8 @@ var allUnits = [
             "amperes per meter"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1192,7 +1253,8 @@ var allUnits = [
             "ampere-turns per meter"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1221,7 +1283,8 @@ var allUnits = [
             "rounds per minute"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1250,7 +1313,8 @@ var allUnits = [
             "rounds per second"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1264,7 +1328,8 @@ var allUnits = [
         {
           "lemma": "hertz"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1305,7 +1370,8 @@ var allUnits = [
             "reciprocal centimeters"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1338,7 +1404,8 @@ var allUnits = [
             "metres per second"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1367,7 +1434,8 @@ var allUnits = [
             "miles per hour"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1390,7 +1458,8 @@ var allUnits = [
             "nautical miles per hour"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1407,7 +1476,8 @@ var allUnits = [
             "inches per second"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1424,7 +1494,8 @@ var allUnits = [
         {
           "lemma": "speed of sound"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1441,7 +1512,8 @@ var allUnits = [
             "atmospheres"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1458,7 +1530,8 @@ var allUnits = [
             "pascals"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -1475,7 +1548,8 @@ var allUnits = [
             "bars"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1489,7 +1563,8 @@ var allUnits = [
         {
           "lemma": "technical atmosphere"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1506,7 +1581,8 @@ var allUnits = [
             "torrs"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1529,7 +1605,8 @@ var allUnits = [
             "pounds-force per square inch"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1549,7 +1626,8 @@ var allUnits = [
         {
           "lemma": "percent"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1595,7 +1673,8 @@ var allUnits = [
         {
           "lemma": "permyriad"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1612,7 +1691,8 @@ var allUnits = [
             "poiseuilles"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1626,7 +1706,8 @@ var allUnits = [
         {
           "lemma": "pascal-second"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1643,7 +1724,8 @@ var allUnits = [
             "poises"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1690,7 +1772,8 @@ var allUnits = [
         {
           "lemma": "millilitres per kilogramme of body weight per minute"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1707,7 +1790,8 @@ var allUnits = [
             "radians"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -1727,7 +1811,8 @@ var allUnits = [
             "degrees"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1762,7 +1847,8 @@ var allUnits = [
             "minutes arc"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1788,7 +1874,8 @@ var allUnits = [
         {
           "lemma": "asec"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1808,7 +1895,8 @@ var allUnits = [
         {
           "lemma": "square radian"
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1828,7 +1916,8 @@ var allUnits = [
             "astronomical units"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1875,7 +1964,8 @@ var allUnits = [
             "kilograms per cubic meter"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1921,7 +2011,8 @@ var allUnits = [
             "grams per cubic centimeter"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1938,7 +2029,8 @@ var allUnits = [
             "powers of hydrogen"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1955,7 +2047,8 @@ var allUnits = [
             "grays"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -1972,7 +2065,8 @@ var allUnits = [
             "curies"
           ]
         }
-      ]
+      ],
+      "support_uom": false
     },
     {
       "notations": [
@@ -1989,7 +2083,8 @@ var allUnits = [
             "becquerels"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     },
     {
       "notations": [
@@ -2006,6 +2101,7 @@ var allUnits = [
             "sieverts"
           ]
         }
-      ]
+      ],
+      "support_uom": true
     }
   ]; 
