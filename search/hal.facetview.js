@@ -83,11 +83,11 @@
             event.preventDefault();
             console.log('clickfilterchoice');
             if ($(this).html().trim().length === 0) {
-console.log('checkbox');
+                console.log('checkbox');
 
                 if (!$(this).is(':checked')) {
                     // a checkbox is unchecked -> we remove the filter
-console.log('checked');
+                    console.log('checked');
                     $('.facetview_filterselected[href="' + $(this).attr("href") + '"]').each(function () {
                         $(this).remove();
                     });
@@ -136,7 +136,7 @@ console.log('checked');
             // we need to uncheck a checkbox in case the filter has been triggered by checking a checkbox
             // href attribute is similar and can be used to select the checkbox
             var hrefValue = $(this).attr("href");
-            var checkBoxElement = $('input[type="checkbox"][href="'+hrefValue+'"]');
+            var checkBoxElement = $('input[type="checkbox"][href="' + hrefValue + '"]');
             if (checkBoxElement) {
                 checkBoxElement.removeAttr("checked");
             }
@@ -572,7 +572,7 @@ console.log('checked');
 
 
             $('#facetview_filters').html("").append(thefilters);
-            
+
             options.visualise_filters ? $('.facetview_visualise').bind('click', show_vis) : "";
             $('.facetview_morefacetvals').bind('click', morefacetvals);
             $('.facetview_facetrange').bind('click', facetrange);
@@ -585,7 +585,7 @@ console.log('checked');
             }
             $('#validate-date-range').bind('click', setDateRange);
             $('#date-input').hide();
-            
+
             var temp_intro = '<div class="row">\
                         <button style="text-align:left; min-width:20%;margin-top:10px;" class="btn btn-default" id="new_facet" href="" type="button" >\
                             <i class="glyphicon glyphicon-plus"></i> add new facet \
@@ -635,7 +635,7 @@ console.log('checked');
 	                    </div>';
                 } else if (options.aggs[idx]['type'] == 'date') {
                     vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;left:-10px;"> \
-	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + 
+	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') +
                             '_chart" style="position:relative;"> \
 	                    </div> \
 	                    </div>';
@@ -1042,11 +1042,11 @@ console.log('checked');
                     var item2 = item.replace(/\s/g, '');
                     var count = records[item];
                     sum += count;
-                    
-                    if(facetkey == "document_types")
-                    data2.push({'term': doc_types[item2], 'count': records[item], 'source': doc_types[item], 'relCount': 0});
-                else 
-                    data2.push({'term': item2, 'count': records[item], 'source': item, 'relCount': 0});
+
+                    if (facetkey == "document_types")
+                        data2.push({'term': doc_types[item2], 'count': records[item], 'source': doc_types[item], 'relCount': 0});
+                    else
+                        data2.push({'term': item2, 'count': records[item], 'source': item, 'relCount': 0});
                     numb++;
                 }
             }
@@ -1266,14 +1266,14 @@ console.log('checked');
             // Create the basis panel
             var vis = new pv.Panel()
                     .width(w)
-                    .height(h+10)
+                    .height(h + 10)
                     .bottom(40)
                     .left(0)
                     .right(0)
                     .top(3);
 
             // no more than 10 textual elements (so years) on the X axis
-            var rate = Math.floor(entries.length/8);
+            var rate = Math.floor(entries.length / 8);
             var rank = -1;
             // Add the X-ticks
             vis.add(pv.Rule)
@@ -1380,7 +1380,7 @@ console.log('checked');
                 if (numb >= options.aggs[facetidx]['size']) {
                     break;
                 }
-                wordset.push({'text':fct, 'size':aggs[fct]});
+                wordset.push({'text': fct, 'size': aggs[fct]});
                 numb++;
             }
             //$('#' + place).show();
@@ -1388,44 +1388,50 @@ console.log('checked');
             var w = width;
             var h = w;
             var svg = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2").append("svg")
-                        .attr("width", w*1.2)
-                        .attr("height", h)
-                        .append("g")
-                        .attr("transform", "translate("+w/2+","+h/2+")");
+                    .attr("width", w * 1.2)
+                    .attr("height", h)
+                    .append("g")
+                    .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
             update(31);
             function update(maxRange) {
                 var minRange = 10;
                 if (maxRange < minRange)
-                    minRange = maxRange-1;
+                    minRange = maxRange - 1;
                 if (minRange == 0)
                     minRange = 1;
-                var theScale = d3.scale.linear().domain([0,max_count]).range([minRange, maxRange]);            
-                d3.layout.cloud().size([w*1.3, h*1.3])
-                    .words(wordset.map(function(d) {
-                        return {text: d.text, size: Math.floor(theScale(d.size))};
-                    }))
-                    //.padding(5)
-                    .rotate(function () { return 0; })
-                    //.rotate(function() { return ~~(Math.random() * 2) * 90; })
-                    .fontSize(function (d) { return d.size; })
-                    //.on("end", draw)
-                    .on("end", function(output) {
-                        if ( (wordset.length !== output.length) && (maxRange > 14) ) { 
-                            //console.log("Recurse! " + maxRange); 
-                            update(maxRange-5); 
-                            return undefined;  
-                        } else { 
-                            draw(output); 
-                        }
-                    })
-                    .start();
+                var theScale = d3.scale.linear().domain([0, max_count]).range([minRange, maxRange]);
+                d3.layout.cloud().size([w * 1.3, h * 1.3])
+                        .words(wordset.map(function (d) {
+                            return {text: d.text, size: Math.floor(theScale(d.size))};
+                        }))
+                        //.padding(5)
+                        .rotate(function () {
+                            return 0;
+                        })
+                        //.rotate(function() { return ~~(Math.random() * 2) * 90; })
+                        .fontSize(function (d) {
+                            return d.size;
+                        })
+                        //.on("end", draw)
+                        .on("end", function (output) {
+                            if ((wordset.length !== output.length) && (maxRange > 14)) {
+                                //console.log("Recurse! " + maxRange); 
+                                update(maxRange - 5);
+                                return undefined;
+                            } else {
+                                draw(output);
+                            }
+                        })
+                        .start();
             }
 
             function draw(words) {
                 //console.log(words); 
 
                 var cloud = svg.selectAll("g text")
-                        .data(words, function(d) { return d.text; });
+                        .data(words, function (d) {
+                            return d.text;
+                        });
 
                 cloud.enter().append("text")
                         .style("font-size", function (d) {
@@ -1446,7 +1452,7 @@ console.log('checked');
             }
 
         };
-        
+
         // normal click on a graphical facet
         var clickGraph = function (facetfield, facetKey, facetValueDisplay, facetValue) {
             var newobj = '<a class="facetview_filterselected facetview_clear ' +
@@ -1594,22 +1600,23 @@ console.log('checked');
         var quantitiesPanel = function () {
             initUnitMap();
             var piece = '<div class="well col-md-11" style="background-color:#F7EDDC;">';
-            piece += '<div style="width:50%;margin-top:-5px;margin-bottom:10px;"><b>Quantity search</b> - <a style="font-weight:bold;" id="quantities-form" href="#">form</a> - ' + 
-                '<a id="quantities-free" href="#">free query</a> - <a id="quantities-text" href="#">text</a></div>'
+            piece += '<div style="width:50%;margin-top:-5px;margin-bottom:10px;"><b>Quantity search</b> - <a style="font-weight:bold;" id="quantities-form" href="#">form</a> - ' +
+                    '<a id="quantities-free" href="#">free query</a> - <a id="quantities-text" href="#">text</a></div>'
             piece += '<div id="bar1"/>';
             piece += '<div id="parse-result1"/>';
             piece += '</div>';
-            piece += '<div class="col-md-1"><a id="close-quantities-panel" onclick=\'$("#quantities_panel").hide()\'>'+
-                '<span class="glyphicon glyphicon-remove" style="color:black;"></span></a></div>';
+            piece += '<div class="col-md-1"><a id="close-quantities-panel" onclick=\'$("#quantities_panel").hide()\'>' +
+                    '<span class="glyphicon glyphicon-remove" style="color:black;"></span></a></div>';
             $('#quantities_panel').html(piece);
             initFormDisplay(1);
             $('#quantities_panel').show();
             $('#close-quantitiesbar1').hide();
 
             // bind form, free and text input selection
-            $('#quantities-form').on('click', function(e) {
+            $('#quantities-form').on('click', function (e) {
                 e.stopPropagation();
                 e.preventDefault();
+                console.log("tesst");
                 initFormDisplay(1);
                 $('#close-quantitiesbar1').hide();
                 $('#quantities-form').css("font-weight", "bold");
@@ -1618,7 +1625,7 @@ console.log('checked');
                 modeQuantity = 'form';
                 return false;
             });
-            $('#quantities-free').on('click', function(e) {
+            $('#quantities-free').on('click', function (e) {
                 e.stopPropagation();
                 e.preventDefault();
                 initFreeFieldDisplay(1);
@@ -1629,7 +1636,7 @@ console.log('checked');
                 modeQuantity = 'free';
                 return false;
             });
-            $('#quantities-text').on('click', function(e) {
+            $('#quantities-text').on('click', function (e) {
                 e.stopPropagation();
                 e.preventDefault();
                 $('#bar1').html(quantitiesSearchFreeText);
@@ -1641,64 +1648,73 @@ console.log('checked');
             });
         }
 
-        var initFormDisplay = function(ind) {
-            $('#bar'+ind).html(quantitiesSearchForm.replace(/{{NUMBER}}/gi, ind));
+        var initFormDisplay = function (ind) {
+            $('#bar' + ind).html(quantitiesSearchForm.replace(/{{NUMBER}}/gi, ind));
             //$('#close-quantitiesbar'+ind).hide();
-            $('#quantities_fieldbuttons'+ind).click(addQuantitiesSearchBar);
+            $('#quantities_fieldbuttons' + ind).click(addQuantitiesSearchBar);
 
             // inject multi-choice selector information
-            Object.keys(quantitiesTypesUnits).forEach(function(key) {
-                $('.measurement-fields'+ind).append('<li><a href="#" id="measurement-fields'+ind+'-'+key+'">'+key.toLowerCase().replace(/_/g," ")+'</a></li>');
-                $('#measurement-fields'+ind+'-'+key).on("click", function(e) {
+            Object.keys(quantitiesTypesUnits).forEach(function (key) {
+                $('.measurement-fields' + ind).append('<li><a href="#" id="measurement-fields' + ind + '-' + key + '">' + key.toLowerCase().replace(/_/g, " ") + '</a></li>');
+                $('#measurement-fields' + ind + '-' + key).on("click", function (e) {
                     //console.log($(this).text());
-                    $('#selected-measurement-type'+ind).html($(this).text()+' <span class="caret"></span>');
-                    var units = quantitiesTypesUnits[$(this).text().toUpperCase().replace(/ /g,"_")];
-                    $('.unit-fields'+ind).empty();
-                    for(var i in units) {
-                        $('.unit-fields'+ind).append('<li><a href="#" id="unit-fields'+ind+'-'+i+'">'+units[i].replace(/_/g," ")+'</a></li>');
-                        $('.unit-fields'+ind+' li > a').on("click", function(e) {
-                            $('#selected-unit'+ind).html($(this).text()+' <span class="caret"></span>');
+                    $('#selected-measurement-type' + ind).html($(this).text() + ' <span class="caret"></span>');
+                    var units = quantitiesTypesUnits[$(this).text().toUpperCase().replace(/ /g, "_")];
+                    $('.unit-fields' + ind).empty();
+                    for (var i in units) {
+                        $('.unit-fields' + ind).append('<li><a href="#" id="unit-fields' + ind + '-' + i + '">' + units[i].replace(/_/g, " ") + '</a></li>');
+                        $('.unit-fields' + ind + ' li > a').on("click", function (e) {
+                            $('#selected-unit' + ind).html($(this).text() + ' <span class="caret"></span>');
                             return false;
                         });
                     }
                     return false;
                 });
             });
-
-            $('#parse'+ind).on('click', function() { 
+            $('#parse' + ind).on('click', function () {
                 var num = $(this).attr("id").match(/\d+/)[0];
                 parseQuantities(num);
             });
-            $('#quantities_freetext_from'+ind).bind('keyup', checkParseButton);
-            $('#quantities_freetext_to'+ind).bind('keyup', checkParseButton);
+            $('#quantities_freetext_from' + ind).bind('keyup', checkParseButton);
+            $('#quantities_freetext_to' + ind).bind('keyup', checkParseButton);
 
             // bind disambiguate button for substance
-            $('disambiguate_substance'+ind).click(disambiguateSubstance);
-            $('#quantities_freetext_substance'+ind).bind('keyup', checkDisambiguateSubstanceButton);
+            $('#disambiguate_substance' + ind).click(disambiguateSubstance);
+            $('#quantities_freetext_substance' + ind).bind('keyup', checkDisambiguateSubstanceButton);
             return false;
         }
 
 
+// disambiguate substance by calling NERD
+        var disambiguateSubstance = function (e) {
+            console.log("substance");
+            var num = $(this).attr("id").match(/\d+/)[0];
+            var substance = $('#quantities_freetext_substance' + num).val();
+            console.log(substance);
+            doexpandNERD(substance);
+            // take out focus after button release
+            $(this).blur();
+        }
+
+
         // call grobid quantities to parse currently inputed quantity query
-        var parseQuantities = function(ind) {
+        var parseQuantities = function (ind) {
             // create structure to be sent to grobid-quantities
             var queryString;
             var service = {};
             if (modeQuantity == 'text') {
                 queryString = '{ "text" : "' + $('#quantities_text').val() + '" }';
                 service = 'processQuantityText';
-            }
-            else if (modeQuantity == 'free') {
-                queryString = { 'text' : $('#quantities_freetext'+ind).val() };
+            } else if (modeQuantity == 'free') {
+                queryString = {'text': $('#quantities_freetext' + ind).val()};
                 service = 'processQuantityText';
-            }
-            else if (modeQuantity == 'form') {
+            } else if (modeQuantity == 'form') {
                 // case type and unit are specified with the form
 
-                queryString = '{ "from" : "' + $('#quantities_freetext_from'+ind).val().trim() + 
-                            '", "to" : "' + $('#quantities_freetext_to'+ind).val().trim() + 
-                            '", "type" : "'+ $('#selected-measurement-type'+ind).text().trim() +
-                            '", "unit": "' + $('#selected-unit'+ind).text().trim() + '" }';
+                queryString = '{ "from" : "' + $('#quantities_freetext_from' + ind).val().trim() +
+                        '", "to" : "' + $('#quantities_freetext_to' + ind).val().trim() +
+                        '", "type" : "' + $('#selected-measurement-type' + ind).text().trim() +
+                        '", "unit": "' + $('#selected-unit' + ind).text().trim() + '" }';
 
                 // case unit unspecified with the form
 
@@ -1707,7 +1723,7 @@ console.log('checked');
 
             var urlQuantities = "http://" + options.host_quantities;
             if (urlQuantities.endsWith("/"))
-                urlQuantities = urlQuantities.substring(0,urlQuantities.length()-1);
+                urlQuantities = urlQuantities.substring(0, urlQuantities.length() - 1);
             if ((!options.port_quantities) || (options.port_quantities.length == 0))
                 urlQuantities += options.port_quantities + "/" + service;
             else
@@ -1715,18 +1731,18 @@ console.log('checked');
             $.ajax({
                 type: "POST",
                 url: urlQuantities,
-        //              contentType: 'application/json',
-        //              contentType: 'charset=UTF-8',
+                //              contentType: 'application/json',
+                //              contentType: 'charset=UTF-8',
                 dataType: 'json',
-        //        dataType: "text",
-        //              data: { text : encodeURIComponent(queryText) },
+                //        dataType: "text",
+                //              data: { text : encodeURIComponent(queryText) },
                 data: queryString,
-        //              data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
+                //              data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
                 success: showexpandQuantities
             });
         }
 
-        var showexpandQuantities = function(sdata) {
+        var showexpandQuantities = function (sdata) {
             if (!sdata) {
                 return;
             }
@@ -1747,24 +1763,24 @@ console.log('checked');
                     range = sdata.measurements[0].quantityLeast.normalizedQuantity;
                     normalizedUnit = sdata.measurements[0].quantityLeast.normalizedUnit.name;
                     from_ = sdata.measurements[0].quantityLeast.normalizedQuantity;
-                }  
+                }
                 if (sdata.measurements[0].quantityMost) {
                     type = sdata.measurements[0].quantityMost.type;
                     if (range.length == 0)
-                        range = sdata.measurements[0].quantityMost.normalizedQuantity; 
+                        range = sdata.measurements[0].quantityMost.normalizedQuantity;
                     else
                         range += '-' + sdata.measurements[0].quantityMost.normalizedQuantity;
                     normalizedUnit = sdata.measurements[0].quantityMost.normalizedUnit.name;
                     to_ = sdata.measurements[0].quantityMost.normalizedQuantity;
-                } 
+                }
                 if (sdata.measurements[0].quantity) {
                     type = sdata.measurements[0].quantity.type;
-                    range = sdata.measurements[0].quantity.normalizedQuantity; 
+                    range = sdata.measurements[0].quantity.normalizedQuantity;
                     normalizedUnit = sdata.measurements[0].quantity.normalizedUnit.name;
-                    value_ = sdata.measurements[0].quantity.normalizedQuantity; 
+                    value_ = sdata.measurements[0].quantity.normalizedQuantity;
                 }
             }
-            
+
             var newobj = '<a class="facetview_filterselected quantitiesrange facetview_clear ' +
                     'btn btn-warning" rel="' + type +
                     '" alt="remove" title="remove"' +
@@ -1774,9 +1790,9 @@ console.log('checked');
             if (to_)
                 newobj += '" to="' + to_;
             if (value_)
-                newobj += '" value="s' + value_;
-            newobj += '">' + type + ': ' + 
-                range + ' ' + normalizedUnit + ' <i class="glyphicon glyphicon-remove"></i></a>';
+                newobj += '" value="' + value_;
+            newobj += '">' + type + ': ' +
+                    range + ' ' + normalizedUnit + ' <i class="glyphicon glyphicon-remove"></i></a>';
             $('#facetview_selectedfilters').append(newobj);
             $('.facetview_filterselected').unbind('click', clearfilter);
             $('.facetview_filterselected').bind('click', clearfilter);
@@ -1796,11 +1812,11 @@ console.log('checked');
 //console.log($('#disambiguation_panel').children().length > 0);
             // note: the action bellow prevents the user to refine his search and disambigation
             /*if ($('#disambiguation_panel').children().length > 0)
-                $('#disambiguation_panel').empty();
-            else*/
+             $('#disambiguation_panel').empty();
+             else*/
             doexpandNERD(queryText);
             // take out focus after button release
-            $('#disambiguate'+(thenum)).blur();
+            $('#disambiguate' + (thenum)).blur();
         };
 
         // call the NERD service and propose senses to the user for his query
@@ -1810,7 +1826,7 @@ console.log('checked');
 
             var urlNERD = "http://" + options.host_nerd;
             if (urlNERD.endsWith("/"))
-                urlNERD = urlNERD.substring(0,urlNERD.length()-1);
+                urlNERD = urlNERD.substring(0, urlNERD.length() - 1);
             if ((!options.port_nerd) || (options.port_nerd.length == 0))
                 urlNERD += options.port_nerd + "/nerd/processERDSearchQuery";
             else
@@ -1818,13 +1834,13 @@ console.log('checked');
             $.ajax({
                 type: "POST",
                 url: urlNERD,
-        //              contentType: 'application/json',
-        //              contentType: 'charset=UTF-8',
-        //              dataType: 'jsonp',
+                //              contentType: 'application/json',
+                //              contentType: 'charset=UTF-8',
+                //              dataType: 'jsonp',
                 dataType: "text",
-        //              data: { text : encodeURIComponent(queryText) },
+                //              data: { text : encodeURIComponent(queryText) },
                 data: queryString,
-        //              data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
+                //              data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
                 success: showexpandNERD
             });
         };
@@ -1838,13 +1854,13 @@ console.log('checked');
 
             piece = getPieceShowexpandNERD(jsonObject);
             $('#disambiguation_panel').html(piece);
-        //            $('#close-disambiguate-panel').bind('click', function () {
-        //                $('#disambiguation_panel').hide();
-        //            })
+            //            $('#close-disambiguate-panel').bind('click', function () {
+            //                $('#disambiguation_panel').hide();
+            //            })
 
             // we need to bind the checkbox...
             for (var sens in jsonObject['entities']) {
-                $('input#selectEntity' + sens).bind('change', $.fn.facetview,clickfilterchoice);
+                $('input#selectEntity' + sens).bind('change', $.fn.facetview, clickfilterchoice);
             }
 
             $('#disambiguation_panel').show();
@@ -1863,7 +1879,7 @@ console.log('checked');
                 $.ajax({
                     //type: "get",
                     type: "post",
-                    url: options.es_host+"/"+options.fulltext_index+"/_search?",
+                    url: options.es_host + "/" + options.fulltext_index + "/_search?",
                     //data: {source: elasticSearchSearchQuery()},
                     data: elasticSearchSearchQuery(),
                     // processData: false,
@@ -1893,18 +1909,18 @@ console.log('checked');
         var whenready = function () {
             //$("#facetview_presentation").remove();
             // append the facetview object to this object
-            
+
             /*var facetview_howmany = $("#facetview_howmany").text();
-            facetview_howmany = facetview_howmany.replace(/{{HOW_MANY}}/gi, options.paging.size);
-            $("#facetview_howmany").text(facetview_howmany);
-            //$(obj).append(thefacetview);
-            // setup search option triggers
-            $('#facetview_partial_match').bind('click', fixmatch);
-            $('#facetview_exact_match').bind('click', fixmatch);
-            $('#facetview_fuzzy_match').bind('click', fixmatch);
-            $('#facetview_match_any').bind('click', fixmatch);
-            $('#facetview_match_all').bind('click', fixmatch);
-            $('#facetview_howmany').bind('click', howmany);*/
+             facetview_howmany = facetview_howmany.replace(/{{HOW_MANY}}/gi, options.paging.size);
+             $("#facetview_howmany").text(facetview_howmany);
+             //$(obj).append(thefacetview);
+             // setup search option triggers
+             $('#facetview_partial_match').bind('click', fixmatch);
+             $('#facetview_exact_match').bind('click', fixmatch);
+             $('#facetview_fuzzy_match').bind('click', fixmatch);
+             $('#facetview_match_any').bind('click', fixmatch);
+             $('#facetview_match_all').bind('click', fixmatch);
+             $('#facetview_howmany').bind('click', howmany);*/
 
 
             // resize the searchbar
@@ -1933,7 +1949,7 @@ console.log('checked');
 
             // trigger the search once on load, to get all results
             //if (options.use_delay)
-                dosearch();
+            dosearch();
         };
 
         $('#disambiguation_panel').hide();
@@ -2013,7 +2029,7 @@ must <span class="caret"></span>\
             else
                 deactivateDisambButton(thenum);
             //if (e.keyCode == 13 && (options.q || $("#facetview_selectedfilters").children().length > 0)) {
-            if (e.keyCode == 13) 
+            if (e.keyCode == 13)
             {
 //                    if (url_options.mode)
 //                        window.location.href = window.location.href.replace(/[\&#].*|$/, "&q=" + options.q);
@@ -2025,30 +2041,30 @@ must <span class="caret"></span>\
 //                    $("#facetview_freetext").text(options.q);
                 // check for remote config options, then do first search
                 /*if (options.config_file) {
-                    $.ajax({
-                        type: "get",
-                        url: options.config_file,
-                        //dataType: "jsonp",
-                        success: function (data) {
-                            options = $.extend(options, data);
-                            whenready();
-                        },
-                        error: function () {
-                            $.ajax({
-                                type: "get",
-                                url: options.config_file,
-                                success: function (data) {
-                                    options = $.extend(options, $.parseJSON(data));
-                                    whenready();
-                                },
-                                error: function () {
-                                    whenready();
-                                }
-                            });
-                        }
-                    });
-                } else {*/
-                    //whenready();
+                 $.ajax({
+                 type: "get",
+                 url: options.config_file,
+                 //dataType: "jsonp",
+                 success: function (data) {
+                 options = $.extend(options, data);
+                 whenready();
+                 },
+                 error: function () {
+                 $.ajax({
+                 type: "get",
+                 url: options.config_file,
+                 success: function (data) {
+                 options = $.extend(options, $.parseJSON(data));
+                 whenready();
+                 },
+                 error: function () {
+                 whenready();
+                 }
+                 });
+                 }
+                 });
+                 } else {*/
+                //whenready();
                 if ($('#facetview_filters').children().length == 0)
                     whenready();
                 else
@@ -2068,13 +2084,13 @@ must <span class="caret"></span>\
                 $("#facetview_freetext1").keyup(keyPress);
             $('#disambiguate1').click(disambiguateNERD);
             $('#quantities1').click(quantitiesPanel);
-            
+
             $("#facetview_fieldbuttons1").on("click", function () {
                 var cloneIndex = $(".clonedDiv").length + 1;
                 $("#facetview_searchbars").append(searchbar.replace(/{{NUMBER}}/gi, cloneIndex));
-                $('#facetview_fieldbuttons'+cloneIndex).hide();
-                $("#close-searchbar"+cloneIndex).css("display", "block");
-                
+                $('#facetview_fieldbuttons' + cloneIndex).hide();
+                $("#close-searchbar" + cloneIndex).css("display", "block");
+
                 $(".tei-fields li a").click(function () {
                     var selText = $(this).text();
                     $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
@@ -2094,18 +2110,18 @@ must <span class="caret"></span>\
                 $('#disambiguate' + cloneIndex).click(disambiguateNERD);
                 $('#quantities' + cloneIndex).hide();
 
-                $('#close-searchbar'+cloneIndex).click(function () {
+                $('#close-searchbar' + cloneIndex).click(function () {
                     // grab the index number 
                     var theIndex = $(this).attr("id").match(/\d+/)[0];
                     // remove searchbar
-                    $('#facetview_searchbar'+theIndex).remove();
+                    $('#facetview_searchbar' + theIndex).remove();
                     // trigger a new search if the corresponding free field is not empty and whenready has instanciated the filter facetviews
-                    if (($('#facetview_freetext'+theIndex).val() != "")  && ($('#facetview_filters').children().length > 0))
+                    if (($('#facetview_freetext' + theIndex).val() != "") && ($('#facetview_filters').children().length > 0))
                         dosearch();
                 });
                 cloneIndex++;
             });
-            
+
 
             $(".tei-fields li a").click(function () {
                 var selText = $(this).text();

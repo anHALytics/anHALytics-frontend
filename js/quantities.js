@@ -5,31 +5,30 @@
 // map mesurement types and units
 var quantitiesTypesUnits = new Object();
 
-var initFreeFieldDisplay = function(ind) {
-	$('#bar'+ind).html(quantitiesSearchFreeField.replace(/{{NUMBER}}/gi, ind));
-	$('#quantities_fieldbuttons'+ind).click(addQuantitiesSearchBar);
+var initFreeFieldDisplay = function (ind) {
+    $('#bar' + ind).html(quantitiesSearchFreeField.replace(/{{NUMBER}}/gi, ind));
+    $('#quantities_fieldbuttons' + ind).click(addQuantitiesSearchBar);
 
-	$('#parse'+ind).on('click', function() { 
-		var num = $(this).attr("id").match(/\d+/)[0];
-    	parseQuantities(num);
+    $('#parse' + ind).on('click', function () {
+        var num = $(this).attr("id").match(/\d+/)[0];
+        parseQuantities(num);
     });
-    $('#quantities_freetext'+ind).bind('keyup', checkParseButton);
+    $('#quantities_freetext' + ind).bind('keyup', checkParseButton);
 }
 
-var checkParseButton = function(e) {
-	e.stopPropagation();
+var checkParseButton = function (e) {
+    e.stopPropagation();
     e.preventDefault();
-	var num = $(this).attr("id").match(/\d+/)[0];
-	if (!num)
-		num = '';
-    if ($('#quantities_freetext_from'+num).val()) {
+    var num = $(this).attr("id").match(/\d+/)[0];
+    if (!num)
+        num = '';
+    if ($('#quantities_freetext_from' + num).val()) {
         $('#parse' + num).attr("disabled", false);
-    } else if ($('#quantities_freetext_to'+num).val()) {
+    } else if ($('#quantities_freetext_to' + num).val()) {
         $('#parse' + num).attr("disabled", false);
-    } else if ($('#quantities_freetext'+num).val()) {
+    } else if ($('#quantities_freetext' + num).val()) {
         $('#parse' + num).attr("disabled", false);
-    } 
-    else {
+    } else {
         $('#parse' + num).attr("disabled", true);
     }
     return false;
@@ -37,22 +36,15 @@ var checkParseButton = function(e) {
 
 var checkDisambiguateSubstanceButton = function () {
     var num = $(this).attr("id").match(/\d+/)[0];
-    if ($('#quantities_freetext_substance'+num).val()) {
+    if ($('#quantities_freetext_substance' + num).val()) {
         $('#disambiguate_substance' + num).attr("disabled", false);
-    }
-    else {
+    } else {
         $('#disambiguate_substance' + num).attr("disabled", true);
     }
 };
 
 // introduce additional quantity search bar (all search input are of the same type in the panel) 
-var addQuantitiesSearchBar = function() {
-
-}
-
-
-// disambiguate substance by calling NERD
-var disambiguateSubstance = function() {
+var addQuantitiesSearchBar = function () {
 
 }
 
@@ -118,21 +110,23 @@ var quantitiesSearchFreeField = '<div id="quantitiesbar{{NUMBER}}" style="width:
 var quantitiesSearchFreeText = '';
 
 // init the measurement types / units map, this is necessary to fill the multi-choice selectors in the search form 
-var initUnitMap = function() {
-	if (Object.keys(quantitiesTypesUnits).length == 0) {
-		for(var i in allUnits) {
-			var type = allUnits[i].type;
-			var names = allUnits[i].names;
-			for(var j in names) {
-				console.log(names[j]);
-				var unit = names[j].lemma;
-				if (quantitiesTypesUnits[type] == null) {
-					quantitiesTypesUnits[type] = [];
-					quantitiesTypesUnits[type].push(unit);
-				} else {
-					quantitiesTypesUnits[type].push(unit);
-				}
-			}
-		}
-	}
+var initUnitMap = function () {
+    if (Object.keys(quantitiesTypesUnits).length == 0) {
+        for (var i in allUnits) {
+            if (allUnits[i].support_uom) {
+                var type = allUnits[i].type;
+                var names = allUnits[i].names;
+                for (var j in names) {
+                    console.log(names[j]);
+                    var unit = names[j].lemma;
+                    if (quantitiesTypesUnits[type] == null) {
+                        quantitiesTypesUnits[type] = [];
+                        quantitiesTypesUnits[type].push(unit);
+                    } else {
+                        quantitiesTypesUnits[type].push(unit);
+                    }
+                }
+            }
+        }
+    }
 }

@@ -46,16 +46,28 @@ var elasticSearchSearchQuery = function () {
             var rel = $(this).attr('rel');
             var from_ = $(this).attr('from');
             var to_ = $(this).attr('to');
-            var rngs = {
-                'gte': "" + from_,
-                'lte': "" + to_,
-                'relation': 'intersects'
-            };
-            var objj = {};
-            objj['$teiCorpus.$standoff.$quantities.' + rel] = rngs;
-            var obj2 = {};
-            obj2['range'] = objj;
-            quantitiesClauses.push(obj2);
+            //var value = $(this).attr('value');
+            if(from_ || to_){
+                var rngs = {
+                    'gte': "" + from_,
+                    'lte': "" + to_,
+                    'relation': 'intersects'
+                };
+                var objjrng = {};
+                objjrng['$teiCorpus.$standoff.$quantities.' + rel] = rngs;
+                var obj2 = {}
+                obj2['range'] = objjrng;
+                quantitiesClauses.push(obj2);
+            }
+            else if(value){
+                var objjvalue = {};
+                objjvalue['$teiCorpus.$standoff.$quantities.' + rel] = value;
+                var obj1 = {};
+                
+                obj1['match'] = objjvalue;
+                
+                quantitiesClauses.push(obj1);
+            }
         } else if ($(this).hasClass('facetview_facetrange')) {
             var rel = options.aggs[ $(this).attr('rel') ]['field'];
             //var from_ = (parseInt( $('.facetview_lowrangeval', this).html() ) - 1970)* 365*24*60*60*1000;
