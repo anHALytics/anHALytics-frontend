@@ -14,7 +14,7 @@ var defaults = {
     // elasticsearch
     es_host : 'http://localhost:9200',
 //    es_host : 'http://traces2.saclay.inria.fr',
-    fulltext_index: 'anhalytics_fulltextteis', // the URL against which to submit searches
+    fulltext_index: 'anhalytics_teis', // the URL against which to submit searches
 //    fulltext_index: 'quantities', // the URL against which to submit searches
     nerd_annotation_index: 'annotations_nerd',
     kb_index: 'anhalytics_kb',
@@ -30,7 +30,7 @@ var defaults = {
     collection: 'npl',
 
     // the name of the sub-collection to be searched, for instance hal or istex for npl, epodoc for patent 
-    subcollection: 'hal',
+    subcollection: 'istex',
 
     // snippet ranking
     snippet_style: 'andlauer',
