@@ -40,9 +40,8 @@ var buildrecord = function (index, node) {
                     '/document" target="_blank" style="color:firebrick;"><img class="img-thumbnail img-responsive" style="float:right; height:100px; max-width:100px;" src="' +
                     'https://hal.archives-ouvertes.fr/' + repositoryDocId + '/thumb' + '" /></a>';
         }if (options.subcollection == "istex") {
-            result += '<a class="fa fa-file-pdf-o" href="https://api.istex.fr/document/' + repositoryDocId +
-                    '/fulltext/pdf" target="_blank" style="color:firebrick;"><img class="img-thumbnail img-responsive" style="float:right; height:100px; max-width:100px;" src="' +
-                    'https://hal.archives-ouvertes.fr/' + repositoryDocId + '/thumb' + '" /></a>';
+            result += '<a class="fa fa-file-pdf-o fa-5x" href="https://api.istex.fr/document/' + repositoryDocId +
+                    '/fulltext/pdf" target="_blank" style="color:firebrick;"></a>';
             
         }
     }
