@@ -25,7 +25,7 @@ var buildrecord = function (index, node) {
 
     var type = null;
     var id = options.data['ids'][index];
-
+console.log(jsonObject)
 
     result += '<div class="col-md-2" style="padding-right:0px;">';
     // add image where available
@@ -36,11 +36,10 @@ var buildrecord = function (index, node) {
         if (options.subcollection == "hal") {
             // try to avoid resizing when possible - useless in this case, and fix height 
             // to avoid all records moving while images are downloaded
-            result += '<a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + repositoryDocId +
-                    '/document" target="_blank" style="color:firebrick;"><img class="img-thumbnail img-responsive" style="float:right; height:100px; max-width:100px;" src="' +
-                    'https://hal.archives-ouvertes.fr/' + repositoryDocId + '/thumb' + '" /></a>';
+            result += '<a id="pdf'+index+'" class="fa fa-file-pdf-o fa-5x" rel="'+id+'" href="https://hal.archives-ouvertes.fr/' + repositoryDocId +
+                    '/document" target="_blank" style="color:firebrick;"></a>';
         }if (options.subcollection == "istex") {
-            result += '<a class="fa fa-file-pdf-o fa-5x" href="https://api.istex.fr/document/' + repositoryDocId +
+            result += '<a id="pdf'+index+'" class="fa fa-file-pdf-o fa-5x" rel="'+id+'" href="https://api.istex.fr/document/' + repositoryDocId +
                     '/fulltext/pdf" target="_blank" style="color:firebrick;"></a>';
             
         }

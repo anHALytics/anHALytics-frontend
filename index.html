@@ -26,7 +26,18 @@
         <script type="text/javascript" src="bower_components/d3/d3.min.js "></script>
         <script type="text/javascript" src="bower_components/d3-cloud/build/d3.layout.cloud.js "></script>
         <script type="text/javascript" src="bower_components/protovis/protovis-r3.2.js"></script>
+        
+        
+        <link type="text/css" href="lib/pdf.js/web/text_layer_builder.css" rel="stylesheet"/>
+        <link type="text/css" href="lib/pdf.js/web/annotation_layer_builder.css" rel="stylesheet"/>
+        <script type="text/javascript" src="lib/pdf.js/web/text_layer_builder.js"></script>
+        <script type="text/javascript" src="lib/pdf.js/web/pdf_link_service.js"></script>
+        <script type="text/javascript" src="lib/pdf.js/web/annotation_layer_builder.js"></script>
+        <script type="text/javascript" src="lib/pdf.js/build/pdf.js"></script>
+        
         <script type="text/javascript" src="lib/Porter-Stemmer/stemmer.js"></script>
+        
+        
 
         <!-- for nicer rendering of wikipedia abstracts -->
         <script type="text/javascript" src="lib/wiki/wiki2html.js"></script>
@@ -56,7 +67,7 @@
         <script type="text/javascript">
             var options = $.extend(defaults, {
                 aggs: [
-                    {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_datePub', 'display': 'publication_date', 'type': 'date', 'view': 'graphic'},
+                    {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_published', 'display': 'publication_date', 'type': 'date', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halDomain_abbrev', 'display': 'subject-headers', 'size': 20, 'type': 'taxonomy', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.notAnalyzed', 'display': 'keywords', 'size': 10, 'type': 'cloud', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$profileDesc.$langUsage.$language', 'display': 'language', 'size': 6, 'type': 'country', 'view': 'graphic'},
@@ -65,7 +76,7 @@
                     {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$persName.$fullName.notAnalyzed', 'display': 'Author', 'size': 10, 'type': 'entity', 'view': 'textual'},
                     {'field': '$teiCorpus.$standoff.$category.category', 'display': 'wikipedia_categories', 'size': 10, 'type': 'entity', 'view': 'textual'},
                     {'field': '$teiCorpus.$standoff.$keyterm.preferredTerm', 'display': 'keyterms', 'size': 10, 'type': 'entity', 'view': 'textual'},
-                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology_abbrev', 'display': 'document_types', 'size': 20, 'type': 'class', 'view': 'graphic'},
+                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_typology', 'display': 'document_types', 'size': 20, 'type': 'class', 'view': 'graphic'},
                 ]
             });
 

@@ -4,18 +4,23 @@ var defaults = {
     port_nerd: "",
 
      // grobid-quantities
-    host_quantities: "localhost",
-    port_quantities: "8060",
+    host_quantities: "traces2.saclay.inria.fr",
+    port_quantities: "8090",
 
     // proxy
     service: "local", // access to service can be local or proxy, depending on security requirements
     proxy_host: "",
     
     // elasticsearch
+    anhalytics_rest : 'http://localhost:8090/pdf',
+    
+    // elasticsearch
     es_host : 'http://localhost:9200',
 //    es_host : 'http://traces2.saclay.inria.fr',
-    fulltext_index: 'anhalytics_teis', // the URL against which to submit searches
+    fulltext_index: 'anhalytics_hal_teis', // the URL against which to submit searches
 //    fulltext_index: 'quantities', // the URL against which to submit searches
+    quantities_annotation_index: 'annotations_quantities',
+    quantities_annotation_type: 'quantities',
     nerd_annotation_index: 'annotations_nerd',
     kb_index: 'anhalytics_kb',
     authors_type: 'authors',
@@ -30,7 +35,7 @@ var defaults = {
     collection: 'npl',
 
     // the name of the sub-collection to be searched, for instance hal or istex for npl, epodoc for patent 
-    subcollection: 'istex',
+    subcollection: 'hal',
 
     // snippet ranking
     snippet_style: 'andlauer',

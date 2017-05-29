@@ -46,7 +46,7 @@ var elasticSearchSearchQuery = function () {
             var rel = $(this).attr('rel');
             var from_ = $(this).attr('from');
             var to_ = $(this).attr('to');
-            //var value = $(this).attr('value');
+            var value = $(this).attr('value');
             if(from_ || to_){
                 var rngs = {
                     'gte': "" + from_,
