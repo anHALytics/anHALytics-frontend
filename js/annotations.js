@@ -1,3 +1,7 @@
+nerd = new Nerd();
+nerd.host = options.host_nerd;
+nerd.port = options.port_nerd;
+
 var displayTitleAnnotation = function (titleID) {
 
     //we load now in background the additional record information requiring a user interaction for
@@ -21,7 +25,7 @@ var displayTitleAnnotation = function (titleID) {
             });
         }
     });
-}
+};
 
 var displayAbstractAnnotation = function (abstractID) {
     $('#abstractNaked' + abstractID).each(function () {
@@ -44,7 +48,7 @@ var displayAbstractAnnotation = function (abstractID) {
         // trigger MathJax on the abstract content
         MathJax.Hub.Queue(["Typeset",MathJax.Hub, 'abstractNaked'+abstractID]);
     });
-}
+};
 
 var displayKeywordAnnotation = function (keywordIDs) {
 
@@ -68,7 +72,7 @@ var displayKeywordAnnotation = function (keywordIDs) {
         });
     }
 
-}
+};
 
 var displayAnnotations = function (data, index, id, origin) {
     var jsonObject = null;
@@ -441,7 +445,7 @@ window.lookupWikiMediaImage = function (wikipedia, lang, id) {
             }
         });
     }
-}
+};
 
 var parseDisambNERD = function (sdata) {
     var jsonObject = JSON.parse(sdata);
@@ -479,7 +483,7 @@ var getPieceShowexpandNERD = function (jsonObject) {
             var conf = entity.nerd_score;
             if (conf && conf.length > 4)
                 conf = conf.substring(0, 4);
-            var definitions = entity.definitions;
+
             var wikipedia = entity.wikipediaExternalRef;
             var content = entity.rawName; //$(this).text();
             var preferredTerm = entity.preferredTerm;
@@ -492,10 +496,13 @@ var getPieceShowexpandNERD = function (jsonObject) {
             piece += '<input type="checkbox" id="selectEntity' + sens
                     + '" name="selectEntity' + sens + '" value="0" href="'
                     + preferredTerm + '" rel="$teiCorpus.$standoff.$nerd.preferredTerm" display="concepts">';
-            piece += '<label for="selectEntity' + sens + '" id="label' + sens + '"> <strong>' + entity.rawName + '&nbsp;</strong> </label></div></td>';
-            
-            //if (conf)
-            //     piece += '<p><b>Conf</b>: ' + conf + '</p>';
+            piece += '<label for="selectEntity' + sens + '" id="label' + sens + '"> <strong>' + content + '&nbsp;</strong> </label></div></td>';
+
+
+            var definitions = "";
+            nerd.fetchConcept(wikipedia, lang, function (result) {
+                definitions = result["definitions"]
+            });
 
             var localHtml = "";
             if (definitions && definitions.length > 0)

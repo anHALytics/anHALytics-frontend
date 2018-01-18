@@ -1611,16 +1611,15 @@ console.log('checked');
                 urlNERD += options.port_nerd + "/service/disambiguate";
             else
                 urlNERD += ":" + options.port_nerd + "/service/disambiguate";
+
+            var formData = new FormData();
+            formData.append("query", queryString);
             $.ajax({
-                type: "POST",
+                type: 'POST',
                 url: urlNERD,
-        //              contentType: 'application/json',
-        //              contentType: 'charset=UTF-8',
-        //              dataType: 'jsonp',
-                dataType: "application/json",
-        //              data: { text : encodeURIComponent(queryText) },
-                data: queryString,
-        //              data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
+                data: formData,
+                contentType: false,
+                processData: false,
                 success: showexpandNERD
             });
         };
@@ -1630,7 +1629,10 @@ console.log('checked');
                 return;
             }
 
-            var jsonObject = parseDisambNERD(sdata);
+            var jsonObject = sdata;
+            if(typeof sdata === "string") {
+                parseDisambNERD(sdata);
+            }
 
             piece = getPieceShowexpandNERD(jsonObject);
             $('#disambiguation_panel').html(piece);
