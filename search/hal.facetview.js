@@ -1608,9 +1608,9 @@ console.log('checked');
             if (urlNERD.endsWith("/"))
                 urlNERD = urlNERD.substring(0,urlNERD.length()-1);
             if ((!options.port_nerd) || (options.port_nerd.length == 0))
-                urlNERD += options.port_nerd + "/nerd/processERDSearchQuery";
+                urlNERD += options.port_nerd + "/service/disambiguate";
             else
-                urlNERD += ":" + options.port_nerd + "/nerd/processERDSearchQuery";
+                urlNERD += ":" + options.port_nerd + "/service/disambiguate";
             $.ajax({
                 type: "POST",
                 url: urlNERD,
