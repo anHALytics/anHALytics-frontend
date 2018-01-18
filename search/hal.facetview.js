@@ -1617,7 +1617,7 @@ console.log('checked');
         //              contentType: 'application/json',
         //              contentType: 'charset=UTF-8',
         //              dataType: 'jsonp',
-                dataType: "text",
+                dataType: "application/json",
         //              data: { text : encodeURIComponent(queryText) },
                 data: queryString,
         //              data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
