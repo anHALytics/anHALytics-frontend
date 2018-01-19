@@ -83,11 +83,11 @@
             event.preventDefault();
             console.log('clickfilterchoice');
             if ($(this).html().trim().length === 0) {
-console.log('checkbox');
+                console.log('checkbox');
 
                 if (!$(this).is(':checked')) {
                     // a checkbox is unchecked -> we remove the filter
-console.log('checked');
+                    console.log('checked');
                     $('.facetview_filterselected[href="' + $(this).attr("href") + '"]').each(function () {
                         $(this).remove();
                     });
@@ -1631,7 +1631,7 @@ console.log('checked');
 
             var jsonObject = sdata;
             if(typeof sdata === "string") {
-                parseDisambNERD(sdata);
+                jsonObject = parseDisambNERD(sdata);
             }
 
             piece = getPieceShowexpandNERD(jsonObject);
