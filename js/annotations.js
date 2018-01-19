@@ -485,14 +485,17 @@ var getPieceShowexpandNERD = function (jsonObject) {
 
             piece += '<tr id="selectLine' + sens + '" href="' + wikipediaRefID + '" rel="$teiCorpus.$standoff.$nerd.wikipediaExternalRef">' +
                 '<td id="selectArea' + sens + '" href="' + wikipediaRefID + '" rel="$teiCorpus.$standoff.$nerd.wikipediaExternalRef">';
+
             piece += '<div class="checkbox checkbox-inline checkbox-danger" id="selectEntityBlock' +
                 sens + '" href="' + wikipediaRefID + '" rel="$teiCorpus.$standoff.$nerd.wikipediaExternalRef">';
+
             piece += '<input type="checkbox" id="selectEntity' + sens
                 + '" name="selectEntity' + sens + '" value="0" href="'
                 + preferredTerm + '" rel="$teiCorpus.$standoff.$nerd.preferredTerm" display="concepts">';
+
             piece += '<label for="selectEntity' + sens + '" id="label' + sens + '"> <strong>' + content + '&nbsp;</strong> </label></div></td>';
 
-            piece += '<td id="description-' + wikipediaRefID + '"></td><td>';
+            piece += '<td id="description-' + wikipediaRefID + '" index="'+sens+'"></td><td>';
 
             piece += '<td width="25%">';
             piece +=
@@ -517,9 +520,14 @@ var getPieceShowexpandNERD = function (jsonObject) {
                 console.log("Getting response for " + wikipediaRefID);
                 var definitions = result["definitions"];
                 var localHtml = "";
-                if (definitions && definitions.length > 0)
+                if (definitions && definitions.length > 0) {
                     localHtml = wiki2html(definitions[0]['definition'], lang);
-                    $('#description-' + wikipediaRefID).html(localHtml);
+                    var descriptionBlock = $('#description-' + wikipediaRefID);
+                    descriptionBlock.html(localHtml);
+                    var index = descriptionBlock.attr("index");
+
+                    $('#selectEntity' + index).attr("href", result['preferredTerm']);
+                }
             });
         }
         piece += '</table>';
