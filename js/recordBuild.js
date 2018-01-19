@@ -36,13 +36,9 @@ var buildrecord = function (index, node) {
         if (options.subcollection == "hal") {
             // try to avoid resizing when possible - useless in this case, and fix height 
             // to avoid all records moving while images are downloaded
-            // result += '<a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + repositoryDocId +
-            //         '/document" target="_blank" style="color:firebrick;"><img class="img-thumbnail img-responsive" style="float:right; height:100px; max-width:100px;" src="' +
-            //         'https://hal.archives-ouvertes.fr/' + repositoryDocId + '/thumb' + '" /></a>';
-
             result += '<a class="fa fa-file-pdf-o" href="https://hal.archives-ouvertes.fr/' + repositoryDocId +
-                        '/document" target="_blank" style="color:firebrick;"><img class="img-thumbnail img-responsive" style="float:right; height:100px; max-width:100px;" ' +
-                        'src="data/images/pdf_icon.gif" /></a>';
+                    '/document" target="_blank" style="color:firebrick;"><img class="img-thumbnail img-responsive" style="float:right; height:100px; max-width:100px;" src="' +
+                    'https://hal.archives-ouvertes.fr/' + repositoryDocId + '/thumb' + '" /></a>';
         }
     }
     result += '</div>';
