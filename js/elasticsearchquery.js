@@ -21,7 +21,7 @@ var elasticSearchSearchQuery = function () {
     var bool = false;
     //var nested = false;
     var filtered = false; // true if a filter at least applies to the query
-    var queried_fields = []; // list of queried fields for highlights   
+    var queried_fields = []; // list of queried fields for highlights
     //sorting field
     var datepub = record_metadata.datepub;
     var date = {};
@@ -37,11 +37,11 @@ var elasticSearchSearchQuery = function () {
     qs['stored_fields'] = textFieldsNPLReturned;
     var quantitiesClauses = [];
 
-    // simple query mode	
+    // simple query mode
     $('.facetview_filterselected', obj).each(function () {
         // facet filter for a range of values
         !bool ? bool = {'must': []} : "";
-        if ($(this).hasClass('quantitiesrange')) { 
+        if ($(this).hasClass('quantitiesrange')) {
             // prepare the quantity query
             var rel = $(this).attr('rel');
             var from_ = $(this).attr('from');
@@ -63,9 +63,9 @@ var elasticSearchSearchQuery = function () {
                 var objjvalue = {};
                 objjvalue['$teiCorpus.$standoff.$quantities.' + rel] = value;
                 var obj1 = {};
-                
+
                 obj1['match'] = objjvalue;
-                
+
                 quantitiesClauses.push(obj1);
             }
         } else if ($(this).hasClass('facetview_facetrange')) {
@@ -103,13 +103,13 @@ var elasticSearchSearchQuery = function () {
             bool['must'].push(obj);
             filtered = true;
         } else {
-            // other facet filter 
+            // other facet filter
             var obj = {'term': {}};
             obj['term'][ $(this).attr('rel') ] = $(this).attr('href');
             bool['must'].push(obj);
             filtered = true;
         }
-        
+
     });
 
 console.log(quantitiesClauses);
@@ -140,7 +140,7 @@ console.log(quantitiesClauses);
                 for(var i in quantitiesClauses) {
                     obj4['must'].push(quantitiesClauses[i]);
                 }
-            } 
+            }
             qs['sort'] = [date];
         } else {
             //obj4['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}};
@@ -183,7 +183,7 @@ console.log(quantitiesClauses);
                         obj4['must_not'].push(obj6);
                     }
                     queried_fields.push(obj6['query_string']['default_field']);
-                    
+
                     //obj6['match'][ record_metadata.title ] = $('#facetview_freetext' + thenum).val();
                     //obj6['match'][ 'default_operator' ] = 'AND';
                     //
@@ -217,7 +217,7 @@ console.log(quantitiesClauses);
                     obj6['query_string'] = {'default_field': "_all", 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 else if (field == "title"){
                     if (lang == "all lang"){
-                        obj6['query_string'] = {'fields': [record_metadata.titleall], 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                        obj6['query_string'] = {'stored_fields': [record_metadata.titleall], 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 }else if (lang == "en")
                         obj6['query_string'] = {'default_field': record_metadata.titleen, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                     else if (lang == "fr")
@@ -227,7 +227,7 @@ console.log(quantitiesClauses);
 
                 } else if (field == "abstract"){
                         if (lang == "all lang")
-                        obj6['query_string'] = {'fields': [abstract_metadata.abstract], 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                        obj6['query_string'] = {'stored_fields': [abstract_metadata.abstract], 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 else if (lang == "en")
                         obj6['query_string'] = {'default_field': abstract_metadata.abstract_en, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                     else if (lang == "fr")
@@ -248,9 +248,9 @@ console.log(quantitiesClauses);
 
                 if(obj6['query_string']['default_field'])
                     queried_fields.push(obj6['query_string']['default_field']);
-                else if(obj6['query_string']['fields']) {
-                    for (var item in obj6['query_string']['fields']) {
-                        queried_fields.push(obj6['query_string']['fields'][item]);
+                else if(obj6['query_string']['stored_fields']) {
+                    for (var item in obj6['query_string']['stored_fields']) {
+                        queried_fields.push(obj6['query_string']['stored_fields'][item]);
                     }
                 }
                 //obj6['match'][ record_metadata.title ] = $('#facetview_freetext' + thenum).val();
@@ -280,7 +280,7 @@ console.log(quantitiesClauses);
 
         if (options.aggs[item]['type'] == 'date') {
             obj['interval'] = "year";
-            //obj['size'] = 5; 
+            //obj['size'] = 5;
             qs['aggs'][nameFacet] = {"date_histogram": obj};
         } else {
             obj['size'] = options.aggs[item]['size'] + 50;
@@ -308,7 +308,7 @@ console.log(quantitiesClauses);
 
     for (var fie in queried_fields) {
 //        if (options['snippet_style'] == 'andlauer') {
-//            qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 100};
+//            qs['highlight']['stored_fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 100};
 //        } else {
         if (queried_fields[fie] == '_all' || (queried_fields[fie] != abstract_metadata.keywords && queried_fields[fie] != record_metadata.author_fullname) ) {
             qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 3};
