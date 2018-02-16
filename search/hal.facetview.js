@@ -294,7 +294,7 @@
             }
 
             // TBD: we should adjust here the default last day of the month
-            // based on the number of days in the month (e.g. 30 days for 11, 
+            // based on the number of days in the month (e.g. 30 days for 11,
             // 31 days for 10, etc.)
 
             range += (day_from) + '-' + (month_from + 1) + '-' + year_from;
@@ -344,17 +344,17 @@
                         if (numb >= options.aggs[each]['size']) {
                             break;
                         }
-                        var item2;
-                        if (options.aggs[each]['display'] == "document_types")
-                            item2 = doc_types[item];
-                        else
-                            item2 = item;
+                        // var item2;
+                        // if (options.aggs[each]['display'] == "document_types")
+                        //     item2 = doc_types[item];
+                        // else
+                        //     item2 = item;
                         if (options.aggs[each]['display'].indexOf('class') != -1)
-                            item2 = item.replace(/\s/g, '');
+                            item = item.replace(/\s/g, '');
                         var append = '<li><a class="facetview_filterchoice' +
                                 '" rel="' + options.aggs[each]['field'] + '" href="' + item + '" display="' + options.aggs[each]['display'] + '">'
 
-                                + item2 +
+                                + item +
                                 ' (' + addCommas(records[item]) + ')</a></li>';
                         $('#facetview_' + options.aggs[each]['display']).append(append);
                         numb++;
@@ -680,7 +680,7 @@
             if (update) {
                 vis.select("svg").remove();
             }
-
+console.log(facetkey);
             vis = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2").append("svg:svg")
                     .attr("width", w + p * 2)
                     .attr("height", h + p * 2)
@@ -719,7 +719,13 @@
                 if (numb >= options.aggs[facetidx]['size']) {
                     break;
                 }
-                var item2 = item.replace(/\s/g, '');
+                var item2 = null;
+
+                if(item.indexOf("_") !== -1)
+                  item2 = item.split("_")[0];
+                else
+                  item2 = item.replace(/\s/g, '');
+
                 var count = records[item];
                 sum += count;
 
@@ -783,7 +789,7 @@
                 }
                 numb++;
             }
-            //console.log('wheel data:');			
+            //console.log('wheel data:');
             //console.log(datas);
             for (var item in datas) {
                 datas[item]['relCount'] = datas[item]['count'] / sum;
@@ -1039,13 +1045,18 @@
                         break;
                     }
 
-                    var item2 = item.replace(/\s/g, '');
+                    var item2 = null;
+                    if(item.indexOf("_") !== -1)
+                      item2 = item.split("_")[0];
+                    else
+                      item2 = item.replace(/\s/g, '');
+
                     var count = records[item];
                     sum += count;
 
-                    if (facetkey == "document_types")
-                        data2.push({'term': doc_types[item2], 'count': records[item], 'source': doc_types[item], 'relCount': 0});
-                    else
+                    // if (facetkey == "document_types")
+                    //     data2.push({'term': doc_types[item2], 'count': records[item], 'source': doc_types[item], 'relCount': 0});
+                    // else
                         data2.push({'term': item2, 'count': records[item], 'source': item, 'relCount': 0});
                     numb++;
                 }
@@ -1251,7 +1262,7 @@
             var entries = options.data.aggregations3[facetkey];
             // Add the last "blank" entry for proper timeline ending
             if (entries.length > 0) {
-                //if (entries.length == 1) {	
+                //if (entries.length == 1) {
                 entries.push({doc_count: entries[entries.length - 1].doc_count});
             }
             // Set-up dimensions and scales for the chart
@@ -1315,7 +1326,7 @@
             vis.add(pv.Panel)
                     // Add the area segments for each entry
                     .add(pv.Area)
-                    // Set-up auxiliary variable to hold state (mouse over / out) 
+                    // Set-up auxiliary variable to hold state (mouse over / out)
                     .def("active", -1)
                     // Pass the data to Protovis
                     .data(entries)
@@ -1415,7 +1426,7 @@
                         //.on("end", draw)
                         .on("end", function (output) {
                             if ((wordset.length !== output.length) && (maxRange > 14)) {
-                                //console.log("Recurse! " + maxRange); 
+                                //console.log("Recurse! " + maxRange);
                                 update(maxRange - 5);
                                 return undefined;
                             } else {
@@ -1426,7 +1437,7 @@
             }
 
             function draw(words) {
-                //console.log(words); 
+                //console.log(words);
 
                 var cloud = svg.selectAll("g text")
                         .data(words, function (d) {
@@ -1536,7 +1547,7 @@
 
         // put the results on the page
         showresults = function (sdata) {
-            // get the data and parse from elasticsearch or other 
+            // get the data and parse from elasticsearch or other
             var data = null;
             if (options.search_index == "elasticsearch") {
                 // default is elasticsearch
@@ -1546,7 +1557,6 @@
                 return;
             }
             options.data = data;
-console.log(data);
             // put result metadata on the page
             putmetadata(data);
             // put the filtered results on the page
@@ -1566,9 +1576,9 @@ console.log(data);
                 $("#abstract_keywords_" + index).on('hidden.bs.collapse', function () {
                     $('#button_abstract_keywords_collapse_' + index).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
                 });
-                
+
                 $("#pdf" + index).click(showPdfModal);
-                
+
             });
             MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
             // change filter options
@@ -1590,7 +1600,7 @@ console.log(data);
 
 
         };
-        
+
         var showPdfModal = function(event){
             event.preventDefault();
             console.log('showPdfModal');
@@ -1602,17 +1612,17 @@ console.log(data);
             $('.facetview_removepdf').bind('click', removePdfModal);
             $('#facetview_pdfmodal').modal('show');
         }
-        
+
         var removePdfModal = function(event){
             $('#facetview_pdfmodal').modal('hide');
             $('#facetview_pdfmodal').remove();
         }
-        
+
         var loadPDFWithAnnotations = function(num, which){
             PDFJS.disableWorker = true;
             measurementMap = new Array();
-            
-            
+
+
                 PDFJS.getDocument(options.anhalytics_rest+'?id='+which).then(function (pdf) {
                     // Get div#container and cache it for later use
                     var container = document.getElementById("pdfmodal"+num);
@@ -1630,8 +1640,8 @@ console.log(data);
                         pdf.getPage(i).then(function (page) {
                             var table = document.createElement("table");
                             var tr = document.createElement("tr");
-                            var td1 = document.createElement("td"); 
-                            var td2 = document.createElement("td"); 
+                            var td1 = document.createElement("td");
+                            var td2 = document.createElement("td");
 
                             tr.appendChild(td1);
                             tr.appendChild(td2);
@@ -1643,9 +1653,9 @@ console.log(data);
                             var t = document.createTextNode("page " + (page.pageIndex + 1) + "/" + (nbPages));
                             pageInfo.appendChild(t);
                             div0.appendChild(pageInfo);
-                            
+
                             td1.appendChild(div0);
-                            
+
                             var scale = 1.5;
                             var viewport = page.getViewport(scale);
                             var div = document.createElement("div");
@@ -1656,14 +1666,14 @@ console.log(data);
                             // This will keep positions of child elements as per our needs, and add a light border
                             div.setAttribute("style", "position: relative; ");
 
-                           
+
                             // Create a new Canvas element
                             var canvas = document.createElement("canvas");
                             canvas.setAttribute("style", "border-style: solid; border-width: 1px; border-color: gray;");
 
                             // Append Canvas within div#page-#{pdf_page_number}
                             div.appendChild(canvas);
-                            
+
                             // Append div within div#container
                             td1.appendChild(div);
 
@@ -1711,14 +1721,11 @@ console.log(data);
 
                                     // Render text-fragments
                                     textLayer.render();
-                                    
-                                    
-                                    console.log("test");
-                                    
+
                                     var url = options.es_host+"/"+options.quantities_annotation_index+"/"+options.quantities_annotation_type+"/"+which;
-            console.log(url);
+
             var xhr = new XMLHttpRequest();
-            xhr.responseType = 'json'; 
+            xhr.responseType = 'json';
             xhr.open('GET', url, true);
                                      xhr.onreadystatechange = function (e) {
                 if (xhr.readyState == 4 && xhr.status == 200) {
@@ -1735,7 +1742,7 @@ console.log(data);
                         });
                     }
                 });
-           
+
         }
 
         // ===============================================
@@ -1905,7 +1912,7 @@ console.log(data);
 
             var type; // mesure type, e.g. length, mass
             var range; // atomicvalue or inteval range
-            var normalizedUnit; // unit in which the range is expressed 
+            var normalizedUnit; // unit in which the range is expressed
             var from_, to_, value_; // the values to be propagated to the query
             if (sdata.measurements) {
                 if (sdata.measurements[0].quantityLeast) {
@@ -2239,6 +2246,7 @@ must <span class="caret"></span>\
                 var cloneIndex = $(".clonedDiv").length + 1;
                 $("#facetview_searchbars").append(searchbar.replace(/{{NUMBER}}/gi, cloneIndex));
                 $('#facetview_fieldbuttons' + cloneIndex).hide();
+                console.log("hide-display");
                 $("#close-searchbar" + cloneIndex).css("display", "block");
 
                 $(".tei-fields li a").click(function () {
@@ -2261,7 +2269,7 @@ must <span class="caret"></span>\
                 $('#quantities' + cloneIndex).hide();
 
                 $('#close-searchbar' + cloneIndex).click(function () {
-                    // grab the index number 
+                    // grab the index number
                     var theIndex = $(this).attr("id").match(/\d+/)[0];
                     // remove searchbar
                     $('#facetview_searchbar' + theIndex).remove();
@@ -2306,7 +2314,7 @@ must <span class="caret"></span>\
 //            $('#example-single').multiselect({
 //                onChange: function (element, checked) {
 //                    options.brands = $('#example-single option:selected');
-//                    
+//
 //                    //window.location.href = window.location.href.replace(/[\?#].*|$/, "?mode=" + brands.val());
 //                }
 //            });
@@ -2323,5 +2331,3 @@ must <span class="caret"></span>\
     $.fn.facetview.options = {};
 
 })(jQuery);
-
-

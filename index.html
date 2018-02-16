@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <title>Demo HAL</title>
-        <link rel="icon" type="image/x-icon" href="data/images/favicon.ico"/> 
+        <link rel="icon" type="image/x-icon" href="data/images/favicon.ico"/>
         <link rel="shortcut icon" type="image/x-icon" href="data/images/favicon.ico"/>
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
         <!--
@@ -19,25 +19,25 @@
         <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 
         <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>  
+        <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
         <!--        <script type="text/javascript" src="bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>-->
         <script type="text/javascript" src="lib/linkify/1.0/jquery.linkify-1.0-min.js"></script>
         <script type="text/javascript" src="bower_components/d3/d3.min.js "></script>
         <script type="text/javascript" src="bower_components/d3-cloud/build/d3.layout.cloud.js "></script>
         <script type="text/javascript" src="bower_components/protovis/protovis-r3.2.js"></script>
-        
-        
+
+
         <link type="text/css" href="lib/pdf.js/web/text_layer_builder.css" rel="stylesheet"/>
         <link type="text/css" href="lib/pdf.js/web/annotation_layer_builder.css" rel="stylesheet"/>
         <script type="text/javascript" src="lib/pdf.js/web/text_layer_builder.js"></script>
         <script type="text/javascript" src="lib/pdf.js/web/pdf_link_service.js"></script>
         <script type="text/javascript" src="lib/pdf.js/web/annotation_layer_builder.js"></script>
         <script type="text/javascript" src="lib/pdf.js/build/pdf.js"></script>
-        
+
         <script type="text/javascript" src="lib/Porter-Stemmer/stemmer.js"></script>
-        
-        
+
+
 
         <!-- for nicer rendering of wikipedia abstracts -->
         <script type="text/javascript" src="lib/wiki/wiki2html.js"></script>
@@ -68,7 +68,7 @@
             var options = $.extend(defaults, {
                 aggs: [
                     {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_published', 'display': 'publication_date', 'type': 'date', 'view': 'graphic'},
-                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halDomain_abbrev', 'display': 'subject-headers', 'size': 20, 'type': 'taxonomy', 'view': 'graphic'},
+                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_domain', 'display': 'subject-domains', 'size': 20, 'type': 'taxonomy', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.notAnalyzed', 'display': 'keywords', 'size': 10, 'type': 'cloud', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$profileDesc.$langUsage.$language', 'display': 'language', 'size': 6, 'type': 'country', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$desc.$address.key', 'display': 'country', 'size': 6, 'type': 'country', 'view': 'graphic'},
@@ -119,7 +119,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-4 pull-right no-padding">
                     <small><span style="padding-left:40px;color:#AE0C0C;position:relative; float:right;">
                             <!--a href="">Documentation</a>
-                            <a href="index.html?mode_query=simple">simple</a> 
+                            <a href="index.html?mode_query=simple">simple</a>
                             <a href="dashboard.html">dashboard</a-->
                         </span></small>
                 </div>
@@ -133,7 +133,7 @@
                         <div class="col-md-3 ">
                             <div id="facetview_filters"></div>
                         </div>
-                        <div class="col-md-9" id="facetview_rightcol" style="position:relative;" >                            
+                        <div class="col-md-9" id="facetview_rightcol" style="position:relative;" >
                             <!--div class="row" id="facetview_presentation" style="margin-bottom: 150px;"></div-->
                             <div id="facetview_searchbars">
                                 <!--div id="facetview_searchbar1" style="width:900px" class="row input-group clonedDiv">
