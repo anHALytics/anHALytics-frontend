@@ -23,12 +23,13 @@ var displayTitleAnnotation = function (titleID) {
     });
 }
 
-var displayAbstractAnnotation = function (abstractID) {
-    $('#abstractNaked' + abstractID).each(function () {
+var displayAbstractAnnotation = function (abstractpIDs) {
+for (var p in abstractpIDs) {
+    $('#abstractNaked' + abstractpIDs[p]).each(function () {
         // annotations for the abstract
         var index = $(this).attr('pos');
         var titleID = $(this).attr('rel');
-        var localQuery = {"query": {"bool": {"must": {"term": {"_id": abstractID}}}}};
+        var localQuery = {"query": {"bool": {"must": {"term": {"_id": abstractpIDs[p]}}}}};
 
         $.ajax({
             type: "post",
@@ -38,12 +39,13 @@ var displayAbstractAnnotation = function (abstractID) {
             //data: {source: JSON.stringify(localQuery)},
             data: JSON.stringify(localQuery),
             success: function (data) {
-                displayAnnotations(data, index, abstractID, 'abstract');
+                displayAnnotations(data, index, abstractpIDs[p], 'abstract');
             }
         });
         // trigger MathJax on the abstract content
-        MathJax.Hub.Queue(["Typeset",MathJax.Hub, 'abstractNaked'+abstractID]);
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub, 'abstractNaked'+abstractpIDs[p]]);
     });
+  }
 }
 
 var displayKeywordAnnotation = function (keywordIDs) {
@@ -98,10 +100,10 @@ var displayAnnotations = function (data, index, id, origin) {
     //console.log('annotation for ' + id);
     //console.log(jsonObject);
 
-    //var text = jsonObject['_source']['annotation']['nerd']['text'];		
+    //var text = jsonObject['_source']['annotation']['nerd']['text'];
     var text = $('[rel="' + id + '"]').text();
     var entities = jsonObject['_source']['annotation']['nerd']['entities'];
-    
+
     var lang = 'en'; //default
     var language = jsonObject['_source']['annotation']['nerd']['language'];
     if (language)
@@ -135,7 +137,7 @@ var displayAnnotations = function (data, index, id, origin) {
         // tagging the text
         if (start > lastMaxIndex) {
             // we have a problem in the initial sort of the entities
-            // the server response is not compatible with the client 
+            // the server response is not compatible with the client
             console.log("Sorting of entities as present in the server's response not valid for this client.");
         } else if ((start == lastMaxIndex) || (end > lastMaxIndex)) {
             // overlap
@@ -172,7 +174,7 @@ var displayAnnotations = function (data, index, id, origin) {
     //var result = '<strong><span style="font-size:13px">' + text + '<span></strong>';
     $('[rel="' + id + '"]').html(text);
 
-    // now set the popovers/view event 
+    // now set the popovers/view event
     var m = 0;
     for (var m in entities) {
         // set the info box
@@ -202,14 +204,14 @@ var displayAnnotations = function (data, index, id, origin) {
 
 
 
-/** 
- * View the full entity information in the infobox 
+/**
+ * View the full entity information in the infobox
  */
 function viewEntity(event) {
 
     event.preventDefault();
     // currently entity can appear in the title, abstract or keywords
-    // the origin is visible in the event origin id, as well as the "coordinates" of the entity 
+    // the origin is visible in the event origin id, as well as the "coordinates" of the entity
 
     var localID = $(this).attr('id');
 
@@ -366,7 +368,7 @@ function viewEntity(event) {
 //            urlImage += '?maxwidth=150';
 //            urlImage += '&maxheight=150';
 //            urlImage += '&key=' + options.api_key;
-            string += 
+            string +=
             '<span style="align:right;" id="img-' + wikipedia + '-'+resultIndex+'"><script type="text/javascript">lookupWikiMediaImage("'+
                 wikipedia+'", "'+lang+'", "img-'+wikipedia+'-'+resultIndex+'")</script></span>';
         }
@@ -387,7 +389,7 @@ function viewEntity(event) {
 
             string += '<a href="http://en.wikipedia.org/wiki?curid=' +
                             wikipedia +
-                    '" target="_blank"><img style="max-width:28px;max-height:22px;" src="data/images/wikipedia.png"/></a>';        
+                    '" target="_blank"><img style="max-width:28px;max-height:22px;" src="data/images/wikipedia.png"/></a>';
         }
         string += '</p>';
 
@@ -493,7 +495,7 @@ var getPieceShowexpandNERD = function (jsonObject) {
                     + '" name="selectEntity' + sens + '" value="0" href="'
                     + preferredTerm + '" rel="$teiCorpus.$standoff.$nerd.preferredTerm" display="concepts">';
             piece += '<label for="selectEntity' + sens + '" id="label' + sens + '"> <strong>' + entity.rawName + '&nbsp;</strong> </label></div></td>';
-            
+
             //if (conf)
             //     piece += '<p><b>Conf</b>: ' + conf + '</p>';
 
@@ -501,7 +503,7 @@ var getPieceShowexpandNERD = function (jsonObject) {
             if (definitions && definitions.length > 0)
                 localHtml = wiki2html(definitions[0]['definition'], lang);
 
-            /*if ( preferredTerm && (entity.rawName.toLowerCase() != preferredTerm.toLowerCase()) ) {   
+            /*if ( preferredTerm && (entity.rawName.toLowerCase() != preferredTerm.toLowerCase()) ) {
                 piece += '<td><b>' + preferredTerm + ': </b>' +
                         localHtml
                         + '</td><td>';
@@ -512,7 +514,7 @@ var getPieceShowexpandNERD = function (jsonObject) {
             }
 
             piece += '<td width="25%">';
-            piece += 
+            piece +=
             '<span id="img-disamb-' + wikipedia + '-' + sens+'"><script type="text/javascript">lookupWikiMediaImage("'+
                 wikipedia+'", "'+lang+'", "img-disamb-' + wikipedia + '-' + sens+'")</script></span>';
             piece += '</td><td>';

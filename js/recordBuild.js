@@ -1,10 +1,10 @@
 var abstract_metadata = {
-    the_id: "$teiCorpus.$teiHeader.$profileDesc.xml:id",
+    the_id: "$teiCorpus.$teiHeader.$profileDesc.$abstract.xml:id",
     repositoryDocId: "repositoryDocId",
     abstract: "$teiCorpus.$teiHeader.$profileDesc.$abstract.*",
-    abstract_en: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en",
-    abstract_fr: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr",
-    abstract_de: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de",
+    abstract_en: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$p.$lang_en",
+    abstract_fr: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$p.$lang_fr",
+    abstract_de: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$p.$lang_de",
     typology: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology", // should be call in background
     keywordsid: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id", // should be call in background
     keywords: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.analyzed" // should be call in background
@@ -25,7 +25,6 @@ var buildrecord = function (index, node) {
 
     var type = null;
     var id = options.data['ids'][index];
-console.log(jsonObject)
 
     result += '<div class="col-md-2" style="padding-right:0px;">';
     // add image where available
@@ -34,14 +33,14 @@ console.log(jsonObject)
     if (options.display_images) {
 
         if (options.subcollection == "hal") {
-            // try to avoid resizing when possible - useless in this case, and fix height 
+            // try to avoid resizing when possible - useless in this case, and fix height
             // to avoid all records moving while images are downloaded
             result += '<a id="pdf'+index+'" class="fa fa-file-pdf-o fa-5x" rel="'+id+'" href="https://hal.archives-ouvertes.fr/' + repositoryDocId +
                     '/document" target="_blank" style="color:firebrick;"></a>';
         }if (options.subcollection == "istex") {
             result += '<a id="pdf'+index+'" class="fa fa-file-pdf-o fa-5x" rel="'+id+'" href="https://api.istex.fr/document/' + repositoryDocId +
                     '/fulltext/pdf" target="_blank" style="color:firebrick;"></a>';
-            
+
         }
     }
     result += '</div>';
@@ -86,9 +85,9 @@ console.log(jsonObject)
     }
     /*
      if (!title || (title.length === 0)) {
-     
+
      titles = jsonObject[record_metadata.titleen];
-     
+
      if (typeof titles == 'string') {
      title = titles;
      }
@@ -101,11 +100,11 @@ console.log(jsonObject)
      }
      }
      }
-     
+
      if (!title || (title.length === 0)) {
-     
+
      titles = jsonObject[record_metadata.titlefr];
-     
+
      if (typeof titles == 'string') {
      title = titles;
      }
@@ -118,11 +117,11 @@ console.log(jsonObject)
      }
      }
      }
-     
+
      if (!title || (title.length === 0)) {
-     
+
      titles = jsonObject[record_metadata.titlede];
-     
+
      if (typeof titles == 'string') {
      title = titles;
      }
@@ -275,11 +274,11 @@ console.log(jsonObject)
     }
     result += '</strong></div>';
     //result += '<br/>';
-    //result += '<div class="row"><div class="col-md-6"><a id="button_abstract_keywords_collapse_' + index + 
+    //result += '<div class="row"><div class="col-md-6"><a id="button_abstract_keywords_collapse_' + index +
 
-    result += '<div class="row"><a id="button_abstract_keywords_collapse_' + index + 
-        '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_keywords_' + index + 
-        '" style="color: #585858;"> Abstract/Keywords <span class="glyphicon glyphicon-chevron-down" style="font-size:11px"/></a></div><div class="col-md-6"><a target="_blank" href="publication.html?pubID=' + id + 
+    result += '<div class="row"><a id="button_abstract_keywords_collapse_' + index +
+        '" role="button" data-parent="#myGroup" data-toggle="collapse" href="#abstract_keywords_' + index +
+        '" style="color: #585858;"> Abstract/Keywords <span class="glyphicon glyphicon-chevron-down" style="font-size:11px"/></a></div><div class="col-md-6"><a target="_blank" href="publication.html?pubID=' + id +
         //'" style="color: #585858;">More details...</a></div></div>';
         '" style="color: #585858;"></a></div>';
 
@@ -313,9 +312,9 @@ console.log(jsonObject)
 
     result += '<div class="row">';
     result += '<div class="col-md-12">';
-    
-    // snippets 
-    // Dominique Andlauer's strategy (sort of Google's one), at least one snippet per matched term, then 
+
+    // snippets
+    // Dominique Andlauer's strategy (sort of Google's one), at least one snippet per matched term, then
     // per relevance, first we check the number of different matched terms
     if (options.snippet_style == "andlauer") {
         if (highlight) {
@@ -495,14 +494,14 @@ console.log(jsonObject)
 
     node.append(result);
 
-    // load biblio and abstract info. 
-    // pos attribute gives the result index, rel attribute gives the document ID 
+    // load biblio and abstract info.
+    // pos attribute gives the result index, rel attribute gives the document ID
     // abstract and further informations
-    var localQuery = {"stored_fields": [abstract_metadata.the_id, 
+    var localQuery = {"stored_fields": [abstract_metadata.the_id,
             abstract_metadata.repositoryDocId,
-            abstract_metadata.abstract_en, 
-            abstract_metadata.abstract_fr, 
-            abstract_metadata.abstract_de, 
+            abstract_metadata.abstract_en,
+            abstract_metadata.abstract_fr,
+            abstract_metadata.abstract_de,
             abstract_metadata.typology,
             abstract_metadata.keywordsid,
             abstract_metadata.keywords
@@ -522,7 +521,7 @@ console.log(jsonObject)
         }
     });
     displayTitleAnnotation(titleID);
-    
+
 };
 
 var displayAbstractPanel = function (data, index) {
@@ -566,81 +565,52 @@ var displayAbstractPanel = function (data, index) {
         }
         piece += '<p style="align:justify;text-align:justify; text-justify:inter-word; width:100%;"></p>';
 
-        var abstract = null;
+        var abstractp = null;
 
-        var abstractID = null;
-        var abstractIDs = jsonObject['$teiCorpus.$teiHeader.$profileDesc.xml:id'];
-        if (typeof abstractIDs == 'string') {
-            abstractID = abstractIDs;
-        } else {
-            if (abstractIDs && (abstractIDs.length > 0)) {
-                abstractID = abstractIDs[0];
-                while ((typeof abstractID != 'string') && (typeof abstractID != 'undefined')) {
-                    abstractID = abstractID[0];
-                }
+        var abstractpID = null;
+        var abstractpIDs = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.xml:id'];
+        if (typeof abstractpIDs == 'string') {
+            abstractpIDs[0] = abstractpIDs;
+        }
+
+        var abstractps = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$p.$lang_en'];
+        if (typeof abstractps == 'string') {
+            abstractps[0] = abstractps;
+        }
+
+        if (!abstractps || (abstractps.length == 0)) {
+            abstractps = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$p.$lang_fr'];
+
+            if (typeof abstractps == 'string') {
+                abstractps[0] = abstractps;
             }
         }
 
-        var abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_en'];
-        if (typeof abstracts == 'string') {
-            abstract = abstracts;
-        } else {
-            if (abstracts && (abstracts.length > 0)) {
-                abstract = abstracts[0];
-                while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                    abstract = abstract[0];
-                }
+        if (!abstractps || (abstractps.length == 0)) {
+            abstractps = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$p.$lang_de'];
+
+            if (typeof abstractps == 'string') {
+                abstractps[0] = abstractps;
             }
         }
 
-        if (!abstract || (abstract.length == 0)) {
-            abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_fr'];
+        if (!abstractps || (abstractps.length == 0)) {
+            abstractps = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$p.$lang_es'];
 
-            if (typeof abstracts == 'string') {
-                abstract = abstracts;
-            } else {
-                if (abstracts && (abstracts.length > 0)) {
-                    abstract = abstracts[0];
-                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                        abstract = abstract[0];
-                    }
-                }
+            if (typeof abstractps == 'string') {
+                abstractps[0] = abstractps;
             }
         }
 
-        if (!abstract || (abstract.length == 0)) {
-            abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_de'];
-
-            if (typeof abstracts == 'string') {
-                abstract = abstracts;
-            } else {
-                if (abstracts && (abstracts.length > 0)) {
-                    abstract = abstracts[0];
-                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                        abstract = abstract[0];
-                    }
-                }
+        if(typeof abstractps != 'undefined'){
+            for (var n in abstractps) {
+                abstractp = abstractps[n];
+                abstractpID = abstractpIDs[n];
+                  if (abstractp && (abstractp.length > 0) && (abstractp.trim().indexOf(" ") != -1)) {
+                      piece += '<p style="align:justify;text-align:justify; text-justify:inter-word; width:100%;">';
+                      piece += '<strong>Abstract: </strong><span id="abstractNaked'+abstractpID+'" pos="' + index + '" rel="' + abstractpID + '" >' + abstractp + '</span></p>';
+                  }
             }
-        }
-
-        if (!abstract || (abstract.length == 0)) {
-            abstracts = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$lang_es'];
-
-            if (typeof abstracts == 'string') {
-                abstract = abstracts;
-            } else {
-                if (abstracts && (abstracts.length > 0)) {
-                    abstract = abstracts[0];
-                    while ((typeof abstract != 'string') && (typeof abstract != 'undefined')) {
-                        abstract = abstract[0];
-                    }
-                }
-            }
-        }
-
-        if (abstract && (abstract.length > 0) && (abstract.trim().indexOf(" ") != -1)) {
-            piece += '<p style="align:justify;text-align:justify; text-justify:inter-word; width:100%;">';
-            piece += '<strong>Abstract: </strong><span id="abstractNaked'+abstractID+'" pos="' + index + '" rel="' + abstractID + '" >' + abstract + '</span></p>';
         }
 
         // keywords
@@ -675,7 +645,7 @@ var displayAbstractPanel = function (data, index) {
 
         $('#innen_abstract_' + docid).append(piece);
 
-        displayAbstractAnnotation(abstractID);
+        displayAbstractAnnotation(abstractpIDs);
         displayKeywordAnnotation(keywordIDs);
     }
 };
