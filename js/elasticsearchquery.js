@@ -21,7 +21,7 @@ var elasticSearchSearchQuery = function () {
     var bool = false;
     //var nested = false;
     var filtered = false; // true if a filter at least applies to the query
-    var queried_fields = []; // list of queried fields for highlights   
+    var queried_fields = []; // list of queried fields for highlights
     //sorting field
     var datepub = record_metadata.datepub;
     var date = {};
@@ -34,13 +34,41 @@ var elasticSearchSearchQuery = function () {
         textFieldsNPLReturned.push(record_metadata[key]);
     }
 
-    qs['fields'] = textFieldsNPLReturned;
+    qs['stored_fields'] = textFieldsNPLReturned;
+    var quantitiesClauses = [];
 
-    // simple query mode	
+    // simple query mode
     $('.facetview_filterselected', obj).each(function () {
         // facet filter for a range of values
         !bool ? bool = {'must': []} : "";
-        if ($(this).hasClass('facetview_facetrange')) {
+        if ($(this).hasClass('quantitiesrange')) {
+            // prepare the quantity query
+            var rel = $(this).attr('rel');
+            var from_ = $(this).attr('from');
+            var to_ = $(this).attr('to');
+            var value = $(this).attr('value');
+            if(from_ || to_){
+                var rngs = {
+                    'gte': "" + from_,
+                    'lte': "" + to_,
+                    'relation': 'intersects'
+                };
+                var objjrng = {};
+                objjrng['$teiCorpus.$standoff.$quantities.' + rel] = rngs;
+                var obj2 = {}
+                obj2['range'] = objjrng;
+                quantitiesClauses.push(obj2);
+            }
+            else if(value){
+                var objjvalue = {};
+                objjvalue['$teiCorpus.$standoff.$quantities.' + rel] = value;
+                var obj1 = {};
+
+                obj1['match'] = objjvalue;
+
+                quantitiesClauses.push(obj1);
+            }
+        } else if ($(this).hasClass('facetview_facetrange')) {
             var rel = options.aggs[ $(this).attr('rel') ]['field'];
             //var from_ = (parseInt( $('.facetview_lowrangeval', this).html() ) - 1970)* 365*24*60*60*1000;
             //var to_ = (parseInt( $('.facetview_highrangeval', this).html() ) - 1970) * 365*24*60*60*1000 - 1;
@@ -75,14 +103,16 @@ var elasticSearchSearchQuery = function () {
             bool['must'].push(obj);
             filtered = true;
         } else {
-            // other facet filter 
+            // other facet filter
             var obj = {'term': {}};
             obj['term'][ $(this).attr('rel') ] = $(this).attr('href');
             bool['must'].push(obj);
             filtered = true;
         }
+
     });
 
+console.log(quantitiesClauses);
 
     for (var item in options.predefined_filters) {
         // predefined filters to apply to all search and defined in the options
@@ -94,37 +124,29 @@ var elasticSearchSearchQuery = function () {
     }
 
     if (bool) {
-        // $('#facetview_freetext').val() != ""
-        //    ? bool['must'].push( {'query_string': { 'query': $('#facetview_freetext').val() } } )
-        //    : "";
-        var obj = {'query': {}};
+        //var obj = {'query': {}};
         var obj2 = {'bool': bool};
 
-        /*if (nested) {
-         // case nested documents are queried 
-         obj['query'] = obj2;
-         // when nested documents are for the classes
-         obj['path'] = '$teiCorpus.$teiCorpus.$teiHeader.$profileDesc.$textClass';
-         // other cases in the future here...
-         
-         var obj3 = {'nested': obj};
-         var obj4 = {'filter': obj3};
-         }
-         else*/
-        //{
         // case no nested documents are queried
-        obj['query'] = obj2;
-        var obj4 = {'filter': obj};
+        //obj['query'] = obj2;
+        var obj4 = {'filter': obj2};
         //}
 
         if ($('#facetview_freetext1').val() == "") {
-            obj4['query'] = {'match_all': {}};
+            if (quantitiesClauses.length == 0)
+                obj4['must'] = {'match_all': {}};
+            else {
+                obj4['must']= [];
+                for(var i in quantitiesClauses) {
+                    obj4['must'].push(quantitiesClauses[i]);
+                }
+            }
             qs['sort'] = [date];
         } else {
             //obj4['query'] = {'query_string': {'query': $('#facetview_freetext').val(), 'default_operator': 'AND'}};
             var thenum;
-            var obj3 = {'bool': {'should': [],
-                    'must': [], 'must_not': []}};
+            /*var obj3 = {'bool': {'should': [],
+                    'must': [], 'must_not': []}};*/
             var rule;
             var field;
 
@@ -144,26 +166,37 @@ var elasticSearchSearchQuery = function () {
                         obj6['query_string'] = {'default_field': abstract_metadata.keywords, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                     else if (field == "author")
                         obj6['query_string'] = {'default_field': record_metadata.author_fullname, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
-                    if (rule == "should") {
-                        obj3['bool']['should'].push(obj6);
-                    } else if (
-                            rule = "must") {
-                        obj3['bool']['must'].push(obj6);
-
-                    } else if (rule = "must_not") {
-                        obj3['bool']['must_not'].push(obj6);
+                    if (rule === "should") {
+                        //obj3['bool']['should'].push(obj6);
+                        if (!obj4['should'])
+                            obj4['should'] = [];
+                        obj4['should'].push(obj6);
+                    } else if (rule === "must") {
+                        if (!obj4['must'])
+                            obj4['must'] = [];
+                        //obj3['bool']['must'].push(obj6);
+                        obj4['must'].push(obj6);
+                    } else if (rule === "must_not") {
+                        if (!obj4['must_not'])
+                            obj4['must_not'] = [];
+                        //obj3['bool']['must_not'].push(obj6);
+                        obj4['must_not'].push(obj6);
                     }
                     queried_fields.push(obj6['query_string']['default_field']);
-                    
+
                     //obj6['match'][ record_metadata.title ] = $('#facetview_freetext' + thenum).val();
                     //obj6['match'][ 'default_operator' ] = 'AND';
                     //
                 }
             });
-            obj4['query'] = obj3;
+            //obj4['query'] = obj3;
+            if (quantitiesClauses.length > 0) {
+                for(var i in quantitiesClauses) {
+                    obj4['must'].push(quantitiesClauses[i]);
+                }
+            }
         }
-        qs['query'] = {'filtered': obj4};
-        //qs['query'] = {'bool': bool}
+        qs['query'] = {'bool': obj4};
     } else {
         var thenum;
         var obj3 = {'bool': {'should': [],
@@ -184,7 +217,7 @@ var elasticSearchSearchQuery = function () {
                     obj6['query_string'] = {'default_field': "_all", 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 else if (field == "title"){
                     if (lang == "all lang"){
-                        obj6['query_string'] = {'fields': [record_metadata.titleall], 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                        obj6['query_string'] = {'stored_fields': [record_metadata.titleall], 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 }else if (lang == "en")
                         obj6['query_string'] = {'default_field': record_metadata.titleen, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                     else if (lang == "fr")
@@ -194,7 +227,7 @@ var elasticSearchSearchQuery = function () {
 
                 } else if (field == "abstract"){
                         if (lang == "all lang")
-                        obj6['query_string'] = {'fields': [abstract_metadata.abstract], 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
+                        obj6['query_string'] = {'stored_fields': [abstract_metadata.abstract], 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 else if (lang == "en")
                         obj6['query_string'] = {'default_field': abstract_metadata.abstract_en, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                     else if (lang == "fr")
@@ -207,19 +240,18 @@ var elasticSearchSearchQuery = function () {
                         obj6['query_string'] = {'default_field': record_metadata.author_fullname, 'query': $('#facetview_freetext' + thenum).val(), 'default_operator': 'AND'};
                 if (rule == "should") {
                     obj3['bool']['should'].push(obj6);
-                } else if (
-                        rule = "must") {
+                } else if (rule == "must") {
                     obj3['bool']['must'].push(obj6);
-
-                } else if (rule = "must_not") {
+                } else if (rule == "must_not") {
                     obj3['bool']['must_not'].push(obj6);
                 }
 
                 if(obj6['query_string']['default_field'])
-                queried_fields.push(obj6['query_string']['default_field']);
-            else if(obj6['query_string']['fields'])
-                for (var item in obj6['query_string']['fields']) {
-                    queried_fields.push(obj6['query_string']['fields'][item]);
+                    queried_fields.push(obj6['query_string']['default_field']);
+                else if(obj6['query_string']['stored_fields']) {
+                    for (var item in obj6['query_string']['stored_fields']) {
+                        queried_fields.push(obj6['query_string']['stored_fields'][item]);
+                    }
                 }
                 //obj6['match'][ record_metadata.title ] = $('#facetview_freetext' + thenum).val();
                 //obj6['match'][ 'default_operator' ] = 'AND';
@@ -248,7 +280,7 @@ var elasticSearchSearchQuery = function () {
 
         if (options.aggs[item]['type'] == 'date') {
             obj['interval'] = "year";
-            //obj['size'] = 5; 
+            //obj['size'] = 5;
             qs['aggs'][nameFacet] = {"date_histogram": obj};
         } else {
             obj['size'] = options.aggs[item]['size'] + 50;
@@ -276,7 +308,7 @@ var elasticSearchSearchQuery = function () {
 
     for (var fie in queried_fields) {
 //        if (options['snippet_style'] == 'andlauer') {
-//            qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 100};
+//            qs['highlight']['stored_fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 100};
 //        } else {
         if (queried_fields[fie] == '_all' || (queried_fields[fie] != abstract_metadata.keywords && queried_fields[fie] != record_metadata.author_fullname) ) {
             qs['highlight']['fields'][queried_fields[fie]] = {'fragment_size': 130, 'number_of_fragments': 3};

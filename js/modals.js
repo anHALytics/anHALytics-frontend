@@ -124,3 +124,25 @@ var facetrangeModal = '<div id="facetview_rangemodal" class="modal">\
                             </div> \
                             </div> \
                 </div>';
+
+var getPdfModal = function (which) {
+    var pdfModal = 
+            '<div id="facetview_pdfmodal" class="modal" style="display: block; padding-left: 400px;">\
+        <div class="modal-dialog" style="width:1200px">\
+            <div class="modal-content" >\
+                <div class="modal-header"> \
+                <a class="facetview_removepdf close">×</a> \
+                <h3>PDF</h3> \
+                </div> \
+                <div class="modal-body">';
+    
+    pdfModal += '<div id="pdfmodal'+which+'"></div>\
+</div> \
+                <div class="modal-footer"> \
+                <a class="facetview_removepdf btn close">Cancel</a> \
+                </div> \
+                </div> \
+</div> \
+                </div>';
+    return pdfModal;
+}

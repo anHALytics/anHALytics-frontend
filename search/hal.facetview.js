@@ -136,7 +136,7 @@
             // we need to uncheck a checkbox in case the filter has been triggered by checking a checkbox
             // href attribute is similar and can be used to select the checkbox
             var hrefValue = $(this).attr("href");
-            var checkBoxElement = $('input[type="checkbox"][href="'+hrefValue+'"]');
+            var checkBoxElement = $('input[type="checkbox"][href="' + hrefValue + '"]');
             if (checkBoxElement) {
                 checkBoxElement.removeAttr("checked");
             }
@@ -294,7 +294,7 @@
             }
 
             // TBD: we should adjust here the default last day of the month
-            // based on the number of days in the month (e.g. 30 days for 11, 
+            // based on the number of days in the month (e.g. 30 days for 11,
             // 31 days for 10, etc.)
 
             range += (day_from) + '-' + (month_from + 1) + '-' + year_from;
@@ -344,17 +344,17 @@
                         if (numb >= options.aggs[each]['size']) {
                             break;
                         }
-                        var item2;
-                        if (options.aggs[each]['display'] == "document_types")
-                            item2 = doc_types[item];
-                        else
-                            item2 = item;
+                        // var item2;
+                        // if (options.aggs[each]['display'] == "document_types")
+                        //     item2 = doc_types[item];
+                        // else
+                        //     item2 = item;
                         if (options.aggs[each]['display'].indexOf('class') != -1)
-                            item2 = item.replace(/\s/g, '');
+                            item = item.replace(/\s/g, '');
                         var append = '<li><a class="facetview_filterchoice' +
                                 '" rel="' + options.aggs[each]['field'] + '" href="' + item + '" display="' + options.aggs[each]['display'] + '">'
 
-                                + item2 +
+                                + item +
                                 ' (' + addCommas(records[item]) + ')</a></li>';
                         $('#facetview_' + options.aggs[each]['display']).append(append);
                         numb++;
@@ -572,7 +572,7 @@
 
 
             $('#facetview_filters').html("").append(thefilters);
-            
+
             options.visualise_filters ? $('.facetview_visualise').bind('click', show_vis) : "";
             $('.facetview_morefacetvals').bind('click', morefacetvals);
             $('.facetview_facetrange').bind('click', facetrange);
@@ -585,7 +585,7 @@
             }
             $('#validate-date-range').bind('click', setDateRange);
             $('#date-input').hide();
-            
+
             var temp_intro = '<div class="row">\
                         <button style="text-align:left; min-width:20%;margin-top:10px;" class="btn btn-default" id="new_facet" href="" type="button" >\
                             <i class="glyphicon glyphicon-plus"></i> add new facet \
@@ -635,7 +635,7 @@
 	                    </div>';
                 } else if (options.aggs[idx]['type'] == 'date') {
                     vis = '<div id="facetview_visualisation' + '_' + $(this).attr('href') + '" style="position:relative;left:-10px;"> \
-	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') + 
+	                    <div class="modal-body2" id ="facetview_visualisation' + '_' + $(this).attr('href') +
                             '_chart" style="position:relative;"> \
 	                    </div> \
 	                    </div>';
@@ -680,7 +680,7 @@
             if (update) {
                 vis.select("svg").remove();
             }
-
+console.log(facetkey);
             vis = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2").append("svg:svg")
                     .attr("width", w + p * 2)
                     .attr("height", h + p * 2)
@@ -719,7 +719,13 @@
                 if (numb >= options.aggs[facetidx]['size']) {
                     break;
                 }
-                var item2 = item.replace(/\s/g, '');
+                var item2 = null;
+
+                if(item.indexOf("_") !== -1)
+                  item2 = item.split("_")[0];
+                else
+                  item2 = item.replace(/\s/g, '');
+
                 var count = records[item];
                 sum += count;
 
@@ -783,7 +789,7 @@
                 }
                 numb++;
             }
-            //console.log('wheel data:');			
+            //console.log('wheel data:');
             //console.log(datas);
             for (var item in datas) {
                 datas[item]['relCount'] = datas[item]['count'] / sum;
@@ -1039,14 +1045,19 @@
                         break;
                     }
 
-                    var item2 = item.replace(/\s/g, '');
+                    var item2 = null;
+                    if(item.indexOf("_") !== -1)
+                      item2 = item.split("_")[0];
+                    else
+                      item2 = item.replace(/\s/g, '');
+
                     var count = records[item];
                     sum += count;
-                    
-                    if(facetkey == "document_types")
-                    data2.push({'term': doc_types[item2], 'count': records[item], 'source': doc_types[item], 'relCount': 0});
-                else 
-                    data2.push({'term': item2, 'count': records[item], 'source': item, 'relCount': 0});
+
+                    // if (facetkey == "document_types")
+                    //     data2.push({'term': doc_types[item2], 'count': records[item], 'source': doc_types[item], 'relCount': 0});
+                    // else
+                        data2.push({'term': item2, 'count': records[item], 'source': item, 'relCount': 0});
                     numb++;
                 }
             }
@@ -1251,7 +1262,7 @@
             var entries = options.data.aggregations3[facetkey];
             // Add the last "blank" entry for proper timeline ending
             if (entries.length > 0) {
-                //if (entries.length == 1) {	
+                //if (entries.length == 1) {
                 entries.push({doc_count: entries[entries.length - 1].doc_count});
             }
             // Set-up dimensions and scales for the chart
@@ -1266,14 +1277,14 @@
             // Create the basis panel
             var vis = new pv.Panel()
                     .width(w)
-                    .height(h+10)
+                    .height(h + 10)
                     .bottom(40)
                     .left(0)
                     .right(0)
                     .top(3);
 
             // no more than 10 textual elements (so years) on the X axis
-            var rate = Math.floor(entries.length/8);
+            var rate = Math.floor(entries.length / 8);
             var rank = -1;
             // Add the X-ticks
             vis.add(pv.Rule)
@@ -1315,7 +1326,7 @@
             vis.add(pv.Panel)
                     // Add the area segments for each entry
                     .add(pv.Area)
-                    // Set-up auxiliary variable to hold state (mouse over / out) 
+                    // Set-up auxiliary variable to hold state (mouse over / out)
                     .def("active", -1)
                     // Pass the data to Protovis
                     .data(entries)
@@ -1380,7 +1391,7 @@
                 if (numb >= options.aggs[facetidx]['size']) {
                     break;
                 }
-                wordset.push({'text':fct, 'size':aggs[fct]});
+                wordset.push({'text': fct, 'size': aggs[fct]});
                 numb++;
             }
             //$('#' + place).show();
@@ -1388,44 +1399,50 @@
             var w = width;
             var h = w;
             var svg = d3.select("#facetview_visualisation_" + facetkey + " > .modal-body2").append("svg")
-                        .attr("width", w*1.2)
-                        .attr("height", h)
-                        .append("g")
-                        .attr("transform", "translate("+w/2+","+h/2+")");
+                    .attr("width", w * 1.2)
+                    .attr("height", h)
+                    .append("g")
+                    .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
             update(31);
             function update(maxRange) {
                 var minRange = 10;
                 if (maxRange < minRange)
-                    minRange = maxRange-1;
+                    minRange = maxRange - 1;
                 if (minRange == 0)
                     minRange = 1;
-                var theScale = d3.scale.linear().domain([0,max_count]).range([minRange, maxRange]);            
-                d3.layout.cloud().size([w*1.3, h*1.3])
-                    .words(wordset.map(function(d) {
-                        return {text: d.text, size: Math.floor(theScale(d.size))};
-                    }))
-                    //.padding(5)
-                    .rotate(function () { return 0; })
-                    //.rotate(function() { return ~~(Math.random() * 2) * 90; })
-                    .fontSize(function (d) { return d.size; })
-                    //.on("end", draw)
-                    .on("end", function(output) {
-                        if ( (wordset.length !== output.length) && (maxRange > 14) ) { 
-                            //console.log("Recurse! " + maxRange); 
-                            update(maxRange-5); 
-                            return undefined;  
-                        } else { 
-                            draw(output); 
-                        }
-                    })
-                    .start();
+                var theScale = d3.scale.linear().domain([0, max_count]).range([minRange, maxRange]);
+                d3.layout.cloud().size([w * 1.3, h * 1.3])
+                        .words(wordset.map(function (d) {
+                            return {text: d.text, size: Math.floor(theScale(d.size))};
+                        }))
+                        //.padding(5)
+                        .rotate(function () {
+                            return 0;
+                        })
+                        //.rotate(function() { return ~~(Math.random() * 2) * 90; })
+                        .fontSize(function (d) {
+                            return d.size;
+                        })
+                        //.on("end", draw)
+                        .on("end", function (output) {
+                            if ((wordset.length !== output.length) && (maxRange > 14)) {
+                                //console.log("Recurse! " + maxRange);
+                                update(maxRange - 5);
+                                return undefined;
+                            } else {
+                                draw(output);
+                            }
+                        })
+                        .start();
             }
 
             function draw(words) {
-                //console.log(words); 
+                //console.log(words);
 
                 var cloud = svg.selectAll("g text")
-                        .data(words, function(d) { return d.text; });
+                        .data(words, function (d) {
+                            return d.text;
+                        });
 
                 cloud.enter().append("text")
                         .style("font-size", function (d) {
@@ -1446,7 +1463,7 @@
             }
 
         };
-        
+
         // normal click on a graphical facet
         var clickGraph = function (facetfield, facetKey, facetValueDisplay, facetValue) {
             var newobj = '<a class="facetview_filterselected facetview_clear ' +
@@ -1530,7 +1547,7 @@
 
         // put the results on the page
         showresults = function (sdata) {
-            // get the data and parse from elasticsearch or other 
+            // get the data and parse from elasticsearch or other
             var data = null;
             if (options.search_index == "elasticsearch") {
                 // default is elasticsearch
@@ -1540,7 +1557,6 @@
                 return;
             }
             options.data = data;
-
             // put result metadata on the page
             putmetadata(data);
             // put the filtered results on the page
@@ -1560,6 +1576,9 @@
                 $("#abstract_keywords_" + index).on('hidden.bs.collapse', function () {
                     $('#button_abstract_keywords_collapse_' + index).find('span').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
                 });
+
+                $("#pdf" + index).click(showPdfModal);
+
             });
             MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
             // change filter options
@@ -1582,6 +1601,364 @@
 
         };
 
+        var showPdfModal = function(event){
+            event.preventDefault();
+            console.log('showPdfModal');
+            var which = $(this).attr('rel');
+            var num = $(this).attr("id").match(/\d+/)[0];
+            console.log(which);
+            $('#facetview').append(getPdfModal(num));
+            loadPDFWithAnnotations(num, which);
+            $('.facetview_removepdf').bind('click', removePdfModal);
+            $('#facetview_pdfmodal').modal('show');
+        }
+
+        var removePdfModal = function(event){
+            $('#facetview_pdfmodal').modal('hide');
+            $('#facetview_pdfmodal').remove();
+        }
+
+        var loadPDFWithAnnotations = function(num, which){
+            PDFJS.disableWorker = true;
+            measurementMap = new Array();
+
+
+                PDFJS.getDocument(options.anhalytics_rest+'?id='+which).then(function (pdf) {
+                    // Get div#container and cache it for later use
+                    var container = document.getElementById("pdfmodal"+num);
+                    // enable hyperlinks within PDF files.
+                    //var pdfLinkService = new PDFJS.PDFLinkService();
+                    //pdfLinkService.setDocument(pdf, null);
+
+                    //$('#requestResult').html('');
+                    nbPages = pdf.numPages;
+
+                    // Loop from 1 to total_number_of_pages in PDF document
+                    for (var i = 1; i <= nbPages; i++) {
+
+                        // Get desired page
+                        pdf.getPage(i).then(function (page) {
+                            var table = document.createElement("table");
+                            var tr = document.createElement("tr");
+                            var td1 = document.createElement("td");
+                            var td2 = document.createElement("td");
+
+                            tr.appendChild(td1);
+                            tr.appendChild(td2);
+                            table.appendChild(tr);
+
+                            var div0 = document.createElement("div");
+                            div0.setAttribute("style", "text-align: center; margin-top: 1cm; width:80%;");
+                            var pageInfo = document.createElement("p");
+                            var t = document.createTextNode("page " + (page.pageIndex + 1) + "/" + (nbPages));
+                            pageInfo.appendChild(t);
+                            div0.appendChild(pageInfo);
+
+                            td1.appendChild(div0);
+
+                            var scale = 1.5;
+                            var viewport = page.getViewport(scale);
+                            var div = document.createElement("div");
+
+                            // Set id attribute with page-#{pdf_page_number} format
+                            div.setAttribute("id", "page-" + (page.pageIndex + 1));
+
+                            // This will keep positions of child elements as per our needs, and add a light border
+                            div.setAttribute("style", "position: relative; ");
+
+
+                            // Create a new Canvas element
+                            var canvas = document.createElement("canvas");
+                            canvas.setAttribute("style", "border-style: solid; border-width: 1px; border-color: gray;");
+
+                            // Append Canvas within div#page-#{pdf_page_number}
+                            div.appendChild(canvas);
+
+                            // Append div within div#container
+                            td1.appendChild(div);
+
+                            var annot = document.createElement("div");
+                            annot.setAttribute('style', 'vertical-align:top;');
+                            annot.setAttribute('id', 'detailed_quantity-' + (page.pageIndex+1));
+                            td2.setAttribute('style', 'vertical-align:top;');
+                            td2.appendChild(annot);
+
+                            container.appendChild(table);
+
+                            var context = canvas.getContext('2d');
+                            canvas.height = viewport.height;
+                            canvas.width = viewport.width;
+
+                            var renderContext = {
+                                canvasContext: context,
+                                viewport: viewport
+                            };
+
+                            // Render PDF page
+                            page.render(renderContext).then(function () {
+                                // Get text-fragments
+                                return page.getTextContent();
+                            })
+                                .then(function (textContent) {
+                                    // Create div which will hold text-fragments
+                                    var textLayerDiv = document.createElement("div");
+
+                                    // Set it's class to textLayer which have required CSS styles
+                                    textLayerDiv.setAttribute("class", "textLayer");
+
+                                    // Append newly created div in `div#page-#{pdf_page_number}`
+                                    div.appendChild(textLayerDiv);
+
+                                    // Create new instance of TextLayerBuilder class
+                                    var textLayer = new TextLayerBuilder({
+                                        textLayerDiv: textLayerDiv,
+                                        pageIndex: page.pageIndex,
+                                        viewport: viewport
+                                    });
+
+                                    // Set text-fragments
+                                    textLayer.setTextContent(textContent);
+
+                                    // Render text-fragments
+                                    textLayer.render();
+
+                                    var url = options.es_host+"/"+options.quantities_annotation_index+"/"+options.quantities_annotation_type+"/"+which;
+
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = 'json';
+            xhr.open('GET', url, true);
+                                     xhr.onreadystatechange = function (e) {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = e.target.response;
+                    //var response = JSON.parse(xhr.responseText);
+                    //console.log(response);
+                    setupAnnotations(response);
+                } else if (xhr.status != 200) {
+                    console.log("Response " + xhr.status + ": ");
+                }
+            };
+            xhr.send();
+                                });
+                        });
+                    }
+                });
+
+        }
+
+        // ===============================================
+        // quantities
+        // ===============================================
+
+        // the quantity search object built from the user input
+        var quantitySearch = {};
+
+        var modeQuantity = 'form'; // one of form, free or text
+
+        var quantitiesPanel = function () {
+            initUnitMap();
+            var piece = '<div class="well col-md-11" style="background-color:#F7EDDC;">';
+            piece += '<div style="width:50%;margin-top:-5px;margin-bottom:10px;"><b>Quantity search</b> - <a style="font-weight:bold;" id="quantities-form" href="#">form</a> - ' +
+                    '<a id="quantities-free" href="#">free query</a> - <a id="quantities-text" href="#">text</a></div>'
+            piece += '<div id="bar1"/>';
+            piece += '<div id="parse-result1"/>';
+            piece += '</div>';
+            piece += '<div class="col-md-1"><a id="close-quantities-panel" onclick=\'$("#quantities_panel").hide()\'>' +
+                    '<span class="glyphicon glyphicon-remove" style="color:black;"></span></a></div>';
+            $('#quantities_panel').html(piece);
+            initFormDisplay(1);
+            $('#quantities_panel').show();
+            $('#close-quantitiesbar1').hide();
+
+            // bind form, free and text input selection
+            $('#quantities-form').on('click', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+                console.log("tesst");
+                initFormDisplay(1);
+                $('#close-quantitiesbar1').hide();
+                $('#quantities-form').css("font-weight", "bold");
+                $('#quantities-free').css("font-weight", "normal");
+                $('#quantities-text').css("font-weight", "normal");
+                modeQuantity = 'form';
+                return false;
+            });
+            $('#quantities-free').on('click', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+                initFreeFieldDisplay(1);
+                $('#close-freebar1').hide();
+                $('#quantities-form').css("font-weight", "normal");
+                $('#quantities-free').css("font-weight", "bold");
+                $('#quantities-text').css("font-weight", "normal");
+                modeQuantity = 'free';
+                return false;
+            });
+            $('#quantities-text').on('click', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+                $('#bar1').html(quantitiesSearchFreeText);
+                $('#quantities-form').css("font-weight", "normal");
+                $('#quantities-free').css("font-weight", "normal");
+                $('#quantities-text').css("font-weight", "bold");
+                modeQuantity = 'text';
+                return false;
+            });
+        }
+
+        var initFormDisplay = function (ind) {
+            $('#bar' + ind).html(quantitiesSearchForm.replace(/{{NUMBER}}/gi, ind));
+            //$('#close-quantitiesbar'+ind).hide();
+            $('#quantities_fieldbuttons' + ind).click(addQuantitiesSearchBar);
+
+            // inject multi-choice selector information
+            Object.keys(quantitiesTypesUnits).forEach(function (key) {
+                $('.measurement-fields' + ind).append('<li><a href="#" id="measurement-fields' + ind + '-' + key + '">' + key.toLowerCase().replace(/_/g, " ") + '</a></li>');
+                $('#measurement-fields' + ind + '-' + key).on("click", function (e) {
+                    //console.log($(this).text());
+                    $('#selected-measurement-type' + ind).html($(this).text() + ' <span class="caret"></span>');
+                    var units = quantitiesTypesUnits[$(this).text().toUpperCase().replace(/ /g, "_")];
+                    $('.unit-fields' + ind).empty();
+                    for (var i in units) {
+                        $('.unit-fields' + ind).append('<li><a href="#" id="unit-fields' + ind + '-' + i + '">' + units[i].replace(/_/g, " ") + '</a></li>');
+                        $('.unit-fields' + ind + ' li > a').on("click", function (e) {
+                            $('#selected-unit' + ind).html($(this).text() + ' <span class="caret"></span>');
+                            return false;
+                        });
+                    }
+                    return false;
+                });
+            });
+            $('#parse' + ind).on('click', function () {
+                var num = $(this).attr("id").match(/\d+/)[0];
+                parseQuantities(num);
+            });
+            $('#quantities_freetext_from' + ind).bind('keyup', checkParseButton);
+            $('#quantities_freetext_to' + ind).bind('keyup', checkParseButton);
+
+            // bind disambiguate button for substance
+            $('#disambiguate_substance' + ind).click(disambiguateSubstance);
+            $('#quantities_freetext_substance' + ind).bind('keyup', checkDisambiguateSubstanceButton);
+            return false;
+        }
+
+
+// disambiguate substance by calling NERD
+        var disambiguateSubstance = function (e) {
+            console.log("substance");
+            var num = $(this).attr("id").match(/\d+/)[0];
+            var substance = $('#quantities_freetext_substance' + num).val();
+            console.log(substance);
+            doexpandNERD(substance);
+            // take out focus after button release
+            $(this).blur();
+        }
+
+
+        // call grobid quantities to parse currently inputed quantity query
+        var parseQuantities = function (ind) {
+            // create structure to be sent to grobid-quantities
+            var queryString;
+            var service = {};
+            if (modeQuantity == 'text') {
+                queryString = '{ "text" : "' + $('#quantities_text').val() + '" }';
+                service = 'processQuantityText';
+            } else if (modeQuantity == 'free') {
+                queryString = {'text': $('#quantities_freetext' + ind).val()};
+                service = 'processQuantityText';
+            } else if (modeQuantity == 'form') {
+                // case type and unit are specified with the form
+
+                queryString = '{ "from" : "' + $('#quantities_freetext_from' + ind).val().trim() +
+                        '", "to" : "' + $('#quantities_freetext_to' + ind).val().trim() +
+                        '", "type" : "' + $('#selected-measurement-type' + ind).text().trim() +
+                        '", "unit": "' + $('#selected-unit' + ind).text().trim() + '" }';
+
+                // case unit unspecified with the form
+
+                service = 'parseMeasure';
+            }
+
+            var urlQuantities = "http://" + options.host_quantities;
+            if (urlQuantities.endsWith("/"))
+                urlQuantities = urlQuantities.substring(0, urlQuantities.length() - 1);
+            if ((!options.port_quantities) || (options.port_quantities.length == 0))
+                urlQuantities += options.port_quantities + "/" + service;
+            else
+                urlQuantities += ":" + options.port_quantities + "/" + service;
+            $.ajax({
+                type: "POST",
+                url: urlQuantities,
+                //              contentType: 'application/json',
+                //              contentType: 'charset=UTF-8',
+                dataType: 'json',
+                //        dataType: "text",
+                //              data: { text : encodeURIComponent(queryText) },
+                data: queryString,
+                //              data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
+                success: showexpandQuantities
+            });
+        }
+
+        var showexpandQuantities = function (sdata) {
+            if (!sdata) {
+                return;
+            }
+            console.log(sdata);
+
+            // we create a filter corresponding to the parsed measurement
+            console.log('do quantity filter');
+            //var rel = $('#facetview_rangerel').html();
+            //var range = $('#facetview_rangechoices').html();
+
+            var type; // mesure type, e.g. length, mass
+            var range; // atomicvalue or inteval range
+            var normalizedUnit; // unit in which the range is expressed
+            var from_, to_, value_; // the values to be propagated to the query
+            if (sdata.measurements) {
+                if (sdata.measurements[0].quantityLeast) {
+                    type = sdata.measurements[0].quantityLeast.type;
+                    range = sdata.measurements[0].quantityLeast.normalizedQuantity;
+                    normalizedUnit = sdata.measurements[0].quantityLeast.normalizedUnit.name;
+                    from_ = sdata.measurements[0].quantityLeast.normalizedQuantity;
+                }
+                if (sdata.measurements[0].quantityMost) {
+                    type = sdata.measurements[0].quantityMost.type;
+                    if (range.length == 0)
+                        range = sdata.measurements[0].quantityMost.normalizedQuantity;
+                    else
+                        range += '-' + sdata.measurements[0].quantityMost.normalizedQuantity;
+                    normalizedUnit = sdata.measurements[0].quantityMost.normalizedUnit.name;
+                    to_ = sdata.measurements[0].quantityMost.normalizedQuantity;
+                }
+                if (sdata.measurements[0].quantity) {
+                    type = sdata.measurements[0].quantity.type;
+                    range = sdata.measurements[0].quantity.normalizedQuantity;
+                    normalizedUnit = sdata.measurements[0].quantity.normalizedUnit.name;
+                    value_ = sdata.measurements[0].quantity.normalizedQuantity;
+                }
+            }
+
+            var newobj = '<a class="facetview_filterselected quantitiesrange facetview_clear ' +
+                    'btn btn-warning" rel="' + type +
+                    '" alt="remove" title="remove"' +
+                    '" href="#';
+            if (from_)
+                newobj += '" from="' + from_;
+            if (to_)
+                newobj += '" to="' + to_;
+            if (value_)
+                newobj += '" value="' + value_;
+            newobj += '">' + type + ': ' +
+                    range + ' ' + normalizedUnit + ' <i class="glyphicon glyphicon-remove"></i></a>';
+            $('#facetview_selectedfilters').append(newobj);
+            $('.facetview_filterselected').unbind('click', clearfilter);
+            $('.facetview_filterselected').bind('click', clearfilter);
+            //$('#facetview_rangemodal').modal('hide');
+            //$('#facetview_rangemodal').remove();
+            options.paging.from = 0;
+            dosearch();
+        }
+
         // ===============================================
         // disambiguation
         // ===============================================
@@ -1592,11 +1969,11 @@
 //console.log($('#disambiguation_panel').children().length > 0);
             // note: the action bellow prevents the user to refine his search and disambigation
             /*if ($('#disambiguation_panel').children().length > 0)
-                $('#disambiguation_panel').empty();
-            else*/
+             $('#disambiguation_panel').empty();
+             else*/
             doexpandNERD(queryText);
             // take out focus after button release
-            $('#disambiguate'+(thenum)).blur();
+            $('#disambiguate' + (thenum)).blur();
         };
 
         // call the NERD service and propose senses to the user for his query
@@ -1606,7 +1983,7 @@
 
             var urlNERD = "http://" + options.host_nerd;
             if (urlNERD.endsWith("/"))
-                urlNERD = urlNERD.substring(0,urlNERD.length()-1);
+                urlNERD = urlNERD.substring(0, urlNERD.length() - 1);
             if ((!options.port_nerd) || (options.port_nerd.length == 0))
                 urlNERD += options.port_nerd + "/service/disambiguate";
             else
@@ -1617,9 +1994,13 @@
             $.ajax({
                 type: 'POST',
                 url: urlNERD,
-                data: formData,
-                contentType: false,
-                processData: false,
+                //              contentType: 'application/json',
+                //              contentType: 'charset=UTF-8',
+                //              dataType: 'jsonp',
+                dataType: "text",
+                //              data: { text : encodeURIComponent(queryText) },
+                data: queryString,
+                //              data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
                 success: showexpandNERD
             });
         };
@@ -1636,17 +2017,22 @@
 
             piece = getPieceShowexpandNERD(jsonObject);
             $('#disambiguation_panel').html(piece);
-        //            $('#close-disambiguate-panel').bind('click', function () {
-        //                $('#disambiguation_panel').hide();
-        //            })
+            //            $('#close-disambiguate-panel').bind('click', function () {
+            //                $('#disambiguation_panel').hide();
+            //            })
 
             // we need to bind the checkbox...
             for (var sens in jsonObject['entities']) {
-                $('input#selectEntity' + sens).bind('change', $.fn.facetview,clickfilterchoice);
+                $('input#selectEntity' + sens).bind('change', $.fn.facetview, clickfilterchoice);
             }
 
             $('#disambiguation_panel').show();
         };
+
+
+        // ===============================================
+        // main search methods
+        // ===============================================
 
         // execute a search
         var dosearch = function () {
@@ -1656,7 +2042,7 @@
                 $.ajax({
                     //type: "get",
                     type: "post",
-                    url: options.es_host+"/"+options.fulltext_index+"/_search?",
+                    url: options.es_host + "/" + options.fulltext_index + "/_search?",
                     //data: {source: elasticSearchSearchQuery()},
                     data: elasticSearchSearchQuery(),
                     // processData: false,
@@ -1686,18 +2072,18 @@
         var whenready = function () {
             //$("#facetview_presentation").remove();
             // append the facetview object to this object
-            
+
             /*var facetview_howmany = $("#facetview_howmany").text();
-            facetview_howmany = facetview_howmany.replace(/{{HOW_MANY}}/gi, options.paging.size);
-            $("#facetview_howmany").text(facetview_howmany);
-            //$(obj).append(thefacetview);
-            // setup search option triggers
-            $('#facetview_partial_match').bind('click', fixmatch);
-            $('#facetview_exact_match').bind('click', fixmatch);
-            $('#facetview_fuzzy_match').bind('click', fixmatch);
-            $('#facetview_match_any').bind('click', fixmatch);
-            $('#facetview_match_all').bind('click', fixmatch);
-            $('#facetview_howmany').bind('click', howmany);*/
+             facetview_howmany = facetview_howmany.replace(/{{HOW_MANY}}/gi, options.paging.size);
+             $("#facetview_howmany").text(facetview_howmany);
+             //$(obj).append(thefacetview);
+             // setup search option triggers
+             $('#facetview_partial_match').bind('click', fixmatch);
+             $('#facetview_exact_match').bind('click', fixmatch);
+             $('#facetview_fuzzy_match').bind('click', fixmatch);
+             $('#facetview_match_any').bind('click', fixmatch);
+             $('#facetview_match_all').bind('click', fixmatch);
+             $('#facetview_howmany').bind('click', howmany);*/
 
 
             // resize the searchbar
@@ -1726,7 +2112,7 @@
 
             // trigger the search once on load, to get all results
             //if (options.use_delay)
-                dosearch();
+            dosearch();
         };
 
         $('#disambiguation_panel').hide();
@@ -1786,14 +2172,14 @@ must <span class="caret"></span>\
 </ul>\
 <button type="button" id="disambiguate{{NUMBER}}" class="btn btn-default" disabled="true">Disambiguate</button>\
 </div>\
-<div class="btn-group" style="margin-left:20px;">\
+<div class="btn-group" style="margin-left:15px;">\
 <button class="btn btn-default" id="facetview_fieldbuttons{{NUMBER}}" href="" type="button"><i class="glyphicon glyphicon-plus" style="vertical-align:middle;margin-right:0px;margin-bottom:2px;"></i></button>\
 </div>\
 <div class="btn-group">\
 <button class="btn btn-default" id="close-searchbar{{NUMBER}}" href="" type="button"><i class="glyphicon glyphicon-minus" style="vertical-align:middle;margin-right:0px;margin-bottom:4px;"></i></button>\
 </div>\
+<button type="button" id="quantities{{NUMBER}}" class="btn btn-default" style="margin-left:15px;">Quantities</button>\
 </div>';
-
 
         var keyPress = function (e) {
 
@@ -1806,7 +2192,7 @@ must <span class="caret"></span>\
             else
                 deactivateDisambButton(thenum);
             //if (e.keyCode == 13 && (options.q || $("#facetview_selectedfilters").children().length > 0)) {
-            if (e.keyCode == 13) 
+            if (e.keyCode == 13)
             {
 //                    if (url_options.mode)
 //                        window.location.href = window.location.href.replace(/[\&#].*|$/, "&q=" + options.q);
@@ -1818,30 +2204,30 @@ must <span class="caret"></span>\
 //                    $("#facetview_freetext").text(options.q);
                 // check for remote config options, then do first search
                 /*if (options.config_file) {
-                    $.ajax({
-                        type: "get",
-                        url: options.config_file,
-                        //dataType: "jsonp",
-                        success: function (data) {
-                            options = $.extend(options, data);
-                            whenready();
-                        },
-                        error: function () {
-                            $.ajax({
-                                type: "get",
-                                url: options.config_file,
-                                success: function (data) {
-                                    options = $.extend(options, $.parseJSON(data));
-                                    whenready();
-                                },
-                                error: function () {
-                                    whenready();
-                                }
-                            });
-                        }
-                    });
-                } else {*/
-                    //whenready();
+                 $.ajax({
+                 type: "get",
+                 url: options.config_file,
+                 //dataType: "jsonp",
+                 success: function (data) {
+                 options = $.extend(options, data);
+                 whenready();
+                 },
+                 error: function () {
+                 $.ajax({
+                 type: "get",
+                 url: options.config_file,
+                 success: function (data) {
+                 options = $.extend(options, $.parseJSON(data));
+                 whenready();
+                 },
+                 error: function () {
+                 whenready();
+                 }
+                 });
+                 }
+                 });
+                 } else {*/
+                //whenready();
                 if ($('#facetview_filters').children().length == 0)
                     whenready();
                 else
@@ -1860,13 +2246,15 @@ must <span class="caret"></span>\
             if (!options.use_delay)
                 $("#facetview_freetext1").keyup(keyPress);
             $('#disambiguate1').click(disambiguateNERD);
-            
+            $('#quantities1').click(quantitiesPanel);
+
             $("#facetview_fieldbuttons1").on("click", function () {
                 var cloneIndex = $(".clonedDiv").length + 1;
                 $("#facetview_searchbars").append(searchbar.replace(/{{NUMBER}}/gi, cloneIndex));
-                $('#facetview_fieldbuttons'+cloneIndex).hide();
-                $("#close-searchbar"+cloneIndex).css("display", "block");
-                
+                $('#facetview_fieldbuttons' + cloneIndex).hide();
+                console.log("hide-display");
+                $("#close-searchbar" + cloneIndex).css("display", "block");
+
                 $(".tei-fields li a").click(function () {
                     var selText = $(this).text();
                     $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
@@ -1884,19 +2272,20 @@ must <span class="caret"></span>\
                     $("#facetview_freetext" + cloneIndex).keyup(keyPress);
 
                 $('#disambiguate' + cloneIndex).click(disambiguateNERD);
+                $('#quantities' + cloneIndex).hide();
 
-                $('#close-searchbar'+cloneIndex).click(function () {
-                    // grab the index number 
+                $('#close-searchbar' + cloneIndex).click(function () {
+                    // grab the index number
                     var theIndex = $(this).attr("id").match(/\d+/)[0];
                     // remove searchbar
-                    $('#facetview_searchbar'+theIndex).remove();
+                    $('#facetview_searchbar' + theIndex).remove();
                     // trigger a new search if the corresponding free field is not empty and whenready has instanciated the filter facetviews
-                    if (($('#facetview_freetext'+theIndex).val() != "")  && ($('#facetview_filters').children().length > 0))
+                    if (($('#facetview_freetext' + theIndex).val() != "") && ($('#facetview_filters').children().length > 0))
                         dosearch();
                 });
                 cloneIndex++;
             });
-            
+
 
             $(".tei-fields li a").click(function () {
                 var selText = $(this).text();
@@ -1931,7 +2320,7 @@ must <span class="caret"></span>\
 //            $('#example-single').multiselect({
 //                onChange: function (element, checked) {
 //                    options.brands = $('#example-single option:selected');
-//                    
+//
 //                    //window.location.href = window.location.href.replace(/[\?#].*|$/, "?mode=" + brands.val());
 //                }
 //            });
@@ -1948,5 +2337,3 @@ must <span class="caret"></span>\
     $.fn.facetview.options = {};
 
 })(jQuery);
-
-

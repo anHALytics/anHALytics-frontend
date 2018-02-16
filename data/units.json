@@ -1,0 +1,2107 @@
+var allUnits = [
+    {
+      "notations": [
+        {
+          "raw": "m"
+        }
+      ],
+      "type": "LENGTH",
+      "system": "SI_BASE",
+      "supportsPrefixes": true,
+      "names": [
+        {
+          "lemma": "metre",
+          "inflections": [
+            "metres"
+          ]
+        },
+        {
+          "lemma": "meter",
+          "inflections": [
+            "meters"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "m^3",
+          "product": [
+            {
+              "base": "m",
+              "pow": "3"
+            }
+          ]
+        },
+        {
+          "raw": "m³",
+          "product": [
+            {
+              "base": "m",
+              "pow": "3"
+            }
+          ]
+        }
+      ],
+      "type": "VOLUME",
+      "system": "SI_BASE",
+      "supportsPrefixes": true,
+      "names": [
+        {
+          "lemma": "cubic meter",
+          "inflections": [
+            "cubic meters"
+          ]
+        },
+        {
+          "lemma": "cubic metre",
+          "inflections": [
+            "cubic metres"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "th"
+        }
+      ],
+      "type": "LENGTH",
+      "system": "IMPERIAL",
+      "supportsPrefixes": false,
+      "names": [
+        {
+          "lemma": "thou"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "in"
+        }
+      ],
+      "type": "LENGTH",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "inch",
+          "inflections": [
+            "inches"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "ft"
+        }
+      ],
+      "type": "LENGTH",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "foot",
+          "inflections": [
+            "feet"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "yd"
+        }
+      ],
+      "type": "LENGTH",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "yard",
+          "inflections": [
+            "yards"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "ch"
+        }
+      ],
+      "type": "LENGTH",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "chain",
+          "inflections": [
+            "chains"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "fur"
+        }
+      ],
+      "type": "LENGTH",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "furlong",
+          "inflections": [
+            "furlongs"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "mi"
+        }
+      ],
+      "type": "LENGTH",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "mile",
+          "inflections": [
+            "miles"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "lea"
+        }
+      ],
+      "type": "LENGTH",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "league",
+          "inflections": [
+            "leagues"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "ftm"
+        }
+      ],
+      "type": "LENGTH",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "fathom",
+          "inflections": [
+            "fathoms"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "g"
+        }
+      ],
+      "type": "MASS",
+      "system": "SI_BASE",
+      "supportsPrefixes": true,
+      "names": [
+        {
+          "lemma": "gram",
+          "inflections": [
+            "grams"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "t"
+        }
+      ],
+      "type": "MASS",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "ton",
+          "inflections": [
+            "tons"
+          ]
+        },
+        {
+          "lemma": "tonne",
+          "inflections": [
+            "tonnes"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "gr"
+        }
+      ],
+      "type": "MASS",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "grain",
+          "inflections": [
+            "grains"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "drc"
+        }
+      ],
+      "type": "MASS",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "dram",
+          "inflections": [
+            "drams"
+          ]
+        },
+        {
+          "lemma": "drachm",
+          "inflections": [
+            "drachms"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "oz"
+        }
+      ],
+      "type": "MASS",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "ounce",
+          "inflections": [
+            "ounces"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "lb"
+        }
+      ],
+      "type": "MASS",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "pound",
+          "inflections": [
+            "pounds"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "st"
+        }
+      ],
+      "type": "MASS",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "stone",
+          "inflections": [
+            "stones"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "qtr"
+        }
+      ],
+      "type": "MASS",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "quarter",
+          "inflections": [
+            "quarters"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "cwt"
+        }
+      ],
+      "type": "MASS",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "hundredweight",
+          "inflections": [
+            "hundredweights"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "A"
+        }
+      ],
+      "type": "ELECTRIC_CURRENT",
+      "system": "SI_BASE",
+      "names": [
+        {
+          "lemma": "ampere",
+          "inflections": [
+            "amperes"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "s"
+        }
+      ],
+      "type": "TIME",
+      "system": "SI_BASE",
+      "supportsPrefixes": true,
+      "names": [
+        {
+          "lemma": "second",
+          "inflections": [
+            "seconds"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "min"
+        }
+      ],
+      "type": "TIME",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "minute",
+          "inflections": [
+            "minutes"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "h"
+        }
+      ],
+      "type": "TIME",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "hour",
+          "inflections": [
+            "hours"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "type": "TIME",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "day",
+          "inflections": [
+            "days"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "type": "TIME",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "week",
+          "inflections": [
+            "weeks"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "type": "TIME",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "month",
+          "inflections": [
+            "months"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "type": "TIME",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "year",
+          "inflections": [
+            "years"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "type": "TIME",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "fortnight",
+          "inflections": [
+            "fortnights"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "K"
+        }
+      ],
+      "type": "TEMPERATURE",
+      "system": "SI_BASE",
+      "names": [
+        {
+          "lemma": "kelvin",
+          "inflections": [
+            "kelvins"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "°C"
+        },
+        {
+          "raw": "℃"
+        }
+      ],
+      "type": "TEMPERATURE",
+      "system": "SI_DERIVED",
+      "supportsPrefixes": false,
+      "names": [
+        {
+          "lemma": "celsius"
+        },
+        {
+          "lemma": "celcius"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "°F"
+        }
+      ],
+      "type": "TEMPERATURE",
+      "system": "US",
+      "supportsPrefixes": false,
+      "names": [
+        {
+          "lemma": "fahrenheit"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "cd"
+        }
+      ],
+      "type": "LUMINOUS_INTENSITY",
+      "system": "SI_BASE",
+      "supportsPrefixes": true,
+      "names": [
+        {
+          "lemma": "candela",
+          "inflections": [
+            "candelas"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "mol"
+        }
+      ],
+      "type": "AMOUNT_OF_SUBSTANCE",
+      "system": "SI_BASE",
+      "supportsPrefixes": true,
+      "names": [
+        {
+          "lemma": "mole",
+          "inflections": [
+            "moles"
+          ]
+        },
+        {
+          "lemma": "mol",
+          "inflections": [
+            "mols"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "M"
+        },
+        {
+          "raw": "mol/L",
+          "product": [
+            {
+              "base": "mol"
+            },
+            {
+              "base": "L",
+              "pow": "-1"
+            }
+          ]
+        },
+        {
+          "raw": "mol/m^3",
+          "product": [
+            {
+              "base": "mol"
+            },
+            {
+              "base": "m",
+              "pow": "-3"
+            }
+          ]
+        },
+        {
+          "raw": "mol/m³",
+          "product": [
+            {
+              "base": "mol"
+            },
+            {
+              "base": "m",
+              "pow": "-3"
+            }
+          ]
+        }
+      ],
+      "type": "CONCENTRATION",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "molarity"
+        },
+        {
+          "lemma": "amount concentration"
+        },
+        {
+          "lemma": "substance concentration"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "w/w%",
+          "product": [
+            {
+              "base": "w"
+            },
+            {
+              "base": "w%",
+              "pow": "-1"
+            }
+          ]
+        }
+      ],
+      "type": "CONCENTRATION",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "weight/weight percent"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "ppm"
+        }
+      ],
+      "type": "CONCENTRATION",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "part per million"
+        },
+        {
+          "lemma": "part per millions"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "ppb"
+        }
+      ],
+      "type": "CONCENTRATION",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "part per billion"
+        },
+        {
+          "lemma": "part per billions"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "l"
+        }
+      ],
+      "type": "VOLUME",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "litre",
+          "inflections": [
+            "litres"
+          ]
+        },
+        {
+          "lemma": "liter",
+          "inflections": [
+            "liters"
+          ]
+        }
+      ],
+      "support_uom": false  
+    },
+    {
+      "notations": [
+        {
+          "raw": "oz"
+        },
+        {
+          "raw": "fl oz"
+        },
+        {
+          "raw": "fl. oz."
+        },
+        {
+          "raw": "oz. fl."
+        }
+      ],
+      "type": "VOLUME",
+      "system": "US",
+      "names": [
+        {
+          "lemma": "fluid ounce",
+          "inflections": [
+            "fluid ounces"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "oz"
+        },
+        {
+          "raw": "fl oz"
+        },
+        {
+          "raw": "fl. oz."
+        },
+        {
+          "raw": "oz. fl."
+        }
+      ],
+      "type": "VOLUME",
+      "system": "IMPERIAL",
+      "names": [
+        {
+          "lemma": "fluid ounce",
+          "inflections": [
+            "fluid ounces"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "gi"
+        }
+      ],
+      "type": "VOLUME",
+      "system": "US",
+      "names": [
+        {
+          "lemma": "gill",
+          "inflections": [
+            "gills"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "c"
+        }
+      ],
+      "type": "VOLUME",
+      "system": "US",
+      "names": [
+        {
+          "lemma": "cup",
+          "inflections": [
+            "cups"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "pt"
+        }
+      ],
+      "type": "VOLUME",
+      "system": "US",
+      "names": [
+        {
+          "lemma": "pint",
+          "inflections": [
+            "pints"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "qt"
+        }
+      ],
+      "type": "VOLUME",
+      "system": "US",
+      "names": [
+        {
+          "lemma": "quart",
+          "inflections": [
+            "quarts"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "gal"
+        }
+      ],
+      "type": "VOLUME",
+      "system": "US",
+      "names": [
+        {
+          "lemma": "gallon",
+          "inflections": [
+            "gallons"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "cu in"
+        }
+      ],
+      "type": "VOLUME",
+      "system": "US",
+      "names": [
+        {
+          "lemma": "cubic inch",
+          "inflections": [
+            "cubic inches"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "V"
+        }
+      ],
+      "type": "VOLTAGE",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "volt",
+          "inflections": [
+            "volts"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "F"
+        }
+      ],
+      "type": "ELECTRIC_CAPACITANCE",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "farad",
+          "inflections": [
+            "farads"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "Ω"
+        }
+      ],
+      "type": "ELECTRIC_RESISTANCE",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "ohm",
+          "inflections": [
+            "ohms"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "S"
+        }
+      ],
+      "type": "ELECTRIC_CONDUCTANCE",
+      "system": "SI_DERIVED",
+      "supportsPrefixes": true,
+      "names": [
+        {
+          "lemma": "siemens"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "J"
+        }
+      ],
+      "type": "ENERGY",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "joule",
+          "inflections": [
+            "joules"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "C"
+        }
+      ],
+      "type": "ELECTRIC_CHARGE",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "coulomb",
+          "inflections": [
+            "coulombs"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "H"
+        }
+      ],
+      "type": "INDUCTANCE",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "henri",
+          "inflections": [
+            "henries"
+          ]
+        },
+        {
+          "lemma": "henry"
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "W"
+        }
+      ],
+      "type": "POWER",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "watt",
+          "inflections": [
+            "watts"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "VA"
+        }
+      ],
+      "type": "POWER",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "volt-ampere",
+          "inflections": [
+            "volt-amperes"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "T"
+        }
+      ],
+      "type": "MAGNETIC_INDUCTION",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "tesla",
+          "inflections": [
+            "teslas"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "Wb"
+        }
+      ],
+      "type": "MAGNETIC_FLUX",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "weber",
+          "inflections": [
+            "webers"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "dB"
+        }
+      ],
+      "type": "ATTENUATION",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "decibel",
+          "inflections": [
+            "decibels"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "V/m",
+          "product": [
+            {
+              "base": "V"
+            },
+            {
+              "base": "m",
+              "pow": "-1"
+            }
+          ]
+        }
+      ],
+      "type": "ELECTRIC_FIELD",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "volt per metre",
+          "inflections": [
+            "volts per metre"
+          ]
+        },
+        {
+          "lemma": "volt per meter",
+          "inflections": [
+            "volts per meter"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "A/m",
+          "product": [
+            {
+              "base": "A"
+            },
+            {
+              "base": "m",
+              "pow": "-1"
+            }
+          ]
+        }
+      ],
+      "type": "MAGNETIC_FIELD_STRENGTH",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "ampere per metre",
+          "inflections": [
+            "amperes per metre"
+          ]
+        },
+        {
+          "lemma": "ampere per meter",
+          "inflections": [
+            "amperes per meter"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "AT/m",
+          "product": [
+            {
+              "base": "AT"
+            },
+            {
+              "base": "m",
+              "pow": "-1"
+            }
+          ]
+        }
+      ],
+      "type": "MAGNETIC_FIELD_STRENGTH",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "ampere-turn per metre",
+          "inflections": [
+            "ampere-turns per metre"
+          ]
+        },
+        {
+          "lemma": "ampere-turn per meter",
+          "inflections": [
+            "ampere-turns per meter"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "rpm"
+        },
+        {
+          "raw": "round/min",
+          "product": [
+            {
+              "base": "round"
+            },
+            {
+              "base": "min",
+              "pow": "-1"
+            }
+          ]
+        }
+      ],
+      "type": "FREQUENCY",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "round per minute",
+          "inflections": [
+            "rounds per minute"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "rps"
+        },
+        {
+          "raw": "round/s",
+          "product": [
+            {
+              "base": "round"
+            },
+            {
+              "base": "s",
+              "pow": "-1"
+            }
+          ]
+        }
+      ],
+      "type": "FREQUENCY",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "round per second",
+          "inflections": [
+            "rounds per second"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "Hz"
+        }
+      ],
+      "type": "FREQUENCY",
+      "system": "SI_BASE",
+      "names": [
+        {
+          "lemma": "hertz"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "cm^-1",
+          "product": [
+            {
+              "prefix": "c",
+              "base": "m",
+              "pow": "-1"
+            }
+          ]
+        },
+        {
+          "raw": "cm⁻¹",
+          "product": [
+            {
+              "prefix": "c",
+              "base": "m",
+              "pow": "-1"
+            }
+          ]
+        }
+      ],
+      "type": "ENERGY",
+      "system": "SI_DERIVED",
+      "supportsPrefixes": false,
+      "names": [
+        {
+          "lemma": "wavenumber",
+          "inflections": [
+            "wavenumbers"
+          ]
+        },
+        {
+          "lemma": "reciprocal centimeter",
+          "inflections": [
+            "reciprocal centimeters"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "m/s",
+          "product": [
+            {
+              "base": "m"
+            },
+            {
+              "base": "s",
+              "pow": "-1"
+            }
+          ]
+        }
+      ],
+      "type": "VELOCITY",
+      "type": "VELOCITY",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "meter per second",
+          "inflections": [
+            "meters per second"
+          ]
+        },
+        {
+          "lemma": "metre per second",
+          "inflections": [
+            "metres per second"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "mi/h",
+          "product": [
+            {
+              "base": "mi"
+            },
+            {
+              "base": "h",
+              "pow": "-1"
+            }
+          ]
+        },
+        {
+          "raw": "mph"
+        }
+      ],
+      "type": "VELOCITY",
+      "system": "US",
+      "names": [
+        {
+          "lemma": "mile per hour",
+          "inflections": [
+            "miles per hour"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "knot"
+        }
+      ],
+      "type": "VELOCITY",
+      "system": "US",
+      "names": [
+        {
+          "lemma": "knot",
+          "inflections": [
+            "knots"
+          ]
+        },
+        {
+          "lemma": "nautical mile per hour",
+          "inflections": [
+            "nautical miles per hour"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "ips"
+        }
+      ],
+      "type": "VELOCITY",
+      "system": "US",
+      "names": [
+        {
+          "lemma": "inch per second",
+          "inflections": [
+            "inches per second"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "Mach"
+        }
+      ],
+      "type": "VELOCITY",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "mach"
+        },
+        {
+          "lemma": "speed of sound"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "atm"
+        }
+      ],
+      "type": "PRESSURE",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "atmosphere",
+          "inflections": [
+            "atmospheres"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "Pa"
+        }
+      ],
+      "type": "PRESSURE",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "pascal",
+          "inflections": [
+            "pascals"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "Bar"
+        }
+      ],
+      "type": "PRESSURE",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "bar",
+          "inflections": [
+            "bars"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "at"
+        }
+      ],
+      "type": "PRESSURE",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "technical atmosphere"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "Torr"
+        }
+      ],
+      "type": "PRESSURE",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "torr",
+          "inflections": [
+            "torrs"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "psi"
+        }
+      ],
+      "type": "PRESSURE",
+      "system": "US",
+      "names": [
+        {
+          "lemma": "pound per square inch",
+          "inflections": [
+            "pounds per square inch"
+          ]
+        },
+        {
+          "lemma": "pound per square inch",
+          "inflections": [
+            "pounds-force per square inch"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "%"
+        }
+      ],
+      "type": "FRACTION",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "percentage",
+          "inflections": [
+            "percentages"
+          ]
+        },
+        {
+          "lemma": "percent"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "‰"
+        }
+      ],
+      "type": "FRACTION",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "per mille"
+        },
+        {
+          "lemma": "per mil"
+        },
+        {
+          "lemma": "permil"
+        },
+        {
+          "lemma": "permill"
+        },
+        {
+          "lemma": "permille"
+        }
+      ]
+    },
+    {
+      "notations": [
+        {
+          "raw": "‱"
+        }
+      ],
+      "type": "FRACTION",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "per ten thousand"
+        },
+        {
+          "lemma": "basis point"
+        },
+        {
+          "lemma": "permyriad"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "Pl"
+        }
+      ],
+      "type": "DYNAMIC_VISCOSITY",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "poiseuille",
+          "inflections": [
+            "poiseuilles"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "Pa.s"
+        }
+      ],
+      "type": "DYNAMIC_VISCOSITY",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "pascal-second"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "P"
+        }
+      ],
+      "type": "DYNAMIC_VISCOSITY",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "poise",
+          "inflections": [
+            "poises"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "ml/kg/min",
+          "product": [
+            {
+              "prefix": "m",
+              "base": "l"
+            },
+            {
+              "prefix": "k",
+              "base": "g",
+              "pow": "-1"
+            },
+            {
+              "base": "min",
+              "pow": "-1"
+            }
+          ]
+        },
+        {
+          "raw": "ml/(kg*min)",
+          "product": [
+            {
+              "prefix": "m",
+              "base": "l"
+            },
+            {
+              "prefix": "k",
+              "base": "g",
+              "pow": "-1"
+            },
+            {
+              "base": "min",
+              "pow": "-1"
+            }
+          ]
+        }
+      ],
+      "type": "VO2_MAX",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "millilitres per kilogramme of body weight per minute"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "rad"
+        }
+      ],
+      "type": "ANGLE",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "radian",
+          "inflections": [
+            "radians"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "°"
+        },
+        {
+          "raw": "deg"
+        }
+      ],
+      "type": "ANGLE",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "degree",
+          "inflections": [
+            "degrees"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "'"
+        },
+        {
+          "raw": "am"
+        }
+      ],
+      "type": "ANGLE",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "arcmin"
+        },
+        {
+          "lemma": "arcminute"
+        },
+        {
+          "lemma": "MOA"
+        },
+        {
+          "lemma": "minute of arc",
+          "inflections": [
+            "minutes of arc"
+          ]
+        },
+        {
+          "lemma": "minute arc",
+          "inflections": [
+            "minutes arc"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "\""
+        },
+        {
+          "raw": "``"
+        },
+        {
+          "raw": "''"
+        },
+        {
+          "raw": "as"
+        }
+      ],
+      "type": "ANGLE",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "arcsec"
+        },
+        {
+          "lemma": "asec"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "sr"
+        }
+      ],
+      "type": "SOLID_ANGLE",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "steradian",
+          "inflections": [
+            "steradians"
+          ]
+        },
+        {
+          "lemma": "square radian"
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "AU"
+        },
+        {
+          "raw": "au"
+        }
+      ],
+      "type": "LENGTH",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "astronomical unit",
+          "inflections": [
+            "astronomical units"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "kg/m3",
+          "product": [
+            {
+              "prefix": "k",
+              "base": "g"
+            },
+            {
+              "base": "m",
+              "pow": "-3"
+            }
+          ]
+        },
+        {
+          "raw": "kg/m^3",
+          "product": [
+            {
+              "prefix": "k",
+              "base": "g"
+            },
+            {
+              "base": "m",
+              "pow": "-3"
+            }
+          ]
+        }
+      ],
+      "type": "DENSITY",
+      "system": "SI_DERIVED",
+      "supportsPrefixes": false,
+      "names": [
+        {
+          "lemma": "kilogram per cubic metre",
+          "inflections": [
+            "kilograms per cubic metre"
+          ]
+        },
+        {
+          "lemma": "kilogram per cubic meter",
+          "inflections": [
+            "kilograms per cubic meter"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "g/cc",
+          "product": [
+            {
+              "base": "g"
+            },
+            {
+              "base": "cc",
+              "pow": "-1"
+            }
+          ]
+        },
+        {
+          "raw": "g/cm2",
+          "product": [
+            {
+              "base": "g"
+            },
+            {
+              "prefix": "c",
+              "base": "m",
+              "pow": "-2"
+            }
+          ]
+        }
+      ],
+      "type": "DENSITY",
+      "system": "SI_DERIVED",
+      "supportsPrefixes": false,
+      "names": [
+        {
+          "lemma": "gram per cubic centimetre",
+          "inflections": [
+            "grams per cubic centimetre"
+          ]
+        },
+        {
+          "lemma": "gram per cubic centimeter",
+          "inflections": [
+            "grams per cubic centimeter"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "pH"
+        }
+      ],
+      "type": "ACIDITY",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "power of hydrogen",
+          "inflections": [
+            "powers of hydrogen"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "Gy"
+        }
+      ],
+      "type": "ABSORBED_DOSE",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "gray",
+          "inflections": [
+            "grays"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "Ci"
+        }
+      ],
+      "type": "RADIOACTIVITY",
+      "system": "NON_SI",
+      "names": [
+        {
+          "lemma": "curie",
+          "inflections": [
+            "curies"
+          ]
+        }
+      ],
+      "support_uom": false
+    },
+    {
+      "notations": [
+        {
+          "raw": "Bq"
+        }
+      ],
+      "type": "RADIOACTIVITY",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "becquerel",
+          "inflections": [
+            "becquerels"
+          ]
+        }
+      ],
+      "support_uom": true
+    },
+    {
+      "notations": [
+        {
+          "raw": "Sv"
+        }
+      ],
+      "type": "EQUIVALENT_DOSE",
+      "system": "SI_DERIVED",
+      "names": [
+        {
+          "lemma": "sievert",
+          "inflections": [
+            "sieverts"
+          ]
+        }
+      ],
+      "support_uom": true
+    }
+  ]; 
