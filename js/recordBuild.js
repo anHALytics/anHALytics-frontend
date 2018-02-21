@@ -563,6 +563,11 @@ var displayAbstractPanel = function (data, index) {
                 //piece += '<p><strong>' + type + '</strong></p>';
             }
         }
+        if (options.subcollection == "istex") {
+          piece += '<p><strong> <a href="https://api.istex.fr/document/' + repositoryDocId +
+                  '/fulltext/pdf" target="_blank" style="margin-right:10px; color:#D42C2C;" alt="see resource on ISTEX">' + repositoryDocId + '</a></strong>';
+
+        }
         piece += '<p style="align:justify;text-align:justify; text-justify:inter-word; width:100%;"></p>';
 
         var abstractp = null;
