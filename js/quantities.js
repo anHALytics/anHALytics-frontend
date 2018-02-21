@@ -43,7 +43,7 @@ var checkDisambiguateSubstanceButton = function () {
     }
 };
 
-// introduce additional quantity search bar (all search input are of the same type in the panel) 
+// introduce additional quantity search bar (all search input are of the same type in the panel)
 var addQuantitiesSearchBar = function () {
 
 }
@@ -72,9 +72,6 @@ unit <span class="caret"></span>\
 </div>\
 <div style="min-width: 180px;" class="btn-group">\
 <input type="text" class="form-control" id="quantities_freetext_substance{{NUMBER}}" name="q3" aria-describedby="sizing-addon1" placeholder="substance"/>\
-</div>\
-<div class="btn-group">\
-<button type="button" id="disambiguate_substance{{NUMBER}}" class="btn btn-default" disabled="true">Disambiguate</button>\
 </div>\
 <div class="btn-group">\
 <button type="button" id="parse{{NUMBER}}" class="btn btn-default" disabled="true">Parse</button>\
@@ -109,7 +106,7 @@ var quantitiesSearchFreeField = '<div id="quantitiesbar{{NUMBER}}" style="width:
 // text area to express the quantity search with a piece of text (NL)
 var quantitiesSearchFreeText = '';
 
-// init the measurement types / units map, this is necessary to fill the multi-choice selectors in the search form 
+// init the measurement types / units map, this is necessary to fill the multi-choice selectors in the search form
 var initUnitMap = function () {
     if (Object.keys(quantitiesTypesUnits).length == 0) {
         for (var i in allUnits) {
@@ -294,7 +291,7 @@ function viewQuantityPDF() {
         measurementType = "List";
         string = toHtml(quantityMap, measurementType, $(this).position().top);
     }
-//console.log(string); 
+//console.log(string);
     $('#detailed_quantity-' + pageIndex).html(string);
     $('#detailed_quantity-' + pageIndex).show();
 }
@@ -347,7 +344,7 @@ function intervalToHtml(quantityMap, measurementType, topPos) {
             substance = quantityMost.quantified;
 
         string += "<div class='info-sense-box " + colorLabel + "'";
-        if (topPos != -1) 
+        if (topPos != -1)
             string += " style='vertical-align:top; position:relative; top:" + topPos + "'";
         string += "><h2 style='color:#FFF;padding-left:10px;font-size:16;'>" + measurementType;
         string += "</h2>";
@@ -430,7 +427,7 @@ function intervalToHtml(quantityMap, measurementType, topPos) {
 
             if (first) {
                 string += "<div class='info-sense-box " + colorLabel + "'";
-                if (topPos != -1) 
+                if (topPos != -1)
                      string += " style='vertical-align:top; position:relative; top:" + topPos + "'";
                 string += "><h2 style='color:#FFF;padding-left:10px;font-size:16;'>" + measurementType;
                 string += "</h2>";
