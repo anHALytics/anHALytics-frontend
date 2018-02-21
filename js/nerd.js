@@ -9,7 +9,7 @@ function Nerd() {
         var url = "http://" + this.host;
 
         if (url.endsWith("/"))
-            url = url.substring(0, url.length() - 1);
+            url = url.substring(0, url.length - 1);
 
         if ((!this.port) || (this.port.length === 0))
             url += this.port + postfix;

@@ -1880,7 +1880,7 @@ console.log(facetkey);
 
             var urlQuantities = "http://" + options.host_quantities;
             if (urlQuantities.endsWith("/"))
-                urlQuantities = urlQuantities.substring(0, urlQuantities.length() - 1);
+                urlQuantities = urlQuantities.substring(0, urlQuantities.length - 1);
             if ((!options.port_quantities) || (options.port_quantities.length == 0))
                 urlQuantities += options.port_quantities + "/" + service;
             else
@@ -1983,7 +1983,7 @@ console.log(facetkey);
 
             var urlNERD = "http://" + options.host_nerd;
             if (urlNERD.endsWith("/"))
-                urlNERD = urlNERD.substring(0, urlNERD.length() - 1);
+                urlNERD = urlNERD.substring(0, urlNERD.length - 1);
             if ((!options.port_nerd) || (options.port_nerd.length == 0))
                 urlNERD += options.port_nerd + "/service/disambiguate";
             else
@@ -1999,8 +1999,10 @@ console.log(facetkey);
                 //              dataType: 'jsonp',
                 dataType: "text",
                 //              data: { text : encodeURIComponent(queryText) },
-                data: queryString,
+                data: formData,
                 //              data: JSON.stringify( { text : encodeURIComponent(queryText) } ),
+                contentType: false,
+                processData: false,
                 success: showexpandNERD
             });
         };

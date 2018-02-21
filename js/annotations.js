@@ -458,7 +458,6 @@ var getPieceShowexpandNERD = function (jsonObject) {
     var language = jsonObject.language;
     if (language)
         lang = language.lang;
-
     var piece = '<div class="well col-md-11" style="background-color:#F7EDDC;">';
     if (jsonObject['entities']) {
         piece += '<table class="table" style="border:1px solid white;">';
@@ -484,7 +483,7 @@ var getPieceShowexpandNERD = function (jsonObject) {
 
             var wikipediaRefID = entity.wikipediaExternalRef;
             var content = entity.rawName;
-            var preferredTerm = entity.preferredTerm;
+            //var preferredTerm = entity.preferredTerm;
 
             piece += '<tr id="selectLine' + sens + '" href="' + wikipediaRefID + '" rel="$teiCorpus.$standoff.$nerd.wikipediaExternalRef">' +
                 '<td id="selectArea' + sens + '" href="' + wikipediaRefID + '" rel="$teiCorpus.$standoff.$nerd.wikipediaExternalRef">';
@@ -493,31 +492,27 @@ var getPieceShowexpandNERD = function (jsonObject) {
                 sens + '" href="' + wikipediaRefID + '" rel="$teiCorpus.$standoff.$nerd.wikipediaExternalRef">';
 
             piece += '<input type="checkbox" id="selectEntity' + sens
-                    + '" name="selectEntity' + sens + '" value="0" href="'
-                    + preferredTerm + '" rel="$teiCorpus.$standoff.$nerd.preferredTerm" display="concepts">';
-            piece += '<label for="selectEntity' + sens + '" id="label' + sens + '"> <strong>' + entity.rawName + '&nbsp;</strong> </label></div></td>';
+                    + '" name="selectEntity' + sens + '" value="0" " rel="$teiCorpus.$standoff.$nerd.preferredTerm" display="concepts">';
+            piece += '<label for="selectEntity' + sens + '" id="label' + sens + '"> <strong>' + content + '&nbsp;</strong> </label></div></td>';
 
             //if (conf)
             //     piece += '<p><b>Conf</b>: ' + conf + '</p>';
 
             var localHtml = "";
-            if (definitions && definitions.length > 0)
-                localHtml = wiki2html(definitions[0]['definition'], lang);
+            //if (definitions && definitions.length > 0)
+            //    localHtml = wiki2html(definitions[0]['definition'], lang);
 
             /*if ( preferredTerm && (entity.rawName.toLowerCase() != preferredTerm.toLowerCase()) ) {
                 piece += '<td><b>' + preferredTerm + ': </b>' +
                         localHtml
                         + '</td><td>';
-            } else */{
-                piece += '<td>' +
-                        localHtml
-                        + '</td><td>';
-            }
+            } else */
+            piece += '<td id="description-' + sens + '"></td><td>';
 
             piece += '<td width="25%">';
             piece +=
-            '<span id="img-disamb-' + wikipedia + '-' + sens+'"><script type="text/javascript">lookupWikiMediaImage("'+
-                wikipedia+'", "'+lang+'", "img-disamb-' + wikipedia + '-' + sens+'")</script></span>';
+            '<span id="img-disamb-' + wikipediaRefID + '-' + sens+'"><script type="text/javascript">lookupWikiMediaImage("'+
+                wikipediaRefID+'", "'+lang+'", "img-disamb-' + wikipediaRefID + '-' + sens+'")</script></span>';
             piece += '</td><td>';
             piece += '<table><tr><td>';
 
@@ -539,11 +534,11 @@ var getPieceShowexpandNERD = function (jsonObject) {
                 var localHtml = "";
                 if (definitions && definitions.length > 0) {
                     localHtml = wiki2html(definitions[0]['definition'], lang);
-                    var descriptionBlock = $('#description-' + wikipediaRefID);
+                    var descriptionBlock = $('#description-' + sens);
                     descriptionBlock.html(localHtml);
-                    var index = descriptionBlock.attr("index");
+                    //var index = descriptionBlock.attr("index");
 
-                    $('#selectEntity' + index).attr("href", result['preferredTerm']);
+                    $('#selectEntity' + sens).attr("href", result['preferredTerm']);
                 }
             });
         }
