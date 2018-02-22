@@ -1754,49 +1754,50 @@ console.log(facetkey);
 
         var modeQuantity = 'form'; // one of form, free or text
 
-        var quantitiesPanel = function () {
-            initUnitMap();
-            var piece = '<div class="well col-md-11" style="background-color:#F7EDDC;">';
-            piece += '<div style="width:50%;margin-top:-5px;margin-bottom:10px;"><b>Quantity search</b> - <a style="font-weight:bold;" id="quantities-form" href="#">form</a> - ' +
-                    '<a id="quantities-free" href="#">free query</a> - <a id="quantities-text" href="#">text</a></div>'
-            piece += '<div id="bar1"/>';
-            piece += '<div id="parse-result1"/>';
-            piece += '</div>';
-            piece += '<div class="col-md-1"><a id="close-quantities-panel" onclick=\'$("#quantities_panel").hide()\'>' +
-                    '<span class="glyphicon glyphicon-remove" style="color:black;"></span></a></div>';
-            $('#quantities_panel').html(piece);
-            initFormDisplay(1);
+        var addQuantitiesPanel = function () {
             $('#quantities_panel').show();
-            $('#close-quantitiesbar1').hide();
+            var cloneQuantityIndex = $(".clonedQuantityDiv").length + 1;
+            initUnitMap();
+            var piece = '<div class="col-md-11 clonedQuantityDiv" id="panel'+cloneQuantityIndex+'">';
+            piece += '<div style="width:50%;margin-top:-5px;margin-bottom:10px;"><b>Quantity search</b> - <a style="font-weight:bold;" id="quantities-form'+cloneQuantityIndex+'" href="#">form</a> - ' +
+                    '<a id="quantities-free'+cloneQuantityIndex+'" href="#">free query</a> - <a id="quantities-text'+cloneQuantityIndex+'" href="#">text</a></div>'
+            piece += '<div id="bar'+cloneQuantityIndex+'"/>';
+            piece += '<div id="parse-result'+cloneQuantityIndex+'"/>';
+            piece += '</div>';
+            if(cloneQuantityIndex === 1 ){
+              piece += '<div class="col-md-1"><a id="close-quantities-panel" onclick=\'$("#quantities_panel").empty();$("#quantities_panel").hide();dosearch();\'>' +
+                      '<span class="glyphicon glyphicon-remove" style="color:black;"></span></a></div>';
+            }
+            $('#quantities_panel').append(piece);
+            initFormDisplay(cloneQuantityIndex);
+
 
             // bind form, free and text input selection
-            $('#quantities-form').on('click', function (e) {
+            $('#quantities-form'+cloneQuantityIndex).on('click', function (e) {
                 e.stopPropagation();
                 e.preventDefault();
                 console.log("tesst");
-                initFormDisplay(1);
-                $('#close-quantitiesbar1').hide();
+                initFormDisplay(cloneQuantityIndex);
                 $('#quantities-form').css("font-weight", "bold");
                 $('#quantities-free').css("font-weight", "normal");
                 $('#quantities-text').css("font-weight", "normal");
                 modeQuantity = 'form';
                 return false;
             });
-            $('#quantities-free').on('click', function (e) {
+            $('#quantities-free'+cloneQuantityIndex).on('click', function (e) {
                 e.stopPropagation();
                 e.preventDefault();
-                initFreeFieldDisplay(1);
-                $('#close-freebar1').hide();
+                initFreeFieldDisplay(cloneQuantityIndex);
                 $('#quantities-form').css("font-weight", "normal");
                 $('#quantities-free').css("font-weight", "bold");
                 $('#quantities-text').css("font-weight", "normal");
                 modeQuantity = 'free';
                 return false;
             });
-            $('#quantities-text').on('click', function (e) {
+            $('#quantities-text'+cloneQuantityIndex).on('click', function (e) {
                 e.stopPropagation();
                 e.preventDefault();
-                $('#bar1').html(quantitiesSearchFreeText);
+                $('#bar'+cloneQuantityIndex).html(quantitiesSearchFreeText);
                 $('#quantities-form').css("font-weight", "normal");
                 $('#quantities-free').css("font-weight", "normal");
                 $('#quantities-text').css("font-weight", "bold");
@@ -1808,7 +1809,22 @@ console.log(facetkey);
         var initFormDisplay = function (ind) {
             $('#bar' + ind).html(quantitiesSearchForm.replace(/{{NUMBER}}/gi, ind));
             //$('#close-quantitiesbar'+ind).hide();
-            $('#quantities_fieldbuttons' + ind).click(addQuantitiesSearchBar);
+            if(ind === 1 ){
+              $('#quantities_fieldbuttons' + ind).click(addQuantitiesPanel);
+              $('#close-quantitiesbar'+ind).hide();
+            }
+            if(ind > 1 ) {
+              $('#quantities_fieldbuttons'+ind).hide();
+              $('#close-quantitiesbar'+ind).show();
+              $('#close-quantitiesbar'+ind).click(function () {
+                  // grab the index number
+                  var theIndex = $(this).attr("id").match(/\d+/)[0];
+
+                  // remove searchbar
+                  $("#panel"+theIndex).remove();
+                  dosearch();
+              });
+            }
 
             // inject multi-choice selector information
             Object.keys(quantitiesTypesUnits).forEach(function (key) {
@@ -2248,7 +2264,7 @@ must <span class="caret"></span>\
             if (!options.use_delay)
                 $("#facetview_freetext1").keyup(keyPress);
             $('#disambiguate1').click(disambiguateNERD);
-            $('#quantities1').click(quantitiesPanel);
+            $('#quantities1').click(addQuantitiesPanel);
 
             $("#facetview_fieldbuttons1").on("click", function () {
                 var cloneIndex = $(".clonedDiv").length + 1;

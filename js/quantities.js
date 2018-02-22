@@ -7,7 +7,25 @@ var quantitiesTypesUnits = new Object();
 
 var initFreeFieldDisplay = function (ind) {
     $('#bar' + ind).html(quantitiesSearchFreeField.replace(/{{NUMBER}}/gi, ind));
-    $('#quantities_fieldbuttons' + ind).click(addQuantitiesSearchBar);
+
+    if(ind === 1 ){
+      $('#quantities_freebuttons' + ind).click(addQuantitiesPanel);
+      $('#close-freebar'+ind).hide();
+    }
+    if(ind > 1 ) {
+      $('#quantities_freebuttons'+ind).hide();
+      $('#close-freebar'+ind).show();
+      $('#close-freebar'+ind).click(function () {
+          // grab the index number
+          var theIndex = $(this).attr("id").match(/\d+/)[0];
+
+          // remove searchbar
+          $("panel"+theIndex).remove();
+          console.log('removedpanel'+"panel"+theIndex);
+          dosearch();
+      });
+    }
+
 
     $('#parse' + ind).on('click', function () {
         var num = $(this).attr("id").match(/\d+/)[0];
@@ -43,14 +61,9 @@ var checkDisambiguateSubstanceButton = function () {
     }
 };
 
-// introduce additional quantity search bar (all search input are of the same type in the panel)
-var addQuantitiesSearchBar = function () {
-
-}
-
 
 // search bar for quantities as a form
-var quantitiesSearchForm = '<div id="quantitiesbar{{NUMBER}}" style="width:100%;padding-right:0px;" class="row input-group clonedDiv">\
+var quantitiesSearchForm = '<div id="quantitiesbar{{NUMBER}}" style="width:100%;padding-right:0px;" class="row input-group">\
 <div class="btn-group">\
 <button id="selected-measurement-type{{NUMBER}}" class="btn btn-default dropdown-toggle" style="width:80px" data-toggle="dropdown" >\
 type <span class="caret"></span>\
@@ -76,14 +89,14 @@ unit <span class="caret"></span>\
 <div class="btn-group" style="margin-left:15px;">\
 <button class="btn btn-default" id="quantities_fieldbuttons{{NUMBER}}" href="" type="button"><i class="glyphicon glyphicon-plus" style="vertical-align:middle;margin-right:0px;margin-bottom:2px;"></i></button>\
 </div>\
-<div class="btn-group">\
+<div class="btn-group" style="margin-left:15px;">\
 <button class="btn btn-default" id="close-quantitiesbar{{NUMBER}}" href="" type="button"><i class="glyphicon glyphicon-minus" style="vertical-align:middle;margin-right:0px;margin-bottom:4px;"></i></button>\
 </div>\
 </div>\
 </div>';
 
 // search bar for quantities as a single free field to express the query
-var quantitiesSearchFreeField = '<div id="quantitiesbar{{NUMBER}}" style="width:100%;padding-right:0px;" class="row input-group clonedDiv">\
+var quantitiesSearchFreeField = '<div id="quantitiesbar{{NUMBER}}" style="width:100%;padding-right:0px;" class="row input-group">\
 <div style="width:100%;" class="btn-group">\
 <div style="width:85%;" class="btn-group">\
 <input type="text" class="form-control" id="quantities_freetext{{NUMBER}}" name="q" placeholder="query"/>\
