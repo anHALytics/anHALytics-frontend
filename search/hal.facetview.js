@@ -1765,7 +1765,7 @@ console.log(facetkey);
             piece += '<div id="parse-result'+cloneQuantityIndex+'"/>';
             piece += '</div>';
             if(cloneQuantityIndex === 1 ){
-              piece += '<div class="col-md-1"><a id="close-quantities-panel" onclick=\'$("#quantities_panel").empty();$("#quantities_panel").hide();dosearch();\'>' +
+              piece += '<div class="col-md-1"><a id="close-quantities-panel" onclick=\'$("#quantities_panel").hide()\'>' +
                       '<span class="glyphicon glyphicon-remove" style="color:black;"></span></a></div>';
             }
             $('#quantities_panel').append(piece);
