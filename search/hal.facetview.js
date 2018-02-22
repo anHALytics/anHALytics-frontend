@@ -1852,8 +1852,8 @@ console.log(facetkey);
             $('#quantities_freetext_to' + ind).bind('keyup', checkParseButton);
 
             // bind disambiguate button for substance
-            //$('#disambiguate_substance' + ind).click(disambiguateSubstance);
-            //$('#quantities_freetext_substance' + ind).bind('keyup', checkDisambiguateSubstanceButton);
+            $('#disambiguate_substance' + ind).click(disambiguateSubstance);
+            $('#quantities_freetext_substance' + ind).bind('keyup', checkDisambiguateSubstanceButton);
             return false;
         }
 

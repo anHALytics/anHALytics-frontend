@@ -65,13 +65,13 @@ var checkDisambiguateSubstanceButton = function () {
 // search bar for quantities as a form
 var quantitiesSearchForm = '<div id="quantitiesbar{{NUMBER}}" style="width:100%;padding-right:0px;" class="row input-group">\
 <div class="btn-group">\
-<button id="selected-measurement-type{{NUMBER}}" class="btn btn-default dropdown-toggle" style="width:80px" data-toggle="dropdown" >\
+<button id="selected-measurement-type{{NUMBER}}" class="btn btn-default dropdown-toggle" style="width:60px" data-toggle="dropdown" >\
 type <span class="caret"></span>\
 </button>\
 <ul class="dropdown-menu measurement-fields{{NUMBER}}"></ul>\
 </div>\
 <div class="btn-group">\
-<button id="selected-unit{{NUMBER}}" class=" selected-lang-field btn btn-default dropdown-toggle" style="width:75px" data-toggle="dropdown">\
+<button id="selected-unit{{NUMBER}}" class=" selected-lang-field btn btn-default dropdown-toggle" style="width:50px" data-toggle="dropdown">\
 unit <span class="caret"></span>\
 </button>\
 <ul class="dropdown-menu unit-fields{{NUMBER}}"></ul>\
@@ -83,8 +83,11 @@ unit <span class="caret"></span>\
 <div style="width: 95px;" class="btn-group">\
 <input type="text" class="form-control" id="quantities_freetext_to{{NUMBER}}" name="q2" aria-describedby="sizing-addon1" placeholder="to"/>\
 </div>\
-<div style="min-width: 180px;" class="btn-group">\
+<div style="min-width: 150px;" class="btn-group">\
 <input type="text" class="form-control" id="quantities_freetext_substance{{NUMBER}}" name="q3" aria-describedby="sizing-addon1" placeholder="substance"/>\
+</div>\
+<div class="btn-group">\
+<button type="button" id="disambiguate_substance{{NUMBER}}" class="btn btn-default" disabled="true">Disamb.</button>\
 </div>\
 <div class="btn-group">\
 <button type="button" id="parse{{NUMBER}}" class="btn btn-default" disabled="true">Parse</button>\
