@@ -86,6 +86,9 @@ unit <span class="caret"></span>\
 <div style="min-width: 180px;" class="btn-group">\
 <input type="text" class="form-control" id="quantities_freetext_substance{{NUMBER}}" name="q3" aria-describedby="sizing-addon1" placeholder="substance"/>\
 </div>\
+<div class="btn-group">\
+<button type="button" id="parse{{NUMBER}}" class="btn btn-default" disabled="true">Parse</button>\
+</div>\
 <div class="btn-group" style="margin-left:15px;">\
 <button class="btn btn-default" id="quantities_fieldbuttons{{NUMBER}}" href="" type="button"><i class="glyphicon glyphicon-plus" style="vertical-align:middle;margin-right:0px;margin-bottom:2px;"></i></button>\
 </div>\
