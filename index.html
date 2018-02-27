@@ -67,7 +67,7 @@
             var options = $.extend(defaults, {
                 aggs: [
                     {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$monogr.$imprint.$date.$type_published', 'display': 'publication_date', 'type': 'date', 'view': 'graphic'},
-                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_domain', 'display': 'subject-domains', 'size': 20, 'type': 'taxonomy', 'view': 'graphic'},
+                    {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_domain_abbrev', 'display': 'subject-domains', 'size': 20, 'type': 'taxonomy', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.notAnalyzed', 'display': 'keywords', 'size': 10, 'type': 'cloud', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$profileDesc.$langUsage.$language', 'display': 'language', 'size': 6, 'type': 'country', 'view': 'graphic'},
                     {'field': '$teiCorpus.$teiHeader.$fileDesc.$sourceDesc.$biblStruct.$analytic.$author.$affiliation.$org.$desc.$address.key', 'display': 'country', 'size': 6, 'type': 'country', 'view': 'graphic'},
