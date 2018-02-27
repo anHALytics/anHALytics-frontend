@@ -723,9 +723,9 @@ console.log(facetkey);
 
                 if(item.indexOf("_") !== -1)
                   item2 = item.split("_")[0];
-                else
-                  item2 = item.replace(/\s/g, '');
-
+                else {
+                  item2 = item;
+                }
                 var count = records[item];
                 sum += count;
 
