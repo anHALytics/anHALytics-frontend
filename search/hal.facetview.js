@@ -1757,53 +1757,57 @@ console.log(facetkey);
         var addQuantitiesPanel = function () {
             $('#quantities_panel').show();
             var cloneQuantityIndex = $(".clonedQuantityDiv").length + 1;
-            initUnitMap();
-            var piece = '<div class="col-md-11 clonedQuantityDiv" id="panel'+cloneQuantityIndex+'">';
-            piece += '<div style="width:50%;margin-top:-5px;margin-bottom:10px;"><b>Quantity search</b> - <a style="font-weight:bold;" id="quantities-form'+cloneQuantityIndex+'" href="#">form</a> - ' +
-                    '<a id="quantities-free'+cloneQuantityIndex+'" href="#">free query</a> - <a id="quantities-text'+cloneQuantityIndex+'" href="#">text</a></div>'
-            piece += '<div id="bar'+cloneQuantityIndex+'"/>';
-            piece += '<div id="parse-result'+cloneQuantityIndex+'"/>';
-            piece += '</div>';
-            if(cloneQuantityIndex === 1 ){
-              piece += '<div class="col-md-1"><a id="close-quantities-panel" onclick=\'$("#quantities_panel").hide()\'>' +
-                      '<span class="glyphicon glyphicon-remove" style="color:black;"></span></a></div>';
-            }
-            $('#quantities_panel').append(piece);
-            initFormDisplay(cloneQuantityIndex);
+            if(cloneQuantityIndex <= 3){
+              initUnitMap();
+              var piece = '<div class="col-md-11 clonedQuantityDiv" id="panel'+cloneQuantityIndex+'">';
+              piece += '<div style="width:50%;margin-top:-5px;margin-bottom:10px;"><b>Quantity search</b> - <a style="font-weight:bold;" id="quantities-form'+cloneQuantityIndex+'" href="#">form</a> - ' +
+                      '<a id="quantities-free'+cloneQuantityIndex+'" href="#">free query</a> - <a id="quantities-text'+cloneQuantityIndex+'" href="#">text</a></div>'
+              piece += '<div id="bar'+cloneQuantityIndex+'"/>';
+              piece += '<div id="parse-result'+cloneQuantityIndex+'"/>';
+              piece += '</div>';
+              if(cloneQuantityIndex === 1 ){
+                piece += '<div class="col-md-1"><a id="close-quantities-panel" onclick=\'$("#quantities_panel").hide()\'>' +
+                        '<span class="glyphicon glyphicon-remove" style="color:black;"></span></a></div>';
+              }
+              $('#quantities_panel').append(piece);
+              initFormDisplay(cloneQuantityIndex);
 
 
-            // bind form, free and text input selection
-            $('#quantities-form'+cloneQuantityIndex).on('click', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-                console.log("tesst");
-                initFormDisplay(cloneQuantityIndex);
-                $('#quantities-form').css("font-weight", "bold");
-                $('#quantities-free').css("font-weight", "normal");
-                $('#quantities-text').css("font-weight", "normal");
-                modeQuantity = 'form';
-                return false;
-            });
-            $('#quantities-free'+cloneQuantityIndex).on('click', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-                initFreeFieldDisplay(cloneQuantityIndex);
-                $('#quantities-form').css("font-weight", "normal");
-                $('#quantities-free').css("font-weight", "bold");
-                $('#quantities-text').css("font-weight", "normal");
-                modeQuantity = 'free';
-                return false;
-            });
-            $('#quantities-text'+cloneQuantityIndex).on('click', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-                $('#bar'+cloneQuantityIndex).html(quantitiesSearchFreeText);
-                $('#quantities-form').css("font-weight", "normal");
-                $('#quantities-free').css("font-weight", "normal");
-                $('#quantities-text').css("font-weight", "bold");
-                modeQuantity = 'text';
-                return false;
-            });
+              // bind form, free and text input selection
+              $('#quantities-form'+cloneQuantityIndex).on('click', function (e) {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  console.log("tesst");
+                  initFormDisplay(cloneQuantityIndex);
+                  $('#quantities-form').css("font-weight", "bold");
+                  $('#quantities-free').css("font-weight", "normal");
+                  $('#quantities-text').css("font-weight", "normal");
+                  modeQuantity = 'form';
+                  return false;
+              });
+              $('#quantities-free'+cloneQuantityIndex).on('click', function (e) {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  initFreeFieldDisplay(cloneQuantityIndex);
+                  $('#quantities-form').css("font-weight", "normal");
+                  $('#quantities-free').css("font-weight", "bold");
+                  $('#quantities-text').css("font-weight", "normal");
+                  modeQuantity = 'free';
+                  return false;
+              });
+              $('#quantities-text'+cloneQuantityIndex).on('click', function (e) {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  $('#bar'+cloneQuantityIndex).html(quantitiesSearchFreeText);
+                  $('#quantities-form').css("font-weight", "normal");
+                  $('#quantities-free').css("font-weight", "normal");
+                  $('#quantities-text').css("font-weight", "bold");
+                  modeQuantity = 'text';
+                  return false;
+              });
+          } else {
+            alert("You've reached the maximum number (3) of quantities search queries.");
+          }
         }
 
         var initFormDisplay = function (ind) {
