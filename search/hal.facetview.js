@@ -1770,18 +1770,20 @@ console.log(facetkey);
                         '<span class="glyphicon glyphicon-remove" style="color:black;"></span></a></div>';
               }
               $('#quantities_panel').append(piece);
-              initFormDisplay(cloneQuantityIndex);
+
+              if(modeQuantity === 'form'){
+                initFormDisplay(cloneQuantityIndex);
+              } else if(modeQuantity === 'free'){
+                initFreeFieldDisplay(cloneQuantityIndex);
+              }
+              else if(modeQuantity === 'text'){}
 
 
               // bind form, free and text input selection
               $('#quantities-form'+cloneQuantityIndex).on('click', function (e) {
                   e.stopPropagation();
                   e.preventDefault();
-                  console.log("tesst");
                   initFormDisplay(cloneQuantityIndex);
-                  $('#quantities-form').css("font-weight", "bold");
-                  $('#quantities-free').css("font-weight", "normal");
-                  $('#quantities-text').css("font-weight", "normal");
                   modeQuantity = 'form';
                   return false;
               });
@@ -1789,9 +1791,6 @@ console.log(facetkey);
                   e.stopPropagation();
                   e.preventDefault();
                   initFreeFieldDisplay(cloneQuantityIndex);
-                  $('#quantities-form').css("font-weight", "normal");
-                  $('#quantities-free').css("font-weight", "bold");
-                  $('#quantities-text').css("font-weight", "normal");
                   modeQuantity = 'free';
                   return false;
               });
@@ -1799,9 +1798,9 @@ console.log(facetkey);
                   e.stopPropagation();
                   e.preventDefault();
                   $('#bar'+cloneQuantityIndex).html(quantitiesSearchFreeText);
-                  $('#quantities-form').css("font-weight", "normal");
-                  $('#quantities-free').css("font-weight", "normal");
-                  $('#quantities-text').css("font-weight", "bold");
+                  $('#quantities-form'+cloneQuantityIndex).css("font-weight", "normal");
+                  $('#quantities-free'+cloneQuantityIndex).css("font-weight", "normal");
+                  $('#quantities-text'+cloneQuantityIndex).css("font-weight", "bold");
                   modeQuantity = 'text';
                   return false;
               });
@@ -1812,6 +1811,10 @@ console.log(facetkey);
 
         var initFormDisplay = function (ind) {
             $('#bar' + ind).html(quantitiesSearchForm.replace(/{{NUMBER}}/gi, ind));
+
+            $('#quantities-form'+ind).css("font-weight", "bold");
+            $('#quantities-free'+ind).css("font-weight", "normal");
+            $('#quantities-text'+ind).css("font-weight", "normal");
             //$('#close-quantitiesbar'+ind).hide();
             if(ind === 1 ){
               $('#quantities_fieldbuttons' + ind).click(addQuantitiesPanel);
@@ -1859,6 +1862,39 @@ console.log(facetkey);
             $('#disambiguate_substance' + ind).click(disambiguateSubstance);
             $('#quantities_freetext_substance' + ind).bind('keyup', checkDisambiguateSubstanceButton);
             return false;
+        }
+
+        var initFreeFieldDisplay = function (ind) {
+            $('#bar' + ind).html(quantitiesSearchFreeField.replace(/{{NUMBER}}/gi, ind));
+
+
+            $('#quantities-form'+ind).css("font-weight", "normal");
+            $('#quantities-free'+ind).css("font-weight", "bold");
+            $('#quantities-text'+ind).css("font-weight", "normal");
+            if(ind === 1 ){
+              $('#quantities_freebuttons' + ind).click(addQuantitiesPanel);
+              $('#close-freebar'+ind).hide();
+              console.log(ind);
+            }
+            if(ind > 1 ) {
+              $('#quantities_freebuttons'+ind).hide();
+              $('#close-freebar'+ind).show();
+              $('#close-freebar'+ind).click(function () {
+                  // grab the index number
+                  var theIndex = $(this).attr("id").match(/\d+/)[0];
+                  // remove searchbar
+                  $("#panel"+theIndex).remove();
+
+                  dosearch();
+              });
+            }
+
+
+            $('#parse' + ind).on('click', function () {
+                var num = $(this).attr("id").match(/\d+/)[0];
+                parseQuantities(num);
+            });
+            $('#quantities_freetext' + ind).bind('keyup', checkParseButton);
         }
 
 

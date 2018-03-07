@@ -5,35 +5,6 @@
 // map mesurement types and units
 var quantitiesTypesUnits = new Object();
 
-var initFreeFieldDisplay = function (ind) {
-    $('#bar' + ind).html(quantitiesSearchFreeField.replace(/{{NUMBER}}/gi, ind));
-
-    if(ind === 1 ){
-      $('#quantities_freebuttons' + ind).click(addQuantitiesPanel);
-      $('#close-freebar'+ind).hide();
-    }
-    if(ind > 1 ) {
-      $('#quantities_freebuttons'+ind).hide();
-      $('#close-freebar'+ind).show();
-      $('#close-freebar'+ind).click(function () {
-          // grab the index number
-          var theIndex = $(this).attr("id").match(/\d+/)[0];
-
-          // remove searchbar
-          $("panel"+theIndex).remove();
-          console.log('removedpanel'+"panel"+theIndex);
-          dosearch();
-      });
-    }
-
-
-    $('#parse' + ind).on('click', function () {
-        var num = $(this).attr("id").match(/\d+/)[0];
-        parseQuantities(num);
-    });
-    $('#quantities_freetext' + ind).bind('keyup', checkParseButton);
-}
-
 var checkParseButton = function (e) {
     e.stopPropagation();
     e.preventDefault();
@@ -104,7 +75,7 @@ unit <span class="caret"></span>\
 // search bar for quantities as a single free field to express the query
 var quantitiesSearchFreeField = '<div id="quantitiesbar{{NUMBER}}" style="width:100%;padding-right:0px;" class="row input-group">\
 <div style="width:100%;" class="btn-group">\
-<div style="width:85%;" class="btn-group">\
+<div style="width:80%;" class="btn-group">\
 <input type="text" class="form-control" id="quantities_freetext{{NUMBER}}" name="q" placeholder="query"/>\
 </div>\
 <div class="btn-group">\
