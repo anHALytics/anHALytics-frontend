@@ -236,6 +236,29 @@ var buildrecord = function (index, node) {
         result += ' - <em>' + titleBook + '</em>';
     }
 
+    var publisher = jsonObject[record_metadata.publisher];
+    if (publisher && (typeof publisher != 'string')) {
+        result += ' - <em>' + publisher[0] + '</em>';
+    }
+
+
+    var unit_volume = jsonObject[record_metadata.unit_volume];
+    if (unit_volume && (typeof unit_volume != 'string')) {
+        result += ' - volume : ' + unit_volume;
+    }
+
+    var unit_issue = jsonObject[record_metadata.unit_issue];
+    if (unit_issue && (typeof unit_issue != 'string')) {
+        result += ' - issue : ' + unit_issue;
+    }
+
+    var page;
+    var unit_pages = jsonObject[record_metadata.unit_page];
+    if (unit_pages && (typeof unit_pages != 'string')) {
+        result += ' - pages : ' + unit_pages[0] + " - " + unit_pages[1];
+    }
+
+
     var rawDate = JSON.stringify(dates);
     if (rawDate != null) {
         var ind1 = rawDate.indexOf('"');
