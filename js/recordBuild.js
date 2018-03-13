@@ -5,7 +5,7 @@ var abstract_metadata = {
     abstract_en: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$p.$lang_en",
     abstract_fr: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$p.$lang_fr",
     abstract_de: "$teiCorpus.$teiHeader.$profileDesc.$abstract.$p.$lang_de",
-    typology: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_halTypology", // should be call in background
+    typology: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$classCode.$scheme_typology", // should be call in background
     keywordsid: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.xml:id", // should be call in background
     keywords: "$teiCorpus.$teiHeader.$profileDesc.$textClass.$keywords.$type_author.$term.analyzed" // should be call in background
 };
@@ -502,6 +502,7 @@ var buildrecord = function (index, node) {
             abstract_metadata.abstract_en,
             abstract_metadata.abstract_fr,
             abstract_metadata.abstract_de,
+            abstract_metadata.abstract,
             abstract_metadata.typology,
             abstract_metadata.keywordsid,
             abstract_metadata.keywords
@@ -601,6 +602,14 @@ var displayAbstractPanel = function (data, index) {
 
         if (!abstractps || (abstractps.length == 0)) {
             abstractps = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$p.$lang_es'];
+
+            if (typeof abstractps == 'string') {
+                abstractps[0] = abstractps;
+            }
+        }
+
+        if (!abstractps || (abstractps.length == 0)) {
+            abstractps = jsonObject['$teiCorpus.$teiHeader.$profileDesc.$abstract.$p.$lang_unknown'];
 
             if (typeof abstractps == 'string') {
                 abstractps[0] = abstractps;
