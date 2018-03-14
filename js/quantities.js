@@ -131,7 +131,7 @@ function getColor(type) {
 }
 var measurementMap = new Array();
 
-function setupAnnotations(response) {
+function setupAnnotations(response, pagenum) {
     var json = response;
     var pageInfo = json._source.annotation.pages;
 
@@ -197,7 +197,8 @@ function setupAnnotations(response) {
                         page_height = pageInfo[pageNumber - 1].page_height;
                         page_width = pageInfo[pageNumber - 1].page_width;
                     }
-                    annotateEntity(quantityType, thePos, theUrl, page_height, page_width, n, m);
+                    if(pagenum== pageNumber)
+                      annotateEntity(quantityType, thePos, theUrl, page_height, page_width, n, m);
                 });
             }
         });
@@ -206,7 +207,7 @@ function setupAnnotations(response) {
 
 function annotateEntity(theId, thePos, theUrl, page_height, page_width, measurementIndex, positionIndex) {
     var page = thePos.p;
-    var pageDiv = $('#page-' + page);
+    var pageDiv = $('#pdfpage');
     var canvas = pageDiv.children('canvas').eq(0);
     //var canvas = pageDiv.find('canvas').eq(0);;
 
@@ -215,8 +216,8 @@ function annotateEntity(theId, thePos, theUrl, page_height, page_width, measurem
     var scale_x = canvasHeight / page_height;
     var scale_y = canvasWidth / page_width;
 
-    var x = thePos.x * scale_x - 1;
-    var y = thePos.y * scale_y - 1;
+    var x = thePos.x * scale_x + 10;
+    var y = thePos.y * scale_y + 25;
     var width = thePos.w * scale_x + 1;
     var height = thePos.h * scale_y + 1;
 
@@ -279,8 +280,8 @@ function viewQuantityPDF() {
         string = toHtml(quantityMap, measurementType, $(this).position().top);
     }
 //console.log(string);
-    $('#detailed_quantity-' + pageIndex).html(string);
-    $('#detailed_quantity-' + pageIndex).show();
+    $('#detailed_quantity').html(string);
+    $('#detailed_quantity').show();
 }
 
 function intervalToHtml(quantityMap, measurementType, topPos) {
@@ -332,7 +333,7 @@ function intervalToHtml(quantityMap, measurementType, topPos) {
 
         string += "<div class='info-sense-box " + colorLabel + "'";
         if (topPos != -1)
-            string += " style='vertical-align:top; position:relative; top:" + topPos + "'";
+            string += " style='vertical-align:top; position:relative;'";
         string += "><h2 style='color:#FFF;padding-left:10px;font-size:16;'>" + measurementType;
         string += "</h2>";
         string += "<div class='container-fluid' style='background-color:#FFF;color:#70695C;border:padding:5px;margin-top:5px;'>" +
@@ -415,7 +416,7 @@ function intervalToHtml(quantityMap, measurementType, topPos) {
             if (first) {
                 string += "<div class='info-sense-box " + colorLabel + "'";
                 if (topPos != -1)
-                     string += " style='vertical-align:top; position:relative; top:" + topPos + "'";
+                     string += " style='vertical-align:top; position:relative; '";
                 string += "><h2 style='color:#FFF;padding-left:10px;font-size:16;'>" + measurementType;
                 string += "</h2>";
                 first = false;
