@@ -131,15 +131,13 @@ function getColor(type) {
 }
 var measurementMap = new Array();
 
-function setupAnnotations(response, pagenum) {
+function setupAnnotations(response) {
     var json = response;
     var pageInfo = json._source.annotation.pages;
 
     var page_height = 0.0;
     var page_width = 0.0;
-    console.log(pageInfo);
     var measurements = json._source.annotation.measurements;
-    console.log(measurements);
     if (measurements) {
         // hey bro, this must be asynchronous to avoid blocking the brother ;)
         measurements.forEach(function (measurement, n) {
@@ -197,7 +195,6 @@ function setupAnnotations(response, pagenum) {
                         page_height = pageInfo[pageNumber - 1].page_height;
                         page_width = pageInfo[pageNumber - 1].page_width;
                     }
-                    if(pagenum== pageNumber)
                       annotateEntity(quantityType, thePos, theUrl, page_height, page_width, n, m);
                 });
             }
@@ -207,7 +204,7 @@ function setupAnnotations(response, pagenum) {
 
 function annotateEntity(theId, thePos, theUrl, page_height, page_width, measurementIndex, positionIndex) {
     var page = thePos.p;
-    var pageDiv = $('#pdfpage');
+    var pageDiv = $('#page-' + page);
     var canvas = pageDiv.children('canvas').eq(0);
     //var canvas = pageDiv.find('canvas').eq(0);;
 
@@ -216,8 +213,8 @@ function annotateEntity(theId, thePos, theUrl, page_height, page_width, measurem
     var scale_x = canvasHeight / page_height;
     var scale_y = canvasWidth / page_width;
 
-    var x = thePos.x * scale_x + 10;
-    var y = thePos.y * scale_y + 25;
+    var x = thePos.x * scale_x - 1;
+    var y = thePos.y * scale_y - 1;
     var width = thePos.w * scale_x + 1;
     var height = thePos.h * scale_y + 1;
 
@@ -253,7 +250,7 @@ function viewQuantityPDF() {
     var pageIndex = $(this).attr('page');
     var localID = $(this).attr('id');
 
-    console.log('viewQuanityPDF ' + pageIndex + ' / ' + localID);
+    //console.log('viewQuanityPDF ' + pageIndex + ' / ' + localID);
 
     var ind1 = localID.indexOf('-');
     var ind2 = localID.indexOf('-', ind1 + 1);
@@ -266,7 +263,7 @@ function viewQuantityPDF() {
     }
 
     var quantityMap = measurementMap[localMeasurementNumber];
-    console.log(quantityMap);
+    //console.log(quantityMap);
     var measurementType = null;
     var string = "";
     if (quantityMap.length == 1) {
@@ -280,8 +277,8 @@ function viewQuantityPDF() {
         string = toHtml(quantityMap, measurementType, $(this).position().top);
     }
 //console.log(string);
-    $('#detailed_quantity').html(string);
-    $('#detailed_quantity').show();
+    $('#detailed_quantity-' + pageIndex).html(string);
+    $('#detailed_quantity-' + pageIndex).show();
 }
 
 function intervalToHtml(quantityMap, measurementType, topPos) {
@@ -333,7 +330,7 @@ function intervalToHtml(quantityMap, measurementType, topPos) {
 
         string += "<div class='info-sense-box " + colorLabel + "'";
         if (topPos != -1)
-            string += " style='vertical-align:top; position:relative;'";
+            string += " style='vertical-align:top; position:relative; top:" + topPos + "'";
         string += "><h2 style='color:#FFF;padding-left:10px;font-size:16;'>" + measurementType;
         string += "</h2>";
         string += "<div class='container-fluid' style='background-color:#FFF;color:#70695C;border:padding:5px;margin-top:5px;'>" +
@@ -416,7 +413,7 @@ function intervalToHtml(quantityMap, measurementType, topPos) {
             if (first) {
                 string += "<div class='info-sense-box " + colorLabel + "'";
                 if (topPos != -1)
-                     string += " style='vertical-align:top; position:relative; '";
+                     string += " style='vertical-align:top; position:relative; top:" + topPos + "'";
                 string += "><h2 style='color:#FFF;padding-left:10px;font-size:16;'>" + measurementType;
                 string += "</h2>";
                 first = false;

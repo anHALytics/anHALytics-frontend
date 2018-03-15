@@ -14,148 +14,144 @@
 <script type="text/javascript" src="lib/pdf.js/build/pdf.js"></script>
 <script type="text/javascript" src="js/quantities.js"></script>
 
-<div>
+<!-- <div>
   <button id="prev">Previous</button>
   <button id="next">Next</button>
   &nbsp; &nbsp;
   <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
-</div>
-<div id=<"container">
-  <table>
-    <tr>
-      <td  style="width:80%;">
-      <div id="pdfpage">
-<canvas id="the-canvas" style="border:1px solid black;"></canvas>
-</div>
-</td>
-<td>
-  <div id="detailed_quantity" style="vertical-align:top;"></div>
-</td>
-</tr>
-</table>
+</div> -->
+<div id="container">
+
 
 </div>
 
 <script type="text/javascript">
-console.log("anhalyticsDocId");
+
+PDFJS.disableWorker = true;
+measurementMap = new Array();
+
 var docid = $.getUrlVars("anhalyticsDocId").anhalyticsDocId;
 // If absolute URL from the remote server is provided, configure the CORS
 // header on that server.
 var pdfurl = defaults.anhalytics_rest+'?id='+docid;
 var annotationurl = defaults.es_host+"/"+defaults.quantities_annotation_index+"/"+defaults.quantities_annotation_type+"/"+docid;
 
-var xhr = new XMLHttpRequest();
-xhr.responseType = 'json';
+PDFJS.getDocument(pdfurl).then(function (pdf) {
+    // Get div#container and cache it for later use
+    var container = document.getElementById("container");
+    // enable hyperlinks within PDF files.
+    //var pdfLinkService = new PDFJS.PDFLinkService();
+    //pdfLinkService.setDocument(pdf, null);
+
+    //$('#requestResult').html('');
+    nbPages = pdf.numPages;
+
+    // Loop from 1 to total_number_of_pages in PDF document
+    for (var i = 1; i <= nbPages; i++) {
+
+        // Get desired page
+        pdf.getPage(i).then(function (page) {
+            var table = document.createElement("table");
+            var tr = document.createElement("tr");
+            var td1 = document.createElement("td");
+            var td2 = document.createElement("td");
+
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            table.appendChild(tr);
+
+            var div0 = document.createElement("div");
+            div0.setAttribute("style", "text-align: center; margin-top: 1cm; width:80%;");
+            var pageInfo = document.createElement("p");
+            var t = document.createTextNode("page " + (page.pageIndex + 1) + "/" + (nbPages));
+            pageInfo.appendChild(t);
+            div0.appendChild(pageInfo);
+
+            td1.appendChild(div0);
+
+            var scale = 1.5;
+            var viewport = page.getViewport(scale);
+            var div = document.createElement("div");
+
+            // Set id attribute with page-#{pdf_page_number} format
+            div.setAttribute("id", "page-" + (page.pageIndex + 1));
+
+            // This will keep positions of child elements as per our needs, and add a light border
+            div.setAttribute("style", "position: relative; ");
 
 
-var pdfDoc = null,
-    pageNum = 1,
-    pageRendering = false,
-    pageNumPending = null,
-    scale = 2,
-    canvas = document.getElementById('the-canvas'),
-    ctx = canvas.getContext('2d');
+            // Create a new Canvas element
+            var canvas = document.createElement("canvas");
+            canvas.setAttribute("style", "border-style: solid; border-width: 1px; border-color: gray;");
 
-/**
- * Get page info from document, resize canvas accordingly, and render page.
- * @param num Page number.
- */
-function renderPage(num) {
-  pageRendering = true;
-  // Using promise to fetch the page
-  pdfDoc.getPage(num).then(function(page) {
-    var viewport = page.getViewport(scale);
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
+            // Append Canvas within div#page-#{pdf_page_number}
+            div.appendChild(canvas);
 
-    // Render PDF page into canvas context
-    var renderContext = {
-      canvasContext: ctx,
-      viewport: viewport
-    };
-    var renderTask = page.render(renderContext);
+            // Append div within div#container
+            td1.appendChild(div);
 
-    // Wait for rendering to finish
-    renderTask.promise.then(function() {
-      pageRendering = false;
-      if (pageNumPending !== null) {
-        // New page rendering is pending
-        renderPage(pageNumPending);
-        pageNumPending = null;
-      }
-    });
-  });
+            var annot = document.createElement("div");
+            annot.setAttribute('style', 'vertical-align:top;');
+            annot.setAttribute('id', 'detailed_quantity-' + (page.pageIndex+1));
+            td2.setAttribute('style', 'vertical-align:top;');
+            td2.appendChild(annot);
 
-  // Update page counters
-  document.getElementById('page_num').textContent = num;
+            container.appendChild(table);
 
+            var context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
 
-  xhr.open('GET', annotationurl, true);
-  xhr.onreadystatechange = function (e) {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-          var response = e.target.response;
-          //var response = JSON.parse(xhr.responseText);
-          //console.log(response);
-          $("#detailed_quantity").empty();
-          $("a").remove();
-          setupAnnotations(response, num);
-      } else if (xhr.status != 200) {
-          console.log("Response " + xhr.status + ": ");
-      }
-  };
-  xhr.send();
+            var renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
 
-}
+            // Render PDF page
+            page.render(renderContext).then(function () {
+                // Get text-fragments
+                return page.getTextContent();
+            })
+                .then(function (textContent) {
+                    // Create div which will hold text-fragments
+                    var textLayerDiv = document.createElement("div");
 
-/**
- * If another page rendering in progress, waits until the rendering is
- * finised. Otherwise, executes rendering immediately.
- */
-function queueRenderPage(num) {
-  if (pageRendering) {
-    pageNumPending = num;
-  } else {
-    renderPage(num);
-  }
-}
+                    // Set it's class to textLayer which have required CSS styles
+                    textLayerDiv.setAttribute("class", "textLayer");
 
-/**
- * Displays previous page.
- */
-function onPrevPage() {
-  if (pageNum <= 1) {
-    return;
-  }
-  pageNum--;
-  queueRenderPage(pageNum);
-}
-document.getElementById('prev').addEventListener('click', onPrevPage);
+                    // Append newly created div in `div#page-#{pdf_page_number}`
+                    div.appendChild(textLayerDiv);
 
-/**
- * Displays next page.
- */
-function onNextPage() {
-  if (pageNum >= pdfDoc.numPages) {
-    return;
-  }
-  pageNum++;
-  queueRenderPage(pageNum);
-}
-document.getElementById('next').addEventListener('click', onNextPage);
+                    // Create new instance of TextLayerBuilder class
+                    var textLayer = new TextLayerBuilder({
+                        textLayerDiv: textLayerDiv,
+                        pageIndex: page.pageIndex,
+                        viewport: viewport
+                    });
 
-/**
- * Asynchronously downloads PDF.
- */
-PDFJS.getDocument(pdfurl).then(function(pdfDoc_) {
-  pdfDoc = pdfDoc_;
-  document.getElementById('page_count').textContent = pdfDoc.numPages;
+                    // Set text-fragments
+                    textLayer.setTextContent(textContent);
 
-  // Initial/first page rendering
-  renderPage(pageNum);
+                    // Render text-fragments
+                    textLayer.render();
 
+                    var xhr = new XMLHttpRequest();
+                    xhr.responseType = 'json';
+
+                    xhr.open('GET', annotationurl, true);
+                    xhr.onreadystatechange = function (e) {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                      var response = e.target.response;
+                      //var response = JSON.parse(xhr.responseText);
+                      //console.log(response);
+                      setupAnnotations(response);
+                    } else if (xhr.status != 200) {
+                      console.log("Response " + xhr.status + ": ");
+                    }
+                  };
+                  xhr.send();
+                });
+        });
+    }
 });
-
-
-
-
 </script>

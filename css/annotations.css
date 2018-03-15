@@ -1,7 +1,7 @@
 /**
- *  Ad hoc Modifications to Bootstrap 
- * 
- *  Author: Patrice Lopez        
+ *  Ad hoc Modifications to Bootstrap
+ *
+ *  Author: Patrice Lopez
  */
 
 
@@ -121,7 +121,7 @@ code, pre, pre.prettyprint {
 pre, pre.prettyprint {
     padding: 16px 20px;
     margin: 10px 0;
-    -webkit-border-radius: 6px; 
+    -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;
     max-width: 100%;
@@ -166,7 +166,7 @@ pre, pre.prettyprint {
 
 /*a:focus{outline:thin dotted #BC0E0E;outline:5px auto -webkit-focus-ring-color;outline-offset:-2px;}
 a:hover,a:active{outline:0;color:#BC0E0E;}
-a{color:#767676;text-decoration:none;}                
+a{color:#767676;text-decoration:none;}
 a:hover{color:#BC0E0E;text-decoration:underline;}*/
 
 h3{ color:#70695C; }
@@ -296,7 +296,7 @@ span.section-active { color: #BC0E0E; }
 }
 
 .popover-content{
-    width:400px;  
+    width:400px;
 }
 
 .popover{
@@ -355,7 +355,128 @@ span.section-active { color: #BC0E0E; }
 }
 
 
+/* NER */
+.info-sense-box.TEMPERATURE {
+    background-color: #398739;
+}
+.info-sense-box.MASS {
+    background-color: #c43c35;
+}
+.info-sense-box.TIME {
+    background-color: #f89406;
+}
+.info-sense-box.LENGTH {
+    background-color: #01A9DB;
+}
+.info-sense-box.FREQUENCY {
+    background-color: #8904B1;
+}
+.info-sense-box.FRACTION {
+    background-color: #c43c35;
+}
+.info-sense-box.VOLUME {
+    background-color: #c43c35;
+}
+.info-sense-box.VELOCITY {
+    background-color: #c43c35;
+}
+.info-sense-box.AREA {
+    background-color: #87A1A8;
+}
+.info-sense-box.CONCENTRATION {
+    background-color: #31B404;
+}
+
+/* DOMAINS */
+.info-sense-box.biology {
+    background-color: #398739;
+}
+.info-sense-box.chemistry {
+    background-color: #c43c35;
+}
+.info-sense-box.food {
+    background-color: #398739;
+}
+.info-sense-box.medicine {
+    background-color: #f89406;
+}
+.info-sense-box.anatomy {
+    background-color: #f89406;
+}
+.info-sense-box.engineering {
+    background-color: #01A9DB;
+}
+.info-sense-box.animals {
+    background-color: #8904B1;
+}
+.info-sense-box.plants {
+    background-color: #c43c35;
+}
+.info-sense-box.earth {
+    background-color: #c43c35;
+}
+.info-sense-box.mathematics {
+    background-color: #c43c35;
+}
+.info-sense-box.physics {
+    background-color: #87A1A8;
+}
+.info-sense-box.optics {
+    background-color: #87A1A8;
+}
+.info-sense-box.architecture {
+    background-color: #A901DB;
+}
+.info-sense-box.astronautics {
+    background-color: #87A1A8;
+}
+.info-sense-box.telecommunication {
+    background-color: #5C460C;
+}
+.info-sense-box.computer_science {
+    background-color: #04B4AE;
+}
+.info-sense-box.environment {
+    background-color: #31B404;
+}
+.info-sense-box.electronics {
+    background-color: #01A9DB;
+}
+
+
+// links for box PDF quantites annotations
+a.TEMPERATURE {
+    border-color: #398739;
+}
+a.MASS {
+    border-color: #c43c35;
+}
+a.TIME {
+    border-color: #f89406;
+}
+a.LENGTH {
+    border-color: #01A9DB;
+}
+a.FREQUENCY {
+    border-color: #8904B1;
+}
+a.FRACTION {
+    border-color: #c43c35;
+}
+a.VOLUME {
+    border-color: #c43c35;
+}
+a.VELOCITY {
+    border-color: #c43c35;
+}
+a.AREA {
+    border-color: #87A1A8;
+}
+a.CONCENTRATION {
+    border-color: #31B404;
+}
+
+
 /* red: #BC0E0E */
 /* orange #FFAA00 */
 /* the cendari grey blue: #87A1A8 */
-
